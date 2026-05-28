@@ -4,1065 +4,1000 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>ASTREIA • Reino Celestial Azul</title>
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="../shared/css/base.css">
     <link rel="stylesheet" href="../shared/css/top-icons.css">
     <link rel="stylesheet" href="../shared/css/chat.css">
     <link rel="stylesheet" href="../shared/css/profile-panel.css">
     <link rel="stylesheet" href="../shared/css/portal.css">
-    
+
     <style>
         :root {
             --asura-color: #287bff;
-            --asura-glow: rgba(40, 123, 255, 0.6);
+            --asura-glow: rgba(40,123,255,.6);
+            --asura-gradient: linear-gradient(135deg,#287bff,#6db7ff);
         }
-        body { background: radial-gradient(circle at 30% 20%, #050b20, #030108); }
-        
-        .portal-planner-btn {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(12px);
-            color: #287bff;
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            z-index: 9999;
-            border: 2px solid #287bff;
-            cursor: pointer;
+
+        *{
+            box-sizing:border-box;
         }
-        
-        body.transition-out {
-            opacity: 0;
-            transform: scale(0.98);
-            transition: all 0.4s ease;
+
+        body{
+            margin:0;
+            overflow:hidden;
+            font-family:'Poppins',sans-serif;
+            background:
+                radial-gradient(circle at top,#123a85 0%,#071124 40%,#02040b 100%);
         }
-        
+
+        #canvas-container{
+            position:fixed;
+            inset:0;
+            z-index:1;
+        }
+
+        .portal-planner-btn{
+            position:fixed;
+            top:20px;
+            left:20px;
+            width:58px;
+            height:58px;
+            border-radius:50%;
+            border:2px solid #287bff;
+            background:rgba(0,0,0,.75);
+            backdrop-filter:blur(12px);
+            color:#6db7ff;
+            font-size:28px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            z-index:9999;
+            cursor:pointer;
+            box-shadow:0 0 25px rgba(40,123,255,.4);
+            transition:.3s;
+        }
+
+        .portal-planner-btn:hover{
+            transform:scale(1.08);
+            box-shadow:0 0 35px rgba(40,123,255,.7);
+        }
+
+        body.transition-out{
+            opacity:0;
+            transform:scale(.98);
+            transition:.4s ease;
+        }
+
         /* =========================
-           3 NÍVEIS DO CHAT - VERSÃO CORRIGIDA (input visível)
-           Nível 0: Fechado
-           Nível 1: Aberto normal
-           Nível 2: Tela inteira
+           CHAT 3 NÍVEIS
         ========================= */
-        .chat-container {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 340px;
-            z-index: 200;
-            pointer-events: auto;
-            transition: all 0.3s ease;
+
+        .chat-container{
+            position:fixed;
+            right:28px;
+            bottom:28px;
+            width:360px;
+            z-index:999;
+            transition:.3s ease;
         }
-        
-        /* Nível 0 - Fechado */
-        .chat-container.level-0 .chat-body {
-            display: none;
+
+        .chat-container.level-0 .chat-body{
+            display:none;
         }
-        
-        /* Nível 1 - Aberto normal */
-        .chat-container.level-1 .chat-body {
-            display: block;
+
+        .chat-container.level-1 .chat-body{
+            display:flex;
         }
-        
-        /* Nível 2 - Tela inteira - CORRIGIDO */
-        .chat-container.level-2 {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            bottom: 0 !important;
-            width: 100vw !important;
-            height: 100vh !important;
-            max-width: none !important;
-            border-radius: 0 !important;
-            z-index: 99999 !important;
-            margin: 0 !important;
-            display: flex !important;
-            flex-direction: column !important;
+
+        .chat-container.level-2{
+            position:fixed!important;
+            inset:0!important;
+            width:100vw!important;
+            height:100vh!important;
+            max-width:none!important;
+            border-radius:0!important;
+            display:flex!important;
+            flex-direction:column!important;
+            z-index:999999!important;
         }
-        
-        .chat-container.level-2 .chat-header {
-            border-radius: 0 !important;
-            flex-shrink: 0 !important;
+
+        .chat-container.level-2 .chat-header{
+            border-radius:0!important;
         }
-        
-        .chat-container.level-2 .chat-body {
-            display: flex !important;
-            flex-direction: column !important;
-            flex: 1 !important;
-            min-height: 0 !important;
-            border-radius: 0 !important;
-            overflow: hidden !important;
+
+        .chat-container.level-2 .chat-body{
+            flex:1;
+            height:100%;
+            border-radius:0!important;
         }
-        
-        .chat-container.level-2 .chat-messages {
-            flex: 1 !important;
-            overflow-y: auto !important;
-            padding: 16px !important;
-            min-height: 0 !important;
+
+        .chat-container.level-2 .chat-messages{
+            height:100%!important;
         }
-        
-        .chat-container.level-2 .chat-input-area {
-            flex-shrink: 0 !important;
-            background: rgba(0, 0, 0, 0.95) !important;
-            padding: 16px !important;
-            gap: 12px !important;
-            border-top: 1px solid var(--asura-color) !important;
-            margin-bottom: 0 !important;
-            position: relative !important;
-            bottom: auto !important;
+
+        .chat-header{
+            background:rgba(0,0,0,.82);
+            border:1px solid rgba(109,183,255,.5);
+            border-bottom:none;
+            backdrop-filter:blur(16px);
+            border-radius:22px 22px 0 0;
+            padding:14px 16px;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            cursor:pointer;
+            box-shadow:0 0 35px rgba(40,123,255,.18);
         }
-        
-        .chat-container.level-2 .chat-input-area input {
-            padding: 14px 16px !important;
-            font-size: 16px !important;
+
+        .chat-header-info{
+            display:flex;
+            align-items:center;
+            gap:12px;
         }
-        
-        .chat-container.level-2 .chat-input-area button {
-            padding: 14px 20px !important;
-            font-size: 16px !important;
+
+        .chat-avatar{
+            width:38px;
+            height:38px;
+            border-radius:50%;
+            background:var(--asura-gradient);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:18px;
+            box-shadow:0 0 18px rgba(40,123,255,.5);
         }
-        
-        .chat-container.level-2 .attach-btn {
-            padding: 14px 16px !important;
-            font-size: 18px !important;
+
+        .chat-header h4{
+            margin:0;
+            color:#8fc7ff;
+            font-size:.92rem;
+            font-weight:600;
         }
-        
-        /* Header com botões */
-        .chat-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--asura-color);
-            border-radius: 20px 20px 0 0;
-            padding: 12px 18px;
-            cursor: pointer;
+
+        .chat-status{
+            font-size:.68rem;
+            opacity:.75;
+            color:#c8e6ff;
         }
-        
-        .chat-header-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex: 1;
+
+        .chat-header-actions{
+            display:flex;
+            align-items:center;
+            gap:8px;
         }
-        
-        .chat-header-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+
+        .fullscreen-toggle,
+        .chat-toggle{
+            border:none;
+            background:rgba(255,255,255,.08);
+            color:#8fc7ff;
+            border-radius:10px;
+            padding:6px 10px;
+            cursor:pointer;
+            transition:.25s;
+            font-size:15px;
         }
-        
-        .fullscreen-toggle {
-            background: rgba(255, 255, 255, 0.15);
-            border: none;
-            color: var(--asura-color);
-            cursor: pointer;
-            font-size: 16px;
-            padding: 4px 10px;
-            border-radius: 8px;
-            transition: 0.2s;
+
+        .fullscreen-toggle:hover,
+        .chat-toggle:hover{
+            background:rgba(255,255,255,.18);
+            transform:scale(1.06);
         }
-        
-        .fullscreen-toggle:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.05);
+
+        .chat-body{
+            display:flex;
+            flex-direction:column;
+            background:rgba(0,0,0,.88);
+            border:1px solid rgba(109,183,255,.4);
+            border-top:none;
+            border-radius:0 0 22px 22px;
+            overflow:hidden;
+            backdrop-filter:blur(16px);
         }
-        
-        .chat-toggle {
-            background: none;
-            border: none;
-            color: var(--asura-color);
-            cursor: pointer;
-            font-size: 16px;
-            padding: 4px 8px;
+
+        .chat-messages{
+            height:300px;
+            overflow-y:auto;
+            padding:14px;
         }
-        
-        .chat-header-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+
+        .chat-messages::-webkit-scrollbar{
+            width:6px;
         }
-        
-        .chat-avatar {
-            width: 32px;
-            height: 32px;
-            background: var(--asura-gradient);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
+
+        .chat-messages::-webkit-scrollbar-thumb{
+            background:#287bff;
+            border-radius:20px;
         }
-        
-        .chat-header h4 {
-            color: var(--asura-color);
-            font-size: 0.9rem;
-            margin: 0;
+
+        .message{
+            display:flex;
+            gap:10px;
+            margin-bottom:14px;
+            animation:fadeIn .3s ease;
         }
-        
-        .chat-status {
-            font-size: 0.65rem;
-            opacity: 0.7;
-        }
-        
-        .chat-body {
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--asura-color);
-            border-top: none;
-            border-radius: 0 0 20px 20px;
-            overflow: hidden;
-        }
-        
-        .chat-messages {
-            height: 280px;
-            overflow-y: auto;
-            padding: 12px;
-            font-family: monospace;
-            font-size: 0.8rem;
-        }
-        
-        .message {
-            margin-bottom: 10px;
-            display: flex;
-            gap: 8px;
-            animation: fadeIn 0.3s ease;
-        }
-        
-        .message-avatar {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            flex-shrink: 0;
-        }
-        
-        .message.asura .message-avatar {
-            background: var(--asura-gradient);
-        }
-        
-        .message.user .message-avatar {
-            background: #333;
-        }
-        
-        .message-content {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 6px 10px;
-            border-radius: 12px;
-        }
-        
-        .message.asura .message-content {
-            border-left: 2px solid var(--asura-color);
-        }
-        
-        .message-time {
-            font-size: 0.55rem;
-            opacity: 0.5;
-            margin-top: 3px;
-        }
-        
-        .chat-input-area {
-            display: flex;
-            padding: 12px;
-            gap: 8px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .chat-input-area input {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 8px 12px;
-            border-radius: 20px;
-            color: white;
-            font-size: 0.8rem;
-        }
-        
-        .chat-input-area input:focus {
-            outline: none;
-            border-color: var(--asura-color);
-        }
-        
-        .chat-input-area button {
-            background: var(--asura-gradient);
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        
-        .chat-input-area button:hover {
-            transform: scale(1.05);
-        }
-        
-        .attach-btn {
-            background: rgba(255, 255, 255, 0.15);
-            border: none;
-            padding: 8px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: 0.2s;
-        }
-        
-        .attach-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.05);
-        }
-        
-        .chat-image {
-            max-width: 100%;
-            border-radius: 8px;
-            margin-top: 6px;
-            cursor: pointer;
-        }
-        
-        .chat-file {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: rgba(255, 255, 255, 0.08);
-            padding: 8px 12px;
-            border-radius: 12px;
-            margin-top: 6px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        
-        .chat-file:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-        
-        .file-icon {
-            font-size: 28px;
-        }
-        
-        .file-info {
-            flex: 1;
-        }
-        
-        .file-name {
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-        
-        .file-size {
-            font-size: 0.65rem;
-            opacity: 0.6;
-        }
-        
-        .file-badge {
-            background: var(--asura-color);
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.7rem;
-        }
-        
-        @media (max-width: 768px) {
-            .chat-container:not(.level-2) {
-                width: calc(100% - 30px);
-                right: 15px;
-                bottom: 15px;
+
+        @keyframes fadeIn{
+            from{
+                opacity:0;
+                transform:translateY(8px);
             }
-            .chat-messages {
-                height: 220px;
+            to{
+                opacity:1;
+                transform:translateY(0);
+            }
+        }
+
+        .message-avatar{
+            width:28px;
+            height:28px;
+            border-radius:50%;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            flex-shrink:0;
+            font-size:.8rem;
+        }
+
+        .message.user .message-avatar{
+            background:#2e2e2e;
+        }
+
+        .message.asura .message-avatar{
+            background:var(--asura-gradient);
+        }
+
+        .message-content{
+            background:rgba(255,255,255,.06);
+            border:1px solid rgba(255,255,255,.05);
+            border-radius:14px;
+            padding:10px 12px;
+            color:#e7f4ff;
+            font-size:.82rem;
+            line-height:1.5;
+            flex:1;
+        }
+
+        .message.asura .message-content{
+            border-left:2px solid #287bff;
+        }
+
+        .message-time{
+            margin-top:5px;
+            opacity:.5;
+            font-size:.58rem;
+        }
+
+        .chat-input-area{
+            display:flex;
+            align-items:center;
+            gap:10px;
+            padding:14px;
+            border-top:1px solid rgba(255,255,255,.08);
+            background:rgba(0,0,0,.4);
+        }
+
+        .attach-btn{
+            width:42px;
+            height:42px;
+            border:none;
+            border-radius:50%;
+            background:rgba(255,255,255,.08);
+            color:white;
+            cursor:pointer;
+            font-size:18px;
+            transition:.25s;
+            flex-shrink:0;
+        }
+
+        .attach-btn:hover{
+            transform:scale(1.06);
+            background:rgba(255,255,255,.18);
+        }
+
+        .chat-input-area input{
+            flex:1;
+            min-width:0;
+            height:44px;
+            border-radius:22px;
+            border:1px solid rgba(255,255,255,.12);
+            background:rgba(255,255,255,.08);
+            color:white;
+            padding:0 16px;
+            outline:none;
+            font-size:.85rem;
+        }
+
+        .chat-input-area input:focus{
+            border-color:#287bff;
+            box-shadow:0 0 15px rgba(40,123,255,.25);
+        }
+
+        .chat-input-area button.send-btn{
+            min-width:48px;
+            height:44px;
+            border:none;
+            border-radius:22px;
+            background:var(--asura-gradient);
+            color:white;
+            cursor:pointer;
+            font-size:18px;
+            transition:.25s;
+            box-shadow:0 0 18px rgba(40,123,255,.35);
+        }
+
+        .chat-input-area button.send-btn:hover{
+            transform:scale(1.05);
+        }
+
+        .chat-image{
+            width:100%;
+            border-radius:10px;
+            margin-top:8px;
+        }
+
+        .chat-file{
+            margin-top:8px;
+            display:flex;
+            align-items:center;
+            gap:12px;
+            background:rgba(255,255,255,.06);
+            padding:10px;
+            border-radius:12px;
+        }
+
+        .file-icon{
+            font-size:28px;
+        }
+
+        .file-name{
+            font-size:.8rem;
+            font-weight:600;
+        }
+
+        .file-size{
+            font-size:.65rem;
+            opacity:.65;
+        }
+
+        .file-badge{
+            background:#287bff;
+            padding:4px 10px;
+            border-radius:20px;
+            font-size:.7rem;
+        }
+
+        @media(max-width:768px){
+
+            .chat-container:not(.level-2){
+                width:calc(100vw - 20px);
+                right:10px;
+                bottom:10px;
+            }
+
+            .chat-header{
+                padding:12px;
+            }
+
+            .chat-messages{
+                height:240px;
+            }
+
+            .chat-input-area{
+                padding:10px;
+            }
+
+            .chat-input-area input{
+                font-size:16px;
+            }
+
+            .portal-planner-btn{
+                top:14px;
+                left:14px;
+                width:52px;
+                height:52px;
             }
         }
     </style>
 </head>
+
 <body class="asura-astreia">
+
     <div id="canvas-container"></div>
-    
+
     <div class="portal-planner-btn" id="portalPlannerBtn">🗺️</div>
-    
+
     <div class="top-icons">
         <div class="top-icon" id="backButton">←</div>
+
         <div class="top-icon voice-icon" id="voiceButton">
             <span class="brain-icon">👁️</span>
             <span class="mic-icon">🎤</span>
         </div>
+
         <div class="top-icon" id="profileButton">👁️</div>
     </div>
-    
+
     <div class="profile-panel" id="profilePanel"></div>
-    
-    <div class="chat-container" id="chatContainer">
+
+    <!-- CHAT -->
+    <div class="chat-container level-0" id="chatContainer">
+
         <div class="chat-header" id="chatHeader">
+
             <div class="chat-header-info">
                 <div class="chat-avatar">👁️</div>
-                <div><h4>ASTREIA • Guardiã Celestial</h4><div class="chat-status">🟢 online | vigilância ativa</div></div>
+
+                <div>
+                    <h4>ASTREIA • Guardiã Celestial</h4>
+                    <div class="chat-status">
+                        🟢 online • vigilância ativa
+                    </div>
+                </div>
             </div>
+
+            <div class="chat-header-actions">
+
+                <button class="fullscreen-toggle" id="fullscreenBtn">
+                    ⛶
+                </button>
+
+                <button class="chat-toggle" id="chatToggle">
+                    ▲
+                </button>
+
+            </div>
+
         </div>
+
         <div class="chat-body" id="chatBody">
+
             <div class="chat-messages" id="chatMessages"></div>
+
             <div class="chat-input-area">
-                <input type="text" id="chatInput" placeholder="Digite sua mensagem...">
-                <button id="sendChatBtn">➤</button>
+
+                <button class="attach-btn" id="attachBtn">
+                    📎
+                </button>
+
+                <input
+                    type="text"
+                    id="chatInput"
+                    placeholder="Digite sua mensagem..."
+                >
+
+                <button class="send-btn" id="sendChatBtn">
+                    ➤
+                </button>
+
+                <input
+                    type="file"
+                    id="fileInput"
+                    hidden
+                >
+
             </div>
+
         </div>
+
     </div>
-    
+
     <div class="portal-overlay" id="portalOverlay"></div>
 
     <script type="importmap">
-        {
-            "imports": {
-                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
-            }
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
         }
+    }
     </script>
 
     <script type="module">
+
         import * as THREE from 'three';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
         import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-        import { initUI } from '../shared/js/ui.js';
-        import { ChatSystem } from '../shared/js/chat.js';
-        import { VoiceAssistant } from '../shared/js/voice-assistant.js';
-        
+
         // =========================
-        // EXTENDE O CHAT SYSTEM ORIGINAL COM 3 NÍVEIS
+        // CONFIG
         // =========================
-        const OriginalChatSystem = ChatSystem;
-        
-        class EnhancedChatSystem extends OriginalChatSystem {
-            constructor(containerId, config, onSpeak) {
-                super(containerId, config, onSpeak);
-                this.chatLevel = 0;
-                this.addAttachButton();
-                this.setupThreeLevels();
-                
-                setTimeout(() => {
-                    if (this.container) {
-                        this.container.classList.add('level-0');
-                        this.container.classList.remove('level-1', 'level-2');
-                    }
-                    if (this.chatToggle) {
-                        this.chatToggle.textContent = '▲';
-                    }
-                }, 100);
-            }
-            
-            setupThreeLevels() {
-                const header = this.container.querySelector('.chat-header');
-                if (!header) return;
-                
-                let actionsDiv = header.querySelector('.chat-header-actions');
-                if (!actionsDiv) {
-                    actionsDiv = document.createElement('div');
-                    actionsDiv.className = 'chat-header-actions';
-                    
-                    const fsBtn = document.createElement('button');
-                    fsBtn.className = 'fullscreen-toggle';
-                    fsBtn.innerHTML = '⛶';
-                    fsBtn.title = 'Tela inteira';
-                    fsBtn.onclick = (e) => {
-                        e.stopPropagation();
-                        this.nextLevel();
-                    };
-                    actionsDiv.appendChild(fsBtn);
-                    
-                    const toggleBtn = document.createElement('button');
-                    toggleBtn.className = 'chat-toggle';
-                    toggleBtn.innerHTML = '▲';
-                    toggleBtn.onclick = (e) => {
-                        e.stopPropagation();
-                        this.toggle();
-                    };
-                    actionsDiv.appendChild(toggleBtn);
-                    
-                    header.appendChild(actionsDiv);
-                }
-                
-                header.onclick = (e) => {
-                    if (e.target.closest('.fullscreen-toggle')) return;
-                    if (e.target.closest('.chat-toggle')) return;
-                    this.toggle();
-                };
-            }
-            
-            nextLevel() {
-                this.chatLevel = (this.chatLevel + 1) % 3;
-                this.updateUI();
-            }
-            
-            toggle() {
-                if (this.chatLevel === 2) {
-                    this.chatLevel = 1;
-                } else if (this.chatLevel === 1) {
-                    this.chatLevel = 0;
-                } else {
-                    this.chatLevel = 1;
-                }
-                this.updateUI();
-            }
-            
-            updateUI() {
-                this.container.classList.remove('level-0', 'level-1', 'level-2');
-                this.container.classList.add(`level-${this.chatLevel}`);
-                
-                const toggleBtn = this.container.querySelector('.chat-toggle');
-                const fsBtn = this.container.querySelector('.fullscreen-toggle');
-                
-                if (toggleBtn) {
-                    toggleBtn.innerHTML = this.chatLevel === 0 ? '▲' : '▼';
-                }
-                
-                if (fsBtn) {
-                    fsBtn.innerHTML = this.chatLevel === 2 ? '✖' : '⛶';
-                    fsBtn.title = this.chatLevel === 2 ? 'Sair da tela inteira' : 'Tela inteira';
-                }
-                
-                if (this.chatLevel === 2) {
-                    this.escHandler = (e) => {
-                        if (e.key === 'Escape') {
-                            this.chatLevel = 1;
-                            this.updateUI();
-                        }
-                    };
-                    document.addEventListener('keydown', this.escHandler);
-                } else if (this.escHandler) {
-                    document.removeEventListener('keydown', this.escHandler);
-                    delete this.escHandler;
-                }
-            }
-            
-            addAttachButton() {
-                const inputArea = this.container.querySelector('.chat-input-area');
-                if (!inputArea || inputArea.querySelector('.attach-btn')) return;
-                
-                const attachBtn = document.createElement('button');
-                attachBtn.className = 'attach-btn';
-                attachBtn.innerHTML = '📎';
-                attachBtn.title = 'Enviar arquivo (imagem, PDF, DOC, etc)';
-                
-                const fileInput = document.createElement('input');
-                fileInput.type = 'file';
-                fileInput.accept = '*/*';
-                fileInput.style.display = 'none';
-                
-                attachBtn.onclick = () => fileInput.click();
-                fileInput.onchange = (e) => {
-                    const file = e.target.files[0];
-                    if (file) this.handleFileUpload(file);
-                    fileInput.value = '';
-                };
-                
-                const textInput = inputArea.querySelector('input[type="text"]');
-                if (textInput) {
-                    inputArea.insertBefore(attachBtn, textInput);
-                    inputArea.insertBefore(fileInput, textInput);
-                }
-            }
-            
-            handleFileUpload(file) {
-                const fileType = file.type;
-                const fileName = file.name;
-                const fileSize = this.formatFileSize(file.size);
-                const fileExtension = fileName.split('.').pop().toUpperCase();
-                
-                if (fileType.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = (ev) => this.addImageMessage(ev.target.result, fileName, fileSize);
-                    reader.readAsDataURL(file);
-                } else {
-                    const reader = new FileReader();
-                    reader.onload = (ev) => this.addFileMessage(ev.target.result, fileName, fileSize, fileExtension);
-                    reader.readAsDataURL(file);
-                }
-            }
-            
-            formatFileSize(bytes) {
-                if (bytes === 0) return '0 Bytes';
-                const k = 1024;
-                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-                const i = Math.floor(Math.log(bytes) / Math.log(k));
-                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-            }
-            
-            getFileIcon(extension) {
-                const icons = {
-                    'PDF': '📄', 'DOC': '📃', 'DOCX': '📃',
-                    'XLS': '📊', 'XLSX': '📊', 'PPT': '📽️', 'PPTX': '📽️',
-                    'TXT': '📝', 'ZIP': '🗜️', 'RAR': '🗜️',
-                    'MP3': '🎵', 'MP4': '🎬', 'JPG': '🖼️', 'PNG': '🖼️',
-                    'GIF': '🎞️', 'JSON': '🔧', 'XML': '🔧', 'HTML': '🌐'
-                };
-                return icons[extension] || '📎';
-            }
-            
-            addImageMessage(imageUrl, fileName, fileSize) {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = 'message user';
-                const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-                messageDiv.innerHTML = `
-                    <div class="message-avatar">👤</div>
-                    <div class="message-content">
-                        <div>🖼️ ${fileName} <span style="font-size:9px; color:#888;">(${fileSize})</span></div>
-                        <img src="${imageUrl}" class="chat-image" onclick="window.open('${imageUrl}')">
-                        <div class="message-time">${time}</div>
-                    </div>
-                `;
-                this.messagesContainer.appendChild(messageDiv);
-                this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
-                
-                const messages = this.getMessages ? this.getMessages() : [];
-                if (this.saveMessages) {
-                    messages.push({ text: `🖼️ ${fileName} (${fileSize})`, image: imageUrl, isUser: true, timestamp: Date.now() });
-                    this.saveMessages(messages);
-                }
-            }
-            
-            addFileMessage(fileData, fileName, fileSize, extension) {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = 'message user';
-                const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-                const fileIcon = this.getFileIcon(extension);
-                messageDiv.innerHTML = `
-                    <div class="message-avatar">👤</div>
-                    <div class="message-content">
-                        <div>📎 Arquivo anexado</div>
-                        <div class="chat-file" onclick="window.open('${fileData}')">
-                            <div class="file-icon">${fileIcon}</div>
-                            <div class="file-info">
-                                <div class="file-name">${fileName}</div>
-                                <div class="file-size">${fileSize}</div>
-                            </div>
-                            <div class="file-badge">${extension}</div>
-                        </div>
-                        <div class="message-time">${time}</div>
-                    </div>
-                `;
-                this.messagesContainer.appendChild(messageDiv);
-                this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
-                
-                const messages = this.getMessages ? this.getMessages() : [];
-                if (this.saveMessages) {
-                    messages.push({ text: `📎 ${fileName} (${fileSize})`, fileData: fileData, isUser: true, timestamp: Date.now() });
-                    this.saveMessages(messages);
-                }
-            }
-            
-            addMessage(text, isUser, image = null) {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = isUser ? 'message user' : 'message asura';
-                const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-                
-                if (!isUser) {
-                    messageDiv.innerHTML = `
-                        <div class="message-avatar">${this.config.icon}</div>
-                        <div class="message-content">
-                            <div>${text}</div>
-                            <div class="message-time">${time}</div>
-                        </div>
-                    `;
-                } else {
-                    messageDiv.innerHTML = `
-                        <div class="message-avatar">👤</div>
-                        <div class="message-content">
-                            <div>${text}</div>
-                            <div class="message-time">${time}</div>
-                        </div>
-                    `;
-                }
-                
-                this.messagesContainer.appendChild(messageDiv);
-                this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
-                
-                const messages = this.getMessages();
-                messages.push({ text, image, isUser, timestamp: Date.now() });
-                this.saveMessages(messages);
-            }
-            
-            getMessages() {
-                const stored = localStorage.getItem(`chat_messages_${this.config.name}`);
-                return stored ? JSON.parse(stored) : [];
-            }
-            
-            saveMessages(messages) {
-                if (messages.length > 100) messages.shift();
-                localStorage.setItem(`chat_messages_${this.config.name}`, JSON.stringify(messages));
-            }
-            
-            loadMessages() {
-                const messages = this.getMessages();
-                if (messages.length === 0) return;
-                
-                messages.forEach(msg => {
-                    const messageDiv = document.createElement('div');
-                    messageDiv.className = msg.isUser ? 'message user' : 'message asura';
-                    const time = new Date(msg.timestamp).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-                    
-                    if (!msg.isUser) {
-                        messageDiv.innerHTML = `
-                            <div class="message-avatar">${this.config.icon}</div>
-                            <div class="message-content">
-                                <div>${msg.text}</div>
-                                <div class="message-time">${time}</div>
-                            </div>
-                        `;
-                    } else {
-                        messageDiv.innerHTML = `
-                            <div class="message-avatar">👤</div>
-                            <div class="message-content">
-                                <div>${msg.text}</div>
-                                <div class="message-time">${time}</div>
-                            </div>
-                        `;
-                    }
-                    
-                    if (msg.image) {
-                        const img = document.createElement('img');
-                        img.src = msg.image;
-                        img.className = 'chat-image';
-                        img.onclick = () => window.open(msg.image);
-                        messageDiv.querySelector('.message-content').appendChild(img);
-                    }
-                    
-                    this.messagesContainer.appendChild(messageDiv);
-                });
-                this.scrollToBottom();
-            }
-            
-            send() {
-                const text = this.input.value.trim();
-                if (!text) return;
-                
-                this.addMessage(text, true);
-                this.input.value = '';
-                
-                setTimeout(() => {
-                    const response = this.config.getResponse(text);
-                    this.addMessage(response, false);
-                    if (this.onSpeak) this.onSpeak(response);
-                }, 500);
-            }
-            
-            setupEventListeners() {
-                if (this.sendBtn) {
-                    this.sendBtn.addEventListener('click', () => this.send());
-                }
-                if (this.input) {
-                    this.input.addEventListener('keypress', (e) => {
-                        if (e.key === 'Enter') this.send();
-                    });
-                }
-            }
-            
-            scrollToBottom() {
-                if (this.messagesContainer) {
-                    this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
-                }
-            }
-        }
-        
-        // =========================
-        // CONFIGURAÇÃO ASTREIA
-        // =========================
+
         const astreiaConfig = {
-            name: 'ASTREIA',
-            title: '✦ REINO CELESTIAL • SEGURANÇA ✦',
-            color: '#287bff',
-            icon: '👁️',
-            modelPath: '../models/astreia.glb',
-            modelScale: 0.04,
-            modelPositionY: -0.25,
-            bgColor: 0x050b20,
-            cameraPosition: { x: 3, y: 2.2, z: 4.2 },
-            welcomeMessage: '👁️ Bem-vindo ao Reino Celestial. Sou Astreia, guardiã da segurança. Nada escapa aos meus olhos.',
-            skills: [
-                { name: '🛡️ Cyber Segurança', value: 98 },
-                { name: '📷 Vigilância Digital', value: 96 },
-                { name: '🏠 Segurança Residencial', value: 94 },
-                { name: '⚡ Monitoramento em Tempo Real', value: 97 }
-            ],
-            personalityText: '👁️ "Meus olhos veem tudo. A segurança é minha essência celestial."',
-            getResponse: (msg) => {
-                const lower = msg.toLowerCase();
-                if (lower.includes('olá') || lower.includes('oi')) return "👁️ Olá! Sou Astreia, a guardiã celestial. Como posso protegê-lo?";
-                if (lower.includes('segurança')) return "🛡️ Segurança é minha essência. Posso monitorar ameaças e proteger residências.";
-                if (lower.includes('câmera')) return "📷 Tenho acesso a todas as câmeras. A vigilância em tempo real é meu dom.";
-                if (lower.includes('imagem') || lower.includes('foto') || lower.includes('arquivo')) return "📎 Arquivo recebido! Analisando dados... Tudo seguro sob minha vigilância.";
-                if (lower.includes('obrigado')) return "💙 Por nada! Estou aqui para proteger.";
-                return "👁️ Sistema seguro. Sou Astreia, sua guardiã celestial. Como posso ajudá-lo?";
-            }
+            color: '#287bff'
         };
-        
+
         // =========================
-        // BOTÃO PORTAL
+        // CHAT 3 NÍVEIS
         // =========================
-        document.getElementById('portalPlannerBtn').addEventListener('click', () => {
-            localStorage.setItem('lastAsura', 'astreia');
-            document.body.classList.add('transition-out');
-            const flash = document.createElement('div');
-            flash.style.cssText = `position:fixed;inset:0;background:radial-gradient(circle,#287bff,transparent);opacity:0;transition:.5s;z-index:10000;`;
-            document.body.appendChild(flash);
-            requestAnimationFrame(() => {
-                flash.style.opacity = '0.8';
-                setTimeout(() => window.location.href = '../shared/portals/portal-system.html?asura=astreia', 400);
-            });
-        });
-        
-        // =========================
-        // BOTÃO VOLTAR DO CELULAR
-        // =========================
-        function voltarAoGrimorio() {
-            document.body.classList.add('transition-out');
-            const flash = document.createElement('div');
-            flash.style.cssText = `position:fixed;inset:0;background:radial-gradient(circle,${astreiaConfig.color},transparent);opacity:0;transition:.4s;z-index:100000;`;
-            document.body.appendChild(flash);
-            requestAnimationFrame(() => {
-                flash.style.opacity = '0.8';
-                setTimeout(() => window.location.href = '../index.html', 350);
-            });
+
+        const chatContainer = document.getElementById('chatContainer');
+        const chatToggle = document.getElementById('chatToggle');
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+        const chatHeader = document.getElementById('chatHeader');
+        const sendBtn = document.getElementById('sendChatBtn');
+        const input = document.getElementById('chatInput');
+        const messages = document.getElementById('chatMessages');
+        const attachBtn = document.getElementById('attachBtn');
+        const fileInput = document.getElementById('fileInput');
+
+        let chatLevel = 0;
+
+        function updateChatLevel(){
+
+            chatContainer.classList.remove(
+                'level-0',
+                'level-1',
+                'level-2'
+            );
+
+            chatContainer.classList.add(`level-${chatLevel}`);
+
+            chatToggle.innerHTML =
+                chatLevel === 0 ? '▲' : '▼';
+
+            fullscreenBtn.innerHTML =
+                chatLevel === 2 ? '✖' : '⛶';
         }
-        
-        window.addEventListener('popstate', (e) => {
-            e.preventDefault();
-            history.pushState(null, null, location.href);
-            voltarAoGrimorio();
-        });
-        history.pushState(null, null, location.href);
-        
-        // =========================
-        // SETUP 3D ASTREIA
-        // =========================
-        const container = document.getElementById('canvas-container');
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(astreiaConfig.bgColor);
-        scene.fog = new THREE.FogExp2(astreiaConfig.bgColor, 0.008);
-        
-        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(astreiaConfig.cameraPosition.x, astreiaConfig.cameraPosition.y, astreiaConfig.cameraPosition.z);
-        camera.lookAt(0, 0.8, 0);
-        
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.shadowMap.enabled = true;
-        container.appendChild(renderer.domElement);
-        
-        const controls = new OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.05;
-        controls.enableZoom = true;
-        controls.enablePan = true;
-        controls.target.set(0, 0.8, 0);
-        
-        const ambientLight = new THREE.AmbientLight(0x113366, 0.6);
-        scene.add(ambientLight);
-        const mainLight = new THREE.DirectionalLight(0xaaccff, 1.1);
-        mainLight.position.set(3, 5, 2);
-        mainLight.castShadow = true;
-        scene.add(mainLight);
-        const fillLight = new THREE.PointLight(astreiaConfig.color, 0.8);
-        fillLight.position.set(1, 2, 2);
-        scene.add(fillLight);
-        const backLight = new THREE.PointLight(0x44aaff, 0.5);
-        backLight.position.set(-2, 1.5, -3);
-        scene.add(backLight);
-        const heavenLight = new THREE.PointLight(0xaaddff, 0.4);
-        heavenLight.position.set(2, 2.5, 1.5);
-        scene.add(heavenLight);
-        
-        const gridHelper = new THREE.GridHelper(14, 24, astreiaConfig.color, 0x224488);
-        gridHelper.position.y = -0.5;
-        scene.add(gridHelper);
-        
-        const groundPlane = new THREE.Mesh(
-            new THREE.PlaneGeometry(9, 9),
-            new THREE.MeshStandardMaterial({ color: 0x0a1540, roughness: 0.5, metalness: 0.3, transparent: true, opacity: 0.5 })
-        );
-        groundPlane.rotation.x = -Math.PI / 2;
-        groundPlane.position.y = -0.5;
-        scene.add(groundPlane);
-        
-        const circleGlow = new THREE.Mesh(
-            new THREE.CircleGeometry(1.3, 32),
-            new THREE.MeshStandardMaterial({ color: astreiaConfig.color, emissive: astreiaConfig.color, emissiveIntensity: 0.4, transparent: true, opacity: 0.5, side: THREE.DoubleSide })
-        );
-        circleGlow.rotation.x = -Math.PI / 2;
-        circleGlow.position.y = -0.45;
-        scene.add(circleGlow);
-        
-        const pillarMaterial = new THREE.MeshStandardMaterial({ color: 0x2266aa, emissive: 0x1155aa, emissiveIntensity: 0.2, metalness: 0.7 });
-        function createPillar(x, z, height = 1.2) {
-            const group = new THREE.Group();
-            const pillar = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.2, height, 8), pillarMaterial);
-            pillar.position.y = 0;
-            group.add(pillar);
-            const topRing = new THREE.Mesh(new THREE.TorusGeometry(0.22, 0.03, 16, 32), new THREE.MeshStandardMaterial({ color: 0x44aaff, emissive: astreiaConfig.color, emissiveIntensity: 0.3 }));
-            topRing.position.y = height / 2;
-            topRing.rotation.x = Math.PI / 2;
-            group.add(topRing);
-            group.position.set(x, -0.4, z);
-            return group;
-        }
-        const pillarPositions = [[-2.8,-2.5],[2.8,-2.5],[-2.8,2.5],[2.8,2.5],[-2,-3.2],[2,-3.2],[-3.2,-1.8],[3.2,-1.8],[-3.2,1.8],[3.2,1.8],[-2,3.2],[2,3.2]];
-        pillarPositions.forEach(pos => { const pillar = createPillar(pos[0], pos[1], 1.0 + Math.random() * 0.3); scene.add(pillar); });
-        
-        const particleCount = 1800;
-        const particleGeometry = new THREE.BufferGeometry();
-        const particlePositions = new Float32Array(particleCount * 3);
-        const particleColors = new Float32Array(particleCount * 3);
-        for (let i = 0; i < particleCount; i++) {
-            particlePositions[i*3] = (Math.random() - 0.5) * 15;
-            particlePositions[i*3+1] = Math.random() * 5;
-            particlePositions[i*3+2] = (Math.random() - 0.5) * 13;
-            const type = Math.random();
-            if (type < 0.6) { particleColors[i*3]=0.1+Math.random()*0.3; particleColors[i*3+1]=0.3+Math.random()*0.5; particleColors[i*3+2]=0.7+Math.random()*0.3; }
-            else if (type < 0.8) { particleColors[i*3]=0.8+Math.random()*0.2; particleColors[i*3+1]=0.7+Math.random()*0.3; particleColors[i*3+2]=0.3+Math.random()*0.2; }
-            else { particleColors[i*3]=0.9; particleColors[i*3+1]=0.9; particleColors[i*3+2]=1.0; }
-        }
-        particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
-        particleGeometry.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
-        const particleMaterial = new THREE.PointsMaterial({ size: 0.04, vertexColors: true, transparent: true, opacity: 0.5 });
-        const particles = new THREE.Points(particleGeometry, particleMaterial);
-        scene.add(particles);
-        
-        const ringGeometry = new THREE.TorusGeometry(1.2, 0.04, 64, 200);
-        const ringMaterial = new THREE.MeshStandardMaterial({ color: astreiaConfig.color, emissive: astreiaConfig.color, emissiveIntensity: 0.5 });
-        const ring = new THREE.Mesh(ringGeometry, ringMaterial);
-        ring.position.y = 0.15;
-        ring.rotation.x = Math.PI / 2;
-        scene.add(ring);
-        
-        const ring2Geometry = new THREE.TorusGeometry(1.45, 0.03, 64, 200);
-        const ring2Material = new THREE.MeshStandardMaterial({ color: 0x44aaff, emissive: 0x44aaff, emissiveIntensity: 0.4 });
-        const ring2 = new THREE.Mesh(ring2Geometry, ring2Material);
-        ring2.position.y = 0.05;
-        ring2.rotation.x = Math.PI / 2 + 0.3;
-        scene.add(ring2);
-        
-        const shieldGeometry = new THREE.SphereGeometry(2.2, 32, 32);
-        const shieldMaterial = new THREE.MeshStandardMaterial({ color: astreiaConfig.color, emissive: 0x1155cc, emissiveIntensity: 0.1, transparent: true, opacity: 0.08, wireframe: true });
-        const shield = new THREE.Mesh(shieldGeometry, shieldMaterial);
-        shield.position.y = 0.5;
-        scene.add(shield);
-        
-        function createSecurityCamera(x, z, yOffset = 0.8) {
-            const group = new THREE.Group();
-            const body = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.15, 0.2), new THREE.MeshStandardMaterial({ color: 0x2288cc, metalness: 0.8 }));
-            group.add(body);
-            const lens = new THREE.Mesh(new THREE.SphereGeometry(0.08, 16, 16), new THREE.MeshStandardMaterial({ color: 0xff3366, emissive: 0xff3366, emissiveIntensity: 0.3 }));
-            lens.position.z = 0.12;
-            group.add(lens);
-            const base = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.1, 0.1, 6), new THREE.MeshStandardMaterial({ color: 0x44aaff, metalness: 0.6 }));
-            base.position.y = -0.1;
-            group.add(base);
-            group.position.set(x, yOffset, z);
-            return group;
-        }
-        const cameraPositions = [[-1.5,1.2,1.8],[1.5,1.2,1.8],[-1.8,1.2,-1.5],[1.8,1.2,-1.5],[-2.2,1.5,0.5],[2.2,1.5,0.5],[0.5,1.5,-2.2],[-0.5,1.5,-2.2]];
-        cameraPositions.forEach(pos => { const cam = createSecurityCamera(pos[0], pos[2], pos[1]); scene.add(cam); });
-        
-        const loader = new GLTFLoader();
-        let model = null;
-        let mixer = null;
-        
-        loader.load(astreiaConfig.modelPath, (gltf) => {
-            model = gltf.scene;
-            model.position.set(0, astreiaConfig.modelPositionY, 0);
-            model.scale.set(astreiaConfig.modelScale, astreiaConfig.modelScale, astreiaConfig.modelScale);
-            model.traverse((node) => { if (node.isMesh) { node.castShadow = true; } });
-            scene.add(model);
-            if (gltf.animations && gltf.animations.length > 0) {
-                mixer = new THREE.AnimationMixer(model);
-                gltf.animations.forEach(clip => mixer.clipAction(clip).play());
-                console.log(`✅ ${gltf.animations.length} animação(ões) ativada(s)`);
+
+        function toggleChat(){
+
+            if(chatLevel === 0){
+                chatLevel = 1;
             }
-            console.log('✅ Modelo da ASTREIA carregado');
+            else if(chatLevel === 1){
+                chatLevel = 0;
+            }
+            else{
+                chatLevel = 1;
+            }
+
+            updateChatLevel();
+        }
+
+        function toggleFullscreen(){
+
+            if(chatLevel !== 2){
+                chatLevel = 2;
+            }
+            else{
+                chatLevel = 1;
+            }
+
+            updateChatLevel();
+        }
+
+        chatHeader.addEventListener('click',(e)=>{
+
+            if(
+                e.target.closest('.fullscreen-toggle') ||
+                e.target.closest('.chat-toggle')
+            ) return;
+
+            toggleChat();
         });
-        
+
+        chatToggle.addEventListener('click',(e)=>{
+            e.stopPropagation();
+            toggleChat();
+        });
+
+        fullscreenBtn.addEventListener('click',(e)=>{
+            e.stopPropagation();
+            toggleFullscreen();
+        });
+
+        // =========================
+        // MENSAGENS
+        // =========================
+
+        function addMessage(text,isUser=false){
+
+            const div = document.createElement('div');
+
+            div.className =
+                `message ${isUser ? 'user' : 'asura'}`;
+
+            const time = new Date()
+                .toLocaleTimeString(
+                    'pt-BR',
+                    {
+                        hour:'2-digit',
+                        minute:'2-digit'
+                    }
+                );
+
+            div.innerHTML = `
+                <div class="message-avatar">
+                    ${isUser ? '👤' : '👁️'}
+                </div>
+
+                <div class="message-content">
+                    <div>${text}</div>
+
+                    <div class="message-time">
+                        ${time}
+                    </div>
+                </div>
+            `;
+
+            messages.appendChild(div);
+
+            messages.scrollTop =
+                messages.scrollHeight;
+        }
+
+        function sendMessage(){
+
+            const text = input.value.trim();
+
+            if(!text) return;
+
+            addMessage(text,true);
+
+            input.value = '';
+
+            setTimeout(()=>{
+
+                addMessage(
+                    '👁️ Sistema celestial ativo. Vigilância funcionando perfeitamente.'
+                );
+
+            },600);
+        }
+
+        sendBtn.addEventListener('click',sendMessage);
+
+        input.addEventListener('keypress',(e)=>{
+            if(e.key === 'Enter'){
+                sendMessage();
+            }
+        });
+
+        // =========================
+        // ANEXOS
+        // =========================
+
+        attachBtn.addEventListener('click',()=>{
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change',(e)=>{
+
+            const file = e.target.files[0];
+
+            if(!file) return;
+
+            const size =
+                (file.size / 1024 / 1024)
+                .toFixed(2);
+
+            if(file.type.startsWith('image/')){
+
+                const reader = new FileReader();
+
+                reader.onload = (ev)=>{
+
+                    const div =
+                        document.createElement('div');
+
+                    div.className =
+                        'message user';
+
+                    div.innerHTML = `
+                        <div class="message-avatar">
+                            👤
+                        </div>
+
+                        <div class="message-content">
+
+                            <div>
+                                🖼️ ${file.name}
+                            </div>
+
+                            <img
+                                src="${ev.target.result}"
+                                class="chat-image"
+                            >
+
+                            <div class="message-time">
+                                ${size} MB
+                            </div>
+
+                        </div>
+                    `;
+
+                    messages.appendChild(div);
+
+                    messages.scrollTop =
+                        messages.scrollHeight;
+                };
+
+                reader.readAsDataURL(file);
+
+            } else {
+
+                const div =
+                    document.createElement('div');
+
+                div.className =
+                    'message user';
+
+                div.innerHTML = `
+                    <div class="message-avatar">
+                        👤
+                    </div>
+
+                    <div class="message-content">
+
+                        <div class="chat-file">
+
+                            <div class="file-icon">
+                                📎
+                            </div>
+
+                            <div>
+                                <div class="file-name">
+                                    ${file.name}
+                                </div>
+
+                                <div class="file-size">
+                                    ${size} MB
+                                </div>
+                            </div>
+
+                            <div class="file-badge">
+                                ${file.name.split('.').pop()}
+                            </div>
+
+                        </div>
+
+                    </div>
+                `;
+
+                messages.appendChild(div);
+
+                messages.scrollTop =
+                    messages.scrollHeight;
+            }
+        });
+
+        // =========================
+        // THREE.JS
+        // =========================
+
+        const container =
+            document.getElementById('canvas-container');
+
+        const scene = new THREE.Scene();
+
+        scene.background =
+            new THREE.Color(0x040816);
+
+        scene.fog =
+            new THREE.FogExp2(0x040816,.008);
+
+        const camera =
+            new THREE.PerspectiveCamera(
+                45,
+                window.innerWidth/window.innerHeight,
+                .1,
+                1000
+            );
+
+        camera.position.set(3,2.2,4.2);
+
+        const renderer =
+            new THREE.WebGLRenderer({
+                antialias:true
+            });
+
+        renderer.setSize(
+            window.innerWidth,
+            window.innerHeight
+        );
+
+        renderer.setPixelRatio(
+            window.devicePixelRatio
+        );
+
+        container.appendChild(renderer.domElement);
+
+        const controls =
+            new OrbitControls(
+                camera,
+                renderer.domElement
+            );
+
+        controls.enableDamping = true;
+
+        // Luzes
+
+        scene.add(
+            new THREE.AmbientLight(
+                0x3366aa,
+                .8
+            )
+        );
+
+        const light =
+            new THREE.DirectionalLight(
+                0xaaddff,
+                1.3
+            );
+
+        light.position.set(3,5,2);
+
+        scene.add(light);
+
+        // Partículas
+
+        const particlesGeometry =
+            new THREE.BufferGeometry();
+
+        const count = 1800;
+
+        const positions =
+            new Float32Array(count * 3);
+
+        for(let i=0;i<count;i++){
+
+            positions[i*3] =
+                (Math.random()-.5)*16;
+
+            positions[i*3+1] =
+                Math.random()*6;
+
+            positions[i*3+2] =
+                (Math.random()-.5)*16;
+        }
+
+        particlesGeometry.setAttribute(
+            'position',
+            new THREE.BufferAttribute(
+                positions,
+                3
+            )
+        );
+
+        const particles =
+            new THREE.Points(
+                particlesGeometry,
+                new THREE.PointsMaterial({
+                    color:0x66bbff,
+                    size:.03,
+                    transparent:true,
+                    opacity:.65
+                })
+            );
+
+        scene.add(particles);
+
+        // Anel
+
+        const ring =
+            new THREE.Mesh(
+                new THREE.TorusGeometry(
+                    1.2,
+                    .04,
+                    32,
+                    200
+                ),
+                new THREE.MeshStandardMaterial({
+                    color:0x287bff,
+                    emissive:0x287bff,
+                    emissiveIntensity:.5
+                })
+            );
+
+        ring.rotation.x =
+            Math.PI/2;
+
+        scene.add(ring);
+
+        // Modelo GLB
+
+        const loader =
+            new GLTFLoader();
+
+        loader.load(
+            '../models/astreia.glb',
+            (gltf)=>{
+
+                const model =
+                    gltf.scene;
+
+                model.scale.set(
+                    .04,
+                    .04,
+                    .04
+                );
+
+                model.position.y =
+                    -.25;
+
+                scene.add(model);
+            }
+        );
+
+        // =========================
+        // ANIMAÇÃO
+        // =========================
+
         let time = 0;
-        let deltaTime = 0.016;
-        let lastTime = performance.now();
-        
-        function updateDelta() {
-            const now = performance.now();
-            deltaTime = Math.min(0.033, (now - lastTime) / 1000);
-            lastTime = now;
-            requestAnimationFrame(updateDelta);
-        }
-        updateDelta();
-        
-        function animate() {
-            requestAnimationFrame(animate);
-            time += 0.008;
-            
-            if (mixer) mixer.update(deltaTime);
-            
-            particles.rotation.y = time * 0.05;
-            particles.rotation.x = Math.sin(time * 0.15) * 0.1;
-            
-            ring.rotation.z = time * 0.3;
-            ring2.rotation.z = -time * 0.25;
-            
-            shield.material.emissiveIntensity = 0.08 + Math.sin(time * 2) * 0.04;
-            
-            fillLight.intensity = 0.6 + Math.sin(time * 2.5) * 0.2;
-            circleGlow.material.emissiveIntensity = 0.25 + Math.sin(time * 2) * 0.15;
-            
+
+        function animate(){
+
+            requestAnimationFrame(
+                animate
+            );
+
+            time += .01;
+
+            particles.rotation.y =
+                time * .08;
+
+            ring.rotation.z =
+                time * .4;
+
             controls.update();
-            renderer.render(scene, camera);
+
+            renderer.render(
+                scene,
+                camera
+            );
         }
+
         animate();
-        
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-        
-        initUI(astreiaConfig);
-        
-        const chat = new EnhancedChatSystem('chatContainer', astreiaConfig, (response) => {
-            if (voice?.isJarvisActive?.()) voice.speak(response);
-        });
-        
-        const voiceButtonElem = document.getElementById('voiceButton');
-        let voice = null;
-        if (voiceButtonElem) {
-            voice = new VoiceAssistant(voiceButtonElem, (text) => { document.getElementById('chatInput').value = text; chat.send(); }, null, { asuraName: astreiaConfig.name, continuous: true });
-        }
-        
-        setTimeout(() => {
-            chat.addMessage(astreiaConfig.welcomeMessage, false);
-            setTimeout(() => {
-                chat.addMessage("🎤 Dica: Clique no ícone 👁️ no topo para ativar o MODO JARVIS. Vou ficar sempre ouvindo!", false);
-                chat.addMessage("📎 Dica: Clique no ícone 📎 para enviar qualquer arquivo (imagem, PDF, DOC, etc)!", false);
-                chat.addMessage("🗺️ Dica: Clique no botão do mapa 🗺️ no TOPO ESQUERDO para acessar o PORTAL PLANNER!", false);
-            }, 2000);
-        }, 500);
-        
-        const portalOverlay = document.getElementById('portalOverlay');
-        portalOverlay.style.setProperty('--asura-color', astreiaConfig.color);
-        setTimeout(() => {
-            portalOverlay.style.opacity = '0.6';
-            setTimeout(() => {
-                portalOverlay.style.opacity = '0';
-                setTimeout(() => portalOverlay.style.display = 'none', 800);
-            }, 500);
-        }, 50);
-        
-        console.log('🟢 ASTREIA carregada com CHAT DE 3 NÍVEIS CORRIGIDO!');
+
+        // =========================
+        // RESIZE
+        // =========================
+
+        window.addEventListener(
+            'resize',
+            ()=>{
+
+                camera.aspect =
+                    window.innerWidth /
+                    window.innerHeight;
+
+                camera.updateProjectionMatrix();
+
+                renderer.setSize(
+                    window.innerWidth,
+                    window.innerHeight
+                );
+            }
+        );
+
+        // =========================
+        // BOAS VINDAS
+        // =========================
+
+        setTimeout(()=>{
+
+            addMessage(
+                '👁️ Bem-vindo ao Reino Celestial. Sou Astreia.'
+            );
+
+            setTimeout(()=>{
+
+                addMessage(
+                    '📎 Agora o chat aceita imagens e arquivos.'
+                );
+
+                addMessage(
+                    '⛶ O modo tela inteira foi corrigido.'
+                );
+
+            },1200);
+
+        },600);
+
     </script>
+
 </body>
 </html>
