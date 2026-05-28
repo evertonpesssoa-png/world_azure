@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>// ACESSO NEGADO // PORTAL OFFLINE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(ellipse at center, #0a0a1a 0%, #000000 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Grade de fundo estilo Matrix */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            animation: gridPulse 4s ease infinite;
+        }
+
+        /* Linhas de varredura */
+        body::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 255, 255, 0.03) 0px,
+                rgba(0, 255, 255, 0.03) 2px,
+                transparent 2px,
+                transparent 6px
+            );
+            pointer-events: none;
+            animation: scan 8s linear infinite;
+        }
+
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        /* Container principal */
+        .error-container {
+            position: relative;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            border: 2px solid #ff00ff;
+            border-radius: 24px;
+            padding: 50px 60px;
+            max-width: 600px;
+            width: 90%;
+            z-index: 10;
+            box-shadow: 
+                0 0 50px rgba(255, 0, 255, 0.3),
+                inset 0 0 30px rgba(255, 0, 255, 0.1),
+                0 0 100px rgba(0, 255, 255, 0.1);
+            animation: borderPulse 2s ease infinite alternate;
+        }
+
+        @keyframes borderPulse {
+            0% { border-color: #ff00ff; box-shadow: 0 0 50px rgba(255, 0, 255, 0.3); }
+            100% { border-color: #00ffff; box-shadow: 0 0 80px rgba(0, 255, 255, 0.5); }
+        }
+
+        /* Código glitch principal */
+        .error-glitch {
+            font-size: 72px;
+            font-weight: bold;
+            font-family: monospace;
+            color: #ff00ff;
+            text-shadow: 
+                4px 4px 0px #00ffff,
+                -2px -2px 0px #ff00ff,
+                0 0 20px #ff00ff;
+            margin-bottom: 20px;
+            animation: glitchText 0.3s ease infinite alternate;
+            letter-spacing: 8px;
+        }
+
+        @keyframes glitchText {
+            0% { transform: translate(0); text-shadow: 4px 4px 0px #00ffff, -2px -2px 0px #ff00ff; }
+            25% { transform: translate(-2px, 1px); text-shadow: -4px -4px 0px #00ffff, 2px 2px 0px #ff00ff; }
+            50% { transform: translate(2px, -1px); text-shadow: 2px -2px 0px #00ffff, -2px 2px 0px #ff00ff; }
+            100% { transform: translate(0); text-shadow: 4px 4px 0px #00ffff, -2px -2px 0px #ff00ff; }
+        }
+
+        /* Ícone com animação */
+        .error-icon {
+            font-size: 80px;
+            margin: 20px 0;
+            filter: drop-shadow(0 0 15px #ff00ff);
+            animation: iconPulse 1s ease infinite, iconRotate 3s ease infinite;
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px #ff00ff); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 30px #ff00ff); }
+        }
+
+        @keyframes iconRotate {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(5deg); }
+            75% { transform: rotate(-5deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        /* Título */
+        .error-title {
+            font-size: 28px;
+            color: #00ffff;
+            text-shadow: 0 0 15px #00ffff;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-weight: bold;
+        }
+
+        /* Linha decorativa */
+        .divider {
+            width: 80%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ff00ff, #00ffff, #ff00ff, transparent);
+            margin: 20px auto;
+            animation: dividerPulse 2s ease infinite;
+        }
+
+        @keyframes dividerPulse {
+            0%, 100% { opacity: 0.5; width: 80%; }
+            50% { opacity: 1; width: 100%; }
+        }
+
+        /* Mensagem de erro */
+        .error-message {
+            color: #ffaa00;
+            font-size: 18px;
+            margin: 20px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        /* Código de erro com terminal */
+        .error-code {
+            background: #0a0a0a;
+            border-left: 3px solid #ff00ff;
+            padding: 12px 20px;
+            font-family: monospace;
+            font-size: 13px;
+            color: #00ff88;
+            margin: 20px 0;
+            text-align: left;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .error-code span {
+            color: #ff00ff;
+        }
+
+        .error-code .blink {
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Texto de status */
+        .status-text {
+            font-size: 12px;
+            color: #ff4444;
+            margin: 15px 0;
+            letter-spacing: 1px;
+        }
+
+        /* Barra de progresso */
+        .progress-bar {
+            width: 100%;
+            height: 3px;
+            background: rgba(255,0,255,0.3);
+            border-radius: 3px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #ff00ff, #00ffff);
+            animation: loading 3s ease forwards;
+        }
+
+        @keyframes loading {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        /* Botão cyberpunk */
+        .back-btn {
+            background: linear-gradient(135deg, #ff00ff, #cc00cc);
+            border: none;
+            padding: 14px 32px;
+            border-radius: 40px;
+            color: #fff;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .back-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px #ff00ff;
+            letter-spacing: 4px;
+        }
+
+        .back-btn:hover::before {
+            left: 100%;
+        }
+
+        /* Partículas flutuantes */
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #00ffff;
+            border-radius: 50%;
+            opacity: 0;
+            animation: floatParticle 4s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(0deg);
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100vh) rotate(360deg);
+            }
+        }
+
+        /* Responsivo */
+        @media (max-width: 600px) {
+            .error-container { padding: 30px 20px; }
+            .error-glitch { font-size: 48px; letter-spacing: 4px; }
+            .error-icon { font-size: 60px; }
+            .error-title { font-size: 20px; }
+            .error-message { font-size: 14px; }
+            .back-btn { padding: 10px 20px; font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-glitch">// 404 //</div>
+        <div class="error-icon">🌀💀🚪</div>
+        <div class="error-title">PORTAL DESCONECTADO</div>
+        <div class="divider"></div>
+        
+        <div class="error-message">⚠️ ACESSO NEGADO ⚠️</div>
+        
+        <div class="error-code">
+            <span>[SYSTEM]</span> Scanning portal database...<br>
+            <span>[ERROR]</span> Mini-mundo não encontrado<br>
+            <span>[CODE]</span> 0x404_PORTAL_OFFLINE<br>
+            <span>[STATUS]</span> Conexão perdida com o servidor<br>
+            <span class="blink">⨯</span> Tente novamente mais tarde
+        </div>
+        
+        <div class="status-text">🚧 OS ENGENHEIROS DO SISTEMA JÁ FORAM NOTIFICADOS 🚧</div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+        
+        <button class="back-btn" onclick="goBack()">⤺ VOLTAR AO PORTAL PLANNER</button>
+    </div>
+
+    <script>
+        // Criar partículas flutuantes
+        for (let i = 0; i < 50; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 4 + 's';
+            particle.style.animationDuration = 3 + Math.random() * 2 + 's';
+            particle.style.opacity = 0.3 + Math.random() * 0.5;
+            particle.style.background = Math.random() > 0.5 ? '#ff00ff' : '#00ffff';
+            document.body.appendChild(particle);
+        }
+
+        function goBack() {
+            const lastAsura = localStorage.getItem('lastAsura') || 'merlim';
+            window.location.href = '/3d-slides/shared/portals/portal-system.html?asura=' + lastAsura;
+        }
+
+        // Efeito de digitação no terminal
+        const errorCode = document.querySelector('.error-code');
+        if (errorCode) {
+            const originalHTML = errorCode.innerHTML;
+            errorCode.innerHTML = '<span>[SYSTEM]</span> <span class="blink">⨯</span>';
+            
+            let i = 0;
+            const fullText = originalHTML;
+            const typing = setInterval(() => {
+                if (i < fullText.length) {
+                    errorCode.innerHTML = fullText.substring(0, i + 1);
+                    i++;
+                } else {
+                    clearInterval(typing);
+                }
+            }, 30);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>ASTREIA • Reino Celestial Azul</title>
+    
+    <!-- FONTE EXCLUSIVA PARA ASTREIA -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="../shared/css/base.css">
+    <link rel="stylesheet" href="../shared/css/top-icons.css">
+    <link rel="stylesheet" href="../shared/css/chat.css">
+    <link rel="stylesheet" href="../shared/css/profile-panel.css">
+    <link rel="stylesheet" href="../shared/css/portal.css">
+    
+    <!-- ESTILOS ESPECÍFICOS DA ASTREIA -->
+    <link rel="stylesheet" href="../shared/asuras/astreia/chat-style.css">
+    
+    <style>
+        :root {
+            --asura-color: #287bff;
+            --asura-glow: rgba(40, 123, 255, 0.6);
+        }
+        body { background: radial-gradient(circle at 30% 20%, #050b20, #030108); }
+        
+        .portal-planner-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(12px);
+            color: #287bff;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            z-index: 9999;
+            border: 2px solid #287bff;
+            cursor: pointer;
+        }
+        
+        body.transition-out {
+            opacity: 0;
+            transform: scale(0.98);
+            transition: all 0.4s ease;
+        }
+        
+        .chat-container {
+            transform: translateY(calc(100% - 48px));
+            transition: transform 0.3s ease;
+        }
+        .chat-container.open { transform: translateY(0); }
+        .chat-body.collapsed { display: none; }
+    </style>
+</head>
+<body class="asura-astreia">
+    <div id="canvas-container"></div>
+    
+    <div class="portal-planner-btn" id="portalPlannerBtn">🗺️</div>
+    
+    <div class="top-icons">
+        <div class="top-icon" id="backButton">←</div>
+        <div class="top-icon voice-icon" id="voiceButton">
+            <span class="brain-icon">👁️</span>
+            <span class="mic-icon">🎤</span>
+        </div>
+        <div class="top-icon" id="profileButton">👁️</div>
+    </div>
+    
+    <div class="profile-panel" id="profilePanel"></div>
+    
+    <div class="chat-container" id="chatContainer">
+        <div class="chat-header" id="chatHeader">
+            <div class="chat-header-info">
+                <div class="chat-avatar">👁️</div>
+                <div><h4>ASTREIA • Guardiã Celestial</h4><div class="chat-status">🟢 online | vigilância ativa</div></div>
+            </div>
+            <div class="chat-toggle" id="chatToggle">▼</div>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" placeholder="Digite sua mensagem...">
+                <button id="sendChatBtn">➤</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="portal-overlay" id="portalOverlay"></div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import { astreiaConfig } from '../shared/asuras/astreia/config.js';
+        import { initScene, initControls } from '../shared/asuras/astreia/scene.js';
+        import { initLights } from '../shared/asuras/astreia/lights.js';
+        import { initFloor } from '../shared/asuras/astreia/floor.js';
+        import { initParticles } from '../shared/asuras/astreia/particles.js';
+        import { initRings, initShield } from '../shared/asuras/astreia/rings.js';
+        import { initPillars } from '../shared/asuras/astreia/pillars.js';
+        import { initCameras } from '../shared/asuras/astreia/cameras.js';
+        import { loadModel } from '../shared/asuras/astreia/model.js';
+        import { startAnimation } from '../shared/asuras/astreia/animate.js';
+        import { initUI } from '../shared/js/ui.js';
+        import { EnhancedChatSystem } from '../shared/js/chat-system-enhanced.js';
+        import { VoiceAssistant } from '../shared/js/voice-assistant.js';
+        
+        // =========================
+        // SETUP 3D
+        // =========================
+        const { scene, camera, renderer } = initScene(astreiaConfig);
+        const controls = await initControls(camera, renderer);
+        const { fillLight, heavenLight } = initLights(scene, astreiaConfig);
+        const circleGlow = initFloor(scene, astreiaConfig);
+        const particles = initParticles(scene);
+        const { ring, ring2 } = initRings(scene, astreiaConfig);
+        const shield = initShield(scene, astreiaConfig);
+        initPillars(scene, astreiaConfig);
+        initCameras(scene);
+        
+        const { model, mixer } = loadModel(scene, astreiaConfig);
+        
+        const animation = startAnimation(scene, camera, renderer, controls, particles, ring, ring2, shield, fillLight, circleGlow);
+        if (mixer) animation.setMixer(mixer);
+        
+        // =========================
+        // BOTÃO PORTAL
+        // =========================
+        document.getElementById('portalPlannerBtn').addEventListener('click', () => {
+            localStorage.setItem('lastAsura', 'astreia');
+            document.body.classList.add('transition-out');
+            const flash = document.createElement('div');
+            flash.style.cssText = `position:fixed;inset:0;background:radial-gradient(circle,#287bff,transparent);opacity:0;transition:.5s;z-index:10000;`;
+            document.body.appendChild(flash);
+            requestAnimationFrame(() => {
+                flash.style.opacity = '0.8';
+                setTimeout(() => window.location.href = '../shared/portals/portal-system.html?asura=astreia', 400);
+            });
+        });
+        
+        // =========================
+        // BOTÃO VOLTAR DO CELULAR
+        // =========================
+        function voltarAoGrimorio() {
+            document.body.classList.add('transition-out');
+            const flash = document.createElement('div');
+            flash.style.cssText = `position:fixed;inset:0;background:radial-gradient(circle,${astreiaConfig.color},transparent);opacity:0;transition:.4s;z-index:100000;`;
+            document.body.appendChild(flash);
+            requestAnimationFrame(() => {
+                flash.style.opacity = '0.8';
+                setTimeout(() => window.location.href = '../index.html', 350);
+            });
+        }
+        
+        window.addEventListener('popstate', (e) => {
+            e.preventDefault();
+            history.pushState(null, null, location.href);
+            voltarAoGrimorio();
+        });
+        history.pushState(null, null, location.href);
+        
+        // =========================
+        // UI, CHAT E VOZ
+        // =========================
+        initUI(astreiaConfig);
+        
+        const chat = new EnhancedChatSystem('chatContainer', astreiaConfig, (response) => {
+            if (voice?.isJarvisActive?.()) voice.speak(response);
+        });
+        
+        const voiceButton = document.getElementById('voiceButton');
+        let voice = null;
+        if (voiceButton) {
+            voice = new VoiceAssistant(voiceButton, (text) => {
+                document.getElementById('chatInput').value = text;
+                chat.send();
+            }, null, { asuraName: astreiaConfig.name, continuous: true });
+        }
+        
+        // Toggle do chat
+        const chatContainer = document.getElementById('chatContainer');
+        const chatToggle = document.getElementById('chatToggle');
+        const chatHeader = document.getElementById('chatHeader');
+        
+        function toggleChat() {
+            chatContainer.classList.toggle('open');
+        }
+        
+        if (chatToggle) chatToggle.addEventListener('click', toggleChat);
+        if (chatHeader) chatHeader.addEventListener('click', toggleChat);
+        
+        // Mensagens de boas-vindas
+        setTimeout(() => {
+            chat.addMessage(astreiaConfig.welcomeMessage, false);
+            setTimeout(() => {
+                chat.addMessage("🎤 Dica: Clique no ícone 👁️ no topo para ativar o MODO JARVIS. Vou ficar sempre ouvindo!", false);
+                chat.addMessage("📎 Dica: Clique no ícone 📎 para enviar qualquer arquivo (imagem, PDF, DOC, etc)!", false);
+                chat.addMessage("🗺️ Dica: Clique no botão do mapa 🗺️ no TOPO ESQUERDO para acessar o PORTAL PLANNER!", false);
+            }, 2000);
+        }, 500);
+        
+        // Efeito de portal de entrada
+        const portalOverlay = document.getElementById('portalOverlay');
+        portalOverlay.style.setProperty('--asura-color', astreiaConfig.color);
+        setTimeout(() => {
+            portalOverlay.style.opacity = '0.6';
+            setTimeout(() => {
+                portalOverlay.style.opacity = '0';
+                setTimeout(() => portalOverlay.style.display = 'none', 800);
+            }, 500);
+        }, 50);
+        
+        console.log('🟢 ASTREIA carregada com SUCESSO!');
+    </script>
+</body>
+</html>

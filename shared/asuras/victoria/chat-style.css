@@ -1,0 +1,61 @@
+/* ESTILOS ESPECÍFICOS DA VICTORIA - GUERRA INFERNAL */
+.asura-victoria .chat-container {
+    background: rgba(10, 0, 0, 0.95) !important;
+    border: 1px solid rgba(255, 0, 0, 0.3) !important;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.2) !important;
+}
+
+.asura-victoria .chat-header {
+    background: rgba(0, 0, 0, 0.9) !important;
+    border-bottom: 1px solid #ff0000 !important;
+}
+
+.asura-victoria .chat-header-info h4 {
+    color: #ff0000 !important;
+    font-family: 'Bebas Neue', cursive !important;
+    text-shadow: 0 0 5px #ff0000 !important;
+    letter-spacing: 2px !important;
+}
+
+.asura-victoria .message-content {
+    background: rgba(255, 0, 0, 0.12) !important;
+    border: 1px solid #ff0000 !important;
+    color: #ffcccc !important;
+    font-family: 'Bebas Neue', cursive !important;
+}
+
+.asura-victoria .message.user .message-content {
+    background: rgba(255, 0, 0, 0.2) !important;
+}
+
+.asura-victoria .attach-btn {
+    border: 1px solid #ff0000 !important;
+    color: #ff0000 !important;
+}
+
+.asura-victoria .attach-btn:hover {
+    background: rgba(255, 0, 0, 0.2) !important;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5) !important;
+}
+
+.asura-victoria .chat-messages::-webkit-scrollbar-thumb {
+    background: #ff0000 !important;
+}
+
+.asura-victoria .chat-file {
+    background: rgba(255, 0, 0, 0.1) !important;
+    border: 1px solid #ff0000 !important;
+}
+
+.asura-victoria .chat-file:hover {
+    background: rgba(255, 0, 0, 0.25) !important;
+}
+
+.asura-victoria .file-name {
+    color: #ff0000 !important;
+}
+
+.asura-victoria .file-badge {
+    background: rgba(255, 0, 0, 0.2) !important;
+    color: #ff0000 !important;
+}

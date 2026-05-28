@@ -1,0 +1,303 @@
+{% extends "base.html" %}
+{% block content %}
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- BACKGROUND -->
+
+<canvas id="gridCanvas"></canvas> <canvas id="particleCanvas"></canvas>
+
+<header class="cyber-header">
+  MENTAL CYBER DASHBOARD — {{ year }}
+</header>
+
+<!-- STATUS -->
+
+<div class="card">
+  <h2>Status Mental</h2>
+  <p>🗓 Dias com anotações: <strong>{{ insights.total_days_with_notes }}</strong></p>
+  <p>⭐ Dias importantes: <strong>{{ insights.important_days }}</strong></p>
+  <p>✍️ Média de caracteres: <strong>{{ insights.avg_text_size }}</strong></p>
+  <p class="insight-text">{{ insights.insight }}</p>
+</div>
+
+<!-- HUD BURNOUT -->
+
+<div class="card">
+  <h2>Nível de Burnout (HUD)</h2>
+  <canvas id="burnoutGauge"></canvas>
+</div>
+
+<!-- CARGA MENTAL -->
+
+<div class="card">
+  <h2>Carga Mental por Semana</h2>
+  <canvas id="mentalChart"></canvas>
+</div>
+
+<!-- INTENSIDADE -->
+
+<div class="card">
+  <h2>Dias Críticos — Intensidade</h2>
+  <canvas id="barChart"></canvas>
+</div>
+
+<a href="/" class="back-btn">⬅ Voltar</a>
+
+<style>
+html, body{
+  margin:0;
+  padding:0;
+  min-height:100%;
+  background:black;
+  font-family:'Orbitron',sans-serif;
+  color:#0ff;
+  overflow-x:hidden;
+  overflow-y:auto;
+}
+
+/* BACKGROUND */
+#gridCanvas,#particleCanvas{
+  position:fixed;
+  top:0;left:0;
+  width:100%;
+  height:100%;
+  z-index:-2;
+}
+
+.cyber-header{
+  text-align:center;
+  font-size:28px;
+  padding:20px;
+  background:linear-gradient(90deg,#ff00cc,#00ffff);
+  color:white;
+  text-shadow:0 0 10px #00ffff,0 0 20px #ff00cc;
+}
+
+.card{
+  background:rgba(0,0,0,0.75);
+  margin:25px auto;
+  padding:25px;
+  border-radius:18px;
+  max-width:900px;
+  border:2px solid #ff00cc;
+  box-shadow:0 0 25px #0ff,0 0 40px #ff00cc;
+  backdrop-filter:blur(6px);
+  transition:0.2s;
+}
+
+.card:hover{
+  transform:scale(1.02);
+  box-shadow:0 0 35px #0ff,0 0 60px #ff00cc;
+}
+
+canvas{
+  background:rgba(0,0,0,0.6);
+  border-radius:14px;
+  box-shadow:0 0 20px #00ffff inset;
+  width:100% !important;
+  height:320px !important;
+}
+</style>
+
+<script>
+/* ======================
+   DADOS DO FLASK
+====================== */
+const weekdayData = {{ insights.weekday_distribution | tojson }};
+const labels = Object.keys(weekdayData);
+const values = Object.values(weekdayData);
+
+// cálculo simples de burnout (0–100)
+const burnoutLevel = Math.min(
+  100,
+  Math.round(({{ insights.important_days }} / 365) * 100 + (values.reduce((a,b)=>a+b,0)/10))
+);
+
+/* ======================
+   AJUSTE CANVAS FUNDO
+====================== */
+const gridCanvas = document.getElementById('gridCanvas');
+const particleCanvas = document.getElementById('particleCanvas');
+const gctx = gridCanvas.getContext('2d');
+const pctx = particleCanvas.getContext('2d');
+
+function resize(){
+  const height = Math.max(
+    document.body.scrollHeight,
+    document.documentElement.scrollHeight,
+    window.innerHeight
+  );
+
+  gridCanvas.width = window.innerWidth;
+  gridCanvas.height = height;
+  particleCanvas.width = window.innerWidth;
+  particleCanvas.height = height;
+}
+
+window.addEventListener('resize', resize);
+window.addEventListener('load', resize);
+resize();
+
+/* GRID ANIMADO */
+let offset=0;
+function drawGrid(){
+  gctx.clearRect(0,0,gridCanvas.width,gridCanvas.height);
+  gctx.strokeStyle='#0ff';
+  gctx.shadowColor='#0ff';
+  gctx.shadowBlur=4;
+
+  for(let i=0;i<gridCanvas.width;i+=50){
+    gctx.beginPath();
+    gctx.moveTo(i,(offset+i)%gridCanvas.height);
+    gctx.lineTo(i,gridCanvas.height);
+    gctx.stroke();
+  }
+  for(let j=0;j<gridCanvas.height;j+=50){
+    gctx.beginPath();
+    gctx.moveTo(0,(j+offset)%gridCanvas.height);
+    gctx.lineTo(gridCanvas.width,(j+offset)%gridCanvas.height);
+    gctx.stroke();
+  }
+  offset+=0.5;
+  requestAnimationFrame(drawGrid);
+}
+drawGrid();
+
+/* PARTICULAS */
+let particles=[];
+for(let i=0;i<100;i++){
+  particles.push({
+    x:Math.random()*window.innerWidth,
+    y:Math.random()*window.innerHeight,
+    r:Math.random()*2+1,
+    speed:Math.random()*0.6+0.2
+  });
+}
+
+function drawParticles(){
+  pctx.clearRect(0,0,particleCanvas.width,particleCanvas.height);
+  particles.forEach(p=>{
+    pctx.fillStyle='#0ff';
+    pctx.shadowColor='#0ff';
+    pctx.shadowBlur=6;
+    pctx.beginPath();
+    pctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    pctx.fill();
+    p.y -= p.speed;
+    if(p.y<0) p.y = particleCanvas.height;
+  });
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+/* ======================
+   HUD BURNOUT
+====================== */
+new Chart(document.getElementById('burnoutGauge'),{
+  type:'doughnut',
+  data:{
+    labels:['Burnout','Restante'],
+    datasets:[{
+      data:[burnoutLevel,100-burnoutLevel],
+      backgroundColor:['magenta','rgba(0,255,255,0.1)'],
+      borderWidth:0
+    }]
+  },
+  options:{
+    cutout:'75%',
+    plugins:{
+      legend:{display:false},
+      tooltip:{enabled:false}
+    },
+    animation:{duration:1500}
+  },
+  plugins:[{
+    id:'text',
+    afterDraw(chart){
+      const ctx = chart.ctx;
+      const width = chart.width;
+      const height = chart.height;
+      ctx.restore();
+      ctx.font = '28px Orbitron';
+      ctx.fillStyle = '#0ff';
+      ctx.textAlign='center';
+      ctx.textBaseline='middle';
+      ctx.fillText(burnoutLevel + '%', width/2, height/2);
+    }
+  }]
+});
+
+/* ======================
+   CARGA MENTAL (LINHA)
+====================== */
+const mentalChart = new Chart(document.getElementById('mentalChart'),{
+  type:'line',
+  data:{
+    labels:labels,
+    datasets:[{
+      label:'Carga Mental',
+      data:values,
+      borderColor:'cyan',
+      backgroundColor:'rgba(0,255,255,0.15)',
+      tension:0.4,
+      borderWidth:3,
+      pointRadius:5,
+      pointBackgroundColor:'magenta'
+    }]
+  },
+  options:{
+    plugins:{
+      legend:{labels:{color:'#0ff'}},
+      tooltip:{backgroundColor:'rgba(0,255,255,0.85)'}
+    },
+    scales:{
+      y:{ticks:{color:'#0ff'},grid:{color:'#222'}},
+      x:{ticks:{color:'#0ff'},grid:{color:'#222'}}
+    }
+  }
+});
+
+/* ======================
+   BARRAS PULSANTES
+====================== */
+const barChart = new Chart(document.getElementById('barChart'),{
+  type:'bar',
+  data:{
+    labels:labels,
+    datasets:[{
+      label:'Intensidade',
+      data:values,
+      backgroundColor:'magenta'
+    }]
+  },
+  options:{
+    plugins:{
+      legend:{labels:{color:'#0ff'}},
+      tooltip:{backgroundColor:'rgba(255,0,255,0.85)'}
+    },
+    scales:{
+      y:{ticks:{color:'#0ff'},grid:{color:'#222'}},
+      x:{ticks:{color:'#0ff'},grid:{color:'#222'}}
+    }
+  }
+});
+
+/* PULSAR NEON */
+function pulsar(){
+  barChart.data.datasets[0].backgroundColor =
+    values.map((v,i)=>`rgba(255,0,255,${0.5+0.5*Math.sin(Date.now()/400+i)})`);
+  barChart.update('none');
+
+  mentalChart.data.datasets[0].borderColor =
+    `rgba(0,255,255,${0.7+0.3*Math.sin(Date.now()/300)})`;
+  mentalChart.update('none');
+
+  requestAnimationFrame(pulsar);
+}
+pulsar();
+
+</script>
+
+{% endblock %}

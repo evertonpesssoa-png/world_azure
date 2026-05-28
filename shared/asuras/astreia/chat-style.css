@@ -1,0 +1,60 @@
+/* ESTILOS ESPECÍFICOS DA ASTREIA - CELESTIAL AZUL */
+.asura-astreia .chat-container {
+    background: rgba(5, 11, 32, 0.95) !important;
+    border: 1px solid rgba(40, 123, 255, 0.3) !important;
+    box-shadow: 0 0 15px rgba(40, 123, 255, 0.2) !important;
+}
+
+.asura-astreia .chat-header {
+    background: rgba(0, 0, 0, 0.9) !important;
+    border-bottom: 1px solid #287bff !important;
+}
+
+.asura-astreia .chat-header-info h4 {
+    color: #287bff !important;
+    font-family: 'Poppins', sans-serif !important;
+    text-shadow: 0 0 5px rgba(40, 123, 255, 0.5) !important;
+}
+
+.asura-astreia .message-content {
+    background: rgba(40, 123, 255, 0.12) !important;
+    border: 1px solid #287bff !important;
+    color: #cceeff !important;
+    font-family: 'Poppins', sans-serif !important;
+}
+
+.asura-astreia .message.user .message-content {
+    background: rgba(40, 123, 255, 0.2) !important;
+}
+
+.asura-astreia .attach-btn {
+    border: 1px solid #287bff !important;
+    color: #287bff !important;
+}
+
+.asura-astreia .attach-btn:hover {
+    background: rgba(40, 123, 255, 0.2) !important;
+    box-shadow: 0 0 10px rgba(40, 123, 255, 0.5) !important;
+}
+
+.asura-astreia .chat-messages::-webkit-scrollbar-thumb {
+    background: #287bff !important;
+}
+
+.asura-astreia .chat-file {
+    background: rgba(40, 123, 255, 0.1) !important;
+    border: 1px solid #287bff !important;
+}
+
+.asura-astreia .chat-file:hover {
+    background: rgba(40, 123, 255, 0.25) !important;
+}
+
+.asura-astreia .file-name {
+    color: #287bff !important;
+}
+
+.asura-astreia .file-badge {
+    background: rgba(40, 123, 255, 0.2) !important;
+    color: #287bff !important;
+}

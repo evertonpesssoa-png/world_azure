@@ -1,0 +1,87 @@
+/* =========================
+   PAINEL DE PERFIL (POPUP)
+   ========================= */
+.profile-panel {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    width: 320px;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 20px;
+    border-left: 4px solid var(--asura-color);
+    box-shadow: 0 0 30px var(--asura-glow);
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateX(20px);
+    pointer-events: none;
+    z-index: 199;
+}
+
+.profile-panel.open {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+}
+
+.profile-panel h2 {
+    font-size: 1.6rem;
+    background: var(--asura-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 5px;
+}
+
+.profile-panel .subtitle {
+    font-size: 0.7rem;
+    color: var(--asura-color);
+    margin-bottom: 15px;
+    letter-spacing: 2px;
+}
+
+.skill-bar {
+    margin-bottom: 12px;
+}
+
+.skill-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    margin-bottom: 4px;
+    color: #ddd;
+}
+
+.skill-bar-bg {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.skill-bar-fill {
+    height: 100%;
+    background: var(--asura-gradient);
+    border-radius: 4px;
+    width: 0%;
+    transition: width 1s ease;
+}
+
+.personality-text {
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: #ccc;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 768px) {
+    .profile-panel {
+        width: 260px;
+        padding: 15px;
+        top: 70px;
+    }
+    .profile-panel h2 { font-size: 1.4rem; }
+}

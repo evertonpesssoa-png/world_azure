@@ -1,0 +1,31 @@
+import * as THREE from 'three';
+
+export function initPanels(scene) {
+    const buttonMaterial = new THREE.MeshStandardMaterial({ color: 0xff4488, emissive: 0xff2266, emissiveIntensity: 0.3 });
+    const controlPositions = [
+        [-2.3, 0.3, 1.8], [2.3, 0.3, 1.8],
+        [-2.3, 0.3, -1.5], [2.3, 0.3, -1.5]
+    ];
+    
+    function createControlPanel(x, z, yOffset) {
+        const group = new THREE.Group();
+        const panel = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.08, 0.25), new THREE.MeshStandardMaterial({ color: 0x226666, metalness: 0.7 }));
+        group.add(panel);
+        
+        const button1 = new THREE.Mesh(new THREE.SphereGeometry(0.045, 6, 6), buttonMaterial);
+        button1.position.set(0.08, 0.05, 0.1);
+        group.add(button1);
+        
+        const button2 = new THREE.Mesh(new THREE.SphereGeometry(0.045, 6, 6), new THREE.MeshStandardMaterial({ color: 0x66ff88, emissive: 0x44ff66, emissiveIntensity: 0.2 }));
+        button2.position.set(-0.08, 0.05, 0.1);
+        group.add(button2);
+        
+        group.position.set(x, yOffset, z);
+        return group;
+    }
+    
+    controlPositions.forEach(pos => {
+        const panel = createControlPanel(pos[0], pos[2], pos[1]);
+        scene.add(panel);
+    });
+}

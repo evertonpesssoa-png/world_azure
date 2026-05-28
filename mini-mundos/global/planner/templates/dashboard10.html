@@ -1,0 +1,263 @@
+{% extends "base.html" %}
+{% block content %}
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<header class="cyber-header">
+  MENTAL CYBER DASHBOARD — {{ year }}
+</header>
+
+<!-- STATUS -->
+<div class="card">
+  <h2>Status Mental</h2>
+  <p>🗓 Dias com anotações: <strong>{{ insights.total_days_with_notes }}</strong></p>
+  <p>⭐ Dias importantes: <strong>{{ insights.important_days }}</strong></p>
+  <p>✍️ Média de caracteres: <strong>{{ insights.avg_text_size }}</strong></p>
+  <p class="insight-text">{{ insights.insight }}</p>
+</div>
+
+<!-- ALERTAS -->
+<div class="card">
+  <h2>Alertas do Sistema</h2>
+  {% for alert in insights.alerts %}
+    <p>{{ alert }}</p>
+  {% endfor %}
+</div>
+
+<!-- BURNOUT ATUAL -->
+<div class="card">
+  <h2>Nível de Burnout</h2>
+  <canvas id="burnoutGauge"></canvas>
+</div>
+
+<!-- PREVISÃO -->
+<div class="card">
+  <h2>Previsão de Burnout (30 dias)</h2>
+  <canvas id="predictionGauge"></canvas>
+</div>
+
+<!-- COLAPSO -->
+<div class="card">
+  <h2>Detector de Colapso</h2>
+  <p>Nível de risco: <strong>{{ insights.collapse_risk }}</strong></p>
+</div>
+
+<!-- ANTIFRÁGIL -->
+<div class="card">
+  <h2>Score Antifrágil</h2>
+  <canvas id="antifragileGauge"></canvas>
+</div>
+
+<!-- CARGA MENTAL -->
+<div class="card">
+  <h2>Carga Mental por Dia da Semana</h2>
+  <canvas id="mentalChart"></canvas>
+</div>
+
+<!-- INTENSIDADE -->
+<div class="card">
+  <h2>Intensidade por Dia</h2>
+  <canvas id="barChart"></canvas>
+</div>
+
+<!-- PRESSÃO ACUMULADA -->
+<div class="card">
+  <h2>Pressão Acumulada</h2>
+  <canvas id="pressureChart"></canvas>
+</div>
+
+<!-- SILÊNCIO -->
+<div class="card">
+  <h2>Detector de Silêncio</h2>
+  <canvas id="silenceChart"></canvas>
+</div>
+
+<!-- RADAR -->
+<div class="card">
+  <h2>Perfil Semanal</h2>
+  <canvas id="radarChart"></canvas>
+</div>
+
+<a href="/" class="back-btn">⬅ Voltar</a>
+
+<style>
+html, body{
+  margin:0;
+  padding:0;
+  background:black;
+  font-family:'Orbitron',sans-serif;
+  color:#0ff;
+}
+
+.cyber-header{
+  text-align:center;
+  font-size:28px;
+  padding:20px;
+  background:linear-gradient(90deg,#ff00cc,#00ffff);
+  color:white;
+  text-shadow:0 0 10px #00ffff,0 0 20px #ff00cc;
+}
+
+.card{
+  background:rgba(0,0,0,0.75);
+  margin:25px auto;
+  padding:25px;
+  border-radius:18px;
+  max-width:900px;
+  border:2px solid #ff00cc;
+  box-shadow:0 0 25px #0ff,0 0 40px #ff00cc;
+}
+
+canvas{
+  background:rgba(0,0,0,0.6);
+  border-radius:14px;
+  box-shadow:0 0 20px #00ffff inset;
+  width:100% !important;
+  height:320px !important;
+}
+
+.back-btn{
+  display:block;
+  text-align:center;
+  margin:30px;
+  font-size:18px;
+  color:#0ff;
+}
+</style>
+
+<script>
+
+/* ======================
+   DADOS DO FLASK
+====================== */
+
+const weekdayData = {{ insights.weekday_distribution | tojson }};
+const labels = Object.keys(weekdayData);
+const values = Object.values(weekdayData);
+
+const burnoutScore = {{ insights.burnout_score }};
+const predictedBurnout = {{ insights.predicted_burnout_30 }};
+const antifragileScore = {{ insights.antifragile_score }};
+
+/* ======================
+   DERIVAÇÕES
+====================== */
+
+// Pressão acumulada
+let cumulative = [];
+let total = 0;
+values.forEach(v=>{
+  total += v;
+  cumulative.push(total);
+});
+
+// Silêncio
+let silence = values.map(v => v === 0 ? 1 : 0);
+
+// Radar normalizado
+const maxVal = Math.max(...values,1);
+const radarValues = values.map(v => (v/maxVal)*10);
+
+/* ======================
+   GAUGES
+====================== */
+
+function createGauge(id, value, color){
+  new Chart(document.getElementById(id),{
+    type:'doughnut',
+    data:{
+      datasets:[{
+        data:[value,100-value],
+        backgroundColor:[color,'rgba(0,255,255,0.1)'],
+        borderWidth:0
+      }]
+    },
+    options:{
+      cutout:'75%',
+      plugins:{legend:{display:false}}
+    }
+  });
+}
+
+createGauge('burnoutGauge', burnoutScore, 'magenta');
+createGauge('predictionGauge', predictedBurnout, 'orange');
+createGauge('antifragileGauge', antifragileScore, 'cyan');
+
+/* ======================
+   GRÁFICOS PRINCIPAIS
+====================== */
+
+// Linha mental
+new Chart(document.getElementById('mentalChart'),{
+  type:'line',
+  data:{
+    labels:labels,
+    datasets:[{
+      label:'Carga Mental',
+      data:values,
+      borderColor:'cyan',
+      backgroundColor:'rgba(0,255,255,0.15)',
+      tension:0.4
+    }]
+  }
+});
+
+// Barras
+new Chart(document.getElementById('barChart'),{
+  type:'bar',
+  data:{
+    labels:labels,
+    datasets:[{
+      label:'Intensidade',
+      data:values,
+      backgroundColor:'magenta'
+    }]
+  }
+});
+
+// Pressão acumulada
+new Chart(document.getElementById('pressureChart'),{
+  type:'line',
+  data:{
+    labels:labels,
+    datasets:[{
+      label:'Pressão',
+      data:cumulative,
+      borderColor:'magenta',
+      backgroundColor:'rgba(255,0,255,0.15)',
+      tension:0.3
+    }]
+  }
+});
+
+// Silêncio
+new Chart(document.getElementById('silenceChart'),{
+  type:'bar',
+  data:{
+    labels:labels,
+    datasets:[{
+      label:'Sem atividade',
+      data:silence,
+      backgroundColor:'rgba(0,255,255,0.6)'
+    }]
+  }
+});
+
+// Radar
+new Chart(document.getElementById('radarChart'),{
+  type:'radar',
+  data:{
+    labels:labels,
+    datasets:[{
+      label:'Perfil',
+      data:radarValues,
+      borderColor:'cyan',
+      backgroundColor:'rgba(0,255,255,0.2)'
+    }]
+  }
+});
+
+</script>
+
+{% endblock %}

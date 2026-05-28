@@ -1,0 +1,40 @@
+export function startAnimation(scene, camera, renderer, controls, particles, ring, ring2, fillLight, circleGlow, labLight) {
+    let time = 0;
+    let deltaTime = 0.016;
+    let lastTime = performance.now();
+    let mixer = null;
+    
+    function updateDelta() {
+        const now = performance.now();
+        deltaTime = Math.min(0.033, (now - lastTime) / 1000);
+        lastTime = now;
+        requestAnimationFrame(updateDelta);
+    }
+    updateDelta();
+    
+    function animate() {
+        requestAnimationFrame(animate);
+        time += 0.01;
+        
+        if (mixer) mixer.update(deltaTime);
+        
+        if (particles) {
+            particles.rotation.y = time * 0.08;
+            particles.rotation.x = Math.sin(time * 0.2) * 0.12;
+        }
+        
+        if (ring) ring.rotation.z = time * 0.45;
+        if (ring2) ring2.rotation.z = -time * 0.35;
+        
+        if (fillLight) fillLight.intensity = 0.6 + Math.sin(time * 4) * 0.25;
+        if (circleGlow) circleGlow.material.emissiveIntensity = 0.35 + Math.sin(time * 3.2) * 0.2;
+        if (labLight) labLight.intensity = 0.35 + Math.sin(time * 2.5) * 0.15;
+        
+        if (controls) controls.update();
+        renderer.render(scene, camera);
+    }
+    
+    animate();
+    
+    return { setMixer: (m) => { mixer = m; } };
+}

@@ -1,0 +1,60 @@
+/* ESTILOS ESPECÍFICOS DA HESTIA - CELESTIAL CLARO */
+.asura-hestia .chat-container {
+    background: rgba(10, 10, 26, 0.95) !important;
+    border: 1px solid rgba(255, 240, 179, 0.3) !important;
+    box-shadow: 0 0 15px rgba(255, 240, 179, 0.2) !important;
+}
+
+.asura-hestia .chat-header {
+    background: rgba(0, 0, 0, 0.9) !important;
+    border-bottom: 1px solid #fff0b3 !important;
+}
+
+.asura-hestia .chat-header-info h4 {
+    color: #fff0b3 !important;
+    font-family: 'Lora', serif !important;
+    text-shadow: 0 0 5px rgba(255, 240, 179, 0.5) !important;
+}
+
+.asura-hestia .message-content {
+    background: rgba(255, 240, 179, 0.12) !important;
+    border: 1px solid #fff0b3 !important;
+    color: #fff5e0 !important;
+    font-family: 'Lora', serif !important;
+}
+
+.asura-hestia .message.user .message-content {
+    background: rgba(255, 240, 179, 0.2) !important;
+}
+
+.asura-hestia .attach-btn {
+    border: 1px solid #fff0b3 !important;
+    color: #fff0b3 !important;
+}
+
+.asura-hestia .attach-btn:hover {
+    background: rgba(255, 240, 179, 0.2) !important;
+    box-shadow: 0 0 10px rgba(255, 240, 179, 0.5) !important;
+}
+
+.asura-hestia .chat-messages::-webkit-scrollbar-thumb {
+    background: #fff0b3 !important;
+}
+
+.asura-hestia .chat-file {
+    background: rgba(255, 240, 179, 0.1) !important;
+    border: 1px solid #fff0b3 !important;
+}
+
+.asura-hestia .chat-file:hover {
+    background: rgba(255, 240, 179, 0.25) !important;
+}
+
+.asura-hestia .file-name {
+    color: #fff0b3 !important;
+}
+
+.asura-hestia .file-badge {
+    background: rgba(255, 240, 179, 0.2) !important;
+    color: #fff0b3 !important;
+}

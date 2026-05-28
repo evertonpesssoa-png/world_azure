@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        http-equiv="X-UA-Compatible"
+        content="IE=edge"
+    >
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <!-- =========================
+         CSS
+    ========================== -->
+
+    <link
+        rel="stylesheet"
+        href="./style.css"
+    >
+
+    <!-- =========================
+         TITLE
+    ========================== -->
+
+    <title>ASURAS</title>
+
+</head>
+
+<body>
+
+    <!-- =========================
+         BANNER
+    ========================== -->
+
+    <div class="banner">
+
+        <!-- =========================
+             PARTICLES
+        ========================== -->
+
+        <canvas id="particles"></canvas>
+
+        <!-- =========================
+             SLIDER 3D
+        ========================== -->
+
+        <div
+            class="slider"
+            style="--quantity: 9"
+        >
+
+            <!-- DIVA -->
+
+            <div
+                class="item"
+                data-asura="diva"
+                data-color="#ff4db8"
+                style="--position: 1"
+            >
+                <img
+                    src="images/diva.png"
+                    alt="Diva"
+                    draggable="false"
+                >
+            </div>
+
+            <!-- SIRIA -->
+
+            <div
+                class="item"
+                data-asura="siria"
+                data-color="#35ff9c"
+                style="--position: 2"
+            >
+                <img
+                    src="images/siria.png"
+                    alt="Siria"
+                    draggable="false"
+                >
+            </div>
+
+            <!-- MERLIM -->
+
+            <div
+                class="item"
+                data-asura="merlim"
+                data-color="#00d9ff"
+                style="--position: 3"
+            >
+                <img
+                    src="images/merlim.png"
+                    alt="Merlim"
+                    draggable="false"
+                >
+            </div>
+
+            <!-- ASTREIA -->
+
+            <div
+                class="item"
+                data-asura="astreia"
+                data-color="#287bff"
+                style="--position: 4"
+            >
+                <img
+                    src="images/astreia.png"
+                    alt="Astreia"
+                    draggable="false"
+                >
+            </div>
+
+            <!-- UMBRA -->
+
+            <div
+                class="item"
+                data-asura="umbra"
+                data-color="#8b2fff"
+                style="--position: 5"
+            >
+                <img
+                    src="images/umbra.png"
+                    alt="Umbra"
+                    draggable="false"
+                >
+            </div>
+
+            <!-- ATENA -->
+
+            <div
+                class="item"
+                data-asura="atena"
+                data-color="#ffd54f"
+                style="--position: 6"
+            >
+                <img
+                    src="images/atena.png"
+                    alt="Atena"
+                    draggable="false"
+                >
+            </div>
+
+            <!-- VICTORIA -->
+
+            <div
+                class="item"
+                data-asura="victoria"
+                data-color="#ff4444"
+                style="--position: 7"
+            >
+                <img
+                    src="images/victoria.png"
+                    alt="Victoria"
+                    draggable="false"
+                >
+            </div>
+
+            <!-- HESTIA -->
+
+            <div
+                class="item"
+                data-asura="hestia"
+                data-color="#fff0b3"
+                style="--position: 8"
+            >
+                <img
+                    src="images/hestia.png"
+                    alt="Hestia"
+                    draggable="false"
+                >
+            </div>
+
+            <!-- DAEDALA -->
+
+            <div
+                class="item"
+                data-asura="daedala"
+                data-color="#00ffd5"
+                style="--position: 9"
+            >
+                <img
+                    src="images/daedala.png"
+                    alt="Daedala"
+                    draggable="false"
+                >
+            </div>
+
+        </div>
+
+        <!-- =========================
+             CONTENT
+        ========================== -->
+
+        <div class="content">
+
+            <!-- =========================
+                 MAGO CENTRAL
+            ========================== -->
+
+            <div class="model"></div>
+
+        </div>
+
+    </div>
+
+    <!-- =========================
+         PORTAL TRANSITION
+    ========================== -->
+
+    <div
+        id="portalTransition"
+        class="portal-flash"
+    ></div>
+
+    <!-- =========================
+         ASURA WORLD
+    ========================== -->
+
+    <div id="asuraWorld"></div>
+
+    <!-- =========================
+         AUDIO HOVER
+    ========================== -->
+
+    <audio
+        id="hoverSound"
+        src="sounds/hover.mp3"
+        preload="auto"
+    ></audio>
+
+    <!-- =========================
+         AMBIENT MUSIC
+    ========================== -->
+
+    <audio
+        id="bgMusic"
+        src="sounds/ambient.mp3"
+        loop
+        preload="auto"
+        playsinline
+    ></audio>
+
+    <!-- =========================
+         SCRIPT COMPLETO (EMBUTIDO)
+    ========================== -->
+
+    <script>
+
+        // =========================
+        // ASURAS - SISTEMA COMPLETO
+        // =========================
+
+        // =========================
+        // ELEMENTOS
+        // =========================
+
+        const items = document.querySelectorAll(".item");
+        const slider = document.querySelector(".slider");
+        const hoverSound = document.getElementById("hoverSound");
+        const bgMusic = document.getElementById("bgMusic");
+        const portalTransition = document.getElementById("portalTransition");
+
+        // =========================
+        // CORES DINÂMICAS
+        // =========================
+
+        items.forEach(item => {
+            const color = item.dataset.color;
+            item.style.setProperty("--glow-color", color);
+        });
+
+        // =========================
+        // SOM HOVER
+        // =========================
+
+        items.forEach(item => {
+            item.addEventListener("mouseenter", () => {
+                if(!hoverSound) return;
+                hoverSound.volume = 0.12;
+                hoverSound.currentTime = 0;
+                hoverSound.play().catch(() => {});
+            });
+        });
+
+        // =========================
+        // PARTICLES
+        // =========================
+
+        const canvas = document.getElementById("particles");
+        const ctx = canvas.getContext("2d");
+
+        function resizeCanvas(){
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        resizeCanvas();
+
+        const particles = [];
+        const particleCount = 120;
+
+        for(let i = 0; i < particleCount; i++){
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2 + 1,
+                speedX: (Math.random() - 0.5) * 0.3,
+                speedY: (Math.random() - 0.5) * 0.3,
+                opacity: Math.random() * 0.5
+            });
+        }
+
+        function drawParticles(){
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(particle => {
+                ctx.beginPath();
+                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255,255,255,${particle.opacity})`;
+                ctx.fill();
+                particle.x += particle.speedX;
+                particle.y += particle.speedY;
+                if(particle.x < 0 || particle.x > canvas.width){
+                    particle.speedX *= -1;
+                }
+                if(particle.y < 0 || particle.y > canvas.height){
+                    particle.speedY *= -1;
+                }
+            });
+            requestAnimationFrame(drawParticles);
+        }
+
+        drawParticles();
+
+        window.addEventListener("resize", () => {
+            resizeCanvas();
+        });
+
+        // =========================
+        // AMBIENT MUSIC
+        // =========================
+
+        if(bgMusic){
+            bgMusic.volume = 0;
+            bgMusic.play().then(() => {
+                setTimeout(() => {
+                    bgMusic.volume = 0.12;
+                }, 800);
+            }).catch(() => {
+                window.addEventListener("click", handleFirstInteraction, { once: true });
+                window.addEventListener("touchstart", handleFirstInteraction, { once: true });
+            });
+        }
+
+        function handleFirstInteraction(){
+            if(!bgMusic) return;
+            bgMusic.volume = 0.12;
+            bgMusic.play().catch(() => {});
+        }
+
+        // =========================
+        // CURSOR BASE
+        // =========================
+
+        document.body.style.cursor = "default";
+
+        // =========================
+        // CONTROLE DE TRANSIÇÃO
+        // =========================
+
+        let transitioning = false;
+
+        // =========================
+        // FLASH PORTAL
+        // =========================
+
+        function createPortalFlash(color){
+            const flash = document.createElement("div");
+            flash.className = "portal-flash";
+            flash.style.setProperty("--flash-color", color);
+            document.body.appendChild(flash);
+            requestAnimationFrame(() => {
+                flash.classList.add("show");
+            });
+            setTimeout(() => {
+                flash.classList.remove("show");
+                setTimeout(() => {
+                    flash.remove();
+                }, 1000);
+            }, 900);
+        }
+
+        // =========================
+        // START TRANSITION (IR PARA O MUNDO)
+        // =========================
+
+        function startAsuraTransition(selectedItem, asura){
+            
+            slider.style.animationPlayState = "paused";
+
+            if(hoverSound){
+                hoverSound.volume = 0.2;
+                hoverSound.currentTime = 0;
+                hoverSound.play().catch(() => {});
+            }
+
+            // fade out da música
+            if(bgMusic){
+                const fadeAudio = setInterval(() => {
+                    if(bgMusic.volume > 0.02){
+                        bgMusic.volume -= 0.01;
+                    }else{
+                        bgMusic.volume = 0;
+                        clearInterval(fadeAudio);
+                    }
+                }, 40);
+            }
+
+            slider.classList.add("fade-all");
+            selectedItem.classList.add("active");
+
+            document.body.style.transition = "transform 1.6s ease";
+            document.body.style.transform = "scale(1.03)";
+
+            if(portalTransition){
+                portalTransition.classList.add("active");
+            }
+
+            createPortalFlash(selectedItem.dataset.color);
+
+            console.log("Entrando no mundo:", asura);
+
+            // Redireciona para o mundo do Asura
+            setTimeout(() => {
+                window.location.href = `worlds/${asura}.html`;
+            }, 2200);
+        }
+
+        // =========================
+        // CLICK ASURA
+        // =========================
+
+        items.forEach(item => {
+            item.addEventListener("click", () => {
+                if(transitioning) return;
+                transitioning = true;
+                const asura = item.dataset.asura;
+                startAsuraTransition(item, asura);
+            });
+        });
+
+    </script>
+
+</body>
+
+</html>

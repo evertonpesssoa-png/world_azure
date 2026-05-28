@@ -1,0 +1,101 @@
+/* =========================
+   CALENDAR GRID E SCROLL
+   ========================= */
+.calendar-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;           /* espaçamento entre meses */
+    max-height: 80vh;    /* altura máxima para rolagem */
+    overflow-y: auto;     /* permite scroll vertical */
+    padding: 0.5rem;
+}
+
+/* =========================
+   CADA MÊS
+   ========================= */
+.month {
+    border: 1px solid #444;
+    padding: 0.5rem;
+    border-radius: 5px;
+}
+
+/* =========================
+   LINHA DE DIAS DA SEMANA
+   ========================= */
+.week.days {
+    display: flex;
+    gap: 0.2rem;
+    font-weight: bold;
+    justify-content: space-between;
+}
+
+/* =========================
+   LINHAS DE DIAS
+   ========================= */
+.week {
+    display: flex;
+    gap: 0.2rem;
+}
+
+/* =========================
+   CADA DIA
+   ========================= */
+.day {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2.3rem;
+    height: 2.3rem;
+    text-decoration: none;
+    color: inherit;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.day:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+/* =========================
+   DIA IMPORTANTE
+   ========================= */
+.day.important {
+    font-weight: bold;
+    color: #ff0;
+}
+
+/* BADGE DE NOTIFICAÇÃO */
+.badge {
+    margin-left: 2px;
+}
+
+/* =========================
+   DIA ATUAL
+   ========================= */
+.day.today {
+    border: 2px solid #ff0;
+    background-color: rgba(255, 255, 0, 0.2);
+    border-radius: 5px;
+}
+
+/* =========================
+   RESPONSIVO
+   ========================= */
+@media (max-width: 768px) {
+    .calendar-grid {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .week, .week.days {
+        flex-wrap: wrap;
+    }
+
+    .day {
+        width: 3rem;
+        height: 3rem;
+        margin-bottom: 0.2rem;
+    }
+}

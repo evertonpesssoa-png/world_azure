@@ -1,0 +1,61 @@
+/* ESTILOS ESPECÍFICOS DA UMBRA - SOMBRIO/GLITCH */
+.asura-umbra .chat-container {
+    background: rgba(5, 5, 16, 0.95) !important;
+    border: 1px solid rgba(139, 47, 255, 0.3) !important;
+    box-shadow: 0 0 15px rgba(139, 47, 255, 0.2) !important;
+}
+
+.asura-umbra .chat-header {
+    background: rgba(0, 0, 0, 0.9) !important;
+    border-bottom: 1px solid #8b2fff !important;
+}
+
+.asura-umbra .chat-header-info h4 {
+    color: #8b2fff !important;
+    font-family: 'Creepster', cursive !important;
+    text-shadow: 0 0 5px #8b2fff !important;
+    letter-spacing: 2px !important;
+}
+
+.asura-umbra .message-content {
+    background: rgba(139, 47, 255, 0.12) !important;
+    border: 1px solid #8b2fff !important;
+    color: #e0ccff !important;
+    font-family: 'Creepster', cursive !important;
+}
+
+.asura-umbra .message.user .message-content {
+    background: rgba(139, 47, 255, 0.2) !important;
+}
+
+.asura-umbra .attach-btn {
+    border: 1px solid #8b2fff !important;
+    color: #8b2fff !important;
+}
+
+.asura-umbra .attach-btn:hover {
+    background: rgba(139, 47, 255, 0.2) !important;
+    box-shadow: 0 0 10px rgba(139, 47, 255, 0.5) !important;
+}
+
+.asura-umbra .chat-messages::-webkit-scrollbar-thumb {
+    background: #8b2fff !important;
+}
+
+.asura-umbra .chat-file {
+    background: rgba(139, 47, 255, 0.1) !important;
+    border: 1px solid #8b2fff !important;
+}
+
+.asura-umbra .chat-file:hover {
+    background: rgba(139, 47, 255, 0.25) !important;
+}
+
+.asura-umbra .file-name {
+    color: #8b2fff !important;
+}
+
+.asura-umbra .file-badge {
+    background: rgba(139, 47, 255, 0.2) !important;
+    color: #8b2fff !important;
+}
