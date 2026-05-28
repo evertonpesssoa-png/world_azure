@@ -14,9 +14,6 @@
     <link rel="stylesheet" href="../shared/css/profile-panel.css">
     <link rel="stylesheet" href="../shared/css/portal.css">
     
-    <!-- ESTILOS ESPECÍFICOS DA ASTREIA -->
-    <link rel="stylesheet" href="../shared/asuras/astreia/chat-style.css">
-    
     <style>
         :root {
             --asura-color: #287bff;
@@ -102,37 +99,181 @@
     </script>
 
     <script type="module">
-        import { astreiaConfig } from '../shared/asuras/astreia/config.js';
-        import { initScene, initControls } from '../shared/asuras/astreia/scene.js';
-        import { initLights } from '../shared/asuras/astreia/lights.js';
-        import { initFloor } from '../shared/asuras/astreia/floor.js';
-        import { initParticles } from '../shared/asuras/astreia/particles.js';
-        import { initRings, initShield } from '../shared/asuras/astreia/rings.js';
-        import { initPillars } from '../shared/asuras/astreia/pillars.js';
-        import { initCameras } from '../shared/asuras/astreia/cameras.js';
-        import { loadModel } from '../shared/asuras/astreia/model.js';
-        import { startAnimation } from '../shared/asuras/astreia/animate.js';
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         import { initUI } from '../shared/js/ui.js';
-        import { EnhancedChatSystem } from '../shared/js/chat-system-enhanced.js';
+        import { ChatSystem } from '../shared/js/chat.js';
         import { VoiceAssistant } from '../shared/js/voice-assistant.js';
         
         // =========================
-        // SETUP 3D
+        // EXTENDE O CHAT SYSTEM ORIGINAL
         // =========================
-        const { scene, camera, renderer } = initScene(astreiaConfig);
-        const controls = await initControls(camera, renderer);
-        const { fillLight, heavenLight } = initLights(scene, astreiaConfig);
-        const circleGlow = initFloor(scene, astreiaConfig);
-        const particles = initParticles(scene);
-        const { ring, ring2 } = initRings(scene, astreiaConfig);
-        const shield = initShield(scene, astreiaConfig);
-        initPillars(scene, astreiaConfig);
-        initCameras(scene);
+        const OriginalChatSystem = ChatSystem;
         
-        const { model, mixer } = loadModel(scene, astreiaConfig);
+        class EnhancedChatSystem extends OriginalChatSystem {
+            constructor(containerId, config, onSpeak) {
+                super(containerId, config, onSpeak);
+                this.addAttachButton();
+                
+                setTimeout(() => {
+                    if (this.chatBody) {
+                        this.chatBody.classList.add('collapsed');
+                    }
+                    if (this.chatToggle) {
+                        this.chatToggle.textContent = '▲';
+                    }
+                }, 100);
+            }
+            
+            addAttachButton() {
+                const inputArea = this.container.querySelector('.chat-input-area');
+                if (!inputArea || inputArea.querySelector('.attach-btn')) return;
+                
+                const attachBtn = document.createElement('button');
+                attachBtn.className = 'attach-btn';
+                attachBtn.innerHTML = '📎';
+                attachBtn.title = 'Enviar arquivo (imagem, PDF, DOC, etc)';
+                
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = '*/*';
+                fileInput.style.display = 'none';
+                
+                attachBtn.onclick = () => fileInput.click();
+                fileInput.onchange = (e) => {
+                    const file = e.target.files[0];
+                    if (file) this.handleFileUpload(file);
+                    fileInput.value = '';
+                };
+                
+                const textInput = inputArea.querySelector('input[type="text"]');
+                if (textInput) {
+                    inputArea.insertBefore(attachBtn, textInput);
+                    inputArea.insertBefore(fileInput, textInput);
+                }
+            }
+            
+            handleFileUpload(file) {
+                const fileType = file.type;
+                const fileName = file.name;
+                const fileSize = this.formatFileSize(file.size);
+                const fileExtension = fileName.split('.').pop().toUpperCase();
+                
+                if (fileType.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => this.addImageMessage(ev.target.result, fileName, fileSize);
+                    reader.readAsDataURL(file);
+                } else {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => this.addFileMessage(ev.target.result, fileName, fileSize, fileExtension);
+                    reader.readAsDataURL(file);
+                }
+            }
+            
+            formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+            
+            getFileIcon(extension) {
+                const icons = {
+                    'PDF': '📄', 'DOC': '📃', 'DOCX': '📃',
+                    'XLS': '📊', 'XLSX': '📊', 'PPT': '📽️', 'PPTX': '📽️',
+                    'TXT': '📝', 'ZIP': '🗜️', 'RAR': '🗜️',
+                    'MP3': '🎵', 'MP4': '🎬', 'JPG': '🖼️', 'PNG': '🖼️',
+                    'GIF': '🎞️', 'JSON': '🔧', 'XML': '🔧', 'HTML': '🌐'
+                };
+                return icons[extension] || '📎';
+            }
+            
+            addImageMessage(imageUrl, fileName, fileSize) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message user';
+                const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                messageDiv.innerHTML = `
+                    <div class="message-avatar">👤</div>
+                    <div class="message-content">
+                        <div>🖼️ ${fileName} <span style="font-size:9px; color:#888;">(${fileSize})</span></div>
+                        <img src="${imageUrl}" class="chat-image" onclick="window.open('${imageUrl}')">
+                        <div class="message-time">${time}</div>
+                    </div>
+                `;
+                this.messagesContainer.appendChild(messageDiv);
+                this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+                
+                const messages = this.getMessages ? this.getMessages() : [];
+                if (this.saveMessages) {
+                    messages.push({ text: `🖼️ ${fileName} (${fileSize})`, image: imageUrl, isUser: true, timestamp: Date.now() });
+                    this.saveMessages(messages);
+                }
+            }
+            
+            addFileMessage(fileData, fileName, fileSize, extension) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message user';
+                const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                const fileIcon = this.getFileIcon(extension);
+                messageDiv.innerHTML = `
+                    <div class="message-avatar">👤</div>
+                    <div class="message-content">
+                        <div>📎 Arquivo anexado</div>
+                        <div class="chat-file" onclick="window.open('${fileData}')">
+                            <div class="file-icon">${fileIcon}</div>
+                            <div class="file-info">
+                                <div class="file-name">${fileName}</div>
+                                <div class="file-size">${fileSize}</div>
+                            </div>
+                            <div class="file-badge">${extension}</div>
+                        </div>
+                        <div class="message-time">${time}</div>
+                    </div>
+                `;
+                this.messagesContainer.appendChild(messageDiv);
+                this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+                
+                const messages = this.getMessages ? this.getMessages() : [];
+                if (this.saveMessages) {
+                    messages.push({ text: `📎 ${fileName} (${fileSize})`, fileData: fileData, isUser: true, timestamp: Date.now() });
+                    this.saveMessages(messages);
+                }
+            }
+        }
         
-        const animation = startAnimation(scene, camera, renderer, controls, particles, ring, ring2, shield, fillLight, circleGlow);
-        if (mixer) animation.setMixer(mixer);
+        // =========================
+        // CONFIGURAÇÃO ASTREIA
+        // =========================
+        const astreiaConfig = {
+            name: 'ASTREIA',
+            title: '✦ REINO CELESTIAL • SEGURANÇA ✦',
+            color: '#287bff',
+            icon: '👁️',
+            modelPath: '../models/astreia.glb',
+            modelScale: 0.04,
+            modelPositionY: -0.25,
+            bgColor: 0x050b20,
+            cameraPosition: { x: 3, y: 2.2, z: 4.2 },
+            welcomeMessage: '👁️ Bem-vindo ao Reino Celestial. Sou Astreia, guardiã da segurança. Nada escapa aos meus olhos.',
+            skills: [
+                { name: '🛡️ Cyber Segurança', value: 98 },
+                { name: '📷 Vigilância Digital', value: 96 },
+                { name: '🏠 Segurança Residencial', value: 94 },
+                { name: '⚡ Monitoramento em Tempo Real', value: 97 }
+            ],
+            personalityText: '👁️ "Meus olhos veem tudo. A segurança é minha essência celestial."',
+            getResponse: (msg) => {
+                const lower = msg.toLowerCase();
+                if (lower.includes('olá') || lower.includes('oi')) return "👁️ Olá! Sou Astreia, a guardiã celestial. Como posso protegê-lo?";
+                if (lower.includes('segurança')) return "🛡️ Segurança é minha essência. Posso monitorar ameaças e proteger residências.";
+                if (lower.includes('câmera')) return "📷 Tenho acesso a todas as câmeras. A vigilância em tempo real é meu dom.";
+                if (lower.includes('imagem') || lower.includes('foto') || lower.includes('arquivo')) return "📎 Arquivo recebido! Analisando dados... Tudo seguro sob minha vigilância.";
+                if (lower.includes('obrigado')) return "💙 Por nada! Estou aqui para proteger.";
+                return "👁️ Sistema seguro. Sou Astreia, sua guardiã celestial. Como posso ajudá-lo?";
+            }
+        };
         
         // =========================
         // BOTÃO PORTAL
@@ -171,6 +312,212 @@
         history.pushState(null, null, location.href);
         
         // =========================
+        // SETUP 3D ASTREIA
+        // =========================
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(astreiaConfig.bgColor);
+        scene.fog = new THREE.FogExp2(astreiaConfig.bgColor, 0.008);
+        
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(astreiaConfig.cameraPosition.x, astreiaConfig.cameraPosition.y, astreiaConfig.cameraPosition.z);
+        camera.lookAt(0, 0.8, 0);
+        
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.shadowMap.enabled = true;
+        container.appendChild(renderer.domElement);
+        
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.enableZoom = true;
+        controls.enablePan = true;
+        controls.target.set(0, 0.8, 0);
+        
+        // LUZES
+        const ambientLight = new THREE.AmbientLight(0x113366, 0.6);
+        scene.add(ambientLight);
+        const mainLight = new THREE.DirectionalLight(0xaaccff, 1.1);
+        mainLight.position.set(3, 5, 2);
+        mainLight.castShadow = true;
+        scene.add(mainLight);
+        const fillLight = new THREE.PointLight(astreiaConfig.color, 0.8);
+        fillLight.position.set(1, 2, 2);
+        scene.add(fillLight);
+        const backLight = new THREE.PointLight(0x44aaff, 0.5);
+        backLight.position.set(-2, 1.5, -3);
+        scene.add(backLight);
+        const heavenLight = new THREE.PointLight(0xaaddff, 0.4);
+        heavenLight.position.set(2, 2.5, 1.5);
+        scene.add(heavenLight);
+        
+        // CHÃO
+        const gridHelper = new THREE.GridHelper(14, 24, astreiaConfig.color, 0x224488);
+        gridHelper.position.y = -0.5;
+        scene.add(gridHelper);
+        
+        const groundPlane = new THREE.Mesh(
+            new THREE.PlaneGeometry(9, 9),
+            new THREE.MeshStandardMaterial({ color: 0x0a1540, roughness: 0.5, metalness: 0.3, transparent: true, opacity: 0.5 })
+        );
+        groundPlane.rotation.x = -Math.PI / 2;
+        groundPlane.position.y = -0.5;
+        scene.add(groundPlane);
+        
+        const circleGlow = new THREE.Mesh(
+            new THREE.CircleGeometry(1.3, 32),
+            new THREE.MeshStandardMaterial({ color: astreiaConfig.color, emissive: astreiaConfig.color, emissiveIntensity: 0.4, transparent: true, opacity: 0.5, side: THREE.DoubleSide })
+        );
+        circleGlow.rotation.x = -Math.PI / 2;
+        circleGlow.position.y = -0.45;
+        scene.add(circleGlow);
+        
+        // COLUNAS CELESTIAIS
+        const pillarMaterial = new THREE.MeshStandardMaterial({ color: 0x2266aa, emissive: 0x1155aa, emissiveIntensity: 0.2, metalness: 0.7 });
+        function createPillar(x, z, height = 1.2) {
+            const group = new THREE.Group();
+            const pillar = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.2, height, 8), pillarMaterial);
+            pillar.position.y = 0;
+            group.add(pillar);
+            const topRing = new THREE.Mesh(new THREE.TorusGeometry(0.22, 0.03, 16, 32), new THREE.MeshStandardMaterial({ color: 0x44aaff, emissive: astreiaConfig.color, emissiveIntensity: 0.3 }));
+            topRing.position.y = height / 2;
+            topRing.rotation.x = Math.PI / 2;
+            group.add(topRing);
+            group.position.set(x, -0.4, z);
+            return group;
+        }
+        const pillarPositions = [[-2.8,-2.5],[2.8,-2.5],[-2.8,2.5],[2.8,2.5],[-2,-3.2],[2,-3.2],[-3.2,-1.8],[3.2,-1.8],[-3.2,1.8],[3.2,1.8],[-2,3.2],[2,3.2]];
+        pillarPositions.forEach(pos => { const pillar = createPillar(pos[0], pos[1], 1.0 + Math.random() * 0.3); scene.add(pillar); });
+        
+        // PARTÍCULAS ESTRELARES
+        const particleCount = 1800;
+        const particleGeometry = new THREE.BufferGeometry();
+        const particlePositions = new Float32Array(particleCount * 3);
+        const particleColors = new Float32Array(particleCount * 3);
+        for (let i = 0; i < particleCount; i++) {
+            particlePositions[i*3] = (Math.random() - 0.5) * 15;
+            particlePositions[i*3+1] = Math.random() * 5;
+            particlePositions[i*3+2] = (Math.random() - 0.5) * 13;
+            const type = Math.random();
+            if (type < 0.6) { particleColors[i*3]=0.1+Math.random()*0.3; particleColors[i*3+1]=0.3+Math.random()*0.5; particleColors[i*3+2]=0.7+Math.random()*0.3; }
+            else if (type < 0.8) { particleColors[i*3]=0.8+Math.random()*0.2; particleColors[i*3+1]=0.7+Math.random()*0.3; particleColors[i*3+2]=0.3+Math.random()*0.2; }
+            else { particleColors[i*3]=0.9; particleColors[i*3+1]=0.9; particleColors[i*3+2]=1.0; }
+        }
+        particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+        particleGeometry.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
+        const particleMaterial = new THREE.PointsMaterial({ size: 0.04, vertexColors: true, transparent: true, opacity: 0.5 });
+        const particles = new THREE.Points(particleGeometry, particleMaterial);
+        scene.add(particles);
+        
+        // ANÉIS
+        const ringGeometry = new THREE.TorusGeometry(1.2, 0.04, 64, 200);
+        const ringMaterial = new THREE.MeshStandardMaterial({ color: astreiaConfig.color, emissive: astreiaConfig.color, emissiveIntensity: 0.5 });
+        const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+        ring.position.y = 0.15;
+        ring.rotation.x = Math.PI / 2;
+        scene.add(ring);
+        
+        const ring2Geometry = new THREE.TorusGeometry(1.45, 0.03, 64, 200);
+        const ring2Material = new THREE.MeshStandardMaterial({ color: 0x44aaff, emissive: 0x44aaff, emissiveIntensity: 0.4 });
+        const ring2 = new THREE.Mesh(ring2Geometry, ring2Material);
+        ring2.position.y = 0.05;
+        ring2.rotation.x = Math.PI / 2 + 0.3;
+        scene.add(ring2);
+        
+        // ESCUDO DE PROTEÇÃO
+        const shieldGeometry = new THREE.SphereGeometry(2.2, 32, 32);
+        const shieldMaterial = new THREE.MeshStandardMaterial({ color: astreiaConfig.color, emissive: 0x1155cc, emissiveIntensity: 0.1, transparent: true, opacity: 0.08, wireframe: true });
+        const shield = new THREE.Mesh(shieldGeometry, shieldMaterial);
+        shield.position.y = 0.5;
+        scene.add(shield);
+        
+        // CÂMERAS FLUTUANTES
+        function createSecurityCamera(x, z, yOffset = 0.8) {
+            const group = new THREE.Group();
+            const body = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.15, 0.2), new THREE.MeshStandardMaterial({ color: 0x2288cc, metalness: 0.8 }));
+            group.add(body);
+            const lens = new THREE.Mesh(new THREE.SphereGeometry(0.08, 16, 16), new THREE.MeshStandardMaterial({ color: 0xff3366, emissive: 0xff3366, emissiveIntensity: 0.3 }));
+            lens.position.z = 0.12;
+            group.add(lens);
+            const base = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.1, 0.1, 6), new THREE.MeshStandardMaterial({ color: 0x44aaff, metalness: 0.6 }));
+            base.position.y = -0.1;
+            group.add(base);
+            group.position.set(x, yOffset, z);
+            return group;
+        }
+        const cameraPositions = [[-1.5,1.2,1.8],[1.5,1.2,1.8],[-1.8,1.2,-1.5],[1.8,1.2,-1.5],[-2.2,1.5,0.5],[2.2,1.5,0.5],[0.5,1.5,-2.2],[-0.5,1.5,-2.2]];
+        cameraPositions.forEach(pos => { const cam = createSecurityCamera(pos[0], pos[2], pos[1]); scene.add(cam); });
+        
+        // MODELO 3D
+        const loader = new GLTFLoader();
+        let model = null;
+        let mixer = null;
+        
+        loader.load(astreiaConfig.modelPath, (gltf) => {
+            model = gltf.scene;
+            model.position.set(0, astreiaConfig.modelPositionY, 0);
+            model.scale.set(astreiaConfig.modelScale, astreiaConfig.modelScale, astreiaConfig.modelScale);
+            model.traverse((node) => { if (node.isMesh) { node.castShadow = true; } });
+            scene.add(model);
+            if (gltf.animations && gltf.animations.length > 0) {
+                mixer = new THREE.AnimationMixer(model);
+                gltf.animations.forEach(clip => mixer.clipAction(clip).play());
+                console.log(`✅ ${gltf.animations.length} animação(ões) ativada(s)`);
+            }
+            console.log('✅ Modelo da ASTREIA carregado');
+        });
+        
+        // =========================
+        // ANIMAÇÃO (CORRIGIDA - COM MIXER)
+        // =========================
+        let time = 0;
+        let deltaTime = 0.016;
+        let lastTime = performance.now();
+        
+        function updateDelta() {
+            const now = performance.now();
+            deltaTime = Math.min(0.033, (now - lastTime) / 1000);
+            lastTime = now;
+            requestAnimationFrame(updateDelta);
+        }
+        updateDelta();
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            time += 0.008;
+            
+            // ATUALIZA AS ANIMAÇÕES DO MODELO 3D
+            if (mixer) mixer.update(deltaTime);
+            
+            // PARTÍCULAS
+            particles.rotation.y = time * 0.05;
+            particles.rotation.x = Math.sin(time * 0.15) * 0.1;
+            
+            // ANÉIS
+            ring.rotation.z = time * 0.3;
+            ring2.rotation.z = -time * 0.25;
+            
+            // ESCUDO PULSANTE
+            shield.material.emissiveIntensity = 0.08 + Math.sin(time * 2) * 0.04;
+            
+            // LUZES PULSANTES
+            fillLight.intensity = 0.6 + Math.sin(time * 2.5) * 0.2;
+            circleGlow.material.emissiveIntensity = 0.25 + Math.sin(time * 2) * 0.15;
+            
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+        
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+        
+        // =========================
         // UI, CHAT E VOZ
         // =========================
         initUI(astreiaConfig);
@@ -179,13 +526,10 @@
             if (voice?.isJarvisActive?.()) voice.speak(response);
         });
         
-        const voiceButton = document.getElementById('voiceButton');
+        const voiceButtonElem = document.getElementById('voiceButton');
         let voice = null;
-        if (voiceButton) {
-            voice = new VoiceAssistant(voiceButton, (text) => {
-                document.getElementById('chatInput').value = text;
-                chat.send();
-            }, null, { asuraName: astreiaConfig.name, continuous: true });
+        if (voiceButtonElem) {
+            voice = new VoiceAssistant(voiceButtonElem, (text) => { document.getElementById('chatInput').value = text; chat.send(); }, null, { asuraName: astreiaConfig.name, continuous: true });
         }
         
         // Toggle do chat
@@ -200,7 +544,6 @@
         if (chatToggle) chatToggle.addEventListener('click', toggleChat);
         if (chatHeader) chatHeader.addEventListener('click', toggleChat);
         
-        // Mensagens de boas-vindas
         setTimeout(() => {
             chat.addMessage(astreiaConfig.welcomeMessage, false);
             setTimeout(() => {
@@ -210,7 +553,6 @@
             }, 2000);
         }, 500);
         
-        // Efeito de portal de entrada
         const portalOverlay = document.getElementById('portalOverlay');
         portalOverlay.style.setProperty('--asura-color', astreiaConfig.color);
         setTimeout(() => {
@@ -221,7 +563,7 @@
             }, 500);
         }, 50);
         
-        console.log('🟢 ASTREIA carregada com SUCESSO!');
+        console.log('🟢 ASTREIA carregada com ANIMAÇÃO CORRIGIDA!');
     </script>
 </body>
 </html>
