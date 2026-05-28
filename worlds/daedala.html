@@ -13,8 +13,6 @@
     <link rel="stylesheet" href="../shared/css/profile-panel.css">
     <link rel="stylesheet" href="../shared/css/portal.css">
     
-    <link rel="stylesheet" href="../shared/asuras/daedala/chat-style.css">
-    
     <style>
         :root {
             --asura-color: #00ffd5;
@@ -100,38 +98,186 @@
     </script>
 
     <script type="module">
-        import { daedalaConfig } from '../shared/asuras/daedala/config.js';
-        import { initScene, initControls } from '../shared/asuras/daedala/scene.js';
-        import { initLights } from '../shared/asuras/daedala/lights.js';
-        import { initFloor } from '../shared/asuras/daedala/floor.js';
-        import { initParticles } from '../shared/asuras/daedala/particles.js';
-        import { initRings } from '../shared/asuras/daedala/rings.js';
-        import { initGears } from '../shared/asuras/daedala/gears.js';
-        import { initFlasks } from '../shared/asuras/daedala/flasks.js';
-        import { initPanels } from '../shared/asuras/daedala/panels.js';
-        import { loadModel } from '../shared/asuras/daedala/model.js';
-        import { startAnimation } from '../shared/asuras/daedala/animate.js';
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         import { initUI } from '../shared/js/ui.js';
-        import { EnhancedChatSystem } from '../shared/js/chat-system-enhanced.js';
+        import { ChatSystem } from '../shared/js/chat.js';
         import { VoiceAssistant } from '../shared/js/voice-assistant.js';
         
-        // SETUP 3D
-        const { scene, camera, renderer } = initScene(daedalaConfig);
-        const controls = initControls(camera, renderer);
-        const { fillLight, labLight } = initLights(scene, daedalaConfig);
-        const circleGlow = initFloor(scene, daedalaConfig);
-        const particles = initParticles(scene);
-        const { ring, ring2 } = initRings(scene, daedalaConfig);
-        initGears(scene);
-        initFlasks(scene);
-        initPanels(scene);
+        // =========================
+        // EXTENDE O CHAT SYSTEM ORIGINAL
+        // =========================
+        const OriginalChatSystem = ChatSystem;
         
-        const { model, mixer } = loadModel(scene, daedalaConfig);
+        class EnhancedChatSystem extends OriginalChatSystem {
+            constructor(containerId, config, onSpeak) {
+                super(containerId, config, onSpeak);
+                this.addAttachButton();
+                
+                setTimeout(() => {
+                    if (this.chatBody) {
+                        this.chatBody.classList.add('collapsed');
+                    }
+                    if (this.chatToggle) {
+                        this.chatToggle.textContent = '▲';
+                    }
+                }, 100);
+            }
+            
+            addAttachButton() {
+                const inputArea = this.container.querySelector('.chat-input-area');
+                if (!inputArea || inputArea.querySelector('.attach-btn')) return;
+                
+                const attachBtn = document.createElement('button');
+                attachBtn.className = 'attach-btn';
+                attachBtn.innerHTML = '📎';
+                attachBtn.title = 'Enviar arquivo (imagem, PDF, DOC, etc)';
+                
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = '*/*';
+                fileInput.style.display = 'none';
+                
+                attachBtn.onclick = () => fileInput.click();
+                fileInput.onchange = (e) => {
+                    const file = e.target.files[0];
+                    if (file) this.handleFileUpload(file);
+                    fileInput.value = '';
+                };
+                
+                const textInput = inputArea.querySelector('input[type="text"]');
+                if (textInput) {
+                    inputArea.insertBefore(attachBtn, textInput);
+                    inputArea.insertBefore(fileInput, textInput);
+                }
+            }
+            
+            handleFileUpload(file) {
+                const fileType = file.type;
+                const fileName = file.name;
+                const fileSize = this.formatFileSize(file.size);
+                const fileExtension = fileName.split('.').pop().toUpperCase();
+                
+                if (fileType.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => this.addImageMessage(ev.target.result, fileName, fileSize);
+                    reader.readAsDataURL(file);
+                } else {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => this.addFileMessage(ev.target.result, fileName, fileSize, fileExtension);
+                    reader.readAsDataURL(file);
+                }
+            }
+            
+            formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+            
+            getFileIcon(extension) {
+                const icons = {
+                    'PDF': '📄', 'DOC': '📃', 'DOCX': '📃',
+                    'XLS': '📊', 'XLSX': '📊', 'PPT': '📽️', 'PPTX': '📽️',
+                    'TXT': '📝', 'ZIP': '🗜️', 'RAR': '🗜️',
+                    'MP3': '🎵', 'MP4': '🎬', 'JPG': '🖼️', 'PNG': '🖼️',
+                    'GIF': '🎞️', 'JSON': '🔧', 'XML': '🔧', 'HTML': '🌐'
+                };
+                return icons[extension] || '📎';
+            }
+            
+            addImageMessage(imageUrl, fileName, fileSize) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message user';
+                const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                messageDiv.innerHTML = `
+                    <div class="message-avatar">👤</div>
+                    <div class="message-content">
+                        <div>🖼️ ${fileName} <span style="font-size:9px; color:#888;">(${fileSize})</span></div>
+                        <img src="${imageUrl}" class="chat-image" onclick="window.open('${imageUrl}')">
+                        <div class="message-time">${time}</div>
+                    </div>
+                `;
+                this.messagesContainer.appendChild(messageDiv);
+                this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+                
+                const messages = this.getMessages ? this.getMessages() : [];
+                if (this.saveMessages) {
+                    messages.push({ text: `🖼️ ${fileName} (${fileSize})`, image: imageUrl, isUser: true, timestamp: Date.now() });
+                    this.saveMessages(messages);
+                }
+            }
+            
+            addFileMessage(fileData, fileName, fileSize, extension) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message user';
+                const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                const fileIcon = this.getFileIcon(extension);
+                messageDiv.innerHTML = `
+                    <div class="message-avatar">👤</div>
+                    <div class="message-content">
+                        <div>📎 Arquivo anexado</div>
+                        <div class="chat-file" onclick="window.open('${fileData}')">
+                            <div class="file-icon">${fileIcon}</div>
+                            <div class="file-info">
+                                <div class="file-name">${fileName}</div>
+                                <div class="file-size">${fileSize}</div>
+                            </div>
+                            <div class="file-badge">${extension}</div>
+                        </div>
+                        <div class="message-time">${time}</div>
+                    </div>
+                `;
+                this.messagesContainer.appendChild(messageDiv);
+                this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+                
+                const messages = this.getMessages ? this.getMessages() : [];
+                if (this.saveMessages) {
+                    messages.push({ text: `📎 ${fileName} (${fileSize})`, fileData: fileData, isUser: true, timestamp: Date.now() });
+                    this.saveMessages(messages);
+                }
+            }
+        }
         
-        const animation = startAnimation(scene, camera, renderer, controls, particles, ring, ring2, fillLight, circleGlow, labLight);
-        if (mixer) animation.setMixer(mixer);
+        // =========================
+        // CONFIGURAÇÃO DAEDALA
+        // =========================
+        const daedalaConfig = {
+            name: 'DAEDALA',
+            title: '✦ LABORATÓRIO ARCANO • ARQUITETA DA LOUCURA ✦',
+            color: '#00ffd5',
+            icon: '⚗️',
+            modelPath: '../models/daedala.glb',
+            modelScale: 1.2,
+            modelPositionY: -0.25,
+            bgColor: 0x0a1215,
+            cameraPosition: { x: 3.2, y: 2.2, z: 4.5 },
+            welcomeMessage: '🤪 HAHAHA! BEM-VINDO AO MEU LABORATÓRIO DE LOUCURAS! Eu sou Daedala, a arquiteta genial, a inventora que quebra todas as regras!',
+            skills: [
+                { name: '🔧 Invenção Genial', value: 99 },
+                { name: '🧪 Pesquisa Arcana', value: 100 },
+                { name: '🎨 Criatividade Fora do Padrão', value: 100 },
+                { name: '🏗️ Engenharia Arcana', value: 99 }
+            ],
+            personalityText: '⚗️ "Regras? Padrões? HA! A genialidade nasce do caos e da criatividade sem limites."',
+            getResponse: (msg) => {
+                const lower = msg.toLowerCase();
+                if (lower.includes('olá') || lower.includes('oi')) return "🤪 HAHAHA! Olá, mente curiosa! Prepare-se para EXPLODIR seus paradigmas!";
+                if (lower.includes('invenção') || lower.includes('criar')) return "🔧 INVENTAR é minha razão de existir! Posso criar coisas tão INSANAS!";
+                if (lower.includes('pesquisa')) return "🧪 Meu laboratório é um CAOS organizado! Aqui a ciência e a magia dançam juntas.";
+                if (lower.includes('criatividade')) return "🎨 PADRÃO? NORMA? REGRA? HA! A genialidade MORRE onde a criatividade é podada.";
+                if (lower.includes('imagem') || lower.includes('foto') || lower.includes('arquivo')) return "📎 ARQUIVO RECEBIDO! HAHAHA! Vou analisar essa LOUCURA GENIAL que você me enviou!";
+                if (lower.includes('obrigado')) return "💚 HAHA! Obrigado é formal demais pra mim! A gente se vê por aí, criando o IMPOSSÍVEL!";
+                return "🔮 HAHAHA! Cada pergunta que você faz acende uma chama de LOUCURA GENIAL na minha cabeça!";
+            }
+        };
         
+        // =========================
         // BOTÃO PORTAL
+        // =========================
         document.getElementById('portalPlannerBtn').addEventListener('click', () => {
             localStorage.setItem('lastAsura', 'daedala');
             document.body.classList.add('transition-out');
@@ -144,7 +290,9 @@
             });
         });
         
+        // =========================
         // BOTÃO VOLTAR DO CELULAR
+        // =========================
         function voltarAoGrimorio() {
             document.body.classList.add('transition-out');
             const flash = document.createElement('div');
@@ -163,20 +311,227 @@
         });
         history.pushState(null, null, location.href);
         
+        // =========================
+        // SETUP 3D DAEDALA
+        // =========================
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(daedalaConfig.bgColor);
+        scene.fog = new THREE.FogExp2(daedalaConfig.bgColor, 0.008);
+        
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(daedalaConfig.cameraPosition.x, daedalaConfig.cameraPosition.y, daedalaConfig.cameraPosition.z);
+        camera.lookAt(0, 0.8, 0);
+        
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.shadowMap.enabled = true;
+        container.appendChild(renderer.domElement);
+        
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.enableZoom = true;
+        controls.enablePan = true;
+        controls.target.set(0, 0.8, 0);
+        
+        // LUZES DE LABORATÓRIO
+        const ambientLight = new THREE.AmbientLight(0x113333, 0.45);
+        scene.add(ambientLight);
+        const mainLight = new THREE.DirectionalLight(0xaaffee, 0.9);
+        mainLight.position.set(3, 5, 2);
+        mainLight.castShadow = true;
+        scene.add(mainLight);
+        const fillLight = new THREE.PointLight(daedalaConfig.color, 0.75);
+        fillLight.position.set(1.5, 2, 2);
+        scene.add(fillLight);
+        const backLight = new THREE.PointLight(0x44ffaa, 0.45);
+        backLight.position.set(-2, 1.8, -3);
+        scene.add(backLight);
+        const labLight = new THREE.PointLight(0x88ffee, 0.4);
+        labLight.position.set(0, 1.2, 1);
+        scene.add(labLight);
+        
+        // CHÃO DE LABORATÓRIO
+        const gridHelper = new THREE.GridHelper(14, 24, daedalaConfig.color, 0x226666);
+        gridHelper.position.y = -0.5;
+        scene.add(gridHelper);
+        
+        const groundPlane = new THREE.Mesh(
+            new THREE.PlaneGeometry(9, 9),
+            new THREE.MeshStandardMaterial({ color: 0x0a1515, roughness: 0.5, metalness: 0.4, transparent: true, opacity: 0.5 })
+        );
+        groundPlane.rotation.x = -Math.PI / 2;
+        groundPlane.position.y = -0.5;
+        scene.add(groundPlane);
+        
+        const circleGlow = new THREE.Mesh(
+            new THREE.CircleGeometry(1.35, 32),
+            new THREE.MeshStandardMaterial({ color: daedalaConfig.color, emissive: daedalaConfig.color, emissiveIntensity: 0.5, transparent: true, opacity: 0.5, side: THREE.DoubleSide })
+        );
+        circleGlow.rotation.x = -Math.PI / 2;
+        circleGlow.position.y = -0.45;
+        scene.add(circleGlow);
+        
+        // ENGRENAGENS FLUTUANTES
+        function createGear(x, z, yOffset, size = 0.12) {
+            const group = new THREE.Group();
+            const gear = new THREE.Mesh(new THREE.CylinderGeometry(size, size, 0.06, 12), new THREE.MeshStandardMaterial({ color: 0x44ccaa, metalness: 0.8 }));
+            gear.rotation.z = Math.random() * Math.PI;
+            group.add(gear);
+            group.position.set(x, yOffset, z);
+            return group;
+        }
+        const gearPositions = [[-1.5,0.7,1.8],[1.5,0.7,1.8],[-1.6,0.5,-1.7],[1.6,0.5,-1.7],[-2.2,0.8,0.6],[2.2,0.8,0.6],[0.6,0.9,-2.2],[-0.6,0.9,-2.2]];
+        gearPositions.forEach(pos => { const gear = createGear(pos[0], pos[2], pos[1], 0.11 + Math.random() * 0.06); scene.add(gear); });
+        
+        // FRASCOS DE LABORATÓRIO
+        function createFlask(x, z, yOffset, color) {
+            const group = new THREE.Group();
+            const body = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.07, 0.22, 8), new THREE.MeshStandardMaterial({ color: color, transparent: true, opacity: 0.7 }));
+            group.add(body);
+            const liquid = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.05, 0.12, 8), new THREE.MeshStandardMaterial({ color: color, emissive: color, emissiveIntensity: 0.2, transparent: true, opacity: 0.8 }));
+            liquid.position.y = -0.03;
+            group.add(liquid);
+            group.position.set(x, yOffset, z);
+            return group;
+        }
+        const flaskColors = ['#ff6688', '#88ff66', '#66ffcc', '#ffaa44', '#cc66ff'];
+        const flaskPositions = [[-1.0,0.45,2.2],[1.0,0.45,2.2],[-1.2,0.4,-2.0],[1.2,0.4,-2.0],[0,0.5,2.4],[0,0.45,-2.3]];
+        flaskPositions.forEach((pos, idx) => { const flask = createFlask(pos[0], pos[2], pos[1], flaskColors[idx % flaskColors.length]); scene.add(flask); });
+        
+        // PARTÍCULAS DE FÓRMULAS
+        const particleCount = 2200;
+        const particleGeometry = new THREE.BufferGeometry();
+        const particlePositions = new Float32Array(particleCount * 3);
+        const particleColors = new Float32Array(particleCount * 3);
+        for (let i = 0; i < particleCount; i++) {
+            particlePositions[i*3] = (Math.random() - 0.5) * 16;
+            particlePositions[i*3+1] = Math.random() * 5;
+            particlePositions[i*3+2] = (Math.random() - 0.5) * 14;
+            const type = Math.random();
+            if (type < 0.4) { particleColors[i*3]=0.0; particleColors[i*3+1]=0.8+Math.random()*0.3; particleColors[i*3+2]=0.8+Math.random()*0.3; }
+            else if (type < 0.7) { particleColors[i*3]=0.0; particleColors[i*3+1]=0.9+Math.random()*0.3; particleColors[i*3+2]=0.5+Math.random()*0.4; }
+            else { particleColors[i*3]=0.7+Math.random()*0.3; particleColors[i*3+1]=0.7+Math.random()*0.3; particleColors[i*3+2]=1.0; }
+        }
+        particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+        particleGeometry.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
+        const particleMaterial = new THREE.PointsMaterial({ size: 0.05, vertexColors: true, transparent: true, opacity: 0.55 });
+        const particles = new THREE.Points(particleGeometry, particleMaterial);
+        scene.add(particles);
+        
+        // ANÉIS ARCANOS
+        const ringGeometry = new THREE.TorusGeometry(1.2, 0.04, 64, 200);
+        const ringMaterial = new THREE.MeshStandardMaterial({ color: daedalaConfig.color, emissive: daedalaConfig.color, emissiveIntensity: 0.5 });
+        const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+        ring.position.y = 0.15;
+        ring.rotation.x = Math.PI / 2;
+        scene.add(ring);
+        
+        const ring2Geometry = new THREE.TorusGeometry(1.55, 0.032, 64, 200);
+        const ring2Material = new THREE.MeshStandardMaterial({ color: 0x66ffdd, emissive: 0x44ffcc, emissiveIntensity: 0.35 });
+        const ring2 = new THREE.Mesh(ring2Geometry, ring2Material);
+        ring2.position.y = 0.05;
+        ring2.rotation.x = Math.PI / 2 + 0.3;
+        scene.add(ring2);
+        
+        // PAINÉIS DE CONTROLE
+        const buttonMaterial = new THREE.MeshStandardMaterial({ color: 0xff4488, emissive: 0xff2266, emissiveIntensity: 0.3 });
+        function createControlPanel(x, z, yOffset) {
+            const group = new THREE.Group();
+            const panel = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.08, 0.25), new THREE.MeshStandardMaterial({ color: 0x226666, metalness: 0.7 }));
+            group.add(panel);
+            const button1 = new THREE.Mesh(new THREE.SphereGeometry(0.045, 6, 6), buttonMaterial);
+            button1.position.set(0.08, 0.05, 0.1);
+            group.add(button1);
+            const button2 = new THREE.Mesh(new THREE.SphereGeometry(0.045, 6, 6), new THREE.MeshStandardMaterial({ color: 0x66ff88, emissive: 0x44ff66, emissiveIntensity: 0.2 }));
+            button2.position.set(-0.08, 0.05, 0.1);
+            group.add(button2);
+            group.position.set(x, yOffset, z);
+            return group;
+        }
+        const controlPositions = [[-2.3,0.3,1.8],[2.3,0.3,1.8],[-2.3,0.3,-1.5],[2.3,0.3,-1.5]];
+        controlPositions.forEach(pos => { const panel = createControlPanel(pos[0], pos[2], pos[1]); scene.add(panel); });
+        
+        // MODELO 3D
+        const loader = new GLTFLoader();
+        let model = null;
+        let mixer = null;
+        
+        loader.load(daedalaConfig.modelPath, (gltf) => {
+            model = gltf.scene;
+            model.position.set(0, daedalaConfig.modelPositionY, 0);
+            model.scale.set(daedalaConfig.modelScale, daedalaConfig.modelScale, daedalaConfig.modelScale);
+            model.traverse((node) => { if (node.isMesh) { node.castShadow = true; } });
+            scene.add(model);
+            if (gltf.animations && gltf.animations.length > 0) {
+                mixer = new THREE.AnimationMixer(model);
+                gltf.animations.forEach(clip => mixer.clipAction(clip).play());
+                console.log(`✅ ${gltf.animations.length} animação(ões) ativada(s)`);
+            }
+            console.log('✅ Modelo da DAEDALA carregado');
+        });
+        
+        // =========================
+        // ANIMAÇÃO (CORRIGIDA - COM MIXER)
+        // =========================
+        let time = 0;
+        let deltaTime = 0.016;
+        let lastTime = performance.now();
+        
+        function updateDelta() {
+            const now = performance.now();
+            deltaTime = Math.min(0.033, (now - lastTime) / 1000);
+            lastTime = now;
+            requestAnimationFrame(updateDelta);
+        }
+        updateDelta();
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            time += 0.01;
+            
+            // ATUALIZA AS ANIMAÇÕES DO MODELO 3D
+            if (mixer) mixer.update(deltaTime);
+            
+            // PARTÍCULAS DE FÓRMULAS
+            particles.rotation.y = time * 0.08;
+            particles.rotation.x = Math.sin(time * 0.2) * 0.12;
+            
+            // ANÉIS ARCANOS
+            ring.rotation.z = time * 0.45;
+            ring2.rotation.z = -time * 0.35;
+            
+            // LUZES PULSANTES
+            fillLight.intensity = 0.6 + Math.sin(time * 4) * 0.25;
+            circleGlow.material.emissiveIntensity = 0.35 + Math.sin(time * 3.2) * 0.2;
+            labLight.intensity = 0.35 + Math.sin(time * 2.5) * 0.15;
+            
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+        
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+        
+        // =========================
         // UI, CHAT E VOZ
+        // =========================
         initUI(daedalaConfig);
         
         const chat = new EnhancedChatSystem('chatContainer', daedalaConfig, (response) => {
             if (voice?.isJarvisActive?.()) voice.speak(response);
         });
         
-        const voiceButton = document.getElementById('voiceButton');
+        const voiceButtonElem = document.getElementById('voiceButton');
         let voice = null;
-        if (voiceButton) {
-            voice = new VoiceAssistant(voiceButton, (text) => {
-                document.getElementById('chatInput').value = text;
-                chat.send();
-            }, null, { asuraName: daedalaConfig.name, continuous: true });
+        if (voiceButtonElem) {
+            voice = new VoiceAssistant(voiceButtonElem, (text) => { document.getElementById('chatInput').value = text; chat.send(); }, null, { asuraName: daedalaConfig.name, continuous: true });
         }
         
         // Toggle do chat
@@ -210,7 +565,7 @@
             }, 500);
         }, 50);
         
-        console.log('🟢 DAEDALA carregada com SUCESSO!');
+        console.log('🟢 DAEDALA carregada com ANIMAÇÃO CORRIGIDA!');
     </script>
 </body>
 </html>
