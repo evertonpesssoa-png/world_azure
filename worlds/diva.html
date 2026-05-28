@@ -13,8 +13,6 @@
     <link rel="stylesheet" href="../shared/css/profile-panel.css">
     <link rel="stylesheet" href="../shared/css/portal.css">
     
-    <link rel="stylesheet" href="../shared/asuras/diva/chat-style.css">
-    
     <style>
         :root {
             --asura-color: #ff4db8;
@@ -100,34 +98,185 @@
     </script>
 
     <script type="module">
-        import { divaConfig } from '../shared/asuras/diva/config.js';
-        import { initScene, initControls } from '../shared/asuras/diva/scene.js';
-        import { initLights } from '../shared/asuras/diva/lights.js';
-        import { initFloor } from '../shared/asuras/diva/floor.js';
-        import { initParticles } from '../shared/asuras/diva/particles.js';
-        import { initRings } from '../shared/asuras/diva/rings.js';
-        import { initGlow } from '../shared/asuras/diva/glow.js';
-        import { loadModel } from '../shared/asuras/diva/model.js';
-        import { startAnimation } from '../shared/asuras/diva/animate.js';
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         import { initUI } from '../shared/js/ui.js';
-        import { EnhancedChatSystem } from '../shared/js/chat-system-enhanced.js';
+        import { ChatSystem } from '../shared/js/chat.js';
         import { VoiceAssistant } from '../shared/js/voice-assistant.js';
         
-        // SETUP 3D
-        const { scene, camera, renderer } = initScene(divaConfig);
-        const controls = initControls(camera, renderer);
-        const { fillLight, bottomLight, frontLight } = initLights(scene, divaConfig);
-        const circleGlow = initFloor(scene, divaConfig);
-        const particles = initParticles(scene, divaConfig);
-        const { ring1, ring2 } = initRings(scene, divaConfig);
-        const glowHalo = initGlow(scene, divaConfig);
+        // =========================
+        // EXTENDE O CHAT SYSTEM ORIGINAL
+        // =========================
+        const OriginalChatSystem = ChatSystem;
         
-        const { model, mixer } = loadModel(scene, divaConfig);
+        class EnhancedChatSystem extends OriginalChatSystem {
+            constructor(containerId, config, onSpeak) {
+                super(containerId, config, onSpeak);
+                this.addAttachButton();
+                
+                setTimeout(() => {
+                    if (this.chatBody) {
+                        this.chatBody.classList.add('collapsed');
+                    }
+                    if (this.chatToggle) {
+                        this.chatToggle.textContent = '▲';
+                    }
+                }, 100);
+            }
+            
+            addAttachButton() {
+                const inputArea = this.container.querySelector('.chat-input-area');
+                if (!inputArea || inputArea.querySelector('.attach-btn')) return;
+                
+                const attachBtn = document.createElement('button');
+                attachBtn.className = 'attach-btn';
+                attachBtn.innerHTML = '📎';
+                attachBtn.title = 'Enviar arquivo (imagem, PDF, DOC, etc)';
+                
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = '*/*';
+                fileInput.style.display = 'none';
+                
+                attachBtn.onclick = () => fileInput.click();
+                fileInput.onchange = (e) => {
+                    const file = e.target.files[0];
+                    if (file) this.handleFileUpload(file);
+                    fileInput.value = '';
+                };
+                
+                const textInput = inputArea.querySelector('input[type="text"]');
+                if (textInput) {
+                    inputArea.insertBefore(attachBtn, textInput);
+                    inputArea.insertBefore(fileInput, textInput);
+                }
+            }
+            
+            handleFileUpload(file) {
+                const fileType = file.type;
+                const fileName = file.name;
+                const fileSize = this.formatFileSize(file.size);
+                const fileExtension = fileName.split('.').pop().toUpperCase();
+                
+                if (fileType.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => this.addImageMessage(ev.target.result, fileName, fileSize);
+                    reader.readAsDataURL(file);
+                } else {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => this.addFileMessage(ev.target.result, fileName, fileSize, fileExtension);
+                    reader.readAsDataURL(file);
+                }
+            }
+            
+            formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+            
+            getFileIcon(extension) {
+                const icons = {
+                    'PDF': '📄', 'DOC': '📃', 'DOCX': '📃',
+                    'XLS': '📊', 'XLSX': '📊', 'PPT': '📽️', 'PPTX': '📽️',
+                    'TXT': '📝', 'ZIP': '🗜️', 'RAR': '🗜️',
+                    'MP3': '🎵', 'MP4': '🎬', 'JPG': '🖼️', 'PNG': '🖼️',
+                    'GIF': '🎞️', 'JSON': '🔧', 'XML': '🔧', 'HTML': '🌐'
+                };
+                return icons[extension] || '📎';
+            }
+            
+            addImageMessage(imageUrl, fileName, fileSize) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message user';
+                const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                messageDiv.innerHTML = `
+                    <div class="message-avatar">👤</div>
+                    <div class="message-content">
+                        <div>🖼️ ${fileName} <span style="font-size:9px; color:#888;">(${fileSize})</span></div>
+                        <img src="${imageUrl}" class="chat-image" onclick="window.open('${imageUrl}')">
+                        <div class="message-time">${time}</div>
+                    </div>
+                `;
+                this.messagesContainer.appendChild(messageDiv);
+                this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+                
+                const messages = this.getMessages ? this.getMessages() : [];
+                if (this.saveMessages) {
+                    messages.push({ text: `🖼️ ${fileName} (${fileSize})`, image: imageUrl, isUser: true, timestamp: Date.now() });
+                    this.saveMessages(messages);
+                }
+            }
+            
+            addFileMessage(fileData, fileName, fileSize, extension) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message user';
+                const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                const fileIcon = this.getFileIcon(extension);
+                messageDiv.innerHTML = `
+                    <div class="message-avatar">👤</div>
+                    <div class="message-content">
+                        <div>📎 Arquivo anexado</div>
+                        <div class="chat-file" onclick="window.open('${fileData}')">
+                            <div class="file-icon">${fileIcon}</div>
+                            <div class="file-info">
+                                <div class="file-name">${fileName}</div>
+                                <div class="file-size">${fileSize}</div>
+                            </div>
+                            <div class="file-badge">${extension}</div>
+                        </div>
+                        <div class="message-time">${time}</div>
+                    </div>
+                `;
+                this.messagesContainer.appendChild(messageDiv);
+                this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+                
+                const messages = this.getMessages ? this.getMessages() : [];
+                if (this.saveMessages) {
+                    messages.push({ text: `📎 ${fileName} (${fileSize})`, fileData: fileData, isUser: true, timestamp: Date.now() });
+                    this.saveMessages(messages);
+                }
+            }
+        }
         
-        const animation = startAnimation(scene, camera, renderer, controls, particles, ring1, ring2, fillLight, circleGlow, bottomLight, frontLight, glowHalo);
-        if (mixer) animation.setMixer(mixer);
+        // =========================
+        // CONFIGURAÇÃO DIVA
+        // =========================
+        const divaConfig = {
+            name: 'DIVA',
+            title: '✦ AUTOMAÇÃO ARCANA • ASSISTENTE MENTALISTA ✦',
+            color: '#ff4db8',
+            icon: '🜁',
+            modelPath: '../models/diva2.glb',
+            modelScale: 0.5,
+            modelPositionY: -0.25,
+            bgColor: 0x050510,
+            cameraPosition: { x: 3, y: 2.2, z: 4.5 },
+            welcomeMessage: '✨ Olá! Sou Diva. Clique no ícone 👩‍💼 para ativar o modo Jarvis (escuta contínua) ou digite sua mensagem. Como posso ajudar?',
+            skills: [
+                { name: '🤖 Automação', value: 96 },
+                { name: '🧠 Leitura Contextual', value: 94 },
+                { name: '💬 Comunicação', value: 98 },
+                { name: '🌀 Sintonia Mentalista', value: 91 }
+            ],
+            personalityText: '💎 "Sua assistente mentalista. Entre o código e a alma."<br>Diva combina automação precisa com intuição afiada.',
+            getResponse: (msg) => {
+                const lower = msg.toLowerCase();
+                if (lower.includes('olá') || lower.includes('oi')) return "✨ Olá! Sinta a energia do meu reino neon. Como posso ajudar?";
+                if (lower.includes('automação')) return "🤖 Automação é meu dom. Posso criar rotinas, lembretes, integrar sistemas...";
+                if (lower.includes('habilidades')) return "🜁 Automação, leitura contextual, comunicação estratégica e sintonia mentalista.";
+                if (lower.includes('imagem') || lower.includes('foto') || lower.includes('arquivo')) return "📎 Arquivo recebido! Processando dados... Minha mente mentalista já está analisando.";
+                if (lower.includes('obrigado')) return "💫 Por nada! Foi um prazer arcano te ajudar.";
+                return "🧠 Percebo o que você diz... Como sua assistente mentalista, posso te ajudar com automação ou apenas conversar.";
+            }
+        };
         
+        // =========================
         // BOTÃO PORTAL
+        // =========================
         document.getElementById('portalPlannerBtn').addEventListener('click', () => {
             localStorage.setItem('lastAsura', 'diva');
             document.body.classList.add('transition-out');
@@ -140,7 +289,9 @@
             });
         });
         
+        // =========================
         // BOTÃO VOLTAR DO CELULAR
+        // =========================
         function voltarAoGrimorio() {
             document.body.classList.add('transition-out');
             const flash = document.createElement('div');
@@ -159,20 +310,226 @@
         });
         history.pushState(null, null, location.href);
         
+        // =========================
+        // SETUP 3D DIVA
+        // =========================
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(divaConfig.bgColor);
+        scene.fog = new THREE.FogExp2(divaConfig.bgColor, 0.008);
+        
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(divaConfig.cameraPosition.x, divaConfig.cameraPosition.y, divaConfig.cameraPosition.z);
+        camera.lookAt(0, 0.8, 0);
+        
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.shadowMap.enabled = true;
+        container.appendChild(renderer.domElement);
+        
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.enableZoom = true;
+        controls.enablePan = true;
+        controls.target.set(0, 0.8, 0);
+        
+        // LUZES NEON
+        const ambientLight = new THREE.AmbientLight(0x332233, 0.85);
+        scene.add(ambientLight);
+        
+        const mainLight = new THREE.DirectionalLight(0xffaaff, 1.5);
+        mainLight.position.set(3, 5, 2);
+        mainLight.castShadow = true;
+        scene.add(mainLight);
+        
+        const fillLight = new THREE.PointLight(0xff4db8, 1.2);
+        fillLight.position.set(1, 2, 2);
+        scene.add(fillLight);
+        
+        const bottomLight = new THREE.PointLight(0xff66cc, 0.7);
+        bottomLight.position.set(0, -1, 0);
+        scene.add(bottomLight);
+        
+        const frontLight = new THREE.PointLight(0xffaacc, 0.5);
+        frontLight.position.set(0, 1, 2);
+        scene.add(frontLight);
+        
+        const backLight = new THREE.PointLight(0x44aaff, 0.5);
+        backLight.position.set(-2, 1.5, -3);
+        scene.add(backLight);
+        
+        const warmLight = new THREE.PointLight(0xffaa66, 0.4);
+        warmLight.position.set(2, 1, 1.5);
+        scene.add(warmLight);
+        
+        // CHÃO NEON
+        const gridHelper = new THREE.GridHelper(12, 20, divaConfig.color, 0x333366);
+        gridHelper.position.y = -0.5;
+        scene.add(gridHelper);
+        
+        const groundPlane = new THREE.Mesh(
+            new THREE.PlaneGeometry(8, 8),
+            new THREE.MeshStandardMaterial({ color: 0x0a0512, roughness: 0.7, metalness: 0.3, transparent: true, opacity: 0.4 })
+        );
+        groundPlane.rotation.x = -Math.PI / 2;
+        groundPlane.position.y = -0.5;
+        scene.add(groundPlane);
+        
+        const circleGlow = new THREE.Mesh(
+            new THREE.CircleGeometry(1.2, 32),
+            new THREE.MeshStandardMaterial({ color: divaConfig.color, emissive: divaConfig.color, emissiveIntensity: 0.5, transparent: true, opacity: 0.5, side: THREE.DoubleSide })
+        );
+        circleGlow.rotation.x = -Math.PI / 2;
+        circleGlow.position.y = -0.45;
+        scene.add(circleGlow);
+        
+        // GLOW/HALO
+        const glowGeometry = new THREE.SphereGeometry(1.1, 16, 16);
+        const glowMaterial = new THREE.MeshBasicMaterial({
+            color: divaConfig.color,
+            transparent: true,
+            opacity: 0.1,
+            side: THREE.BackSide
+        });
+        const glowHalo = new THREE.Mesh(glowGeometry, glowMaterial);
+        glowHalo.position.set(0, 0.5, 0);
+        scene.add(glowHalo);
+        
+        // PARTÍCULAS ROSAS
+        const particleCount = 1200;
+        const particleGeometry = new THREE.BufferGeometry();
+        const particlePositions = new Float32Array(particleCount * 3);
+        for (let i = 0; i < particleCount; i++) {
+            particlePositions[i*3] = (Math.random() - 0.5) * 12;
+            particlePositions[i*3+1] = Math.random() * 4;
+            particlePositions[i*3+2] = (Math.random() - 0.5) * 10;
+        }
+        particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+        const particleMaterial = new THREE.PointsMaterial({ color: divaConfig.color, size: 0.045, transparent: true, opacity: 0.55 });
+        const particles = new THREE.Points(particleGeometry, particleMaterial);
+        scene.add(particles);
+        
+        // ANÉIS
+        const ringGeometry1 = new THREE.TorusGeometry(1.0, 0.03, 64, 200);
+        const ringMaterial1 = new THREE.MeshStandardMaterial({ color: divaConfig.color, emissive: divaConfig.color, emissiveIntensity: 0.6 });
+        const ring1 = new THREE.Mesh(ringGeometry1, ringMaterial1);
+        ring1.position.y = 0.2;
+        ring1.rotation.x = Math.PI / 2;
+        scene.add(ring1);
+        
+        const ringGeometry2 = new THREE.TorusGeometry(1.3, 0.02, 64, 200);
+        const ring2 = new THREE.Mesh(ringGeometry2, ringMaterial1);
+        ring2.position.y = 0.1;
+        ring2.rotation.x = Math.PI / 2 + 0.3;
+        scene.add(ring2);
+        
+        // MODELO 3D
+        const loader = new GLTFLoader();
+        let model = null;
+        let mixer = null;
+        
+        loader.load(divaConfig.modelPath, (gltf) => {
+            model = gltf.scene;
+            model.position.set(0, divaConfig.modelPositionY, 0);
+            model.scale.set(divaConfig.modelScale, divaConfig.modelScale, divaConfig.modelScale);
+            
+            model.traverse((node) => {
+                if (node.isMesh) {
+                    node.castShadow = true;
+                    const isEye = node.name && (
+                        node.name.toLowerCase().includes('eye') || 
+                        node.name.toLowerCase().includes('olho') ||
+                        node.name.toLowerCase().includes('face')
+                    );
+                    if (node.material) {
+                        node.material.roughness = 0.3;
+                        node.material.metalness = 0.6;
+                        if (isEye) {
+                            node.material.emissive = new THREE.Color(0xff66cc);
+                            node.material.emissiveIntensity = 0.6;
+                            node.material.roughness = 0.2;
+                        }
+                    }
+                }
+            });
+            
+            scene.add(model);
+            
+            if (gltf.animations && gltf.animations.length > 0) {
+                mixer = new THREE.AnimationMixer(model);
+                gltf.animations.forEach(clip => mixer.clipAction(clip).play());
+                console.log(`✅ ${gltf.animations.length} animação(ões) ativada(s)`);
+            }
+            console.log('✅ Modelo da DIVA carregado');
+        });
+        
+        // =========================
+        // ANIMAÇÃO (CORRIGIDA - COM MIXER)
+        // =========================
+        let time = 0;
+        let deltaTime = 0.016;
+        let lastTime = performance.now();
+        
+        function updateDelta() {
+            const now = performance.now();
+            deltaTime = Math.min(0.033, (now - lastTime) / 1000);
+            lastTime = now;
+            requestAnimationFrame(updateDelta);
+        }
+        updateDelta();
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            time += 0.008;
+            
+            // ATUALIZA AS ANIMAÇÕES DO MODELO 3D
+            if (mixer) mixer.update(deltaTime);
+            
+            // PARTÍCULAS ROSAS
+            particles.rotation.y = time * 0.1;
+            particles.rotation.x = Math.sin(time * 0.2) * 0.1;
+            
+            // ANÉIS
+            ring1.rotation.z = time * 0.3;
+            ring2.rotation.z = -time * 0.2;
+            
+            // LUZES PULSANTES
+            fillLight.intensity = 0.9 + Math.sin(time * 4) * 0.25;
+            circleGlow.material.emissiveIntensity = 0.3 + Math.sin(time * 2.5) * 0.2;
+            bottomLight.intensity = 0.5 + Math.sin(time * 3) * 0.2;
+            frontLight.intensity = 0.4 + Math.sin(time * 2) * 0.15;
+            
+            // HALO PULSANTE
+            const scale = 1 + Math.sin(time * 2) * 0.03;
+            glowHalo.scale.set(scale, scale, scale);
+            glowMaterial.opacity = 0.08 + Math.sin(time * 1.5) * 0.04;
+            
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+        
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+        
+        // =========================
         // UI, CHAT E VOZ
+        // =========================
         initUI(divaConfig);
         
         const chat = new EnhancedChatSystem('chatContainer', divaConfig, (response) => {
             if (voice?.isJarvisActive?.()) voice.speak(response);
         });
         
-        const voiceButton = document.getElementById('voiceButton');
+        const voiceButtonElem = document.getElementById('voiceButton');
         let voice = null;
-        if (voiceButton) {
-            voice = new VoiceAssistant(voiceButton, (text) => {
-                document.getElementById('chatInput').value = text;
-                chat.send();
-            }, null, { asuraName: divaConfig.name, continuous: true });
+        if (voiceButtonElem) {
+            voice = new VoiceAssistant(voiceButtonElem, (text) => { document.getElementById('chatInput').value = text; chat.send(); }, null, { asuraName: divaConfig.name, continuous: true });
         }
         
         // Toggle do chat
@@ -206,7 +563,7 @@
             }, 500);
         }, 50);
         
-        console.log('🟢 DIVA carregada com SUCESSO!');
+        console.log('🟢 DIVA carregada com ANIMAÇÃO CORRIGIDA!');
     </script>
 </body>
 </html>
