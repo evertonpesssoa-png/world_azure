@@ -46,12 +46,28 @@
             transition: all 0.4s ease;
         }
         
-        .chat-container {
-            transform: translateY(calc(100% - 48px));
-            transition: transform 0.3s ease;
+        /* CORREÇÃO DO CHAT - VERSÃO SIMPLES E FUNCIONAL */
+        .chat-body {
+            display: none;
         }
-        .chat-container.open { transform: translateY(0); }
-        .chat-body.collapsed { display: none; }
+        .chat-container.open .chat-body {
+            display: block;
+        }
+        .chat-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 340px;
+            z-index: 200;
+            pointer-events: auto;
+        }
+        @media (max-width: 768px) {
+            .chat-container {
+                width: calc(100% - 30px);
+                right: 15px;
+                bottom: 15px;
+            }
+        }
     </style>
 </head>
 <body class="asura-astreia">
@@ -116,9 +132,10 @@
                 super(containerId, config, onSpeak);
                 this.addAttachButton();
                 
+                // Chat começa fechado - SEM usar collapsed
                 setTimeout(() => {
-                    if (this.chatBody) {
-                        this.chatBody.classList.add('collapsed');
+                    if (this.container) {
+                        this.container.classList.remove('open');
                     }
                     if (this.chatToggle) {
                         this.chatToggle.textContent = '▲';
@@ -470,7 +487,7 @@
         });
         
         // =========================
-        // ANIMAÇÃO (CORRIGIDA - COM MIXER)
+        // ANIMAÇÃO
         // =========================
         let time = 0;
         let deltaTime = 0.016;
@@ -488,21 +505,16 @@
             requestAnimationFrame(animate);
             time += 0.008;
             
-            // ATUALIZA AS ANIMAÇÕES DO MODELO 3D
             if (mixer) mixer.update(deltaTime);
             
-            // PARTÍCULAS
             particles.rotation.y = time * 0.05;
             particles.rotation.x = Math.sin(time * 0.15) * 0.1;
             
-            // ANÉIS
             ring.rotation.z = time * 0.3;
             ring2.rotation.z = -time * 0.25;
             
-            // ESCUDO PULSANTE
             shield.material.emissiveIntensity = 0.08 + Math.sin(time * 2) * 0.04;
             
-            // LUZES PULSANTES
             fillLight.intensity = 0.6 + Math.sin(time * 2.5) * 0.2;
             circleGlow.material.emissiveIntensity = 0.25 + Math.sin(time * 2) * 0.15;
             
@@ -532,17 +544,21 @@
             voice = new VoiceAssistant(voiceButtonElem, (text) => { document.getElementById('chatInput').value = text; chat.send(); }, null, { asuraName: astreiaConfig.name, continuous: true });
         }
         
-        // Toggle do chat
-        const chatContainer = document.getElementById('chatContainer');
-        const chatToggle = document.getElementById('chatToggle');
-        const chatHeader = document.getElementById('chatHeader');
+        // Toggle do chat - VERSÃO CORRIGIDA
+        const chatContainerElem = document.getElementById('chatContainer');
+        const chatToggleElem = document.getElementById('chatToggle');
+        const chatHeaderElem = document.getElementById('chatHeader');
         
         function toggleChat() {
-            chatContainer.classList.toggle('open');
+            chatContainerElem.classList.toggle('open');
+            // Muda o ícone da seta
+            if (chatToggleElem) {
+                chatToggleElem.textContent = chatContainerElem.classList.contains('open') ? '▼' : '▲';
+            }
         }
         
-        if (chatToggle) chatToggle.addEventListener('click', toggleChat);
-        if (chatHeader) chatHeader.addEventListener('click', toggleChat);
+        if (chatToggleElem) chatToggleElem.addEventListener('click', toggleChat);
+        if (chatHeaderElem) chatHeaderElem.addEventListener('click', toggleChat);
         
         setTimeout(() => {
             chat.addMessage(astreiaConfig.welcomeMessage, false);
@@ -563,7 +579,7 @@
             }, 500);
         }, 50);
         
-        console.log('🟢 ASTREIA carregada com ANIMAÇÃO CORRIGIDA!');
+        console.log('🟢 ASTREIA carregada com CHAT CORRIGIDO!');
     </script>
 </body>
 </html>
