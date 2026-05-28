@@ -1,5 +1,5 @@
 /* =========================
-   CHAT POPUP - 3 NÍVEIS
+   CHAT POPUP
    ========================= */
 .chat-container {
     position: fixed;
@@ -9,49 +9,6 @@
     z-index: 200;
     animation: slideInUp 0.6s ease;
     pointer-events: auto;
-    transition: all 0.3s ease;
-}
-
-/* NÍVEL 0: FECHADO */
-.chat-container.level-0 .chat-body {
-    display: none;
-}
-
-/* NÍVEL 1: ABERTO NORMAL */
-.chat-container.level-1 .chat-body {
-    display: block;
-}
-
-/* NÍVEL 2: TELA INTEIRA */
-.chat-container.level-2 {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    max-width: none !important;
-    border-radius: 0 !important;
-    z-index: 99999 !important;
-    animation: none !important;
-}
-
-.chat-container.level-2 .chat-body {
-    display: block !important;
-    height: calc(100vh - 60px) !important;
-    border-radius: 0 !important;
-}
-
-.chat-container.level-2 .chat-messages {
-    height: calc(100vh - 150px) !important;
-    max-height: none !important;
-}
-
-.chat-container.level-2 .chat-input-area {
-    position: sticky;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.95);
 }
 
 .chat-header {
@@ -66,25 +23,8 @@
     cursor: pointer;
 }
 
-.chat-container.level-2 .chat-header {
-    border-radius: 0 !important;
-}
-
 .chat-header:hover {
     background: rgba(255, 255, 255, 0.08);
-}
-
-.chat-header-left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex: 1;
-}
-
-.chat-header-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
 }
 
 .chat-header-info {
@@ -107,7 +47,6 @@
 .chat-header h4 {
     color: var(--asura-color);
     font-size: 0.9rem;
-    margin: 0;
 }
 
 .chat-status {
@@ -119,26 +58,6 @@
     font-size: 1rem;
     transition: transform 0.3s;
     color: var(--asura-color);
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 4px 8px;
-}
-
-.fullscreen-toggle {
-    background: rgba(255, 255, 255, 0.15);
-    border: none;
-    color: var(--asura-color);
-    cursor: pointer;
-    font-size: 16px;
-    padding: 4px 10px;
-    border-radius: 8px;
-    transition: 0.2s;
-}
-
-.fullscreen-toggle:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: scale(1.05);
 }
 
 .chat-body {
@@ -150,11 +69,6 @@
     overflow: hidden;
 }
 
-.chat-container.level-2 .chat-body {
-    border-radius: 0 !important;
-}
-
-/* Remove a classe antiga que causava bug */
 .chat-body.collapsed {
     display: none;
 }
@@ -247,79 +161,13 @@
     transform: scale(1.05);
 }
 
-.attach-btn {
-    background: rgba(255, 255, 255, 0.15);
-    border: none;
-    padding: 8px 12px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: 0.2s;
-}
-
-.attach-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: scale(1.05);
-}
-
-.chat-image {
-    max-width: 100%;
-    border-radius: 8px;
-    margin-top: 6px;
-    cursor: pointer;
-}
-
-.chat-file {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: rgba(255, 255, 255, 0.08);
-    padding: 8px 12px;
-    border-radius: 12px;
-    margin-top: 6px;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.chat-file:hover {
-    background: rgba(255, 255, 255, 0.15);
-}
-
-.file-icon {
-    font-size: 28px;
-}
-
-.file-info {
-    flex: 1;
-}
-
-.file-name {
-    font-size: 0.8rem;
-    font-weight: bold;
-}
-
-.file-size {
-    font-size: 0.65rem;
-    opacity: 0.6;
-}
-
-.file-badge {
-    background: var(--asura-color);
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 0.7rem;
-}
-
 @media (max-width: 768px) {
-    .chat-container:not(.level-2) {
+    .chat-container {
         width: calc(100% - 30px);
         right: 15px;
         bottom: 15px;
     }
     .chat-messages {
         height: 220px;
-    }
-    .chat-container.level-2 .chat-messages {
-        height: calc(100vh - 150px) !important;
     }
 }
