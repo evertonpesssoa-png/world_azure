@@ -47,7 +47,7 @@
         }
         
         /* =========================
-           3 NÍVEIS DO CHAT
+           3 NÍVEIS DO CHAT - VERSÃO CORRIGIDA
            Nível 0: Fechado
            Nível 1: Aberto normal
            Nível 2: Tela inteira
@@ -72,7 +72,7 @@
             display: block;
         }
         
-        /* Nível 2 - Tela inteira */
+        /* Nível 2 - Tela inteira - CORRIGIDO */
         .chat-container.level-2 {
             position: fixed !important;
             top: 0 !important;
@@ -84,22 +84,57 @@
             max-width: none !important;
             border-radius: 0 !important;
             z-index: 99999 !important;
+            margin: 0 !important;
+        }
+        
+        .chat-container.level-2 .chat-header {
+            border-radius: 0 !important;
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 10 !important;
         }
         
         .chat-container.level-2 .chat-body {
-            display: block !important;
+            display: flex !important;
+            flex-direction: column !important;
             height: calc(100vh - 60px) !important;
+            max-height: none !important;
+            border-radius: 0 !important;
         }
         
         .chat-container.level-2 .chat-messages {
-            height: calc(100vh - 150px) !important;
+            flex: 1 !important;
+            height: auto !important;
             max-height: none !important;
+            overflow-y: auto !important;
+            padding: 16px !important;
         }
         
         .chat-container.level-2 .chat-input-area {
-            position: sticky;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.95);
+            position: sticky !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            background: rgba(0, 0, 0, 0.95) !important;
+            padding: 16px !important;
+            gap: 12px !important;
+            border-top: 1px solid var(--asura-color) !important;
+            z-index: 10 !important;
+        }
+        
+        .chat-container.level-2 .chat-input-area input {
+            padding: 14px 16px !important;
+            font-size: 16px !important;
+        }
+        
+        .chat-container.level-2 .chat-input-area button {
+            padding: 14px 20px !important;
+            font-size: 16px !important;
+        }
+        
+        .chat-container.level-2 .attach-btn {
+            padding: 14px 16px !important;
+            font-size: 18px !important;
         }
         
         /* Header com botões */
@@ -350,9 +385,6 @@
             .chat-messages {
                 height: 220px;
             }
-            .chat-container.level-2 .chat-messages {
-                height: calc(100vh - 150px) !important;
-            }
         }
     </style>
 </head>
@@ -423,6 +455,9 @@
                     if (this.container) {
                         this.container.classList.add('level-0');
                         this.container.classList.remove('level-1', 'level-2');
+                    }
+                    if (this.chatToggle) {
+                        this.chatToggle.textContent = '▲';
                     }
                 }, 100);
             }
@@ -629,6 +664,118 @@
                 if (this.saveMessages) {
                     messages.push({ text: `📎 ${fileName} (${fileSize})`, fileData: fileData, isUser: true, timestamp: Date.now() });
                     this.saveMessages(messages);
+                }
+            }
+            
+            addMessage(text, isUser, image = null) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = isUser ? 'message user' : 'message asura';
+                const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                
+                if (!isUser) {
+                    messageDiv.innerHTML = `
+                        <div class="message-avatar">${this.config.icon}</div>
+                        <div class="message-content">
+                            <div>${text}</div>
+                            <div class="message-time">${time}</div>
+                        </div>
+                    `;
+                } else {
+                    messageDiv.innerHTML = `
+                        <div class="message-avatar">👤</div>
+                        <div class="message-content">
+                            <div>${text}</div>
+                            <div class="message-time">${time}</div>
+                        </div>
+                    `;
+                }
+                
+                this.messagesContainer.appendChild(messageDiv);
+                this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+                
+                const messages = this.getMessages();
+                messages.push({ text, image, isUser, timestamp: Date.now() });
+                this.saveMessages(messages);
+            }
+            
+            getMessages() {
+                const stored = localStorage.getItem(`chat_messages_${this.config.name}`);
+                return stored ? JSON.parse(stored) : [];
+            }
+            
+            saveMessages(messages) {
+                if (messages.length > 100) messages.shift();
+                localStorage.setItem(`chat_messages_${this.config.name}`, JSON.stringify(messages));
+            }
+            
+            loadMessages() {
+                const messages = this.getMessages();
+                if (messages.length === 0) return;
+                
+                messages.forEach(msg => {
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = msg.isUser ? 'message user' : 'message asura';
+                    const time = new Date(msg.timestamp).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                    
+                    if (!msg.isUser) {
+                        messageDiv.innerHTML = `
+                            <div class="message-avatar">${this.config.icon}</div>
+                            <div class="message-content">
+                                <div>${msg.text}</div>
+                                <div class="message-time">${time}</div>
+                            </div>
+                        `;
+                    } else {
+                        messageDiv.innerHTML = `
+                            <div class="message-avatar">👤</div>
+                            <div class="message-content">
+                                <div>${msg.text}</div>
+                                <div class="message-time">${time}</div>
+                            </div>
+                        `;
+                    }
+                    
+                    if (msg.image) {
+                        const img = document.createElement('img');
+                        img.src = msg.image;
+                        img.className = 'chat-image';
+                        img.onclick = () => window.open(msg.image);
+                        messageDiv.querySelector('.message-content').appendChild(img);
+                    }
+                    
+                    this.messagesContainer.appendChild(messageDiv);
+                });
+                this.scrollToBottom();
+            }
+            
+            send() {
+                const text = this.input.value.trim();
+                if (!text) return;
+                
+                this.addMessage(text, true);
+                this.input.value = '';
+                
+                setTimeout(() => {
+                    const response = this.config.getResponse(text);
+                    this.addMessage(response, false);
+                    if (this.onSpeak) this.onSpeak(response);
+                }, 500);
+            }
+            
+            setupEventListeners() {
+                if (this.sendBtn) {
+                    this.sendBtn.addEventListener('click', () => this.send());
+                }
+                if (this.input) {
+                    this.input.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter') this.send();
+                    });
+                }
+            }
+            
+            scrollToBottom() {
+                if (this.messagesContainer) {
+                    this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
                 }
             }
         }
@@ -936,7 +1083,7 @@
             }, 500);
         }, 50);
         
-        console.log('🟢 ASTREIA carregada com CHAT DE 3 NÍVEIS!');
+        console.log('🟢 ASTREIA carregada com CHAT DE 3 NÍVEIS CORRIGIDO!');
     </script>
 </body>
 </html>
