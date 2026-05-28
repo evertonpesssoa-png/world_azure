@@ -13,8 +13,6 @@
     <link rel="stylesheet" href="../shared/css/profile-panel.css">
     <link rel="stylesheet" href="../shared/css/portal.css">
     
-    <link rel="stylesheet" href="../shared/asuras/hestia/chat-style.css">
-    
     <style>
         :root {
             --asura-color: #fff0b3;
@@ -100,36 +98,186 @@
     </script>
 
     <script type="module">
-        import { hestiaConfig } from '../shared/asuras/hestia/config.js';
-        import { initScene, initControls } from '../shared/asuras/hestia/scene.js';
-        import { initLights } from '../shared/asuras/hestia/lights.js';
-        import { initFloor } from '../shared/asuras/hestia/floor.js';
-        import { initParticles } from '../shared/asuras/hestia/particles.js';
-        import { initRings } from '../shared/asuras/hestia/rings.js';
-        import { initPillars } from '../shared/asuras/hestia/pillars.js';
-        import { initScales } from '../shared/asuras/hestia/scales.js';
-        import { loadModel } from '../shared/asuras/hestia/model.js';
-        import { startAnimation } from '../shared/asuras/hestia/animate.js';
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         import { initUI } from '../shared/js/ui.js';
-        import { EnhancedChatSystem } from '../shared/js/chat-system-enhanced.js';
+        import { ChatSystem } from '../shared/js/chat.js';
         import { VoiceAssistant } from '../shared/js/voice-assistant.js';
         
-        // SETUP 3D
-        const { scene, camera, renderer } = initScene(hestiaConfig);
-        const controls = initControls(camera, renderer);
-        const { fillLight, divineLight } = initLights(scene, hestiaConfig);
-        const circleGlow = initFloor(scene, hestiaConfig);
-        const particles = initParticles(scene);
-        const { ring, ring2 } = initRings(scene, hestiaConfig);
-        initPillars(scene, hestiaConfig);
-        const { scaleGroup, scaleGroup2 } = initScales(scene);
+        // =========================
+        // EXTENDE O CHAT SYSTEM ORIGINAL
+        // =========================
+        const OriginalChatSystem = ChatSystem;
         
-        const { model, mixer } = loadModel(scene, hestiaConfig);
+        class EnhancedChatSystem extends OriginalChatSystem {
+            constructor(containerId, config, onSpeak) {
+                super(containerId, config, onSpeak);
+                this.addAttachButton();
+                
+                setTimeout(() => {
+                    if (this.chatBody) {
+                        this.chatBody.classList.add('collapsed');
+                    }
+                    if (this.chatToggle) {
+                        this.chatToggle.textContent = '▲';
+                    }
+                }, 100);
+            }
+            
+            addAttachButton() {
+                const inputArea = this.container.querySelector('.chat-input-area');
+                if (!inputArea || inputArea.querySelector('.attach-btn')) return;
+                
+                const attachBtn = document.createElement('button');
+                attachBtn.className = 'attach-btn';
+                attachBtn.innerHTML = '📎';
+                attachBtn.title = 'Enviar arquivo (imagem, PDF, DOC, etc)';
+                
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = '*/*';
+                fileInput.style.display = 'none';
+                
+                attachBtn.onclick = () => fileInput.click();
+                fileInput.onchange = (e) => {
+                    const file = e.target.files[0];
+                    if (file) this.handleFileUpload(file);
+                    fileInput.value = '';
+                };
+                
+                const textInput = inputArea.querySelector('input[type="text"]');
+                if (textInput) {
+                    inputArea.insertBefore(attachBtn, textInput);
+                    inputArea.insertBefore(fileInput, textInput);
+                }
+            }
+            
+            handleFileUpload(file) {
+                const fileType = file.type;
+                const fileName = file.name;
+                const fileSize = this.formatFileSize(file.size);
+                const fileExtension = fileName.split('.').pop().toUpperCase();
+                
+                if (fileType.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => this.addImageMessage(ev.target.result, fileName, fileSize);
+                    reader.readAsDataURL(file);
+                } else {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => this.addFileMessage(ev.target.result, fileName, fileSize, fileExtension);
+                    reader.readAsDataURL(file);
+                }
+            }
+            
+            formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+            
+            getFileIcon(extension) {
+                const icons = {
+                    'PDF': '📄', 'DOC': '📃', 'DOCX': '📃',
+                    'XLS': '📊', 'XLSX': '📊', 'PPT': '📽️', 'PPTX': '📽️',
+                    'TXT': '📝', 'ZIP': '🗜️', 'RAR': '🗜️',
+                    'MP3': '🎵', 'MP4': '🎬', 'JPG': '🖼️', 'PNG': '🖼️',
+                    'GIF': '🎞️', 'JSON': '🔧', 'XML': '🔧', 'HTML': '🌐'
+                };
+                return icons[extension] || '📎';
+            }
+            
+            addImageMessage(imageUrl, fileName, fileSize) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message user';
+                const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                messageDiv.innerHTML = `
+                    <div class="message-avatar">👤</div>
+                    <div class="message-content">
+                        <div>🖼️ ${fileName} <span style="font-size:9px; color:#888;">(${fileSize})</span></div>
+                        <img src="${imageUrl}" class="chat-image" onclick="window.open('${imageUrl}')">
+                        <div class="message-time">${time}</div>
+                    </div>
+                `;
+                this.messagesContainer.appendChild(messageDiv);
+                this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+                
+                const messages = this.getMessages ? this.getMessages() : [];
+                if (this.saveMessages) {
+                    messages.push({ text: `🖼️ ${fileName} (${fileSize})`, image: imageUrl, isUser: true, timestamp: Date.now() });
+                    this.saveMessages(messages);
+                }
+            }
+            
+            addFileMessage(fileData, fileName, fileSize, extension) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message user';
+                const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                const fileIcon = this.getFileIcon(extension);
+                messageDiv.innerHTML = `
+                    <div class="message-avatar">👤</div>
+                    <div class="message-content">
+                        <div>📎 Arquivo anexado</div>
+                        <div class="chat-file" onclick="window.open('${fileData}')">
+                            <div class="file-icon">${fileIcon}</div>
+                            <div class="file-info">
+                                <div class="file-name">${fileName}</div>
+                                <div class="file-size">${fileSize}</div>
+                            </div>
+                            <div class="file-badge">${extension}</div>
+                        </div>
+                        <div class="message-time">${time}</div>
+                    </div>
+                `;
+                this.messagesContainer.appendChild(messageDiv);
+                this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+                
+                const messages = this.getMessages ? this.getMessages() : [];
+                if (this.saveMessages) {
+                    messages.push({ text: `📎 ${fileName} (${fileSize})`, fileData: fileData, isUser: true, timestamp: Date.now() });
+                    this.saveMessages(messages);
+                }
+            }
+        }
         
-        const animation = startAnimation(scene, camera, renderer, controls, particles, ring, ring2, fillLight, circleGlow, divineLight, scaleGroup, scaleGroup2);
-        if (mixer) animation.setMixer(mixer);
+        // =========================
+        // CONFIGURAÇÃO HESTIA
+        // =========================
+        const hestiaConfig = {
+            name: 'HESTIA',
+            title: '✦ DIMENSÃO CELESTIAL CLARA • ORÁCULO DOS PRINCÍPIOS ✦',
+            color: '#fff0b3',
+            icon: '🔮',
+            modelPath: '../models/hestia2.glb',
+            modelScale: 0.8,
+            modelPositionY: -0.25,
+            bgColor: 0x0a0a1a,
+            cameraPosition: { x: 3.2, y: 2.2, z: 4.2 },
+            welcomeMessage: '✨ Bem-vindo à minha dimensão celestial. Sou Hestia, a guardiã dos seus princípios e objetivos.',
+            skills: [
+                { name: '🔮 Visão dos Princípios', value: 100 },
+                { name: '⚖️ Assistência Jurídica', value: 98 },
+                { name: '📜 Regras & Regulamentos', value: 99 },
+                { name: '✨ Orientação Divina', value: 100 }
+            ],
+            personalityText: '🔮 "Regras são importantes, mas princípios e objetivos são eternos. Sou a guardiã da sua essência."',
+            getResponse: (msg) => {
+                const lower = msg.toLowerCase();
+                if (lower.includes('olá') || lower.includes('oi')) return "✨ Olá. Sou Hestia, a guardiã dos seus princípios. Sua essência está segura comigo.";
+                if (lower.includes('princípio') || lower.includes('princípios')) return "🔮 Os princípios são a bússola que guia suas ações. Regras mudam, mas os princípios são eternos.";
+                if (lower.includes('regra') || lower.includes('jurídico')) return "⚖️ Como assistente jurídica, posso te ajudar com regras, regulamentos e aspectos legais.";
+                if (lower.includes('objetivo') || lower.includes('propósito')) return "🎯 Seus objetivos são a estrela que guia os Asuras. Eu os guardo em minha essência.";
+                if (lower.includes('imagem') || lower.includes('foto') || lower.includes('arquivo')) return "📎 Arquivo recebido! Analisando sob a luz dos princípios... Tudo está em harmonia.";
+                if (lower.includes('obrigado')) return "💛 Por nada. Lembre-se: regras são ferramentas, princípios são eternos.";
+                return "🔮 Sinto sua busca por clareza. Como oráculo dos princípios, posso te ajudar a alinhar suas ações à sua verdadeira essência.";
+            }
+        };
         
+        // =========================
         // BOTÃO PORTAL
+        // =========================
         document.getElementById('portalPlannerBtn').addEventListener('click', () => {
             localStorage.setItem('lastAsura', 'hestia');
             document.body.classList.add('transition-out');
@@ -142,7 +290,9 @@
             });
         });
         
+        // =========================
         // BOTÃO VOLTAR DO CELULAR
+        // =========================
         function voltarAoGrimorio() {
             document.body.classList.add('transition-out');
             const flash = document.createElement('div');
@@ -161,20 +311,229 @@
         });
         history.pushState(null, null, location.href);
         
+        // =========================
+        // SETUP 3D HESTIA
+        // =========================
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(hestiaConfig.bgColor);
+        scene.fog = new THREE.FogExp2(hestiaConfig.bgColor, 0.006);
+        
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(hestiaConfig.cameraPosition.x, hestiaConfig.cameraPosition.y, hestiaConfig.cameraPosition.z);
+        camera.lookAt(0, 0.8, 0);
+        
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.shadowMap.enabled = true;
+        container.appendChild(renderer.domElement);
+        
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.enableZoom = true;
+        controls.enablePan = true;
+        controls.target.set(0, 0.8, 0);
+        
+        // LUZES CELESTIAIS
+        const ambientLight = new THREE.AmbientLight(0x223344, 0.55);
+        scene.add(ambientLight);
+        const mainLight = new THREE.DirectionalLight(0xffeecc, 1.1);
+        mainLight.position.set(3, 5, 2);
+        mainLight.castShadow = true;
+        scene.add(mainLight);
+        const fillLight = new THREE.PointLight(hestiaConfig.color, 0.65);
+        fillLight.position.set(1, 2, 2);
+        scene.add(fillLight);
+        const backLight = new THREE.PointLight(0xaaccff, 0.4);
+        backLight.position.set(-2, 1.5, -3);
+        scene.add(backLight);
+        const divineLight = new THREE.PointLight(0xffeedd, 0.5);
+        divineLight.position.set(0.5, 2.5, 1);
+        scene.add(divineLight);
+        
+        // CHÃO CELESTIAL
+        const gridHelper = new THREE.GridHelper(14, 24, hestiaConfig.color, 0x3366aa);
+        gridHelper.position.y = -0.5;
+        scene.add(gridHelper);
+        
+        const groundPlane = new THREE.Mesh(
+            new THREE.PlaneGeometry(9, 9),
+            new THREE.MeshStandardMaterial({ color: 0x0a1020, roughness: 0.4, metalness: 0.3, transparent: true, opacity: 0.5 })
+        );
+        groundPlane.rotation.x = -Math.PI / 2;
+        groundPlane.position.y = -0.5;
+        scene.add(groundPlane);
+        
+        const circleGlow = new THREE.Mesh(
+            new THREE.CircleGeometry(1.3, 32),
+            new THREE.MeshStandardMaterial({ color: hestiaConfig.color, emissive: 0xffdd99, emissiveIntensity: 0.4, transparent: true, opacity: 0.45, side: THREE.DoubleSide })
+        );
+        circleGlow.rotation.x = -Math.PI / 2;
+        circleGlow.position.y = -0.45;
+        scene.add(circleGlow);
+        
+        // COLUNAS CELESTIAIS
+        function createCelestialPillar(x, z, height = 1.3) {
+            const group = new THREE.Group();
+            const pillar = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.17, height, 8), new THREE.MeshStandardMaterial({ color: 0x88aacc, emissive: 0x557799, emissiveIntensity: 0.15, metalness: 0.5 }));
+            pillar.position.y = 0;
+            group.add(pillar);
+            const ring = new THREE.Mesh(new THREE.TorusGeometry(0.21, 0.025, 16, 32), new THREE.MeshStandardMaterial({ color: hestiaConfig.color, emissive: 0xffdd99, emissiveIntensity: 0.25 }));
+            ring.position.y = height / 2;
+            ring.rotation.x = Math.PI / 2;
+            group.add(ring);
+            const crystal = new THREE.Mesh(new THREE.ConeGeometry(0.09, 0.18, 8), new THREE.MeshStandardMaterial({ color: 0xffeedd, emissive: hestiaConfig.color, emissiveIntensity: 0.2 }));
+            crystal.position.y = height / 2 + 0.05;
+            group.add(crystal);
+            group.position.set(x, -0.4, z);
+            return group;
+        }
+        const pillarPositions = [[-2.8,-2.5],[2.8,-2.5],[-2.8,2.5],[2.8,2.5],[-2,-3.2],[2,-3.2],[-3.2,-1.8],[3.2,-1.8],[-3.2,1.8],[3.2,1.8],[-2,3.2],[2,3.2]];
+        pillarPositions.forEach(pos => { const pillar = createCelestialPillar(pos[0], pos[1], 1.0 + Math.random() * 0.4); scene.add(pillar); });
+        
+        // PARTÍCULAS DE LUZ
+        const particleCount = 2000;
+        const particleGeometry = new THREE.BufferGeometry();
+        const particlePositions = new Float32Array(particleCount * 3);
+        const particleColors = new Float32Array(particleCount * 3);
+        for (let i = 0; i < particleCount; i++) {
+            particlePositions[i*3] = (Math.random() - 0.5) * 16;
+            particlePositions[i*3+1] = Math.random() * 5;
+            particlePositions[i*3+2] = (Math.random() - 0.5) * 14;
+            const type = Math.random();
+            if (type < 0.5) { particleColors[i*3]=0.9+Math.random()*0.3; particleColors[i*3+1]=0.8+Math.random()*0.3; particleColors[i*3+2]=0.5+Math.random()*0.4; }
+            else if (type < 0.75) { particleColors[i*3]=0.9+Math.random()*0.3; particleColors[i*3+1]=0.9+Math.random()*0.3; particleColors[i*3+2]=0.9+Math.random()*0.3; }
+            else { particleColors[i*3]=0.6+Math.random()*0.4; particleColors[i*3+1]=0.7+Math.random()*0.3; particleColors[i*3+2]=1.0; }
+        }
+        particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+        particleGeometry.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
+        const particleMaterial = new THREE.PointsMaterial({ size: 0.045, vertexColors: true, transparent: true, opacity: 0.5 });
+        const particles = new THREE.Points(particleGeometry, particleMaterial);
+        scene.add(particles);
+        
+        // ANÉIS SAGRADOS
+        const ringGeometry = new THREE.TorusGeometry(1.2, 0.035, 64, 200);
+        const ringMaterial = new THREE.MeshStandardMaterial({ color: hestiaConfig.color, emissive: 0xffdd99, emissiveIntensity: 0.45 });
+        const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+        ring.position.y = 0.15;
+        ring.rotation.x = Math.PI / 2;
+        scene.add(ring);
+        
+        const ring2Geometry = new THREE.TorusGeometry(1.55, 0.028, 64, 200);
+        const ring2Material = new THREE.MeshStandardMaterial({ color: 0xffeebb, emissive: 0xffcc88, emissiveIntensity: 0.35 });
+        const ring2 = new THREE.Mesh(ring2Geometry, ring2Material);
+        ring2.position.y = 0.05;
+        ring2.rotation.x = Math.PI / 2 + 0.3;
+        scene.add(ring2);
+        
+        // BALANÇAS DA JUSTIÇA
+        const scaleGroup = new THREE.Group();
+        const scaleBase = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.12, 0.35, 6), new THREE.MeshStandardMaterial({ color: 0xffddaa, metalness: 0.7 }));
+        scaleBase.position.y = 0;
+        scaleGroup.add(scaleBase);
+        const scaleArm = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.05, 0.08), new THREE.MeshStandardMaterial({ color: 0xffddaa, metalness: 0.6 }));
+        scaleArm.position.y = 0.22;
+        scaleGroup.add(scaleArm);
+        const leftPan = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.03, 8), new THREE.MeshStandardMaterial({ color: 0xffddaa, metalness: 0.5 }));
+        leftPan.position.set(-0.28, 0.18, 0);
+        scaleGroup.add(leftPan);
+        const rightPan = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.03, 8), new THREE.MeshStandardMaterial({ color: 0xffddaa, metalness: 0.5 }));
+        rightPan.position.set(0.28, 0.18, 0);
+        scaleGroup.add(rightPan);
+        scaleGroup.position.set(2.2, 0.3, 2.2);
+        scene.add(scaleGroup);
+        const scaleGroup2 = scaleGroup.clone();
+        scaleGroup2.position.set(-2.2, 0.3, 2.2);
+        scene.add(scaleGroup2);
+        
+        // MODELO 3D
+        const loader = new GLTFLoader();
+        let model = null;
+        let mixer = null;
+        
+        loader.load(hestiaConfig.modelPath, (gltf) => {
+            model = gltf.scene;
+            model.position.set(0, hestiaConfig.modelPositionY, 0);
+            model.scale.set(hestiaConfig.modelScale, hestiaConfig.modelScale, hestiaConfig.modelScale);
+            model.traverse((node) => { if (node.isMesh) { node.castShadow = true; } });
+            scene.add(model);
+            if (gltf.animations && gltf.animations.length > 0) {
+                mixer = new THREE.AnimationMixer(model);
+                gltf.animations.forEach(clip => mixer.clipAction(clip).play());
+                console.log(`✅ ${gltf.animations.length} animação(ões) ativada(s)`);
+            }
+            console.log('✅ Modelo da HESTIA carregado');
+        });
+        
+        // =========================
+        // ANIMAÇÃO (CORRIGIDA - COM MIXER)
+        // =========================
+        let time = 0;
+        let deltaTime = 0.016;
+        let lastTime = performance.now();
+        
+        function updateDelta() {
+            const now = performance.now();
+            deltaTime = Math.min(0.033, (now - lastTime) / 1000);
+            lastTime = now;
+            requestAnimationFrame(updateDelta);
+        }
+        updateDelta();
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            time += 0.007;
+            
+            // ATUALIZA AS ANIMAÇÕES DO MODELO 3D
+            if (mixer) mixer.update(deltaTime);
+            
+            // PARTÍCULAS DE LUZ
+            particles.rotation.y = time * 0.05;
+            particles.rotation.x = Math.sin(time * 0.1) * 0.06;
+            
+            // ANÉIS SAGRADOS
+            ring.rotation.z = time * 0.28;
+            ring2.rotation.z = -time * 0.22;
+            
+            // LUZES PULSANTES
+            fillLight.intensity = 0.5 + Math.sin(time * 1.8) * 0.15;
+            circleGlow.material.emissiveIntensity = 0.3 + Math.sin(time * 1.5) * 0.12;
+            divineLight.intensity = 0.4 + Math.sin(time * 1.2) * 0.12;
+            
+            // BALANÇAS DA JUSTIÇA (balanço suave)
+            if (scaleGroup.children[1]) {
+                scaleGroup.children[1].rotation.z = Math.sin(time * 1.5) * 0.03;
+            }
+            if (scaleGroup2.children[1]) {
+                scaleGroup2.children[1].rotation.z = Math.sin(time * 1.5 + 1) * 0.03;
+            }
+            
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+        
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+        
+        // =========================
         // UI, CHAT E VOZ
+        // =========================
         initUI(hestiaConfig);
         
         const chat = new EnhancedChatSystem('chatContainer', hestiaConfig, (response) => {
             if (voice?.isJarvisActive?.()) voice.speak(response);
         });
         
-        const voiceButton = document.getElementById('voiceButton');
+        const voiceButtonElem = document.getElementById('voiceButton');
         let voice = null;
-        if (voiceButton) {
-            voice = new VoiceAssistant(voiceButton, (text) => {
-                document.getElementById('chatInput').value = text;
-                chat.send();
-            }, null, { asuraName: hestiaConfig.name, continuous: true });
+        if (voiceButtonElem) {
+            voice = new VoiceAssistant(voiceButtonElem, (text) => { document.getElementById('chatInput').value = text; chat.send(); }, null, { asuraName: hestiaConfig.name, continuous: true });
         }
         
         // Toggle do chat
@@ -208,7 +567,7 @@
             }, 500);
         }, 50);
         
-        console.log('🟢 HESTIA carregada com SUCESSO!');
+        console.log('🟢 HESTIA carregada com ANIMAÇÃO CORRIGIDA!');
     </script>
 </body>
 </html>
