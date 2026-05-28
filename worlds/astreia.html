@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>ASTREIA • Reino Celestial Azul</title>
     
-    <!-- FONTE EXCLUSIVA PARA ASTREIA -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="../shared/css/base.css">
@@ -47,7 +46,7 @@
         }
         
         /* =========================
-           3 NÍVEIS DO CHAT - VERSÃO CORRIGIDA
+           3 NÍVEIS DO CHAT - VERSÃO CORRIGIDA (input visível)
            Nível 0: Fechado
            Nível 1: Aberto normal
            Nível 2: Tela inteira
@@ -85,41 +84,40 @@
             border-radius: 0 !important;
             z-index: 99999 !important;
             margin: 0 !important;
+            display: flex !important;
+            flex-direction: column !important;
         }
         
         .chat-container.level-2 .chat-header {
             border-radius: 0 !important;
-            position: sticky !important;
-            top: 0 !important;
-            z-index: 10 !important;
+            flex-shrink: 0 !important;
         }
         
         .chat-container.level-2 .chat-body {
             display: flex !important;
             flex-direction: column !important;
-            height: calc(100vh - 60px) !important;
-            max-height: none !important;
+            flex: 1 !important;
+            min-height: 0 !important;
             border-radius: 0 !important;
+            overflow: hidden !important;
         }
         
         .chat-container.level-2 .chat-messages {
             flex: 1 !important;
-            height: auto !important;
-            max-height: none !important;
             overflow-y: auto !important;
             padding: 16px !important;
+            min-height: 0 !important;
         }
         
         .chat-container.level-2 .chat-input-area {
-            position: sticky !important;
-            bottom: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
+            flex-shrink: 0 !important;
             background: rgba(0, 0, 0, 0.95) !important;
             padding: 16px !important;
             gap: 12px !important;
             border-top: 1px solid var(--asura-color) !important;
-            z-index: 10 !important;
+            margin-bottom: 0 !important;
+            position: relative !important;
+            bottom: auto !important;
         }
         
         .chat-container.level-2 .chat-input-area input {
@@ -447,7 +445,7 @@
         class EnhancedChatSystem extends OriginalChatSystem {
             constructor(containerId, config, onSpeak) {
                 super(containerId, config, onSpeak);
-                this.chatLevel = 0; // 0=fechado, 1=normal, 2=tela inteira
+                this.chatLevel = 0;
                 this.addAttachButton();
                 this.setupThreeLevels();
                 
@@ -466,13 +464,11 @@
                 const header = this.container.querySelector('.chat-header');
                 if (!header) return;
                 
-                // Cria container de ações
                 let actionsDiv = header.querySelector('.chat-header-actions');
                 if (!actionsDiv) {
                     actionsDiv = document.createElement('div');
                     actionsDiv.className = 'chat-header-actions';
                     
-                    // Botão tela inteira
                     const fsBtn = document.createElement('button');
                     fsBtn.className = 'fullscreen-toggle';
                     fsBtn.innerHTML = '⛶';
@@ -483,7 +479,6 @@
                     };
                     actionsDiv.appendChild(fsBtn);
                     
-                    // Botão toggle (seta)
                     const toggleBtn = document.createElement('button');
                     toggleBtn.className = 'chat-toggle';
                     toggleBtn.innerHTML = '▲';
@@ -496,7 +491,6 @@
                     header.appendChild(actionsDiv);
                 }
                 
-                // Header click também toggle
                 header.onclick = (e) => {
                     if (e.target.closest('.fullscreen-toggle')) return;
                     if (e.target.closest('.chat-toggle')) return;
@@ -536,7 +530,6 @@
                     fsBtn.title = this.chatLevel === 2 ? 'Sair da tela inteira' : 'Tela inteira';
                 }
                 
-                // ESC fecha tela inteira
                 if (this.chatLevel === 2) {
                     this.escHandler = (e) => {
                         if (e.key === 'Escape') {
@@ -873,7 +866,6 @@
         controls.enablePan = true;
         controls.target.set(0, 0.8, 0);
         
-        // LUZES
         const ambientLight = new THREE.AmbientLight(0x113366, 0.6);
         scene.add(ambientLight);
         const mainLight = new THREE.DirectionalLight(0xaaccff, 1.1);
@@ -890,7 +882,6 @@
         heavenLight.position.set(2, 2.5, 1.5);
         scene.add(heavenLight);
         
-        // CHÃO
         const gridHelper = new THREE.GridHelper(14, 24, astreiaConfig.color, 0x224488);
         gridHelper.position.y = -0.5;
         scene.add(gridHelper);
@@ -911,7 +902,6 @@
         circleGlow.position.y = -0.45;
         scene.add(circleGlow);
         
-        // COLUNAS CELESTIAIS
         const pillarMaterial = new THREE.MeshStandardMaterial({ color: 0x2266aa, emissive: 0x1155aa, emissiveIntensity: 0.2, metalness: 0.7 });
         function createPillar(x, z, height = 1.2) {
             const group = new THREE.Group();
@@ -928,7 +918,6 @@
         const pillarPositions = [[-2.8,-2.5],[2.8,-2.5],[-2.8,2.5],[2.8,2.5],[-2,-3.2],[2,-3.2],[-3.2,-1.8],[3.2,-1.8],[-3.2,1.8],[3.2,1.8],[-2,3.2],[2,3.2]];
         pillarPositions.forEach(pos => { const pillar = createPillar(pos[0], pos[1], 1.0 + Math.random() * 0.3); scene.add(pillar); });
         
-        // PARTÍCULAS ESTRELARES
         const particleCount = 1800;
         const particleGeometry = new THREE.BufferGeometry();
         const particlePositions = new Float32Array(particleCount * 3);
@@ -948,7 +937,6 @@
         const particles = new THREE.Points(particleGeometry, particleMaterial);
         scene.add(particles);
         
-        // ANÉIS
         const ringGeometry = new THREE.TorusGeometry(1.2, 0.04, 64, 200);
         const ringMaterial = new THREE.MeshStandardMaterial({ color: astreiaConfig.color, emissive: astreiaConfig.color, emissiveIntensity: 0.5 });
         const ring = new THREE.Mesh(ringGeometry, ringMaterial);
@@ -963,14 +951,12 @@
         ring2.rotation.x = Math.PI / 2 + 0.3;
         scene.add(ring2);
         
-        // ESCUDO DE PROTEÇÃO
         const shieldGeometry = new THREE.SphereGeometry(2.2, 32, 32);
         const shieldMaterial = new THREE.MeshStandardMaterial({ color: astreiaConfig.color, emissive: 0x1155cc, emissiveIntensity: 0.1, transparent: true, opacity: 0.08, wireframe: true });
         const shield = new THREE.Mesh(shieldGeometry, shieldMaterial);
         shield.position.y = 0.5;
         scene.add(shield);
         
-        // CÂMERAS FLUTUANTES
         function createSecurityCamera(x, z, yOffset = 0.8) {
             const group = new THREE.Group();
             const body = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.15, 0.2), new THREE.MeshStandardMaterial({ color: 0x2288cc, metalness: 0.8 }));
@@ -987,7 +973,6 @@
         const cameraPositions = [[-1.5,1.2,1.8],[1.5,1.2,1.8],[-1.8,1.2,-1.5],[1.8,1.2,-1.5],[-2.2,1.5,0.5],[2.2,1.5,0.5],[0.5,1.5,-2.2],[-0.5,1.5,-2.2]];
         cameraPositions.forEach(pos => { const cam = createSecurityCamera(pos[0], pos[2], pos[1]); scene.add(cam); });
         
-        // MODELO 3D
         const loader = new GLTFLoader();
         let model = null;
         let mixer = null;
@@ -1006,9 +991,6 @@
             console.log('✅ Modelo da ASTREIA carregado');
         });
         
-        // =========================
-        // ANIMAÇÃO
-        // =========================
         let time = 0;
         let deltaTime = 0.016;
         let lastTime = performance.now();
@@ -1049,9 +1031,6 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
         
-        // =========================
-        // UI, CHAT E VOZ
-        // =========================
         initUI(astreiaConfig);
         
         const chat = new EnhancedChatSystem('chatContainer', astreiaConfig, (response) => {
