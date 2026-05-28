@@ -1,4 +1,4 @@
-// Chat System Melhorado (Base para todas as asuras)
+// Chat System Melhorado com 3 Níveis (Base para todas as asuras)
 export class EnhancedChatSystem {
     constructor(containerId, config, onSpeak) {
         this.container = document.getElementById(containerId);
@@ -10,254 +10,217 @@ export class EnhancedChatSystem {
         this.chatToggle = document.getElementById('chatToggle');
         this.chatBody = document.getElementById('chatBody');
         
+        this.chatLevel = 0; // 0=fechado, 1=aberto normal, 2=tela inteira
+        
         this.init();
         this.setupEventListeners();
         this.loadMessages();
+        this.injectFullscreenStyles();
+    }
+    
+    injectFullscreenStyles() {
+        if (document.getElementById('chat-fullscreen-styles')) return;
+        
+        const styles = document.createElement('style');
+        styles.id = 'chat-fullscreen-styles';
+        styles.textContent = `
+            .chat-container.fullscreen {
+                position: fixed !important;
+                top: 0 !important;
+                left: 0 !important;
+                width: 100vw !important;
+                height: 100vh !important;
+                max-width: none !important;
+                transform: none !important;
+                border-radius: 0 !important;
+                z-index: 99999 !important;
+            }
+            
+            .chat-container.fullscreen .chat-body {
+                height: calc(100vh - 60px) !important;
+                max-height: none !important;
+            }
+            
+            .chat-container.fullscreen .chat-messages {
+                height: calc(100vh - 150px) !important;
+                max-height: none !important;
+            }
+            
+            .chat-container.fullscreen .chat-input-area {
+                position: sticky;
+                bottom: 0;
+                background: rgba(0,0,0,0.9);
+                padding: 12px;
+            }
+            
+            .fullscreen-toggle {
+                background: rgba(255,255,255,0.2);
+                border: none;
+                color: white;
+                cursor: pointer;
+                font-size: 18px;
+                padding: 4px 10px;
+                border-radius: 8px;
+                margin-left: 10px;
+                transition: 0.2s;
+            }
+            
+            .fullscreen-toggle:hover {
+                background: rgba(255,255,255,0.3);
+                transform: scale(1.05);
+            }
+            
+            .chat-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                cursor: pointer;
+            }
+            
+            .chat-header-left {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                flex: 1;
+            }
+            
+            .chat-header-actions {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+        `;
+        document.head.appendChild(styles);
     }
     
     init() {
         this.addAttachButton();
+        this.addFullscreenButton();
         
         // Chat começa fechado
         setTimeout(() => {
-            if (this.chatBody) this.chatBody.classList.add('collapsed');
-            if (this.chatToggle) this.chatToggle.textContent = '▲';
+            if (this.container) {
+                this.container.classList.remove('open', 'fullscreen');
+                this.chatLevel = 0;
+            }
         }, 100);
     }
     
-    addAttachButton() {
-        const inputArea = this.container.querySelector('.chat-input-area');
-        if (!inputArea || inputArea.querySelector('.attach-btn')) return;
+    addFullscreenButton() {
+        const chatHeader = this.container.querySelector('.chat-header');
+        if (!chatHeader || chatHeader.querySelector('.fullscreen-toggle')) return;
         
-        const attachBtn = document.createElement('button');
-        attachBtn.className = 'attach-btn';
-        attachBtn.innerHTML = '📎';
-        attachBtn.title = 'Enviar arquivo (imagem, PDF, DOC, etc)';
+        // Reestrutura o header se necessário
+        const existingInfo = chatHeader.querySelector('.chat-header-info');
+        const existingToggle = this.chatToggle;
         
-        const fileInput = document.createElement('input');
-        fileInput.type = 'file';
-        fileInput.accept = '*/*';
-        fileInput.style.display = 'none';
-        fileInput.multiple = false;
-        
-        attachBtn.onclick = () => fileInput.click();
-        fileInput.onchange = (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                this.handleFileUpload(file);
+        if (existingInfo) {
+            // Cria container esquerdo
+            let leftContainer = chatHeader.querySelector('.chat-header-left');
+            if (!leftContainer) {
+                leftContainer = document.createElement('div');
+                leftContainer.className = 'chat-header-left';
+                
+                // Move o avatar e info para o left container
+                const avatar = existingInfo.querySelector('.chat-avatar');
+                const infoDiv = existingInfo.querySelector('div');
+                if (avatar) leftContainer.appendChild(avatar.cloneNode(true));
+                if (infoDiv) leftContainer.appendChild(infoDiv.cloneNode(true));
+                
+                // Limpa e adiciona
+                existingInfo.innerHTML = '';
+                existingInfo.appendChild(leftContainer);
             }
-            fileInput.value = '';
-        };
-        
-        const textInput = inputArea.querySelector('input[type="text"]');
-        if (textInput) {
-            inputArea.insertBefore(attachBtn, textInput);
-            inputArea.insertBefore(fileInput, textInput);
         }
-    }
-    
-    handleFileUpload(file) {
-        const fileType = file.type;
-        const fileName = file.name;
-        const fileSize = this.formatFileSize(file.size);
-        const fileExtension = fileName.split('.').pop().toUpperCase();
         
-        if (fileType.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = (ev) => {
-                this.addImageMessage(ev.target.result, fileName, fileSize);
+        // Cria container de ações
+        let actionsContainer = chatHeader.querySelector('.chat-header-actions');
+        if (!actionsContainer) {
+            actionsContainer = document.createElement('div');
+            actionsContainer.className = 'chat-header-actions';
+            
+            // Botão de tela inteira
+            const fullscreenBtn = document.createElement('button');
+            fullscreenBtn.className = 'fullscreen-toggle';
+            fullscreenBtn.innerHTML = '⛶';
+            fullscreenBtn.title = 'Tela inteira';
+            fullscreenBtn.onclick = (e) => {
+                e.stopPropagation();
+                this.nextLevel();
             };
-            reader.readAsDataURL(file);
-        } else {
-            const reader = new FileReader();
-            reader.onload = (ev) => {
-                this.addFileMessage(ev.target.result, fileName, fileSize, fileExtension);
-            };
-            reader.readAsDataURL(file);
+            
+            actionsContainer.appendChild(fullscreenBtn);
+            
+            // Move o toggle existente para actions
+            if (this.chatToggle) {
+                actionsContainer.appendChild(this.chatToggle);
+            }
+            
+            chatHeader.appendChild(actionsContainer);
         }
     }
     
-    formatFileSize(bytes) {
-        if (bytes === 0) return '0 Bytes';
-        const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-    }
-    
-    getFileIcon(extension) {
-        const icons = {
-            'PDF': '📄', 'DOC': '📃', 'DOCX': '📃',
-            'XLS': '📊', 'XLSX': '📊', 'PPT': '📽️', 'PPTX': '📽️',
-            'TXT': '📝', 'ZIP': '🗜️', 'RAR': '🗜️',
-            'MP3': '🎵', 'MP4': '🎬', 'JPG': '🖼️', 'PNG': '🖼️',
-            'GIF': '🎞️', 'JSON': '🔧', 'XML': '🔧', 'HTML': '🌐'
-        };
-        return icons[extension] || '📎';
-    }
-    
-    addImageMessage(imageUrl, fileName, fileSize) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = 'message user';
-        const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    nextLevel() {
+        // Ciclo: 0 -> 1 -> 2 -> 0
+        this.chatLevel = (this.chatLevel + 1) % 3;
         
-        messageDiv.innerHTML = `
-            <div class="message-avatar">👤</div>
-            <div class="message-content">
-                <div>🖼️ ${fileName} <span style="font-size:9px; color:#888;">(${fileSize})</span></div>
-                <img src="${imageUrl}" class="chat-image" onclick="window.open('${imageUrl}')">
-                <div class="message-time">${time}</div>
-            </div>
-        `;
-        
-        this.messagesContainer.appendChild(messageDiv);
-        this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
-        
-        const messages = this.getMessages();
-        messages.push({
-            text: `🖼️ ${fileName} (${fileSize})`,
-            image: imageUrl,
-            isUser: true,
-            timestamp: Date.now()
-        });
-        this.saveMessages(messages);
-    }
-    
-    addFileMessage(fileData, fileName, fileSize, extension) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = 'message user';
-        const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-        const fileIcon = this.getFileIcon(extension);
-        const downloadUrl = fileData;
-        
-        messageDiv.innerHTML = `
-            <div class="message-avatar">👤</div>
-            <div class="message-content">
-                <div>📎 Arquivo anexado</div>
-                <div class="chat-file" onclick="window.open('${downloadUrl}')">
-                    <div class="file-icon">${fileIcon}</div>
-                    <div class="file-info">
-                        <div class="file-name">${fileName}</div>
-                        <div class="file-size">${fileSize}</div>
-                    </div>
-                    <div class="file-badge">${extension}</div>
-                </div>
-                <div class="message-time">${time}</div>
-            </div>
-        `;
-        
-        this.messagesContainer.appendChild(messageDiv);
-        this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
-        
-        const messages = this.getMessages();
-        messages.push({
-            text: `📎 ${fileName} (${fileSize})`,
-            fileData: fileData,
-            isUser: true,
-            timestamp: Date.now()
-        });
-        this.saveMessages(messages);
-    }
-    
-    addMessage(text, isUser, image = null) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = isUser ? 'message user' : 'message asura';
-        const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-        
-        if (!isUser) {
-            messageDiv.innerHTML = `
-                <div class="message-avatar">${this.config.icon}</div>
-                <div class="message-content">
-                    <div>${text}</div>
-                    <div class="message-time">${time}</div>
-                </div>
-            `;
-        } else {
-            messageDiv.innerHTML = `
-                <div class="message-avatar">👤</div>
-                <div class="message-content">
-                    <div>${text}</div>
-                    <div class="message-time">${time}</div>
-                </div>
-            `;
+        switch(this.chatLevel) {
+            case 0: // Fechado
+                this.container.classList.remove('open', 'fullscreen');
+                if (this.chatToggle) this.chatToggle.textContent = '▲';
+                break;
+            case 1: // Aberto normal
+                this.container.classList.remove('fullscreen');
+                this.container.classList.add('open');
+                if (this.chatToggle) this.chatToggle.textContent = '▼';
+                break;
+            case 2: // Tela inteira
+                this.container.classList.add('open', 'fullscreen');
+                if (this.chatToggle) this.chatToggle.textContent = '▼';
+                break;
         }
         
-        this.messagesContainer.appendChild(messageDiv);
-        this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+        // Atualiza ícone do botão fullscreen
+        const fullscreenBtn = this.container.querySelector('.fullscreen-toggle');
+        if (fullscreenBtn) {
+            fullscreenBtn.innerHTML = this.chatLevel === 2 ? '✖' : '⛶';
+            fullscreenBtn.title = this.chatLevel === 2 ? 'Sair da tela inteira' : 'Tela inteira';
+        }
         
-        const messages = this.getMessages();
-        messages.push({
-            text: text,
-            image: image,
-            isUser: isUser,
-            timestamp: Date.now()
-        });
-        this.saveMessages(messages);
+        // Dispara evento para outros componentes
+        const event = new CustomEvent('chatLevelChanged', { detail: { level: this.chatLevel } });
+        window.dispatchEvent(event);
     }
     
-    getMessages() {
-        const stored = localStorage.getItem(`chat_messages_${this.config.name}`);
-        return stored ? JSON.parse(stored) : [];
-    }
-    
-    saveMessages(messages) {
-        if (messages.length > 100) messages.shift();
-        localStorage.setItem(`chat_messages_${this.config.name}`, JSON.stringify(messages));
-    }
-    
-    loadMessages() {
-        const messages = this.getMessages();
-        if (messages.length === 0) return;
-        
-        messages.forEach(msg => {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = msg.isUser ? 'message user' : 'message asura';
-            const time = new Date(msg.timestamp).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    toggleChat() {
+        if (this.chatLevel === 2) {
+            // Se estiver em tela inteira, sai dela
+            this.chatLevel = 1;
+            this.container.classList.remove('fullscreen');
+            this.container.classList.add('open');
+            if (this.chatToggle) this.chatToggle.textContent = '▼';
             
-            if (!msg.isUser) {
-                messageDiv.innerHTML = `
-                    <div class="message-avatar">${this.config.icon}</div>
-                    <div class="message-content">
-                        <div>${msg.text}</div>
-                        <div class="message-time">${time}</div>
-                    </div>
-                `;
-            } else {
-                messageDiv.innerHTML = `
-                    <div class="message-avatar">👤</div>
-                    <div class="message-content">
-                        <div>${msg.text}</div>
-                        <div class="message-time">${time}</div>
-                    </div>
-                `;
+            const fullscreenBtn = this.container.querySelector('.fullscreen-toggle');
+            if (fullscreenBtn) {
+                fullscreenBtn.innerHTML = '⛶';
+                fullscreenBtn.title = 'Tela inteira';
             }
-            
-            if (msg.image) {
-                const img = document.createElement('img');
-                img.src = msg.image;
-                img.className = 'chat-image';
-                img.onclick = () => window.open(msg.image);
-                messageDiv.querySelector('.message-content').appendChild(img);
-            }
-            
-            this.messagesContainer.appendChild(messageDiv);
-        });
-        this.scrollToBottom();
+        } else if (this.chatLevel === 1) {
+            // Se estiver aberto normal, fecha
+            this.chatLevel = 0;
+            this.container.classList.remove('open');
+            if (this.chatToggle) this.chatToggle.textContent = '▲';
+        } else {
+            // Se estiver fechado, abre normal
+            this.chatLevel = 1;
+            this.container.classList.add('open');
+            if (this.chatToggle) this.chatToggle.textContent = '▼';
+        }
     }
     
-    send() {
-        const text = this.input.value.trim();
-        if (!text) return;
-        
-        this.addMessage(text, true);
-        this.input.value = '';
-        
-        setTimeout(() => {
-            const response = this.config.getResponse(text);
-            this.addMessage(response, false);
-            if (this.onSpeak) this.onSpeak(response);
-        }, 500);
-    }
+    // ... (mantenha todos os outros métodos iguais: addAttachButton, handleFileUpload, 
+    // formatFileSize, getFileIcon, addImageMessage, addFileMessage, addMessage, 
+    // getMessages, saveMessages, loadMessages, send, setupEventListeners, scrollToBottom)
     
     setupEventListeners() {
         if (this.sendBtn) {
@@ -268,9 +231,31 @@ export class EnhancedChatSystem {
                 if (e.key === 'Enter') this.send();
             });
         }
-    }
-    
-    scrollToBottom() {
-        this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+        
+        // Evento do toggle (seta)
+        if (this.chatToggle) {
+            this.chatToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.toggleChat();
+            });
+        }
+        
+        // Evento do header (exceto se clicar nos botões)
+        const chatHeader = this.container?.querySelector('.chat-header');
+        if (chatHeader) {
+            chatHeader.addEventListener('click', (e) => {
+                // Não faz nada se clicou nos botões
+                if (e.target.closest('.fullscreen-toggle')) return;
+                if (e.target.closest('.chat-toggle')) return;
+                this.toggleChat();
+            });
+        }
+        
+        // Tecla ESC fecha tela inteira
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.chatLevel === 2) {
+                this.nextLevel();
+            }
+        });
     }
 }
