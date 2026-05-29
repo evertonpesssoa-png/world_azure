@@ -140,3 +140,27 @@ export const isMenuVisible = () => {
   const menu = document.getElementById('menu');
   return menu && menu.style.display !== 'none';
 };
+
+// Adicione ao final do seu menu.js
+
+// Fechar overlay ao clicar fora (útil no celular)
+export const setupOverlayClose = () => {
+  const overlay = document.getElementById('about-overlay');
+  if (overlay) {
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) {
+        overlay.classList.remove('active');
+      }
+    });
+    overlay.addEventListener('touchstart', (e) => {
+      if (e.target === overlay) {
+        overlay.classList.remove('active');
+      }
+    });
+  }
+};
+
+// Chame esta função junto com setupPlayButton
+// No seu main.js, adicione:
+// import { setupOverlayClose } from './modules/menu.js';
+// setupOverlayClose();
