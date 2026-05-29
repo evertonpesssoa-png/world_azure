@@ -15,22 +15,32 @@ export class EnhancedChatSystem extends ChatSystem {
 
     ensureBaseState() {
         setTimeout(() => {
-            this.container.classList.remove('level-0','level-1','level-2');
-            this.container.classList.add('level-0');
+            this.setLevel(0);
         }, 50);
+    }
+
+    // =========================
+    // CONTROLE CENTRAL DE ESTADO
+    // =========================
+    setLevel(level) {
+        this.chatLevel = level;
+
+        this.container.classList.remove('level-0','level-1','level-2');
+        this.container.classList.add(`level-${level}`);
+
+        this.updateUI();
     }
 
     setupThreeLevels() {
         const header = this.container.querySelector('.chat-header');
         if (!header) return;
 
-        // evita duplicar
         if (header.querySelector('.chat-header-actions')) return;
 
         const actions = document.createElement('div');
         actions.className = 'chat-header-actions';
 
-        // fullscreen
+        // FULLSCREEN
         const fsBtn = document.createElement('button');
         fsBtn.className = 'fullscreen-toggle';
         fsBtn.innerHTML = '⛶';
@@ -40,7 +50,7 @@ export class EnhancedChatSystem extends ChatSystem {
             this.nextLevel();
         };
 
-        // toggle
+        // TOGGLE
         const toggleBtn = document.createElement('button');
         toggleBtn.className = 'chat-toggle';
         toggleBtn.innerHTML = '▲';
@@ -60,20 +70,29 @@ export class EnhancedChatSystem extends ChatSystem {
         };
     }
 
+    // =========================
+    // CICLO 0 → 1 → 2 → 0
+    // =========================
     nextLevel() {
-        this.chatLevel = (this.chatLevel + 1) % 3;
-        this.updateUI();
+        const next = (this.chatLevel + 1) % 3;
+        this.setLevel(next);
     }
 
+    // =========================
+    // ABRIR / FECHAR
+    // =========================
     toggle() {
-        this.chatLevel = this.chatLevel === 0 ? 1 : 0;
-        this.updateUI();
+        if (this.chatLevel === 0) {
+            this.setLevel(1);
+        } else {
+            this.setLevel(0);
+        }
     }
 
+    // =========================
+    // UI SINCRONIZADA
+    // =========================
     updateUI() {
-        this.container.classList.remove('level-0','level-1','level-2');
-        this.container.classList.add(`level-${this.chatLevel}`);
-
         const toggleBtn = this.container.querySelector('.chat-toggle');
         const fsBtn = this.container.querySelector('.fullscreen-toggle');
 
@@ -83,10 +102,32 @@ export class EnhancedChatSystem extends ChatSystem {
 
         if (fsBtn) {
             fsBtn.innerHTML = this.chatLevel === 2 ? '✖' : '⛶';
+            fsBtn.title = this.chatLevel === 2
+                ? 'Sair da tela inteira'
+                : 'Tela inteira';
+        }
+
+        // ESC behavior seguro
+        if (this.chatLevel === 2) {
+            if (!this._escHandler) {
+                this._escHandler = (e) => {
+                    if (e.key === 'Escape') {
+                        this.setLevel(1);
+                    }
+                };
+                document.addEventListener('keydown', this._escHandler);
+            }
+        } else {
+            if (this._escHandler) {
+                document.removeEventListener('keydown', this._escHandler);
+                this._escHandler = null;
+            }
         }
     }
 
-    // ===== FILE ATTACH =====
+    // =========================
+    // FILE ATTACH (igual seu)
+    // =========================
     addAttachButton() {
         const inputArea = this.container.querySelector('.chat-input-area');
         if (!inputArea || inputArea.querySelector('.attach-btn')) return;
