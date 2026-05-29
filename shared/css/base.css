@@ -1,121 +1,60 @@
 /* =========================
    RESET E ESTILOS GLOBAIS
    ========================= */
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* =========================
-   VARIÁVEIS GLOBAIS
-   ========================= */
-
-:root {
-    --asura-color: #287bff;
-
-    --glass-bg: rgba(0, 0, 0, 0.75);
-    --glass-border: rgba(255, 255, 255, 0.12);
-
-    --transition-fast: .25s ease;
-    --transition-normal: .35s ease;
-
-    --shadow-glow:
-        0 0 12px rgba(40, 123, 255, .35);
-}
-
-/* =========================
-   HTML / BODY
-   ========================= */
-
-html,
-body {
-    width: 100%;
-    height: 100%;
-}
-
 body {
     overflow: hidden;
-
     font-family: 'Poppins', sans-serif;
-
-    overscroll-behavior: none;
-
-    touch-action: manipulation;
-
-    background: #050b20;
-
-    color: white;
 }
 
 /* =========================
    CANVAS THREE.JS
    ========================= */
-
 #canvas-container {
     position: fixed;
-
-    inset: 0;
-
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-
     z-index: 0;
-}
-
-#canvas-container canvas {
-    display: block;
-
-    width: 100%;
-    height: 100%;
 }
 
 /* =========================
    SCROLLBAR
    ========================= */
-
-.chat-messages::-webkit-scrollbar,
-.profile-panel::-webkit-scrollbar {
+::-webkit-scrollbar {
     width: 4px;
 }
 
-.chat-messages::-webkit-scrollbar-track,
-.profile-panel::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
     background: #1a1a2e;
 }
 
-.chat-messages::-webkit-scrollbar-thumb,
-.profile-panel::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
     background: var(--asura-color);
-
     border-radius: 10px;
 }
 
 /* =========================
    ANIMAÇÕES GLOBAIS
    ========================= */
-
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 @keyframes slideInUp {
     from {
         opacity: 0;
-
         transform: translateY(50px);
     }
-
     to {
         opacity: 1;
-
         transform: translateY(0);
     }
 }
@@ -123,37 +62,10 @@ body {
 @keyframes slideInRight {
     from {
         opacity: 0;
-
         transform: translateX(50px);
     }
-
     to {
         opacity: 1;
-
         transform: translateX(0);
     }
-}
-
-/* =========================
-   UTILITÁRIOS
-   ========================= */
-
-.hidden {
-    display: none !important;
-}
-
-.fade-in {
-    animation: fadeIn .3s ease;
-}
-
-.glass {
-    background: var(--glass-bg);
-
-    backdrop-filter: blur(14px);
-
-    border: 1px solid var(--glass-border);
-}
-
-.glow {
-    box-shadow: var(--shadow-glow);
 }
