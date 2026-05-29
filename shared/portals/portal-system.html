@@ -5,8 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>🗺️ Portal Planner • Mapa de Portais</title>
     <style>
-        /* TODO O CSS PERMANECE IGUAL AO SEU ORIGINAL */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: 'Courier New', monospace;
             background: linear-gradient(135deg, #0a0a2a, #050510);
@@ -15,7 +19,12 @@
             padding: 20px;
             padding-bottom: 80px;
         }
-        .container { max-width: 800px; margin: 0 auto; }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
         .cyber-header {
             text-align: center;
             margin-bottom: 30px;
@@ -25,6 +34,7 @@
             background: rgba(0,255,204,0.05);
             box-shadow: 0 0 20px rgba(0,255,204,0.2);
         }
+        
         h1 {
             font-size: 1.8rem;
             background: linear-gradient(135deg, #00ffcc, #ff00ff);
@@ -33,7 +43,13 @@
             color: transparent;
             text-shadow: 0 0 10px rgba(0,255,204,0.5);
         }
-        .subtitle { color: #aaa; font-size: 0.8rem; margin-top: 10px; }
+        
+        .subtitle {
+            color: #aaa;
+            font-size: 0.8rem;
+            margin-top: 10px;
+        }
+        
         .asura-selector {
             display: flex;
             flex-wrap: wrap;
@@ -41,6 +57,7 @@
             margin-bottom: 20px;
             justify-content: center;
         }
+        
         .asura-btn {
             background: rgba(0,0,0,0.7);
             border: 1px solid #00ffcc;
@@ -53,8 +70,18 @@
             font-family: monospace;
             font-weight: bold;
         }
-        .asura-btn:hover { transform: scale(1.05); box-shadow: 0 0 15px rgba(0,255,204,0.5); }
-        .asura-btn.active { background: #00ffcc; color: #000; box-shadow: 0 0 20px #00ffcc; }
+        
+        .asura-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0,255,204,0.5);
+        }
+        
+        .asura-btn.active {
+            background: #00ffcc;
+            color: #000;
+            box-shadow: 0 0 20px #00ffcc;
+        }
+        
         .controls-panel {
             background: rgba(0,0,0,0.7);
             border-radius: 16px;
@@ -62,13 +89,22 @@
             border: 1px solid #00ffcc;
             margin-bottom: 20px;
         }
-        .controls-panel h3 { color: #ff00ff; margin-bottom: 15px; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; }
+        
+        .controls-panel h3 {
+            color: #ff00ff;
+            margin-bottom: 15px;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
         .position-input {
             display: flex;
             gap: 15px;
             margin-bottom: 20px;
             flex-wrap: wrap;
         }
+        
         .position-input input {
             background: rgba(0,0,0,0.8);
             border: 1px solid #00ffcc;
@@ -79,7 +115,12 @@
             text-align: center;
             font-family: monospace;
         }
-        .position-input label { font-size: 0.7rem; color: #ff00ff; }
+        
+        .position-input label {
+            font-size: 0.7rem;
+            color: #ff00ff;
+        }
+        
         .add-portal {
             background: linear-gradient(135deg, #00ffcc, #00aa88);
             border: none;
@@ -93,8 +134,18 @@
             font-family: monospace;
             width: 100%;
         }
-        .add-portal:hover { transform: scale(1.02); box-shadow: 0 0 20px #00ffcc; }
-        .portals-list { max-height: 400px; overflow-y: auto; margin: 15px 0; }
+        
+        .add-portal:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px #00ffcc;
+        }
+        
+        .portals-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 15px 0;
+        }
+        
         .portal-item {
             display: flex;
             justify-content: space-between;
@@ -107,17 +158,42 @@
             transition: all 0.2s;
             border-left: 3px solid #00ffcc;
         }
-        .portal-item:hover { background: rgba(0,255,204,0.15); transform: translateX(5px); }
+        
+        .portal-item:hover {
+            background: rgba(0,255,204,0.15);
+            transform: translateX(5px);
+        }
+        
         .portal-item.selected {
             border-left: 3px solid #ff00ff;
             background: rgba(255,0,255,0.1);
             box-shadow: 0 0 10px rgba(255,0,255,0.3);
         }
-        .portal-info { display: flex; align-items: center; gap: 10px; }
-        .portal-icon { font-size: 1.8rem; }
-        .portal-details { font-size: 0.8rem; }
-        .portal-name { font-weight: bold; color: #00ffcc; }
-        .portal-pos { font-size: 0.7rem; color: #888; }
+        
+        .portal-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .portal-icon {
+            font-size: 1.8rem;
+        }
+        
+        .portal-details {
+            font-size: 0.8rem;
+        }
+        
+        .portal-name {
+            font-weight: bold;
+            color: #00ffcc;
+        }
+        
+        .portal-pos {
+            font-size: 0.7rem;
+            color: #888;
+        }
+        
         .delete-portal {
             background: rgba(255,0,0,0.3);
             border: none;
@@ -127,13 +203,18 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-        .delete-portal:hover { background: rgba(255,0,0,0.8); }
+        
+        .delete-portal:hover {
+            background: rgba(255,0,0,0.8);
+        }
+        
         .coord-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 8px;
             margin: 15px 0;
         }
+        
         .coord-preset {
             background: rgba(0,255,204,0.1);
             padding: 8px;
@@ -144,8 +225,18 @@
             transition: all 0.2s;
             border: 1px solid #00ffcc;
         }
-        .coord-preset:hover { background: rgba(0,255,204,0.3); transform: scale(1.02); }
-        .export-import { display: flex; gap: 10px; margin-top: 15px; }
+        
+        .coord-preset:hover {
+            background: rgba(0,255,204,0.3);
+            transform: scale(1.02);
+        }
+        
+        .export-import {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
         .export-btn, .import-btn {
             flex: 1;
             background: #333;
@@ -157,7 +248,12 @@
             font-size: 0.8rem;
             font-family: monospace;
         }
-        .export-btn:hover, .import-btn:hover { background: #555; box-shadow: 0 0 10px #ff00ff; }
+        
+        .export-btn:hover, .import-btn:hover {
+            background: #555;
+            box-shadow: 0 0 10px #ff00ff;
+        }
+        
         .back-to-asura {
             position: fixed;
             bottom: 20px;
@@ -180,8 +276,19 @@
             gap: 8px;
             box-shadow: 0 0 15px rgba(0,255,204,0.3);
         }
-        .back-to-asura:hover { transform: translateX(-5px); box-shadow: 0 0 25px #00ffcc; border-color: #ff00ff; }
-        body.transition-out { opacity: 0; transform: scale(0.98); transition: all 0.4s ease; }
+        
+        .back-to-asura:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 0 25px #00ffcc;
+            border-color: #ff00ff;
+        }
+        
+        body.transition-out {
+            opacity: 0;
+            transform: scale(0.98);
+            transition: all 0.4s ease;
+        }
+        
         .asura-info {
             text-align: center;
             padding: 15px;
@@ -190,10 +297,25 @@
             margin-bottom: 20px;
             border: 1px dashed #00ffcc;
         }
-        .asura-info h2 { color: #ff00ff; font-size: 1.3rem; }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0a0a2a; }
-        ::-webkit-scrollbar-thumb { background: #00ffcc; border-radius: 3px; }
+        
+        .asura-info h2 {
+            color: #ff00ff;
+            font-size: 1.3rem;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #0a0a2a;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #00ffcc;
+            border-radius: 3px;
+        }
+        
         @media (max-width: 600px) {
             body { padding: 10px; padding-bottom: 80px; }
             .portal-icon { font-size: 1.3rem; }
@@ -203,7 +325,9 @@
     </style>
 </head>
 <body>
-    <button class="back-to-asura" id="backToAsuraBtn">⤺ VOLTAR PARA O MUNDO DA ASURA</button>
+    <button class="back-to-asura" id="backToAsuraBtn">
+        ⤺ VOLTAR PARA O MUNDO DA ASURA
+    </button>
     
     <div class="container">
         <div class="cyber-header">
@@ -221,9 +345,18 @@
         <div class="controls-panel">
             <h3>🎮 ADICIONAR PORTAL</h3>
             <div class="position-input">
-                <div><label>X</label><input type="number" id="posX" step="0.1" value="1.2"></div>
-                <div><label>Z</label><input type="number" id="posZ" step="0.1" value="1.2"></div>
-                <div><label>Y</label><input type="number" id="posY" step="0.1" value="0.2"></div>
+                <div>
+                    <label>X</label>
+                    <input type="number" id="posX" step="0.1" value="1.2">
+                </div>
+                <div>
+                    <label>Z</label>
+                    <input type="number" id="posZ" step="0.1" value="1.2">
+                </div>
+                <div>
+                    <label>Y</label>
+                    <input type="number" id="posY" step="0.1" value="0.2">
+                </div>
             </div>
             
             <div style="display: flex; gap: 10px; margin-bottom: 15px;">
@@ -257,57 +390,492 @@
     </div>
 
     <script type="module">
-        import { asurasConfig, defaultPortals, BASE_URL } from './js/portal-config.js';
-        import { getMiniMundoPath, showCyberpunkWarning } from './js/portal-minimundos.js';
-        import { setCurrentAsura, getCurrentAsura, openMiniMundo, initVoltarCelular } from './js/portal-navegacao.js';
-        import { updatePortalsList } from './js/portal-lista.js';
-        import { setPortalsRef, initEventos } from './js/portal-eventos.js';
-        import { loadAsura, initAsuraSelector } from './js/portal-init.js';
+        // =========================
+        // CONFIGURAÇÃO DOS ASURAS
+        // =========================
+        const asurasConfig = {
+            diva: { name: 'DIVA', color: '#ff4db8', icon: '🤖' },
+            siria: { name: 'SIRIA', color: '#35ff9c', icon: '🌳' },
+            merlim: { name: 'MERLIM', color: '#00d9ff', icon: '🔧' },
+            astreia: { name: 'ASTREIA', color: '#287bff', icon: '👁️' },
+            umbra: { name: 'UMBRA', color: '#8b2fff', icon: '🥷' },
+            atena: { name: 'ATENA', color: '#ffd700', icon: '🦉' },
+            victoria: { name: 'VICTORIA', color: '#ff0000', icon: '🐉' },
+            hestia: { name: 'HESTIA', color: '#fff0b3', icon: '🔮' },
+            daedala: { name: 'DAEDALA', color: '#00ffd5', icon: '💡' }
+        };
         
-        // Variáveis globais do módulo
+        // =========================
+        // PORTAIS PADRÃO ATUALIZADOS
+        // =========================
+        const defaultPortals = {
+            diva: [
+                { name: 'GALAXY', icon: '✨', x: 1.2, y: 0.2, z: 1.2 },
+                { name: 'EARTH', icon: '🌍', x: 1.2, y: 0.2, z: -1.2 },
+                { name: 'SISTEMA SOLAR', icon: '🪐', x: -1.2, y: 0.2, z: 1.2 },
+                { name: 'PLANNER', icon: '📋', x: -1.2, y: 0.2, z: -1.2 }
+            ],
+            siria: [
+                { name: 'GALAXY', icon: '✨', x: 1.2, y: 0.2, z: 1.2 },
+                { name: 'EARTH', icon: '🌍', x: 1.2, y: 0.2, z: -1.2 },
+                { name: 'SISTEMA SOLAR', icon: '🪐', x: -1.2, y: 0.2, z: 1.2 },
+                { name: '3D ART GALLERY', icon: '🎨', x: -1.2, y: 0.2, z: -1.2 }
+            ],
+            merlim: [
+                { name: 'GALAXY', icon: '✨', x: 1.2, y: 0.2, z: 1.2 },
+                { name: 'EARTH', icon: '🌍', x: 1.2, y: 0.2, z: -1.2 },
+                { name: 'SISTEMA SOLAR', icon: '🪐', x: -1.2, y: 0.2, z: 1.2 },
+                { name: 'PLANNER', icon: '📋', x: -1.2, y: 0.2, z: -1.2 },
+                { name: '3D ART GALLERY', icon: '🎨', x: 0, y: 0.2, z: 1.6 },
+                { name: 'MARTE', icon: '🔴', x: 1.6, y: 0.2, z: 0 }
+            ],
+            astreia: [
+                { name: 'GALAXY', icon: '✨', x: 1.2, y: 0.2, z: 1.2 },
+                { name: 'EARTH', icon: '🌍', x: 1.2, y: 0.2, z: -1.2 },
+                { name: 'SISTEMA SOLAR', icon: '🪐', x: -1.2, y: 0.2, z: 1.2 },
+                { name: 'PLANNER', icon: '📋', x: -1.2, y: 0.2, z: -1.2 }
+            ],
+            umbra: [
+                { name: 'BURACO NEGRO', icon: '⚫', x: 1.2, y: 0.2, z: 1.2 },
+                { name: 'GALAXY', icon: '✨', x: 1.2, y: 0.2, z: -1.2 },
+                { name: 'SISTEMA SOLAR', icon: '🪐', x: -1.2, y: 0.2, z: 1.2 },
+                { name: 'EARTH', icon: '🌍', x: -1.2, y: 0.2, z: -1.2 }
+            ],
+            atena: [
+                { name: 'GALAXY', icon: '✨', x: 1.2, y: 0.2, z: 1.2 },
+                { name: 'EARTH', icon: '🌍', x: 1.2, y: 0.2, z: -1.2 },
+                { name: 'SISTEMA SOLAR', icon: '🪐', x: -1.2, y: 0.2, z: 1.2 },
+                { name: '3D ART GALLERY', icon: '🎨', x: -1.2, y: 0.2, z: -1.2 }
+            ],
+            victoria: [
+                { name: 'GALAXY', icon: '✨', x: 1.2, y: 0.2, z: 1.2 },
+                { name: 'EARTH', icon: '🌍', x: 1.2, y: 0.2, z: -1.2 },
+                { name: 'SISTEMA SOLAR', icon: '🪐', x: -1.2, y: 0.2, z: 1.2 },
+                { name: 'PLANNER', icon: '📋', x: -1.2, y: 0.2, z: -1.2 }
+            ],
+            hestia: [
+                { name: 'GALAXY', icon: '✨', x: 1.2, y: 0.2, z: 1.2 },
+                { name: 'EARTH', icon: '🌍', x: 1.2, y: 0.2, z: -1.2 },
+                { name: 'SISTEMA SOLAR', icon: '🪐', x: -1.2, y: 0.2, z: 1.2 },
+                { name: '3D ART GALLERY', icon: '🎨', x: -1.2, y: 0.2, z: -1.2 }
+            ],
+            daedala: [
+                { name: 'GALAXY', icon: '✨', x: 1.2, y: 0.2, z: 1.2 },
+                { name: 'EARTH', icon: '🌍', x: 1.2, y: 0.2, z: -1.2 },
+                { name: 'SISTEMA SOLAR', icon: '🪐', x: -1.2, y: 0.2, z: 1.2 },
+                { name: 'PLANNER', icon: '📋', x: -1.2, y: 0.2, z: -1.2 }
+            ]
+        };
+        
+        // =========================
+        // CAMINHOS DOS MINI-MUNDOS (ATUALIZADOS)
+        // =========================
+        const BASE_URL = '/3d-slides/';
+        
+        function getMiniMundoPath(portalName) {
+            const normalizedName = portalName.toUpperCase().trim();
+            
+            const map = {
+                'GALAXY': BASE_URL + 'mini-mundos/global/galaxy_animation/index.html',
+                'EARTH': BASE_URL + 'mini-mundos/global/earth/index.html',
+                'SISTEMA SOLAR': BASE_URL + 'mini-mundos/global/sistema_solar/index.html',
+                'PLANNER': BASE_URL + 'mini-mundos/global/planner/index.html',
+                '3D ART GALLERY': BASE_URL + 'mini-mundos/global/3d-art-gallery-threejs/index.html',
+                'MARTE': BASE_URL + 'mini-mundos/global/mars/index.html',
+                'BURACO NEGRO': BASE_URL + 'mini-mundos/exclusive/umbra/buraco_negro/index.html'
+            };
+            
+            return map[normalizedName] || null;
+        }
+        
+        // =========================
+        // FALLBACK CYBERPUNK
+        // =========================
+        function showCyberpunkWarning(portalName, portalIcon) {
+            const existingWarning = document.getElementById('cyberpunk-warning');
+            if (existingWarning) existingWarning.remove();
+            
+            const warning = document.createElement('div');
+            warning.id = 'cyberpunk-warning';
+            warning.innerHTML = `
+                <div class="warning-container">
+                    <div class="warning-glitch">⚠️ ACESSO NEGADO ⚠️</div>
+                    <div class="warning-icon">${portalIcon || '🚪'}</div>
+                    <div class="warning-title">${portalName}</div>
+                    <div class="warning-message">MINI-MUNDO EM CONSTRUÇÃO</div>
+                    <div class="warning-sub">Os engenheiros do sistema estão trabalhando neste setor.</div>
+                    <div class="warning-code">ERROR_404_PORTAL_NOT_FOUND</div>
+                    <div class="warning-timer">Fechando em <span id="warning-countdown">3</span> segundos...</div>
+                    <button class="warning-btn" id="warning-close-btn">⨯ FECHAR</button>
+                </div>
+            `;
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                #cyberpunk-warning {
+                    position: fixed;
+                    inset: 0;
+                    background: rgba(0,0,0,0.95);
+                    backdrop-filter: blur(8px);
+                    z-index: 100000;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-family: 'Courier New', monospace;
+                    animation: warningPulse 0.5s ease;
+                }
+                .warning-container {
+                    background: linear-gradient(135deg, #0a0a1a, #000000);
+                    border: 2px solid #ff00ff;
+                    border-radius: 16px;
+                    padding: 30px 40px;
+                    text-align: center;
+                    box-shadow: 0 0 40px rgba(255,0,255,0.3);
+                    animation: warningGlitch 0.3s ease infinite alternate;
+                    max-width: 90%;
+                    width: 400px;
+                }
+                .warning-glitch {
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: #ff00ff;
+                    text-shadow: 2px 2px 0px #00ffff;
+                    margin-bottom: 20px;
+                    animation: glitchText 0.5s ease infinite alternate;
+                }
+                .warning-icon { font-size: 64px; margin: 20px 0; filter: drop-shadow(0 0 10px #ff00ff); animation: iconPulse 1s ease infinite; }
+                .warning-title { font-size: 28px; font-weight: bold; color: #00ffff; margin-bottom: 15px; }
+                .warning-message { font-size: 16px; color: #ffaa00; background: rgba(255,170,0,0.1); padding: 8px; border-radius: 8px; margin: 15px 0; border-left: 3px solid #ffaa00; }
+                .warning-sub { font-size: 12px; color: #888; margin-bottom: 20px; }
+                .warning-code { font-size: 11px; color: #ff4444; background: #1a1a1a; padding: 5px; border-radius: 4px; margin: 15px 0; }
+                .warning-timer { font-size: 12px; color: #00ff88; margin: 15px 0; }
+                .warning-btn { background: linear-gradient(135deg, #ff00ff, #cc00cc); border: none; color: white; padding: 10px 20px; border-radius: 30px; cursor: pointer; margin-top: 10px; transition: all 0.3s; }
+                .warning-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px #ff00ff; }
+                @keyframes warningPulse { from { opacity: 0; } to { opacity: 1; } }
+                @keyframes warningGlitch { 0% { transform: translate(0); } 100% { transform: translate(2px, -1px); } }
+                @keyframes glitchText { 0% { text-shadow: 2px 2px 0px #00ffff; } 100% { text-shadow: -2px -2px 0px #ff00ff; } }
+                @keyframes iconPulse { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
+            `;
+            document.head.appendChild(style);
+            document.body.appendChild(warning);
+            
+            let countdown = 3;
+            const countdownSpan = warning.querySelector('#warning-countdown');
+            const timer = setInterval(() => {
+                countdown--;
+                if (countdownSpan) countdownSpan.textContent = countdown;
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                    warning.remove();
+                    style.remove();
+                }
+            }, 1000);
+            
+            const closeBtn = warning.querySelector('#warning-close-btn');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => {
+                    clearInterval(timer);
+                    warning.remove();
+                    style.remove();
+                });
+            }
+        }
+        
+        // =========================
+        // NAVEGAÇÃO
+        // =========================
+        let isRedirecting = false;
         let currentAsura = 'merlim';
         let portals = [];
         let selectedPortalIndex = -1;
         
-        // Wrappers para callbacks
-        function onSelectPortal(idx) {
-            selectedPortalIndex = idx;
-            updatePortalsList(portals, selectedPortalIndex, onDeletePortal, onSelectPortal, onDoubleClickPortal);
+        function openMiniMundo(portalName, portalIcon) {
+            if (isRedirecting) return;
+            const caminho = getMiniMundoPath(portalName);
+            
+            if (!caminho) {
+                showCyberpunkWarning(portalName, portalIcon);
+                return;
+            }
+            
+            localStorage.setItem('lastAsura', currentAsura);
+            isRedirecting = true;
+            
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `position:fixed; inset:0; background:radial-gradient(circle, ${asurasConfig[currentAsura].color}, transparent); opacity:0; transition:opacity 0.5s; z-index:99999; pointer-events:none;`;
+            document.body.appendChild(overlay);
+            
+            requestAnimationFrame(() => {
+                overlay.style.opacity = '0.8';
+                setTimeout(() => { window.location.href = caminho; }, 400);
+            });
         }
         
-        function onDeletePortal(idx) {
-            portals.splice(idx, 1);
-            if (selectedPortalIndex >= portals.length) selectedPortalIndex = -1;
-            updatePortalsList(portals, selectedPortalIndex, onDeletePortal, onSelectPortal, onDoubleClickPortal);
+        // =========================
+        // RENDERIZAR LISTA
+        // =========================
+        function updatePortalsList() {
+            const list = document.getElementById('portalsList');
+            const portalCount = document.getElementById('portalCount');
+            
+            if (portals.length === 0) {
+                list.innerHTML = '<div style="text-align:center; padding:20px; color:#888;">🌀 Nenhum portal cadastrado</div>';
+                if (portalCount) portalCount.innerHTML = '📦 0 portais ativos';
+                return;
+            }
+            
+            if (portalCount) portalCount.innerHTML = `📦 ${portals.length} portal(is) ativo(s)`;
+            
+            list.innerHTML = portals.map((portal, idx) => `
+                <div class="portal-item ${idx === selectedPortalIndex ? 'selected' : ''}" data-index="${idx}">
+                    <div class="portal-info">
+                        <span class="portal-icon">${portal.icon}</span>
+                        <div class="portal-details">
+                            <div class="portal-name">${portal.name}</div>
+                            <div class="portal-pos">📍 x: ${portal.x}, z: ${portal.z}</div>
+                        </div>
+                    </div>
+                    <button class="delete-portal" data-index="${idx}">🗑️</button>
+                </div>
+            `).join('');
+            
+            document.querySelectorAll('.portal-item').forEach(el => {
+                el.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('delete-portal')) return;
+                    const idx = parseInt(el.dataset.index);
+                    selectedPortalIndex = idx;
+                    updatePortalsList();
+                });
+                
+                el.addEventListener('dblclick', (e) => {
+                    if (e.target.classList.contains('delete-portal')) return;
+                    const idx = parseInt(el.dataset.index);
+                    const portal = portals[idx];
+                    openMiniMundo(portal.name, portal.icon);
+                });
+            });
+            
+            document.querySelectorAll('.delete-portal').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (confirm(`Remover portal "${portals[parseInt(btn.dataset.index)].name}"?`)) {
+                        const idx = parseInt(btn.dataset.index);
+                        portals.splice(idx, 1);
+                        if (selectedPortalIndex >= portals.length) selectedPortalIndex = -1;
+                        updatePortalsList();
+                    }
+                });
+            });
         }
         
-        function onDoubleClickPortal(portal) {
-            openMiniMundo(portal.name, portal.icon);
-        }
-        
-        function updateUI(newPortals) {
-            portals = newPortals;
+        // =========================
+        // CARREGAR ASURA
+        // =========================
+        function loadAsura() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const asuraParam = urlParams.get('asura');
+            
+            if (asuraParam && asurasConfig[asuraParam]) {
+                currentAsura = asuraParam;
+            }
+            
+            if (defaultPortals[currentAsura]) {
+                portals = JSON.parse(JSON.stringify(defaultPortals[currentAsura]));
+            } else {
+                portals = [];
+            }
+            
             selectedPortalIndex = -1;
-            updatePortalsList(portals, selectedPortalIndex, onDeletePortal, onSelectPortal, onDoubleClickPortal);
+            
+            const asuraNameEl = document.getElementById('asuraName');
+            const asuraInfoEl = document.getElementById('asuraInfo');
+            if (asuraNameEl) {
+                asuraNameEl.textContent = `${asurasConfig[currentAsura].icon} ${asurasConfig[currentAsura].name}`;
+                asuraNameEl.style.color = asurasConfig[currentAsura].color;
+            }
+            if (asuraInfoEl) asuraInfoEl.style.borderColor = asurasConfig[currentAsura].color;
+            
+            updatePortalsList();
         }
         
-        // Configurar referências para os eventos
-        setPortalsRef(portals, selectedPortalIndex, currentAsura, updateUI);
+        // =========================
+        // INICIALIZAR SELETOR
+        // =========================
+        function initAsuraSelector() {
+            const selector = document.getElementById('asuraSelector');
+            selector.innerHTML = '';
+            
+            Object.keys(asurasConfig).forEach(key => {
+                const btn = document.createElement('button');
+                btn.className = `asura-btn ${key === currentAsura ? 'active' : ''}`;
+                btn.textContent = `${asurasConfig[key].icon} ${asurasConfig[key].name}`;
+                btn.style.borderColor = asurasConfig[key].color;
+                btn.style.color = asurasConfig[key].color;
+                
+                btn.addEventListener('click', () => {
+                    currentAsura = key;
+                    portals = JSON.parse(JSON.stringify(defaultPortals[currentAsura] || []));
+                    selectedPortalIndex = -1;
+                    
+                    document.querySelectorAll('.asura-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    const asuraNameEl = document.getElementById('asuraName');
+                    if (asuraNameEl) {
+                        asuraNameEl.textContent = `${asurasConfig[currentAsura].icon} ${asurasConfig[currentAsura].name}`;
+                        asuraNameEl.style.color = asurasConfig[currentAsura].color;
+                    }
+                    
+                    updatePortalsList();
+                });
+                selector.appendChild(btn);
+            });
+        }
         
-        // Inicializar
-        const result = loadAsura(currentAsura, (asura) => { currentAsura = asura; setCurrentAsura(asura); }, (p) => { portals = p; }, (idx) => { selectedPortalIndex = idx; }, updateUI);
-        currentAsura = result.asura;
-        portals = result.portals;
-        setCurrentAsura(currentAsura);
+        // =========================
+        // EVENTOS
+        // =========================
+        document.getElementById('addPortalBtn')?.addEventListener('click', () => {
+            const x = parseFloat(document.getElementById('posX').value);
+            const z = parseFloat(document.getElementById('posZ').value);
+            const y = parseFloat(document.getElementById('posY').value);
+            const name = document.getElementById('portalName').value.trim();
+            const icon = document.getElementById('portalIcon').value.trim() || '🚪';
+            
+            if (!name) {
+                alert('⚠️ Digite um nome para o portal');
+                return;
+            }
+            
+            if (portals.length >= 20) {
+                alert('⚠️ Máximo de 20 portais por Asura');
+                return;
+            }
+            
+            portals.push({ name, icon, x, y, z });
+            selectedPortalIndex = portals.length - 1;
+            updatePortalsList();
+            
+            document.getElementById('portalName').value = '';
+            document.getElementById('portalIcon').value = '🚪';
+        });
         
-        initAsuraSelector(currentAsura, (asura) => { currentAsura = asura; setCurrentAsura(asura); }, (p) => { portals = p; }, (idx) => { selectedPortalIndex = idx; }, updateUI);
-        initEventos();
-        initVoltarCelular();
+        document.querySelectorAll('.coord-preset').forEach(el => {
+            el.addEventListener('click', () => {
+                const x = parseFloat(el.dataset.x);
+                const z = parseFloat(el.dataset.z);
+                document.getElementById('posX').value = x;
+                document.getElementById('posZ').value = z;
+            });
+        });
         
-        // Renderização inicial
-        updatePortalsList(portals, selectedPortalIndex, onDeletePortal, onSelectPortal, onDoubleClickPortal);
+        document.getElementById('exportBtn')?.addEventListener('click', () => {
+            const data = { asura: currentAsura, portals: portals };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `portals_${currentAsura}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        });
         
-        console.log("🟢 PORTAL PLANNER modularizado carregado!");
+        document.getElementById('importBtn')?.addEventListener('click', () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    try {
+                        const data = JSON.parse(ev.target.result);
+                        if (data.asura === currentAsura) {
+                            portals = data.portals;
+                            selectedPortalIndex = -1;
+                            updatePortalsList();
+                        } else {
+                            alert(`❌ Esse arquivo é para ${data.asura}, você está em ${currentAsura}`);
+                        }
+                    } catch (err) {
+                        alert('❌ Arquivo inválido');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        });
+        
+        // =========================
+        // BOTÃO VOLTAR FÍSICO
+        // =========================
+        document.getElementById('backToAsuraBtn')?.addEventListener('click', () => {
+            const lastAsura = localStorage.getItem('lastAsura') || currentAsura;
+            document.body.classList.add('transition-out');
+            const corAsura = asurasConfig[lastAsura]?.color || '#00ffcc';
+            const flash = document.createElement('div');
+            flash.style.cssText = `
+                position: fixed;
+                inset: 0;
+                background: radial-gradient(circle, ${corAsura}, transparent);
+                opacity: 0;
+                transition: opacity 0.4s ease;
+                z-index: 100000;
+                pointer-events: none;
+            `;
+            document.body.appendChild(flash);
+            requestAnimationFrame(() => {
+                flash.style.opacity = '0.8';
+                setTimeout(() => {
+                    window.location.href = BASE_URL + `worlds/${lastAsura}.html`;
+                }, 350);
+            });
+        });
+        
+        // =========================
+        // BOTÃO VOLTAR DO CELULAR
+        // =========================
+        function voltarParaAsura() {
+            const asuraParaVoltar = localStorage.getItem('lastAsura') || currentAsura;
+            
+            document.body.classList.add('transition-out');
+            
+            const corAsura = asurasConfig[asuraParaVoltar]?.color || '#00ffcc';
+            
+            const flash = document.createElement('div');
+            flash.style.cssText = `
+                position: fixed;
+                inset: 0;
+                background: radial-gradient(circle, ${corAsura}, transparent);
+                opacity: 0;
+                transition: opacity 0.4s ease;
+                z-index: 100000;
+                pointer-events: none;
+            `;
+            document.body.appendChild(flash);
+            
+            requestAnimationFrame(() => {
+                flash.style.opacity = '0.8';
+                setTimeout(() => {
+                    window.location.href = BASE_URL + `worlds/${asuraParaVoltar}.html`;
+                }, 350);
+            });
+        }
+        
+        window.addEventListener('popstate', (event) => {
+            event.preventDefault();
+            history.pushState(null, null, window.location.href);
+            voltarParaAsura();
+        });
+        
+        history.pushState(null, null, window.location.href);
+        console.log("✅ Botão 'voltar' do celular configurado para voltar à asura!");
+        
+        // =========================
+        // INICIAR
+        // =========================
+        loadAsura();
+        initAsuraSelector();
     </script>
 </body>
 </html>
