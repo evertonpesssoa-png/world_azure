@@ -468,9 +468,9 @@
         };
         
         // =========================
-        // CAMINHOS DOS MINI-MUNDOS (ATUALIZADOS)
+        // CAMINHOS DOS MINI-MUNDOS (CORRIGIDOS PARA WORLD_AZURE)
         // =========================
-        const BASE_URL = '/3d-slides/';
+        const BASE_URL = '/world_azure/';
         
         function getMiniMundoPath(portalName) {
             const normalizedName = portalName.toUpperCase().trim();
@@ -769,113 +769,3 @@
             });
         });
         
-        document.getElementById('exportBtn')?.addEventListener('click', () => {
-            const data = { asura: currentAsura, portals: portals };
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `portals_${currentAsura}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-        });
-        
-        document.getElementById('importBtn')?.addEventListener('click', () => {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = '.json';
-            input.onchange = (e) => {
-                const file = e.target.files[0];
-                const reader = new FileReader();
-                reader.onload = (ev) => {
-                    try {
-                        const data = JSON.parse(ev.target.result);
-                        if (data.asura === currentAsura) {
-                            portals = data.portals;
-                            selectedPortalIndex = -1;
-                            updatePortalsList();
-                        } else {
-                            alert(`❌ Esse arquivo é para ${data.asura}, você está em ${currentAsura}`);
-                        }
-                    } catch (err) {
-                        alert('❌ Arquivo inválido');
-                    }
-                };
-                reader.readAsText(file);
-            };
-            input.click();
-        });
-        
-        // =========================
-        // BOTÃO VOLTAR FÍSICO
-        // =========================
-        document.getElementById('backToAsuraBtn')?.addEventListener('click', () => {
-            const lastAsura = localStorage.getItem('lastAsura') || currentAsura;
-            document.body.classList.add('transition-out');
-            const corAsura = asurasConfig[lastAsura]?.color || '#00ffcc';
-            const flash = document.createElement('div');
-            flash.style.cssText = `
-                position: fixed;
-                inset: 0;
-                background: radial-gradient(circle, ${corAsura}, transparent);
-                opacity: 0;
-                transition: opacity 0.4s ease;
-                z-index: 100000;
-                pointer-events: none;
-            `;
-            document.body.appendChild(flash);
-            requestAnimationFrame(() => {
-                flash.style.opacity = '0.8';
-                setTimeout(() => {
-                    window.location.href = BASE_URL + `worlds/${lastAsura}.html`;
-                }, 350);
-            });
-        });
-        
-        // =========================
-        // BOTÃO VOLTAR DO CELULAR
-        // =========================
-        function voltarParaAsura() {
-            const asuraParaVoltar = localStorage.getItem('lastAsura') || currentAsura;
-            
-            document.body.classList.add('transition-out');
-            
-            const corAsura = asurasConfig[asuraParaVoltar]?.color || '#00ffcc';
-            
-            const flash = document.createElement('div');
-            flash.style.cssText = `
-                position: fixed;
-                inset: 0;
-                background: radial-gradient(circle, ${corAsura}, transparent);
-                opacity: 0;
-                transition: opacity 0.4s ease;
-                z-index: 100000;
-                pointer-events: none;
-            `;
-            document.body.appendChild(flash);
-            
-            requestAnimationFrame(() => {
-                flash.style.opacity = '0.8';
-                setTimeout(() => {
-                    window.location.href = BASE_URL + `worlds/${asuraParaVoltar}.html`;
-                }, 350);
-            });
-        }
-        
-        window.addEventListener('popstate', (event) => {
-            event.preventDefault();
-            history.pushState(null, null, window.location.href);
-            voltarParaAsura();
-        });
-        
-        history.pushState(null, null, window.location.href);
-        console.log("✅ Botão 'voltar' do celular configurado para voltar à asura!");
-        
-        // =========================
-        // INICIAR
-        // =========================
-        loadAsura();
-        initAsuraSelector();
-    </script>
-</body>
-</html>
