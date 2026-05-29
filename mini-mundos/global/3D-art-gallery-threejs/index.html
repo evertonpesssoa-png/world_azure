@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
-
-    <title>3D Art Gallery</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>3D Art Gallery • Responsivo</title>
     <link rel="stylesheet" href="./style.css" />
   </head>
 
@@ -19,23 +18,21 @@
             <h1>3D Art Gallery</h1>
           </div>
           <div class="title-info">
-            <p>Welcome to an immersive 3D Art Gallery experience.</p>
+            <p>Bem-vindo à Galeria de Arte 3D imersiva.</p>
             <p>
-              Wander through the virtual gallery halls, and engage with a
-              variety of masterpieces, learning about their history and
-              significance.
+              Explore os corredores da galeria virtual e interaja com obras-primas,
+              aprendendo sobre sua história e significado.
             </p>
             <p>
-              Developed by Emilian Kasemi with a passion for bringing art to
-              life through technology.
+              Desenvolvido por Emilian Kasemi • Adaptado para dispositivos móveis
             </p>
           </div>
 
           <div id="play_button">
-            <p>EXPLORE ART</p>
+            <p>EXPLORAR ARTE</p>
           </div>
           <div id="about_button_container">
-            <button id="about_button">ABOUT</button>
+            <button id="about_button">SOBRE</button>
           </div>
         </div>
       </div>
@@ -43,51 +40,45 @@
 
     <div id="about-overlay">
       <button id="close-about">X</button>
-      <h1>About the 3D Art Gallery</h1>
+      <h1>Sobre a Galeria 3D</h1>
       <p>
-        Welcome to our virtual 3D Art Gallery. Here, you can navigate through a
-        variety of wonderful artworks and learn about their history and
-        significance.
+        Bem-vindo à nossa galeria de arte virtual 3D. Aqui você pode navegar por
+        diversas obras de arte e aprender sobre sua história e significado.
       </p>
       <p>
-        This project is brought to you by Emilian Kasemi. We believe in the
-        power of art to inspire, provoke thought, and communicate across
-        cultures and epochs. Our mission is to make art accessible to everyone,
-        regardless of location or background.
+        Este projeto é trazido a você por Emilian Kasemi. Acreditamos no poder
+        da arte para inspirar, provocar pensamentos e comunicar entre culturas.
       </p>
       <p>
-        Feel free to explore and engage with the artworks. The gallery is best
-        experienced in full-screen mode. For optimal navigation, use the arrow
-        keys or the W, A, S, and D keys. You can also use your mouse to change
-        the viewing direction. Additional information about the artworks will
-        appear on your screen as you approach them.
+        Sinta-se à vontade para explorar. A galeria é melhor apreciada em tela cheia.
+        <strong>No celular, use o joystick na tela!</strong>
       </p>
     </div>
 
     <div id="info-panel">
       <div id="info-header">
-        <h3>Controls</h3>
-        <button id="toggle-info">Hide</button>
+        <h3>Controles</h3>
+        <button id="toggle-info">Esconder</button>
       </div>
       <div id="info-content">
-        <p><b>W/A/S/D:</b> Move around</p>
-        <p><b>Mouse:</b> Look around</p>
-        <p><b>Space:</b> Toggle pointer lock</p>
-        <p><b>M:</b> Show Menu</p>
-        <p><b>Enter:</b> Start exploration</p>
-        <p><b>Esc:</b> Stop exploration</p>
-        <p><b>G:</b> Start audio guide</p>
-        <p><b>P:</b> Stop audio guide</p>
+        <p><b>W/A/S/D:</b> Movimentar</p>
+        <p><b>Mouse:</b> Olhar ao redor</p>
+        <p><b>Espaço:</b> Travar cursor</p>
+        <p><b>M:</b> Mostrar Menu</p>
+        <p><b>Enter:</b> Explorar</p>
+        <p><b>G:</b> Guia de áudio</p>
+        <p><b>P:</b> Parar áudio</p>
+        <p class="mobile-only"><b>📱 Joystick:</b> Toque na tela</p>
       </div>
     </div>
 
     <div id="audio_controls">
-      <button id="start_audio">Start Audio Guide</button>
-      <button id="stop_audio">Stop Audio Guide</button>
+      <button id="start_audio">▶ Iniciar Guia</button>
+      <button id="stop_audio">⏹ Parar Guia</button>
     </div>
 
     <div id="painting-info"></div>
 
-    <script type="module" src="/main.js"></script>
+    <script type="module" src="./main.js"></script>
   </body>
 </html>
