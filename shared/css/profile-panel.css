@@ -1,179 +1,87 @@
 /* =========================
    PAINEL DE PERFIL (POPUP)
    ========================= */
-
 .profile-panel {
     position: fixed;
-
     top: 80px;
     right: 20px;
-
     width: 320px;
-    max-width: calc(100vw - 24px);
-
     background: rgba(0, 0, 0, 0.85);
-
     backdrop-filter: blur(15px);
-
     border-radius: 20px;
-
     padding: 20px;
-
-    border: 1px solid rgba(255,255,255,0.08);
-
     border-left: 4px solid var(--asura-color);
-
-    box-shadow:
-        0 0 30px rgba(0,0,0,0.5),
-        0 0 20px rgba(40,123,255,0.2);
-
-    transition:
-        opacity .3s ease,
-        transform .3s ease;
-
+    box-shadow: 0 0 30px var(--asura-glow);
+    transition: all 0.3s ease;
     opacity: 0;
-
     transform: translateX(20px);
-
     pointer-events: none;
-
-    z-index: 300;
-
-    overflow: hidden;
+    z-index: 199;
 }
-
-/* =========================
-   ESTADO ABERTO
-   ========================= */
 
 .profile-panel.open {
     opacity: 1;
-
     transform: translateX(0);
-
     pointer-events: auto;
 }
 
-/* =========================
-   TÍTULO
-   ========================= */
-
 .profile-panel h2 {
     font-size: 1.6rem;
-
-    margin-bottom: 5px;
-
     background: var(--asura-gradient);
-
     -webkit-background-clip: text;
     background-clip: text;
-
     color: transparent;
+    margin-bottom: 5px;
 }
-
-/* =========================
-   SUBTÍTULO
-   ========================= */
 
 .profile-panel .subtitle {
     font-size: 0.7rem;
-
     color: var(--asura-color);
-
     margin-bottom: 15px;
-
     letter-spacing: 2px;
-
-    opacity: 0.9;
 }
 
-/* =========================
-   SKILLS
-   ========================= */
-
 .skill-bar {
-    margin-bottom: 14px;
+    margin-bottom: 12px;
 }
 
 .skill-label {
     display: flex;
-
     justify-content: space-between;
-
-    align-items: center;
-
-    gap: 10px;
-
-    font-size: 0.72rem;
-
-    margin-bottom: 5px;
-
+    font-size: 0.7rem;
+    margin-bottom: 4px;
     color: #ddd;
 }
 
 .skill-bar-bg {
-    height: 5px;
-
-    background: rgba(255,255,255,0.12);
-
-    border-radius: 999px;
-
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
     overflow: hidden;
 }
 
 .skill-bar-fill {
     height: 100%;
-
-    width: 0%;
-
-    border-radius: 999px;
-
     background: var(--asura-gradient);
-
+    border-radius: 4px;
+    width: 0%;
     transition: width 1s ease;
 }
 
-/* =========================
-   PERSONALIDADE
-   ========================= */
-
 .personality-text {
-    font-size: 0.78rem;
-
-    line-height: 1.6;
-
+    font-size: 0.75rem;
+    line-height: 1.5;
     color: #ccc;
-
-    margin-top: 18px;
-
-    padding-top: 16px;
-
-    border-top: 1px solid rgba(255,255,255,0.08);
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* =========================
-   MOBILE
-   ========================= */
-
 @media (max-width: 768px) {
-
     .profile-panel {
+        width: 260px;
+        padding: 15px;
         top: 70px;
-
-        right: 12px;
-
-        width: calc(100vw - 24px);
-
-        max-width: 320px;
-
-        padding: 16px;
     }
-
-    .profile-panel h2 {
-        font-size: 1.35rem;
-    }
-
-    .personality-text {
-        font-size: 0.75rem;
-    }
+    .profile-panel h2 { font-size: 1.4rem; }
 }
