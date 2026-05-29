@@ -8,23 +8,11 @@ export class ChatSystem {
     }
 
     init() {
-        this.messagesContainer =
-            this.container.querySelector('#chatMessages');
-
-        this.input =
-            this.container.querySelector('#chatInput');
-
-        this.sendBtn =
-            this.container.querySelector('#sendChatBtn');
-
-        this.chatHeader =
-            this.container.querySelector('#chatHeader');
-
-        this.chatBody =
-            this.container.querySelector('#chatBody');
-
-        this.chatToggle =
-            this.container.querySelector('#chatToggle');
+        this.messagesContainer = this.container.querySelector('#chatMessages');
+        this.input = this.container.querySelector('#chatInput');
+        this.sendBtn = this.container.querySelector('#sendChatBtn');
+        this.chatHeader = this.container.querySelector('#chatHeader');
+        this.chatBody = this.container.querySelector('#chatBody');
 
         // mensagem inicial
         this.addMessage(
@@ -39,9 +27,7 @@ export class ChatSystem {
 
     setupEventListeners() {
         if (this.sendBtn) {
-            this.sendBtn.addEventListener('click', () => {
-                this.send();
-            });
+            this.sendBtn.addEventListener('click', () => this.send());
         }
 
         if (this.input) {
@@ -56,16 +42,14 @@ export class ChatSystem {
     addMessage(text, isUser = false) {
         const messageDiv = document.createElement('div');
 
-        messageDiv.className =
-            `message ${isUser ? 'user' : 'asura'}`;
+        messageDiv.className = `message ${
+            isUser ? 'user' : 'asura'
+        }`;
 
-        const time = new Date().toLocaleTimeString(
-            'pt-BR',
-            {
-                hour: '2-digit',
-                minute: '2-digit'
-            }
-        );
+        const time = new Date().toLocaleTimeString('pt-BR', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
 
         messageDiv.innerHTML = `
             <div class="message-avatar">
@@ -103,17 +87,14 @@ export class ChatSystem {
 
         this.input.value = '';
 
-        const thinkingDiv =
-            this.addMessage('🧠 processando...', false);
+        const thinkingDiv = this.addMessage(
+            '🧠 processando...',
+            false
+        );
 
-        const content =
-            thinkingDiv.querySelector('.message-content');
-
-        if (content) {
-            content.innerHTML = `
-                <em>🧠 processando...</em>
-            `;
-        }
+        thinkingDiv.querySelector('.message-content').innerHTML = `
+            <em>🧠 processando...</em>
+        `;
 
         setTimeout(() => {
             thinkingDiv.remove();
