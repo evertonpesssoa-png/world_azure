@@ -13,7 +13,14 @@
     <link rel="stylesheet" href="../shared/css/profile-panel.css">
     <link rel="stylesheet" href="../shared/css/portal.css">
     
-
+    <style>
+        :root {
+            --asura-color: #287bff;
+            --asura-glow: rgba(40, 123, 255, 0.6);
+            --asura-gradient: linear-gradient(135deg, #287bff, #44aaff);
+        }
+        body { background: radial-gradient(circle at 30% 20%, #050b20, #030108); }
+    </style>
 </head>
 <body class="asura-astreia">
     <div id="canvas-container"></div>
@@ -25,6 +32,9 @@
         <div class="top-icon voice-icon" id="voiceButton">
             <span class="brain-icon">👁️</span>
             <span class="mic-icon">🎤</span>
+            <div class="mental-wave"></div>
+            <div class="brain-waves left"><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="brain-waves right"><span></span><span></span><span></span><span></span><span></span></div>
         </div>
         <div class="top-icon" id="profileButton">👁️</div>
     </div>
@@ -450,7 +460,7 @@
         });
         
         // =========================
-        // BOTÃO VOLTAR DO CELULAR
+        // BOTÃO VOLTAR
         // =========================
         function voltarAoGrimorio() {
             document.body.classList.add('transition-out');
@@ -462,6 +472,8 @@
                 setTimeout(() => window.location.href = '../index.html', 350);
             });
         }
+        
+        document.getElementById('backButton').addEventListener('click', voltarAoGrimorio);
         
         window.addEventListener('popstate', (e) => {
             e.preventDefault();
@@ -695,4 +707,3 @@
     </script>
 </body>
 </html>
-astreia.html 
