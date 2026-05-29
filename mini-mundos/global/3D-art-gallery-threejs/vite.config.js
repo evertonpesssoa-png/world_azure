@@ -1,10 +1,17 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: '/3D-art-gallery',
+  base: '/world_azure/mini-mundos/global/3D-art-gallery-threejs/',
   build: {
+    outDir: 'dist',
     rollupOptions: {
-      input: '/main.js',
+      input: {
+        main: '/main.js',
+      },
     },
+  },
+  server: {
+    host: true,
+    open: true,
   },
 });
