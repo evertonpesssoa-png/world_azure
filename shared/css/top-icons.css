@@ -1,182 +1,359 @@
 /* =========================
-   TOP ICONS - DESIGN ORIGINAL
+   ICONES DO TOPO (UNIFICADOS)
    ========================= */
-
 .top-icons {
     position: fixed;
     top: 20px;
     right: 20px;
+    z-index: 200;
     display: flex;
     gap: 15px;
-    z-index: 1000;
-    pointer-events: none;
+    pointer-events: auto;
 }
 
 .top-icon {
-    width: 52px;
-    height: 52px;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(10px);
-    border: 1.5px solid var(--asura-color, #287bff);
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--asura-color);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
+    font-size: 1.5rem;
     cursor: pointer;
-    pointer-events: auto;
     transition: all 0.3s ease;
-    color: var(--asura-color, #287bff);
+    color: var(--asura-color);
+    box-shadow: 0 0 10px var(--asura-glow);
     position: relative;
 }
 
 .top-icon:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 20px var(--asura-color, #287bff);
-    border-color: white;
+    transform: scale(1.08);
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 20px var(--asura-glow);
+}
+
+/* Tooltip */
+.top-icon::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: -35px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.85);
+    color: var(--asura-color);
+    font-size: 0.7rem;
+    padding: 5px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    font-family: 'Poppins', sans-serif;
+    z-index: 10;
+}
+
+.top-icon:hover::after {
+    opacity: 1;
 }
 
 /* =========================
-   BOTÃO DO PORTAL (FORA DO TOP-ICONS)
-   ========================= */
-.portal-planner-btn {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    width: 52px;
-    height: 52px;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(10px);
-    border: 1.5px solid var(--asura-color, #287bff);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 26px;
-    cursor: pointer;
-    z-index: 1000;
-    transition: all 0.3s ease;
-    color: var(--asura-color, #287bff);
-}
-
-.portal-planner-btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 20px var(--asura-color, #287bff);
-}
-
-/* =========================
-   VOICE ICON - JARVIS
+   BOTÃO DE VOZ - ESTILO JARVIS
    ========================= */
 .voice-icon {
     position: relative;
 }
 
-.brain-icon, .mic-icon {
-    position: absolute;
+/* Cérebro e microfone */
+.voice-icon .brain-icon {
+    font-size: 1.5rem;
     transition: all 0.3s ease;
+    display: inline-block;
 }
 
 .voice-icon .mic-icon {
-    opacity: 0;
-    transform: scale(0.8);
-}
-
-.voice-icon.active .brain-icon {
-    opacity: 0;
-    transform: scale(0.8);
-}
-
-.voice-icon.active .mic-icon {
-    opacity: 1;
-    transform: scale(1);
-}
-
-/* Efeito de pulso (onda cerebral) */
-.mental-wave {
     position: absolute;
-    inset: -4px;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.7rem;
+    background: var(--asura-color);
+    color: #000;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
-    border: 2px solid var(--asura-color, #287bff);
-    opacity: 0;
-    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 5px var(--asura-color);
 }
 
-.voice-icon.active .mental-wave {
-    animation: mentalPulse 1.5s infinite;
-}
-
-@keyframes mentalPulse {
-    0% {
-        transform: scale(1);
-        opacity: 0.8;
-        border-width: 2px;
-    }
-    100% {
-        transform: scale(1.4);
-        opacity: 0;
-        border-width: 1px;
-    }
-}
-
-/* Ondas laterais estilo Jarvis */
-.brain-waves {
+/* Ondas cerebrais (barras laterais) */
+.voice-icon .brain-waves {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
     display: flex;
     gap: 3px;
+    align-items: center;
+    justify-content: center;
     opacity: 0;
-    transition: opacity 0.3s;
+    transition: opacity 0.3s ease;
 }
 
-.brain-waves.left { left: -25px; }
-.brain-waves.right { right: -25px; }
+.voice-icon .brain-waves.left {
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-right: 8px;
+}
 
-.voice-icon.active .brain-waves {
+.voice-icon .brain-waves.right {
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 8px;
+}
+
+.voice-icon.listening .brain-waves {
     opacity: 1;
 }
 
-.brain-waves span {
+.voice-icon .brain-waves span {
     width: 3px;
-    height: 12px;
-    background: var(--asura-color, #287bff);
+    background: var(--asura-color);
     border-radius: 2px;
-    animation: waveBounce 0.6s ease infinite alternate;
+    animation: brain-wave 0.8s ease-in-out infinite;
 }
 
-.brain-waves span:nth-child(1) { animation-delay: 0s; height: 12px; }
-.brain-waves span:nth-child(2) { animation-delay: 0.1s; height: 16px; }
-.brain-waves span:nth-child(3) { animation-delay: 0.2s; height: 20px; }
-.brain-waves span:nth-child(4) { animation-delay: 0.3s; height: 16px; }
-.brain-waves span:nth-child(5) { animation-delay: 0.4s; height: 12px; }
+.voice-icon .brain-waves.left span:nth-child(1) { height: 12px; animation-delay: 0s; }
+.voice-icon .brain-waves.left span:nth-child(2) { height: 18px; animation-delay: 0.1s; }
+.voice-icon .brain-waves.left span:nth-child(3) { height: 22px; animation-delay: 0.2s; }
+.voice-icon .brain-waves.left span:nth-child(4) { height: 18px; animation-delay: 0.3s; }
+.voice-icon .brain-waves.left span:nth-child(5) { height: 12px; animation-delay: 0.4s; }
 
-@keyframes waveBounce {
-    from { transform: scaleY(0.5); opacity: 0.4; }
-    to { transform: scaleY(1.2); opacity: 1; }
+.voice-icon .brain-waves.right span:nth-child(1) { height: 12px; animation-delay: 0.4s; }
+.voice-icon .brain-waves.right span:nth-child(2) { height: 18px; animation-delay: 0.3s; }
+.voice-icon .brain-waves.right span:nth-child(3) { height: 22px; animation-delay: 0.2s; }
+.voice-icon .brain-waves.right span:nth-child(4) { height: 18px; animation-delay: 0.1s; }
+.voice-icon .brain-waves.right span:nth-child(5) { height: 12px; animation-delay: 0s; }
+
+@keyframes brain-wave {
+    0%, 100% { opacity: 0.4; transform: scaleY(0.8); }
+    50% { opacity: 1; transform: scaleY(1.2); }
+}
+
+/* Onda mental (círculo pulsante) */
+.voice-icon .mental-wave {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    opacity: 0;
+}
+
+.voice-icon.listening .mental-wave {
+    opacity: 1;
+    animation: mental-wave-pulse 1.2s infinite;
+}
+
+@keyframes mental-wave-pulse {
+    0% {
+        box-shadow: 0 0 0 0 var(--asura-glow);
+        width: 60px;
+        height: 60px;
+        opacity: 0.6;
+    }
+    50% {
+        box-shadow: 0 0 0 15px rgba(255, 255, 255, 0);
+        width: 80px;
+        height: 80px;
+        opacity: 0.3;
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+        width: 100px;
+        height: 100px;
+        opacity: 0;
+    }
+}
+
+/* Cérebro pulsando quando ouvindo */
+.voice-icon.listening .brain-icon {
+    animation: brain-pulse 0.8s ease-in-out infinite;
+}
+
+@keyframes brain-pulse {
+    0%, 100% { transform: scale(1); text-shadow: 0 0 5px var(--asura-color); }
+    50% { transform: scale(1.1); text-shadow: 0 0 15px var(--asura-color); }
+}
+
+/* Microfone vibrando quando ouvindo */
+.voice-icon.listening .mic-icon {
+    animation: mic-vibrate 0.3s infinite alternate;
+}
+
+@keyframes mic-vibrate {
+    from { transform: translateX(-50%) scale(1); }
+    to { transform: translateX(-50%) scale(1.15); background: #fff; }
+}
+
+/* Modo contínuo (Jarvis ativo) - efeito de borda pulsante */
+.voice-icon.continuous-mode {
+    animation: jarvis-border 2s infinite;
+    box-shadow: 0 0 20px var(--asura-color);
+}
+
+.voice-icon.continuous-mode .brain-icon {
+    animation: brain-pulse 0.8s ease-in-out infinite;
+}
+
+.voice-icon.continuous-mode .mic-icon {
+    animation: mic-vibrate 0.3s infinite alternate;
+}
+
+.voice-icon.continuous-mode .mental-wave {
+    animation: mental-wave-pulse 1.2s infinite;
+    opacity: 1;
+}
+
+.voice-icon.continuous-mode .brain-waves {
+    opacity: 1;
+}
+
+@keyframes jarvis-border {
+    0%, 100% { 
+        border-color: var(--asura-color); 
+        box-shadow: 0 0 10px var(--asura-color);
+    }
+    50% { 
+        border-color: #ffffff; 
+        box-shadow: 0 0 25px var(--asura-color);
+    }
 }
 
 /* =========================
-   RESPONSIVO
+   INDICADOR DO MODO JARVIS (BARRA INFERIOR)
    ========================= */
+.jarvis-indicator {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(15px);
+    border-radius: 40px;
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 300;
+    font-size: 0.8rem;
+    font-family: 'Poppins', monospace;
+    transition: all 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+    border: 1px solid var(--asura-color);
+    box-shadow: 0 0 20px var(--asura-glow);
+}
+
+.jarvis-indicator.active {
+    opacity: 1;
+    animation: slideUpJarvis 0.4s ease;
+}
+
+@keyframes slideUpJarvis {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+.jarvis-dot {
+    width: 10px;
+    height: 10px;
+    background: var(--asura-color);
+    border-radius: 50%;
+    animation: jarvis-dot-pulse 1.2s infinite;
+}
+
+@keyframes jarvis-dot-pulse {
+    0%, 100% {
+        opacity: 0.4;
+        transform: scale(1);
+        box-shadow: 0 0 0 0 var(--asura-glow);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+        box-shadow: 0 0 0 6px rgba(255, 255, 255, 0);
+    }
+}
+
+.jarvis-wave {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+}
+
+.jarvis-wave span {
+    width: 3px;
+    height: 14px;
+    background: var(--asura-color);
+    border-radius: 2px;
+    animation: jarvis-wave-anim 0.8s ease-in-out infinite;
+}
+
+.jarvis-wave span:nth-child(1) { animation-delay: 0s; }
+.jarvis-wave span:nth-child(2) { animation-delay: 0.1s; }
+.jarvis-wave span:nth-child(3) { animation-delay: 0.2s; }
+.jarvis-wave span:nth-child(4) { animation-delay: 0.3s; }
+
+@keyframes jarvis-wave-anim {
+    0%, 100% { height: 8px; opacity: 0.5; }
+    50% { height: 18px; opacity: 1; }
+}
+
+.jarvis-text {
+    color: var(--asura-color);
+    letter-spacing: 1px;
+    font-weight: 500;
+    text-shadow: 0 0 5px var(--asura-glow);
+}
+
+.jarvis-command {
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-left: 10px;
+    padding-left: 10px;
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
 @media (max-width: 768px) {
-    .top-icons {
-        top: 12px;
-        right: 12px;
-        gap: 10px;
+    .top-icons { top: 15px; right: 15px; gap: 10px; }
+    .top-icon { width: 40px; height: 40px; font-size: 1.2rem; }
+    
+    .jarvis-indicator {
+        bottom: 80px;
+        padding: 6px 16px;
+        font-size: 0.7rem;
     }
-    .top-icon {
-        width: 44px;
-        height: 44px;
-        font-size: 20px;
-    }
-    .portal-planner-btn {
-        top: 12px;
-        left: 12px;
-        width: 44px;
-        height: 44px;
-        font-size: 22px;
-    }
-    .brain-waves {
-        display: none;
-    }
+    .jarvis-wave span { width: 2px; height: 10px; }
+    .jarvis-text { font-size: 0.65rem; }
+    .jarvis-command { display: none; }
+    
+    .voice-icon .brain-waves.left { display: none; }
+    .voice-icon .brain-waves.right { display: none; }
+    .voice-icon .mic-icon { width: 14px; height: 14px; font-size: 0.55rem; bottom: -6px; }
+    .voice-icon .brain-icon { font-size: 1.2rem; }
 }
