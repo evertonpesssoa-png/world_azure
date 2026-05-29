@@ -5,12 +5,9 @@
 .top-icons {
     position: fixed;
     top: 20px;
-    left: 0;
-    right: 0;
+    right: 20px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
+    gap: 15px;
     z-index: 1000;
     pointer-events: none;
 }
@@ -159,8 +156,20 @@
    RESPONSIVO
    ========================= */
 @media (max-width: 768px) {
-    .top-icons { padding: 0 12px; top: 12px; }
-    .top-icon { width: 44px; height: 44px; font-size: 22px; }
-    .brain-waves { display: none; }
-    .top-icon[data-tooltip]::before { display: none; }
+    .top-icons {
+        top: 12px;
+        right: 12px;
+        gap: 10px;
+    }
+    .top-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 22px;
+    }
+    .brain-waves {
+        display: none;
+    }
+    .top-icon[data-tooltip]::before {
+        display: none;
+    }
 }
