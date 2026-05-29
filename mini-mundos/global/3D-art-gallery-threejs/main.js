@@ -226,3 +226,96 @@ setTimeout(() => {
   console.log("✅ Controles de emergência ativados!");
   
 }, 1000);
+
+// ============================================================
+// CONFIGURAÇÃO DIRETA DOS BOTÕES (SEM DEPENDÊNCIAS)
+// ============================================================
+
+(function() {
+  console.log("🔧 Configurando botões diretamente...");
+  
+  // Botão PLAY
+  const playBtn = document.getElementById('play_button');
+  if (playBtn) {
+    // Remove listeners antigos clonando
+    const newPlay = playBtn.cloneNode(true);
+    playBtn.parentNode.replaceChild(newPlay, playBtn);
+    
+    newPlay.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log("🎮 PLAY - Iniciando galeria");
+      
+      // Esconde o menu
+      const menu = document.getElementById('menu');
+      if (menu) {
+        menu.style.display = 'none';
+        menu.style.visibility = 'hidden';
+      }
+    });
+    
+    newPlay.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log("🎮 PLAY (toque) - Iniciando galeria");
+      const menu = document.getElementById('menu');
+      if (menu) {
+        menu.style.display = 'none';
+        menu.style.visibility = 'hidden';
+      }
+    });
+    
+    console.log("✅ Botão PLAY configurado diretamente");
+  } else {
+    console.error("❌ Botão PLAY não encontrado no DOM");
+  }
+  
+  // Botão ABOUT
+  const aboutBtn = document.getElementById('about_button');
+  if (aboutBtn) {
+    const newAbout = aboutBtn.cloneNode(true);
+    aboutBtn.parentNode.replaceChild(newAbout, aboutBtn);
+    
+    newAbout.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log("ℹ️ ABOUT - Abrindo informações");
+      const overlay = document.getElementById('about-overlay');
+      if (overlay) {
+        overlay.classList.add('active');
+      }
+    });
+    
+    newAbout.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const overlay = document.getElementById('about-overlay');
+      if (overlay) {
+        overlay.classList.add('active');
+      }
+    });
+    
+    console.log("✅ Botão ABOUT configurado diretamente");
+  }
+  
+  // Fechar overlay
+  const closeBtn = document.getElementById('close-about');
+  if (closeBtn) {
+    const newClose = closeBtn.cloneNode(true);
+    closeBtn.parentNode.replaceChild(newClose, closeBtn);
+    newClose.addEventListener('click', () => {
+      document.getElementById('about-overlay')?.classList.remove('active');
+    });
+    newClose.addEventListener('touchstart', () => {
+      document.getElementById('about-overlay')?.classList.remove('active');
+    });
+  }
+  
+  // Toggle info panel
+  const toggleBtn = document.getElementById('toggle-info');
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      document.getElementById('info-panel').classList.toggle('collapsed');
+    });
+  }
+})();
