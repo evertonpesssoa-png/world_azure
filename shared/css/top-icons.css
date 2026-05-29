@@ -5,7 +5,6 @@
     display: flex;
     gap: 15px;
     z-index: 1000;
-    pointer-events: none;
 }
 
 .top-icon {
@@ -13,23 +12,14 @@
     height: 52px;
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(10px);
-    border: 1.5px solid var(--asura-color, #287bff);
+    border: 1.5px solid #287bff;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 24px;
     cursor: pointer;
-    pointer-events: auto;
-    transition: all 0.3s ease;
-    color: var(--asura-color, #287bff);
-    position: relative;
-}
-
-.top-icon:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 20px var(--asura-color, #287bff);
-    border-color: white;
+    color: #287bff;
 }
 
 .portal-planner-btn {
@@ -40,7 +30,7 @@
     height: 52px;
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(10px);
-    border: 1.5px solid var(--asura-color, #287bff);
+    border: 1.5px solid #287bff;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -48,122 +38,21 @@
     font-size: 26px;
     cursor: pointer;
     z-index: 1000;
-    transition: all 0.3s ease;
-    color: var(--asura-color, #287bff);
-}
-
-.portal-planner-btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 20px var(--asura-color, #287bff);
-}
-
-/* Voice icon */
-.voice-icon {
-    position: relative;
+    color: #287bff;
 }
 
 .brain-icon, .mic-icon {
     position: absolute;
-    transition: all 0.3s ease;
 }
 
 .voice-icon .mic-icon {
     opacity: 0;
-    transform: scale(0.8);
 }
 
-.voice-icon.listening .brain-icon,
-.voice-icon.continuous-mode .brain-icon {
+.voice-icon.active .brain-icon {
     opacity: 0;
-    transform: scale(0.8);
 }
 
-.voice-icon.listening .mic-icon,
-.voice-icon.continuous-mode .mic-icon {
+.voice-icon.active .mic-icon {
     opacity: 1;
-    transform: scale(1);
-}
-
-.voice-icon.listening {
-    animation: pulseGlow 1.2s ease-in-out infinite;
-}
-
-.voice-icon.continuous-mode {
-    border-color: #00ffcc;
-    box-shadow: 0 0 20px #00ffcc;
-    animation: jarvisPulse 1.5s ease-in-out infinite;
-}
-
-@keyframes pulseGlow {
-    0% { box-shadow: 0 0 0 0 rgba(40, 123, 255, 0.7); }
-    70% { box-shadow: 0 0 0 15px rgba(40, 123, 255, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(40, 123, 255, 0); }
-}
-
-@keyframes jarvisPulse {
-    0% { box-shadow: 0 0 0 0 #00ffcc; border-color: #00ffcc; }
-    50% { box-shadow: 0 0 0 12px rgba(0, 255, 204, 0.3); border-color: white; }
-    100% { box-shadow: 0 0 0 0 #00ffcc; border-color: #00ffcc; }
-}
-
-.mental-wave {
-    position: absolute;
-    inset: -4px;
-    border-radius: 50%;
-    border: 2px solid var(--asura-color, #287bff);
-    opacity: 0;
-    pointer-events: none;
-}
-
-.voice-icon.listening .mental-wave,
-.voice-icon.continuous-mode .mental-wave {
-    animation: mentalPulse 1.5s infinite;
-}
-
-@keyframes mentalPulse {
-    0% { transform: scale(1); opacity: 0.8; }
-    100% { transform: scale(1.4); opacity: 0; }
-}
-
-.brain-waves {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    gap: 3px;
-    opacity: 0;
-}
-
-.brain-waves.left { left: -25px; }
-.brain-waves.right { right: -25px; }
-
-.voice-icon.listening .brain-waves,
-.voice-icon.continuous-mode .brain-waves {
-    opacity: 1;
-}
-
-.brain-waves span {
-    width: 3px;
-    height: 12px;
-    background: var(--asura-color, #287bff);
-    border-radius: 2px;
-    animation: waveBounce 0.6s ease infinite alternate;
-}
-
-.brain-waves span:nth-child(1) { animation-delay: 0s; height: 12px; }
-.brain-waves span:nth-child(2) { animation-delay: 0.1s; height: 16px; }
-.brain-waves span:nth-child(3) { animation-delay: 0.2s; height: 20px; }
-.brain-waves span:nth-child(4) { animation-delay: 0.3s; height: 16px; }
-.brain-waves span:nth-child(5) { animation-delay: 0.4s; height: 12px; }
-
-@keyframes waveBounce {
-    from { transform: scaleY(0.5); opacity: 0.4; }
-    to { transform: scaleY(1.2); opacity: 1; }
-}
-
-@media (max-width: 768px) {
-    .top-icons { top: 12px; right: 12px; gap: 10px; }
-    .top-icon { width: 44px; height: 44px; font-size: 20px; }
-    .portal-planner-btn { top: 12px; left: 12px; width: 44px; height: 44px; font-size: 22px; }
-    .brain-waves { display: none; }
 }
