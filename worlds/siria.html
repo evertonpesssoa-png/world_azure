@@ -17,14 +17,15 @@
         :root {
             --asura-color: #35ff9c;
             --asura-glow: rgba(53, 255, 156, 0.6);
+            --asura-gradient: linear-gradient(135deg, #35ff9c, #00cc66);
         }
-        body { background: radial-gradient(circle at 30% 20%, #0a1a0f, #030108); }
+        body { background: radial-gradient(circle at 30% 20%, #0a1a0f, #030108); margin: 0; overflow-x: hidden; }
         
         .portal-planner-btn {
             position: fixed;
             top: 20px;
             left: 20px;
-            background: rgba(0,0,0,0.85);
+            background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(12px);
             color: #35ff9c;
             width: 55px;
@@ -33,11 +34,40 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            text-decoration: none;
             font-size: 28px;
             z-index: 9999;
             border: 2px solid #35ff9c;
+            box-shadow: 0 0 20px rgba(53, 255, 156, 0.4);
+            transition: all 0.3s ease;
             cursor: pointer;
         }
+        
+        .portal-planner-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 35px rgba(53, 255, 156, 0.8);
+            background: rgba(53, 255, 156, 0.2);
+        }
+        
+        .portal-planner-btn::before {
+            content: "🗺️ Portal Planner";
+            position: absolute;
+            top: 70px;
+            left: 0;
+            background: rgba(0,0,0,0.9);
+            color: #35ff9c;
+            font-size: 12px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            font-family: 'Poppins', sans-serif;
+            border: 1px solid #35ff9c;
+        }
+        
+        .portal-planner-btn:hover::before { opacity: 1; }
         
         body.transition-out {
             opacity: 0;
@@ -45,35 +75,300 @@
             transition: all 0.4s ease;
         }
         
+        /* ============================================
+           CHAT 3 NÍVEIS - ESTILO FLORESTA/ORGÂNICO
+        ============================================ */
         .chat-container {
-            transform: translateY(calc(100% - 48px));
-            transition: transform 0.3s ease;
+            position: fixed !important;
+            bottom: 20px !important;
+            right: 20px !important;
+            background: rgba(10, 26, 15, 0.95) !important;
+            backdrop-filter: blur(12px) !important;
+            border-radius: 16px !important;
+            border: 1px solid rgba(53, 255, 156, 0.3) !important;
+            z-index: 9998 !important;
+            overflow: hidden !important;
+            transition: all 0.3s ease !important;
         }
-        .chat-container.open { transform: translateY(0); }
-        .chat-body.collapsed { display: none; }
+        
+        .chat-container.level-0 {
+            width: 320px !important;
+            height: 52px !important;
+        }
+        .chat-container.level-0 .chat-body {
+            display: none !important;
+        }
+        
+        .chat-container.level-1 {
+            width: 380px !important;
+            height: 500px !important;
+        }
+        .chat-container.level-1 .chat-body {
+            display: flex !important;
+            flex-direction: column !important;
+            height: calc(100% - 52px) !important;
+        }
+        
+        .chat-container.level-2 {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            border-radius: 0 !important;
+            z-index: 99999 !important;
+        }
+        .chat-container.level-2 .chat-body {
+            display: flex !important;
+            flex-direction: column !important;
+            height: calc(100% - 52px) !important;
+        }
+        .chat-container.level-2 .chat-messages {
+            flex: 1 !important;
+            min-height: 0 !important;
+        }
+        .chat-container.level-2 .chat-input-area {
+            flex-shrink: 0 !important;
+        }
+        
+        .chat-header {
+            background: rgba(0, 0, 0, 0.9) !important;
+            padding: 12px 15px !important;
+            cursor: pointer !important;
+            border-bottom: 1px solid #35ff9c !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            height: 52px !important;
+            box-sizing: border-box !important;
+        }
+        
+        .chat-header-info {
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            flex: 1 !important;
+        }
+        
+        .chat-avatar { font-size: 24px !important; }
+        .chat-header-info h4 {
+            font-size: 14px !important;
+            margin: 0 !important;
+            color: #35ff9c !important;
+            font-family: 'Quicksand', sans-serif !important;
+        }
+        .chat-status { font-size: 10px !important; color: #0f0 !important; }
+        
+        .chat-header-actions {
+            display: flex !important;
+            gap: 8px !important;
+            align-items: center !important;
+        }
+        
+        .chat-header-actions button {
+            background: transparent !important;
+            border: none !important;
+            cursor: pointer !important;
+            font-size: 18px !important;
+            padding: 4px 8px !important;
+            border-radius: 8px !important;
+            color: #35ff9c !important;
+        }
+        .chat-header-actions button:hover {
+            background: rgba(53, 255, 156, 0.2) !important;
+        }
+        
+        .chat-body {
+            display: flex !important;
+            flex-direction: column !important;
+            overflow: hidden !important;
+        }
+        
+        .chat-messages {
+            flex: 1 !important;
+            overflow-y: auto !important;
+            padding: 12px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 10px !important;
+            background: rgba(0, 0, 0, 0.5) !important;
+            min-height: 0 !important;
+        }
+        
+        .message {
+            display: flex !important;
+            gap: 10px !important;
+            max-width: 90% !important;
+        }
+        .message.user {
+            align-self: flex-end !important;
+            flex-direction: row-reverse !important;
+        }
+        
+        .message-avatar {
+            width: 32px !important;
+            height: 32px !important;
+            border-radius: 50% !important;
+            background: rgba(53, 255, 156, 0.2) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 16px !important;
+        }
+        
+        .message-content {
+            background: rgba(53, 255, 156, 0.12) !important;
+            border: 1px solid #35ff9c !important;
+            border-radius: 15px !important;
+            padding: 8px 12px !important;
+            color: #ccffdd !important;
+            font-size: 13px !important;
+            font-family: 'Quicksand', sans-serif !important;
+            word-break: break-word !important;
+        }
+        .message.user .message-content {
+            background: rgba(53, 255, 156, 0.2) !important;
+        }
+        
+        .message-time {
+            font-size: 9px !important;
+            color: rgba(255,255,255,0.5) !important;
+            margin-top: 4px !important;
+            text-align: right !important;
+        }
+        
+        .chat-image {
+            max-width: 180px !important;
+            max-height: 150px !important;
+            border-radius: 10px !important;
+            margin-top: 5px !important;
+            border: 1px solid #35ff9c !important;
+            cursor: pointer !important;
+        }
+        
+        .chat-file {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            background: rgba(53, 255, 156, 0.1) !important;
+            border: 1px solid #35ff9c !important;
+            border-radius: 10px !important;
+            padding: 8px 12px !important;
+            margin-top: 5px !important;
+            cursor: pointer !important;
+        }
+        .chat-file:hover {
+            background: rgba(53, 255, 156, 0.25) !important;
+        }
+        
+        .file-icon { font-size: 24px !important; }
+        .file-info { flex: 1 !important; }
+        .file-name {
+            font-size: 11px !important;
+            color: #35ff9c !important;
+        }
+        .file-size { font-size: 9px !important; color: #888 !important; }
+        .file-badge {
+            background: rgba(53, 255, 156, 0.2) !important;
+            border-radius: 4px !important;
+            padding: 2px 6px !important;
+            font-size: 9px !important;
+            color: #35ff9c !important;
+        }
+        
+        .chat-input-area {
+            display: flex !important;
+            gap: 8px !important;
+            padding: 10px !important;
+            background: rgba(0, 0, 0, 0.85) !important;
+            border-top: 1px solid rgba(53, 255, 156, 0.2) !important;
+            align-items: center !important;
+            flex-shrink: 0 !important;
+        }
+        
+        .chat-input-area input[type="text"] {
+            flex: 1 !important;
+            background: rgba(10, 20, 40, 0.9) !important;
+            border: 1px solid #35ff9c !important;
+            border-radius: 25px !important;
+            padding: 10px 15px !important;
+            color: #35ff9c !important;
+            font-family: 'Quicksand', sans-serif !important;
+            font-size: 12px !important;
+            outline: none !important;
+        }
+        .chat-input-area input[type="text"]:focus {
+            box-shadow: 0 0 10px rgba(53, 255, 156, 0.5) !important;
+        }
+        
+        .chat-input-area button {
+            background: rgba(0, 0, 0, 0.8) !important;
+            border: 1px solid #35ff9c !important;
+            color: #35ff9c !important;
+            width: 38px !important;
+            height: 38px !important;
+            border-radius: 50% !important;
+            cursor: pointer !important;
+            font-size: 16px !important;
+        }
+        .chat-input-area button:hover {
+            background: rgba(53, 255, 156, 0.2) !important;
+        }
+        
+        .attach-btn {
+            background: rgba(0, 0, 0, 0.8) !important;
+            border: 1px solid #35ff9c !important;
+            color: #35ff9c !important;
+            width: 38px !important;
+            height: 38px !important;
+            border-radius: 50% !important;
+            cursor: pointer !important;
+            font-size: 16px !important;
+        }
+        .attach-btn:hover {
+            background: rgba(53, 255, 156, 0.2) !important;
+        }
+        
+        .chat-messages::-webkit-scrollbar { width: 5px; }
+        .chat-messages::-webkit-scrollbar-track { background: #0a0a1a; }
+        .chat-messages::-webkit-scrollbar-thumb { background: #35ff9c; border-radius: 5px; }
+        
+        @media (max-width: 600px) {
+            .chat-container.level-1 { width: calc(100% - 20px) !important; }
+            .chat-container.level-0 { width: calc(100% - 20px) !important; }
+            .chat-image { max-width: 130px !important; }
+        }
     </style>
 </head>
-<body class="asura-siria">
-    <div id="canvas-container"></div>
+<body>
+    <div id="canvas-container" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"></div>
     
-    <div class="portal-planner-btn" id="portalPlannerBtn">🗺️</div>
+    <div class="portal-planner-btn" id="portalPlannerBtn" title="Abrir Portal Planner">🗺️</div>
     
-    <div class="top-icons">
-        <div class="top-icon" id="backButton">←</div>
-        <div class="top-icon voice-icon" id="voiceButton">
+    <div class="top-icons" style="z-index: 100;">
+        <div class="top-icon" id="backButton" data-tooltip="Voltar ao Grimório">←</div>
+        <div class="top-icon voice-icon" id="voiceButton" data-tooltip="Modo Jarvis (clique para ativar)">
             <span class="brain-icon">🌿</span>
             <span class="mic-icon">🎤</span>
+            <div class="mental-wave"></div>
+            <div class="brain-waves left"><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="brain-waves right"><span></span><span></span><span></span><span></span><span></span></div>
         </div>
-        <div class="top-icon" id="profileButton">🌳</div>
+        <div class="top-icon" id="profileButton" data-tooltip="Perfil da Siria">🌳</div>
     </div>
     
     <div class="profile-panel" id="profilePanel"></div>
     
-    <div class="chat-container" id="chatContainer">
+    <div class="chat-container" id="chatContainer" style="z-index: 200;">
         <div class="chat-header" id="chatHeader">
             <div class="chat-header-info">
                 <div class="chat-avatar">🌳</div>
-                <div><h4>SIRIA • Guardiã Financeira</h4><div class="chat-status">🟢 online | ciclo da prosperidade</div></div>
+                <div>
+                    <h4>SIRIA • Guardiã Financeira</h4>
+                    <div class="chat-status">🟢 online | ciclo da prosperidade</div>
+                </div>
             </div>
             <div class="chat-toggle" id="chatToggle">▼</div>
         </div>
@@ -105,24 +400,83 @@
         import { ChatSystem } from '../shared/js/chat.js';
         import { VoiceAssistant } from '../shared/js/voice-assistant.js';
         
-        // =========================
-        // EXTENDE O CHAT SYSTEM ORIGINAL
-        // =========================
-        const OriginalChatSystem = ChatSystem;
-        
-        class EnhancedChatSystem extends OriginalChatSystem {
+        // ============================================
+        // ENHANCED CHAT SYSTEM COM 3 NÍVEIS
+        // ============================================
+        class EnhancedChatSystem extends ChatSystem {
             constructor(containerId, config, onSpeak) {
                 super(containerId, config, onSpeak);
                 this.addAttachButton();
+                setTimeout(() => this.setupThreeLevels(), 100);
+            }
+            
+            setupThreeLevels() {
+                const header = this.container.querySelector('.chat-header');
+                if (!header) return;
                 
-                setTimeout(() => {
-                    if (this.chatBody) {
-                        this.chatBody.classList.add('collapsed');
+                const oldToggle = this.container.querySelector('.chat-toggle');
+                if (oldToggle) oldToggle.style.display = 'none';
+                
+                const actionsDiv = document.createElement('div');
+                actionsDiv.className = 'chat-header-actions';
+                
+                const fsBtn = document.createElement('button');
+                fsBtn.className = 'fullscreen-toggle';
+                fsBtn.innerHTML = '⛶';
+                fsBtn.title = 'Tela cheia';
+                
+                const toggleBtn = document.createElement('button');
+                toggleBtn.className = 'chat-toggle';
+                toggleBtn.innerHTML = '▲';
+                toggleBtn.title = 'Expandir';
+                
+                actionsDiv.appendChild(fsBtn);
+                actionsDiv.appendChild(toggleBtn);
+                header.appendChild(actionsDiv);
+                
+                let level = 0;
+                
+                const setLevel = (newLevel) => {
+                    level = newLevel;
+                    this.container.classList.remove('level-0', 'level-1', 'level-2');
+                    this.container.classList.add(`level-${level}`);
+                    
+                    toggleBtn.innerHTML = level === 0 ? '▲' : '▼';
+                    toggleBtn.title = level === 0 ? 'Expandir' : 'Minimizar';
+                    fsBtn.innerHTML = level === 2 ? '✖' : '⛶';
+                    fsBtn.title = level === 2 ? 'Sair da tela cheia' : 'Tela cheia';
+                    
+                    if (level === 2) {
+                        if (!this._escHandler) {
+                            this._escHandler = (e) => {
+                                if (e.key === 'Escape') setLevel(1);
+                            };
+                            document.addEventListener('keydown', this._escHandler);
+                        }
+                    } else {
+                        if (this._escHandler) {
+                            document.removeEventListener('keydown', this._escHandler);
+                            this._escHandler = null;
+                        }
                     }
-                    if (this.chatToggle) {
-                        this.chatToggle.textContent = '▲';
-                    }
-                }, 100);
+                };
+                
+                fsBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    setLevel(level === 2 ? 1 : 2);
+                };
+                
+                toggleBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    setLevel(level === 0 ? 1 : 0);
+                };
+                
+                header.onclick = (e) => {
+                    if (e.target.closest('button')) return;
+                    setLevel(level === 0 ? 1 : 0);
+                };
+                
+                setLevel(0);
             }
             
             addAttachButton() {
@@ -132,11 +486,10 @@
                 const attachBtn = document.createElement('button');
                 attachBtn.className = 'attach-btn';
                 attachBtn.innerHTML = '📎';
-                attachBtn.title = 'Enviar arquivo (imagem, PDF, DOC, etc)';
+                attachBtn.title = 'Enviar arquivo';
                 
                 const fileInput = document.createElement('input');
                 fileInput.type = 'file';
-                fileInput.accept = '*/*';
                 fileInput.style.display = 'none';
                 
                 attachBtn.onclick = () => fileInput.click();
@@ -157,15 +510,18 @@
                 const fileType = file.type;
                 const fileName = file.name;
                 const fileSize = this.formatFileSize(file.size);
-                const fileExtension = fileName.split('.').pop().toUpperCase();
                 
                 if (fileType.startsWith('image/')) {
                     const reader = new FileReader();
-                    reader.onload = (ev) => this.addImageMessage(ev.target.result, fileName, fileSize);
+                    reader.onload = (ev) => {
+                        this.addImageMessage(ev.target.result, fileName, fileSize);
+                    };
                     reader.readAsDataURL(file);
                 } else {
                     const reader = new FileReader();
-                    reader.onload = (ev) => this.addFileMessage(ev.target.result, fileName, fileSize, fileExtension);
+                    reader.onload = (ev) => {
+                        this.addFileMessage(ev.target.result, fileName, fileSize);
+                    };
                     reader.readAsDataURL(file);
                 }
             }
@@ -178,21 +534,11 @@
                 return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
             }
             
-            getFileIcon(extension) {
-                const icons = {
-                    'PDF': '📄', 'DOC': '📃', 'DOCX': '📃',
-                    'XLS': '📊', 'XLSX': '📊', 'PPT': '📽️', 'PPTX': '📽️',
-                    'TXT': '📝', 'ZIP': '🗜️', 'RAR': '🗜️',
-                    'MP3': '🎵', 'MP4': '🎬', 'JPG': '🖼️', 'PNG': '🖼️',
-                    'GIF': '🎞️', 'JSON': '🔧', 'XML': '🔧', 'HTML': '🌐'
-                };
-                return icons[extension] || '📎';
-            }
-            
             addImageMessage(imageUrl, fileName, fileSize) {
                 const messageDiv = document.createElement('div');
                 messageDiv.className = 'message user';
                 const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                
                 messageDiv.innerHTML = `
                     <div class="message-avatar">👤</div>
                     <div class="message-content">
@@ -203,25 +549,20 @@
                 `;
                 this.messagesContainer.appendChild(messageDiv);
                 this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
-                
-                const messages = this.getMessages ? this.getMessages() : [];
-                if (this.saveMessages) {
-                    messages.push({ text: `🖼️ ${fileName} (${fileSize})`, image: imageUrl, isUser: true, timestamp: Date.now() });
-                    this.saveMessages(messages);
-                }
             }
             
-            addFileMessage(fileData, fileName, fileSize, extension) {
+            addFileMessage(fileData, fileName, fileSize) {
+                const extension = fileName.split('.').pop().toUpperCase();
                 const messageDiv = document.createElement('div');
                 messageDiv.className = 'message user';
                 const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-                const fileIcon = this.getFileIcon(extension);
+                
                 messageDiv.innerHTML = `
                     <div class="message-avatar">👤</div>
                     <div class="message-content">
                         <div>📎 Arquivo anexado</div>
                         <div class="chat-file" onclick="window.open('${fileData}')">
-                            <div class="file-icon">${fileIcon}</div>
+                            <div class="file-icon">📄</div>
                             <div class="file-info">
                                 <div class="file-name">${fileName}</div>
                                 <div class="file-size">${fileSize}</div>
@@ -233,19 +574,10 @@
                 `;
                 this.messagesContainer.appendChild(messageDiv);
                 this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
-                
-                const messages = this.getMessages ? this.getMessages() : [];
-                if (this.saveMessages) {
-                    messages.push({ text: `📎 ${fileName} (${fileSize})`, fileData: fileData, isUser: true, timestamp: Date.now() });
-                    this.saveMessages(messages);
-                }
             }
         }
         
-        // =========================
-        // CONFIGURAÇÃO SIRIA
-        // =========================
-        const siriaConfig = {
+        const config = {
             name: 'SIRIA',
             title: '✦ FLORESTA ESPIRITUAL • PROSPERIDADE ✦',
             color: '#35ff9c',
@@ -274,28 +606,37 @@
             }
         };
         
-        // =========================
-        // BOTÃO PORTAL
-        // =========================
-        document.getElementById('portalPlannerBtn').addEventListener('click', () => {
+        // ============================================
+        // PORTAL PLANNER
+        // ============================================
+        const portalPlannerBtn = document.getElementById('portalPlannerBtn');
+        
+        function openPortalPlanner() {
             localStorage.setItem('lastAsura', 'siria');
             document.body.classList.add('transition-out');
-            const flash = document.createElement('div');
-            flash.style.cssText = `position:fixed;inset:0;background:radial-gradient(circle,#35ff9c,transparent);opacity:0;transition:.5s;z-index:10000;`;
-            document.body.appendChild(flash);
+            const flashOverlay = document.createElement('div');
+            flashOverlay.style.cssText = `position:fixed;inset:0;background:radial-gradient(circle,#35ff9c,transparent);opacity:0;transition:opacity 0.5s;z-index:10000;pointer-events:none;`;
+            document.body.appendChild(flashOverlay);
             requestAnimationFrame(() => {
-                flash.style.opacity = '0.8';
+                flashOverlay.style.opacity = '0.8';
                 setTimeout(() => window.location.href = '../shared/portals/portal-system.html?asura=siria', 400);
             });
-        });
+        }
         
-        // =========================
-        // BOTÃO VOLTAR DO CELULAR
-        // =========================
+        if (portalPlannerBtn) {
+            portalPlannerBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                openPortalPlanner();
+            });
+        }
+        
+        // ============================================
+        // VOLTAR AO GRIMÓRIO
+        // ============================================
         function voltarAoGrimorio() {
             document.body.classList.add('transition-out');
             const flash = document.createElement('div');
-            flash.style.cssText = `position:fixed;inset:0;background:radial-gradient(circle,${siriaConfig.color},transparent);opacity:0;transition:.4s;z-index:100000;`;
+            flash.style.cssText = `position:fixed;inset:0;background:radial-gradient(circle,${config.color},transparent);opacity:0;transition:opacity 0.4s;z-index:100000;pointer-events:none;`;
             document.body.appendChild(flash);
             requestAnimationFrame(() => {
                 flash.style.opacity = '0.8';
@@ -303,23 +644,23 @@
             });
         }
         
-        window.addEventListener('popstate', (e) => {
-            e.preventDefault();
-            history.pushState(null, null, location.href);
+        window.addEventListener('popstate', (event) => {
+            event.preventDefault();
+            history.pushState(null, null, window.location.href);
             voltarAoGrimorio();
         });
-        history.pushState(null, null, location.href);
+        history.pushState(null, null, window.location.href);
         
-        // =========================
-        // SETUP 3D SIRIA
-        // =========================
+        // ============================================
+        // CENA 3D COMPLETA - SIRIA
+        // ============================================
         const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(siriaConfig.bgColor);
-        scene.fog = new THREE.FogExp2(siriaConfig.bgColor, 0.012);
+        scene.background = new THREE.Color(config.bgColor);
+        scene.fog = new THREE.FogExp2(config.bgColor, 0.012);
         
         const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(siriaConfig.cameraPosition.x, siriaConfig.cameraPosition.y, siriaConfig.cameraPosition.z);
+        camera.position.set(config.cameraPosition.x, config.cameraPosition.y, config.cameraPosition.z);
         camera.lookAt(0, 0.8, 0);
         
         const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -342,7 +683,7 @@
         mainLight.position.set(3, 5, 2);
         mainLight.castShadow = true;
         scene.add(mainLight);
-        const fillLight = new THREE.PointLight(siriaConfig.color, 0.7);
+        const fillLight = new THREE.PointLight(config.color, 0.7);
         fillLight.position.set(1, 2, 2);
         scene.add(fillLight);
         const backLight = new THREE.PointLight(0xffcc44, 0.4);
@@ -352,23 +693,20 @@
         spiritLight.position.set(2, 1, 1.5);
         scene.add(spiritLight);
         
-        // CHÃO
-        const gridHelper = new THREE.GridHelper(14, 24, siriaConfig.color, 0x226622);
+        // CHÃO E CÍRCULO VERDE
+        const gridHelper = new THREE.GridHelper(14, 24, config.color, 0x226622);
         gridHelper.position.y = -0.5;
+        gridHelper.material.transparent = true;
+        gridHelper.material.opacity = 0.4;
         scene.add(gridHelper);
         
-        const groundPlane = new THREE.Mesh(
-            new THREE.PlaneGeometry(9, 9),
-            new THREE.MeshStandardMaterial({ color: 0x0a2a0a, roughness: 0.6, metalness: 0.1, transparent: true, opacity: 0.5 })
-        );
+        const groundPlane = new THREE.Mesh(new THREE.PlaneGeometry(9, 9), new THREE.MeshStandardMaterial({ color: 0x0a2a0a, roughness: 0.6, metalness: 0.1, transparent: true, opacity: 0.5 }));
         groundPlane.rotation.x = -Math.PI / 2;
         groundPlane.position.y = -0.5;
+        groundPlane.receiveShadow = true;
         scene.add(groundPlane);
         
-        const circleGlow = new THREE.Mesh(
-            new THREE.CircleGeometry(1.3, 32),
-            new THREE.MeshStandardMaterial({ color: siriaConfig.color, emissive: siriaConfig.color, emissiveIntensity: 0.4, transparent: true, opacity: 0.5, side: THREE.DoubleSide })
-        );
+        const circleGlow = new THREE.Mesh(new THREE.CircleGeometry(1.3, 32), new THREE.MeshStandardMaterial({ color: config.color, emissive: config.color, emissiveIntensity: 0.4, transparent: true, opacity: 0.5, side: THREE.DoubleSide }));
         circleGlow.rotation.x = -Math.PI / 2;
         circleGlow.position.y = -0.45;
         scene.add(circleGlow);
@@ -379,7 +717,7 @@
             const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.2 * size, 0.3 * size, 0.8 * size, 6), new THREE.MeshStandardMaterial({ color: 0x35aa66, emissive: 0x226633, emissiveIntensity: 0.2 }));
             trunk.position.y = 0;
             group.add(trunk);
-            const foliage1 = new THREE.Mesh(new THREE.ConeGeometry(0.4 * size, 0.5 * size, 8), new THREE.MeshStandardMaterial({ color: siriaConfig.color, emissive: siriaConfig.color, emissiveIntensity: 0.15 }));
+            const foliage1 = new THREE.Mesh(new THREE.ConeGeometry(0.4 * size, 0.5 * size, 8), new THREE.MeshStandardMaterial({ color: config.color, emissive: config.color, emissiveIntensity: 0.15 }));
             foliage1.position.y = 0.5 * size;
             group.add(foliage1);
             const foliage2 = new THREE.Mesh(new THREE.ConeGeometry(0.3 * size, 0.4 * size, 8), new THREE.MeshStandardMaterial({ color: 0x55ffaa, emissive: 0x55ffaa, emissiveIntensity: 0.2 }));
@@ -390,31 +728,33 @@
         }
         
         const treePositions = [[-2.5,-2.5],[2.5,-2.5],[-2.5,2.5],[2.5,2.5],[-1.8,-3],[1.8,-3],[-3,-1.5],[3,-1.5],[-3,1.5],[3,1.5],[-1.5,3],[1.5,3],[0,3.2],[0,-3.2]];
-        treePositions.forEach(pos => { const tree = createSpiritTree(pos[0], pos[1], 0.8 + Math.random() * 0.3); scene.add(tree); });
+        treePositions.forEach(pos => { scene.add(createSpiritTree(pos[0], pos[1], 0.8 + Math.random() * 0.3)); });
         
         // PARTÍCULAS VERDES/DOURADAS
         const particleCount = 1500;
         const particleGeometry = new THREE.BufferGeometry();
         const particlePositions = new Float32Array(particleCount * 3);
-        const particleColors = new Float32Array(particleCount * 3);
         for (let i = 0; i < particleCount; i++) {
             particlePositions[i*3] = (Math.random() - 0.5) * 14;
             particlePositions[i*3+1] = Math.random() * 4.5;
             particlePositions[i*3+2] = (Math.random() - 0.5) * 12;
+        }
+        particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+        const particleColors = new Float32Array(particleCount * 3);
+        for (let i = 0; i < particleCount; i++) {
             const type = Math.random();
             if (type < 0.6) { particleColors[i*3]=0.2+Math.random()*0.3; particleColors[i*3+1]=0.7+Math.random()*0.3; particleColors[i*3+2]=0.3+Math.random()*0.3; }
             else if (type < 0.8) { particleColors[i*3]=1.0; particleColors[i*3+1]=0.8+Math.random()*0.2; particleColors[i*3+2]=0.2; }
             else { particleColors[i*3]=0.9+Math.random()*0.3; particleColors[i*3+1]=0.9+Math.random()*0.3; particleColors[i*3+2]=0.9+Math.random()*0.3; }
         }
-        particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
         particleGeometry.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
         const particleMaterial = new THREE.PointsMaterial({ size: 0.045, vertexColors: true, transparent: true, opacity: 0.5 });
         const particles = new THREE.Points(particleGeometry, particleMaterial);
         scene.add(particles);
         
-        // ANÉIS
+        // ANÉIS E CRISTAIS
         const ringGeometry = new THREE.TorusGeometry(1.15, 0.035, 64, 200);
-        const ringMaterial = new THREE.MeshStandardMaterial({ color: siriaConfig.color, emissive: siriaConfig.color, emissiveIntensity: 0.6 });
+        const ringMaterial = new THREE.MeshStandardMaterial({ color: config.color, emissive: config.color, emissiveIntensity: 0.6 });
         const ring = new THREE.Mesh(ringGeometry, ringMaterial);
         ring.position.y = 0.15;
         ring.rotation.x = Math.PI / 2;
@@ -427,8 +767,7 @@
         ring2.rotation.x = Math.PI / 2 + 0.3;
         scene.add(ring2);
         
-        // CRISTAIS
-        const crystalMaterial = new THREE.MeshStandardMaterial({ color: 0x88ffaa, emissive: siriaConfig.color, emissiveIntensity: 0.3, metalness: 0.8 });
+        const crystalMaterial = new THREE.MeshStandardMaterial({ color: 0x88ffaa, emissive: config.color, emissiveIntensity: 0.3, metalness: 0.8 });
         const crystalPositions = [[1.2,-0.3,1.5],[-1.2,-0.3,1.5],[1.5,-0.3,-1.2],[-1.5,-0.3,-1.2],[0.8,-0.3,2],[-0.8,-0.3,2],[2,-0.3,0.8],[-2,-0.3,0.8]];
         crystalPositions.forEach(pos => { const crystal = new THREE.Mesh(new THREE.ConeGeometry(0.12, 0.35, 6), crystalMaterial); crystal.position.set(pos[0], pos[1], pos[2]); scene.add(crystal); });
         
@@ -437,23 +776,19 @@
         let model = null;
         let mixer = null;
         
-        loader.load(siriaConfig.modelPath, (gltf) => {
+        loader.load(config.modelPath, (gltf) => {
             model = gltf.scene;
-            model.position.set(0, siriaConfig.modelPositionY, 0);
-            model.scale.set(siriaConfig.modelScale, siriaConfig.modelScale, siriaConfig.modelScale);
-            model.traverse((node) => { if (node.isMesh) { node.castShadow = true; } });
+            model.position.set(0, config.modelPositionY, 0);
+            model.scale.set(config.modelScale, config.modelScale, config.modelScale);
+            model.traverse((node) => { if (node.isMesh) node.castShadow = true; });
             scene.add(model);
             if (gltf.animations && gltf.animations.length > 0) {
                 mixer = new THREE.AnimationMixer(model);
                 gltf.animations.forEach(clip => mixer.clipAction(clip).play());
-                console.log(`✅ ${gltf.animations.length} animação(ões) ativada(s)`);
             }
-            console.log('✅ Modelo da SIRIA carregado');
         });
         
-        // =========================
-        // ANIMAÇÃO (CORRIGIDA - COM MIXER)
-        // =========================
+        // ANIMAÇÃO
         let time = 0;
         let deltaTime = 0.016;
         let lastTime = performance.now();
@@ -469,22 +804,13 @@
         function animate() {
             requestAnimationFrame(animate);
             time += 0.008;
-            
-            // ATUALIZA AS ANIMAÇÕES DO MODELO 3D
             if (mixer) mixer.update(deltaTime);
-            
-            // PARTÍCULAS
             particles.rotation.y = time * 0.05;
             particles.rotation.x = Math.sin(time * 0.15) * 0.1;
-            
-            // ANÉIS
             ring.rotation.z = time * 0.25;
             ring2.rotation.z = -time * 0.2;
-            
-            // LUZES PULSANTES
             fillLight.intensity = 0.5 + Math.sin(time * 2) * 0.15;
             circleGlow.material.emissiveIntensity = 0.25 + Math.sin(time * 1.8) * 0.15;
-            
             controls.update();
             renderer.render(scene, camera);
         }
@@ -496,53 +822,49 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
         
-        // =========================
-        // UI, CHAT E VOZ
-        // =========================
-        initUI(siriaConfig);
+        // ============================================
+        // INICIALIZAÇÃO UI, CHAT E VOZ
+        // ============================================
+        initUI(config);
         
-        const chat = new EnhancedChatSystem('chatContainer', siriaConfig, (response) => {
+        const chat = new EnhancedChatSystem('chatContainer', config, (response) => {
             if (voice?.isJarvisActive?.()) voice.speak(response);
         });
         
         const voiceButtonElem = document.getElementById('voiceButton');
         let voice = null;
         if (voiceButtonElem) {
-            voice = new VoiceAssistant(voiceButtonElem, (text) => { document.getElementById('chatInput').value = text; chat.send(); }, null, { asuraName: siriaConfig.name, continuous: true });
+            voice = new VoiceAssistant(voiceButtonElem, (text) => { 
+                document.getElementById('chatInput').value = text; 
+                chat.send(); 
+            }, null, { asuraName: config.name, continuous: true });
         }
-        
-        // Toggle do chat
-        const chatContainer = document.getElementById('chatContainer');
-        const chatToggle = document.getElementById('chatToggle');
-        const chatHeader = document.getElementById('chatHeader');
-        
-        function toggleChat() {
-            chatContainer.classList.toggle('open');
-        }
-        
-        if (chatToggle) chatToggle.addEventListener('click', toggleChat);
-        if (chatHeader) chatHeader.addEventListener('click', toggleChat);
         
         setTimeout(() => {
-            chat.addMessage(siriaConfig.welcomeMessage, false);
+            chat.addMessage(config.welcomeMessage, false);
             setTimeout(() => {
-                chat.addMessage("🎤 Dica: Clique no ícone 🌿 no topo para ativar o MODO JARVIS. Vou ficar sempre ouvindo!", false);
-                chat.addMessage("📎 Dica: Clique no ícone 📎 para enviar qualquer arquivo (imagem, PDF, DOC, etc)!", false);
-                chat.addMessage("🗺️ Dica: Clique no botão do mapa 🗺️ no TOPO ESQUERDO para acessar o PORTAL PLANNER!", false);
+                chat.addMessage("🎤 Dica: Clique no ícone 🌿 no topo para ativar o MODO JARVIS.", false);
+                chat.addMessage("📎 Dica: Clique no ícone 📎 para enviar qualquer arquivo.", false);
+                chat.addMessage("🗺️ Dica: Clique no botão 🗺️ no TOPO ESQUERDO para acessar o PORTAL PLANNER!", false);
+                chat.addMessage("🖥️ Dica: Clique em ⛶ para tela cheia! ESC para sair.", false);
             }, 2000);
         }, 500);
         
         const portalOverlay = document.getElementById('portalOverlay');
-        portalOverlay.style.setProperty('--asura-color', siriaConfig.color);
-        setTimeout(() => {
-            portalOverlay.style.opacity = '0.6';
-            setTimeout(() => {
-                portalOverlay.style.opacity = '0';
-                setTimeout(() => portalOverlay.style.display = 'none', 800);
-            }, 500);
-        }, 50);
+        if (portalOverlay) {
+            portalOverlay.style.setProperty('--asura-color', config.color);
+            setTimeout(() => { 
+                portalOverlay.style.opacity = '0.6'; 
+                setTimeout(() => { 
+                    portalOverlay.style.opacity = '0'; 
+                    setTimeout(() => { 
+                        portalOverlay.style.display = 'none'; 
+                    }, 800); 
+                }, 500); 
+            }, 50);
+        }
         
-        console.log('🟢 SIRIA carregada com ANIMAÇÃO CORRIGIDA!');
+        console.log('✅ SIRIA carregada com 3 NÍVEIS no chat e mundo 3D completo!');
     </script>
 </body>
 </html>
