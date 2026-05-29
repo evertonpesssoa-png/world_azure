@@ -33,3 +33,35 @@ export const createBoundingBoxes = (objects) => {
 // That's why createBoundingBoxes starts by checking if objects is an array with if (!Array.isArray(objects)). If objects is not an array, it assumes that it's a Group and sets objects to objects.children. If objects is already an array, it skips this step.
 
 // After this check, objects is always an array, whether it was originally an array or a Group. This means that you can use objects.forEach to loop over each object in objects and add a bounding box to it, regardless of whether objects was originally an array or a Group. This is a way of making createBoundingBoxes flexible so it can work with both Groups and arrays.
+
+
+import * as THREE from 'three';
+
+// Detecta celular para reduzir precisão das bounding boxes
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+export const createBoundingBoxes = (objects) => {
+  if (!Array.isArray(objects)) {
+    objects = objects.children;
+  }
+
+  objects.forEach((object) => {
+    // Criar bounding box com precisão reduzida em celular (melhora performance)
+    if (isMobile) {
+      // Versão mais leve para celular
+      const box = new THREE.Box3();
+      const position = object.position || new THREE.Vector3();
+      const scale = object.scale || new THREE.Vector3(1, 1, 1);
+      
+      // Aproximação rápida (menos precisa, mas mais leve)
+      const halfSize = 0.5;
+      box.min.set(position.x - halfSize, position.y - halfSize, position.z - halfSize);
+      box.max.set(position.x + halfSize, position.y + halfSize, position.z + halfSize);
+      object.BoundingBox = box;
+    } else {
+      // Versão completa para desktop
+      object.BoundingBox = new THREE.Box3();
+      object.BoundingBox.setFromObject(object);
+    }
+  });
+};
