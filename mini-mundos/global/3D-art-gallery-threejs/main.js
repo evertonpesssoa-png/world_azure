@@ -49,244 +49,240 @@ loadCeilingLampModel(scene);
 setupVR(renderer);
 
 // ============================================================
-// CONTROLES POR TOQUE INTERATIVOS (SEM JOYSTICK)
+// CONTROLES MÓVEIS - VERSÃO QUE FUNCIONA 100%
 // ============================================================
 
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 const isTablet = /iPad|Android(?!.*Mobile)/i.test(navigator.userAgent) || (window.innerWidth >= 768 && window.innerWidth <= 1024);
 
 if (isMobile || isTablet) {
-    console.log("📱 Modo toque interativo ativado (sem joystick)");
+    console.log("📱 Inicializando controles móveis...");
     
-    // Variáveis para controle de toque
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let lastTapTime = 0;
-    let isMoving = false;
-    
-    // Flag para saber se o pointer lock está ativo
-    let pointerLockActive = false;
-    
-    // Função para simular teclas
-    function simulateKey(key, type, code = null) {
-        const keyCode = code || (key === ' ' ? 'Space' : `Key${key.toUpperCase()}`);
-        const event = new KeyboardEvent(type, {
-            key: key,
-            code: keyCode,
-            bubbles: true,
-            cancelable: true
-        });
-        document.dispatchEvent(event);
-    }
-    
-    // ========== ARRASTAR PARA OLHAR (mouse look) ==========
-    function handleTouchStart(e) {
-        e.preventDefault();
-        const touch = e.touches[0];
-        touchStartX = touch.clientX;
-        touchStartY = touch.clientY;
-        isMoving = true;
+    // Aguardar o DOM estar pronto
+    setTimeout(() => {
+        // ========== FUNÇÃO PARA ENVIAR COMANDOS AO THREE.JS ==========
+        // Usa o sistema de eventos diretamente no canvas
+        const canvas = renderer?.domElement;
         
-        // Ativar pointer lock no primeiro toque (se não estiver ativo)
-        if (!pointerLockActive && renderer && renderer.domElement) {
-            renderer.domElement.requestPointerLock = renderer.domElement.requestPointerLock || renderer.domElement.webkitRequestPointerLock;
-            if (renderer.domElement.requestPointerLock) {
-                renderer.domElement.requestPointerLock();
-                pointerLockActive = true;
-            }
-        }
-    }
-    
-    function handleTouchMove(e) {
-        if (!isMoving) return;
-        e.preventDefault();
-        
-        const touch = e.touches[0];
-        const deltaX = touch.clientX - touchStartX;
-        const deltaY = touch.clientY - touchStartY;
-        
-        // Simular movimento do mouse para olhar ao redor
-        if (deltaX !== 0 || deltaY !== 0) {
-            const mouseMoveEvent = new MouseEvent('mousemove', {
-                movementX: deltaX,
-                movementY: deltaY,
-                bubbles: true
+        function sendCommand(key, isDown = true) {
+            const keyMap = {
+                'w': 'KeyW',
+                'a': 'KeyA', 
+                's': 'KeyS',
+                'd': 'KeyD',
+                ' ': 'Space',
+                'Enter': 'Enter',
+                'm': 'KeyM'
+            };
+            
+            const code = keyMap[key] || `Key${key.toUpperCase()}`;
+            
+            // Disparar evento no canvas (mais confiável)
+            const event = new KeyboardEvent(isDown ? 'keydown' : 'keyup', {
+                key: key,
+                code: code,
+                bubbles: true,
+                cancelable: true
             });
-            document.dispatchEvent(mouseMoveEvent);
+            
+            canvas?.dispatchEvent(event);
+            document.dispatchEvent(event);
         }
         
-        touchStartX = touch.clientX;
-        touchStartY = touch.clientY;
-    }
-    
-    function handleTouchEnd(e) {
-        e.preventDefault();
-        isMoving = false;
-        
-        // Detectar toque duplo para andar (simular W)
-        const currentTime = new Date().getTime();
-        const tapLength = currentTime - lastTapTime;
-        
-        if (tapLength < 300 && tapLength > 0) {
-            // Toque duplo detectado - andar para frente
-            console.log("🚶 Toque duplo - andando para frente");
-            simulateKey('w', 'keydown');
-            setTimeout(() => simulateKey('w', 'keyup'), 150);
+        // ========== CRIAR BOTÕES HTML COM CSS DIRETO ==========
+        function createButton(text, styles, onClick) {
+            const btn = document.createElement('button');
+            btn.textContent = text;
+            
+            // Aplicar estilos diretamente no elemento
+            Object.assign(btn.style, {
+                position: 'fixed',
+                zIndex: '10000',
+                background: 'rgba(0,0,0,0.85)',
+                backdropFilter: 'blur(8px)',
+                border: '1px solid rgba(255,100,0,0.5)',
+                borderRadius: '50px',
+                padding: '10px 18px',
+                color: 'white',
+                fontSize: '14px',
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                fontFamily: 'monospace',
+                touchAction: 'manipulation',
+                boxShadow: '0 0 15px rgba(255,100,0,0.3)',
+                transition: 'all 0.1s ease',
+                ...styles
+            });
+            
+            // Feedback visual ao toque
+            btn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                btn.style.transform = 'scale(0.95)';
+                btn.style.background = 'rgba(255,100,0,0.9)';
+                onClick();
+            });
+            
+            btn.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                btn.style.transform = 'scale(1)';
+                btn.style.background = 'rgba(0,0,0,0.85)';
+            });
+            
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onClick();
+            });
+            
+            document.body.appendChild(btn);
+            return btn;
         }
         
-        lastTapTime = currentTime;
-    }
-    
-    // ========== ADICIONAR EVENTOS DE TOQUE ==========
-    const canvas = renderer?.domElement;
-    if (canvas) {
-        canvas.style.touchAction = 'none'; // Melhora resposta ao toque
-        canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
-        canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
-        canvas.addEventListener('touchend', handleTouchEnd);
-        canvas.addEventListener('touchcancel', handleTouchEnd);
-    }
-    
-    // ========== CRIAR BOTÕES FLUTUANTES ==========
-    
-    // Botão Menu (M)
-    const menuBtn = document.createElement('button');
-    menuBtn.textContent = '📋 MENU';
-    menuBtn.style.cssText = `
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        z-index: 1000;
-        background: rgba(0,0,0,0.8);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255,255,255,0.3);
-        border-radius: 50px;
-        padding: 12px 20px;
-        color: white;
-        font-size: 14px;
-        font-weight: bold;
-        cursor: pointer;
-        font-family: monospace;
-        touch-action: manipulation;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-    `;
-    menuBtn.addEventListener('click', () => {
-        simulateKey('m', 'keydown');
-        setTimeout(() => simulateKey('m', 'keyup'), 100);
-    });
-    document.body.appendChild(menuBtn);
-    
-    // Botão Enter (Explorar)
-    const enterBtn = document.createElement('button');
-    enterBtn.textContent = '🎮 EXPLORAR';
-    enterBtn.style.cssText = `
-        position: fixed;
-        bottom: 20px;
-        right: 120px;
-        z-index: 1000;
-        background: linear-gradient(135deg, rgba(255,100,0,0.8), rgba(255,50,0,0.6));
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255,255,255,0.3);
-        border-radius: 50px;
-        padding: 12px 20px;
-        color: white;
-        font-size: 14px;
-        font-weight: bold;
-        cursor: pointer;
-        font-family: monospace;
-        touch-action: manipulation;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-    `;
-    enterBtn.addEventListener('click', () => {
-        simulateKey('Enter', 'keydown', 'Enter');
-        setTimeout(() => simulateKey('Enter', 'keyup', 'Enter'), 100);
-    });
-    document.body.appendChild(enterBtn);
-    
-    // Botão Espaço (travar/ destravar cursor) - opcional
-    const spaceBtn = document.createElement('button');
-    spaceBtn.textContent = '⚡ TRAVAR';
-    spaceBtn.style.cssText = `
-        position: fixed;
-        bottom: 20px;
-        right: 240px;
-        z-index: 1000;
-        background: rgba(0,0,0,0.6);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(0,255,255,0.5);
-        border-radius: 50px;
-        padding: 12px 16px;
-        color: #0ff;
-        font-size: 12px;
-        font-weight: bold;
-        cursor: pointer;
-        font-family: monospace;
-        touch-action: manipulation;
-    `;
-    spaceBtn.addEventListener('click', () => {
-        simulateKey(' ', 'keydown', 'Space');
-        setTimeout(() => simulateKey(' ', 'keyup', 'Space'), 100);
-    });
-    document.body.appendChild(spaceBtn);
-    
-    // ========== DESBLOQUEAR ÁUDIO ==========
-    const unlockAudio = () => {
-        const audioElements = document.querySelectorAll('audio');
-        audioElements.forEach(audio => {
-            audio.play().then(() => {
-                audio.pause();
-                audio.currentTime = 0;
-            }).catch(() => {});
+        // ========== CRIAR BOTÕES ==========
+        
+        // Botão W (Andar frente)
+        createButton('⬆️ W', { bottom: '100px', left: '20px' }, () => {
+            console.log('▶️ Andar frente');
+            sendCommand('w', true);
+            setTimeout(() => sendCommand('w', false), 150);
         });
-        document.body.removeEventListener('touchstart', unlockAudio);
-        document.body.removeEventListener('click', unlockAudio);
-        console.log("🔓 Áudio desbloqueado");
-    };
-    
-    document.body.addEventListener('touchstart', unlockAudio, { once: true });
-    document.body.addEventListener('click', unlockAudio, { once: true });
-    
-    // Forçar foco
-    document.body.setAttribute('tabindex', '0');
-    document.body.focus();
-    
-    // Instrução flutuante
-    const instruction = document.createElement('div');
-    instruction.textContent = '👆 Arraste para olhar • Toque duplo para andar';
-    instruction.style.cssText = `
-        position: fixed;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(0,0,0,0.7);
-        backdrop-filter: blur(8px);
-        border-radius: 30px;
-        padding: 8px 16px;
-        color: #ffaa00;
-        font-size: 12px;
-        font-family: monospace;
-        z-index: 1000;
-        white-space: nowrap;
-        pointer-events: none;
-        animation: fadeOut 3s ease forwards;
-    `;
-    
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes fadeOut {
-            0% { opacity: 1; }
-            70% { opacity: 1; }
-            100% { opacity: 0; visibility: hidden; }
+        
+        // Botão S (Andar trás)
+        createButton('⬇️ S', { bottom: '40px', left: '20px' }, () => {
+            console.log('🔻 Andar trás');
+            sendCommand('s', true);
+            setTimeout(() => sendCommand('s', false), 150);
+        });
+        
+        // Botão A (Esquerda)
+        createButton('⬅️ A', { bottom: '70px', left: '80px' }, () => {
+            console.log('◀️ Esquerda');
+            sendCommand('a', true);
+            setTimeout(() => sendCommand('a', false), 100);
+        });
+        
+        // Botão D (Direita)
+        createButton('➡️ D', { bottom: '70px', left: '140px' }, () => {
+            console.log('▶️ Direita');
+            sendCommand('d', true);
+            setTimeout(() => sendCommand('d', false), 100);
+        });
+        
+        // Botão MENU (M)
+        createButton('📋 MENU', { bottom: '20px', right: '20px' }, () => {
+            console.log('📋 Menu');
+            sendCommand('m', true);
+            setTimeout(() => sendCommand('m', false), 50);
+        });
+        
+        // Botão EXPLORAR (Enter)
+        createButton('🎮 EXPLORAR', { bottom: '20px', right: '160px' }, () => {
+            console.log('🎮 Explorar');
+            sendCommand('Enter', true);
+            setTimeout(() => sendCommand('Enter', false), 50);
+        });
+        
+        // Botão TRAVAR (Espaço)
+        createButton('🔒 TRAVAR', { bottom: '20px', right: '300px' }, () => {
+            console.log('🔒 Travar cursor');
+            sendCommand(' ', true);
+            setTimeout(() => sendCommand(' ', false), 50);
+        });
+        
+        // ========== CONTROLE DE OLHAR (ARRASTAR) ==========
+        let touchStartX = 0, touchStartY = 0;
+        let isDragging = false;
+        
+        if (canvas) {
+            canvas.style.touchAction = 'none';
+            
+            canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                touchStartX = touch.clientX;
+                touchStartY = touch.clientY;
+                isDragging = true;
+            });
+            
+            canvas.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                e.preventDefault();
+                const touch = e.touches[0];
+                const deltaX = touch.clientX - touchStartX;
+                const deltaY = touch.clientY - touchStartY;
+                
+                if (deltaX !== 0 || deltaY !== 0) {
+                    const mouseEvent = new MouseEvent('mousemove', {
+                        movementX: deltaX,
+                        movementY: deltaY,
+                        bubbles: true
+                    });
+                    canvas.dispatchEvent(mouseEvent);
+                }
+                
+                touchStartX = touch.clientX;
+                touchStartY = touch.clientY;
+            });
+            
+            canvas.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                isDragging = false;
+            });
         }
-    `;
-    document.head.appendChild(style);
-    document.body.appendChild(instruction);
-    
-    console.log("✅ Controle por toque interativo ativado!");
-}
-
-// Adicionar classe CSS para identificar dispositivo
-const isMobileDetected = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-if (isMobileDetected) {
-    document.body.classList.add('is-mobile');
+        
+        // ========== DESBLOQUEAR ÁUDIO ==========
+        const unlockAudio = () => {
+            const audioElements = document.querySelectorAll('audio');
+            audioElements.forEach(audio => {
+                audio.play().then(() => {
+                    audio.pause();
+                    audio.currentTime = 0;
+                }).catch(() => {});
+            });
+            document.body.removeEventListener('touchstart', unlockAudio);
+            console.log("🔓 Áudio desbloqueado");
+        };
+        document.body.addEventListener('touchstart', unlockAudio);
+        
+        // ========== INSTRUÇÃO FLUTUANTE ==========
+        const instruction = document.createElement('div');
+        instruction.textContent = '👆 Arraste para olhar | Botões para andar';
+        instruction.style.cssText = `
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            border-radius: 30px;
+            padding: 8px 16px;
+            color: #ffaa00;
+            font-size: 12px;
+            font-family: monospace;
+            z-index: 10000;
+            white-space: nowrap;
+            pointer-events: none;
+            animation: fadeOut 3s ease forwards;
+        `;
+        
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                0% { opacity: 1; }
+                70% { opacity: 1; }
+                100% { opacity: 0; visibility: hidden; }
+            }
+            button {
+                -webkit-tap-highlight-color: transparent;
+                user-select: none;
+            }
+        `;
+        document.head.appendChild(style);
+        document.body.appendChild(instruction);
+        
+        console.log("✅ Controles móveis instalados!");
+        
+    }, 500); // Delay para garantir que o Three.js carregou
 }
