@@ -1,67 +1,15 @@
 /* =========================
    PORTAL DE ENTRADA
    ========================= */
-
 .portal-overlay {
     position: fixed;
-
-    inset: 0;
-
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-
-    background:
-        radial-gradient(
-            circle,
-            var(--asura-color),
-            transparent 70%
-        );
-
+    background: radial-gradient(circle, var(--asura-color), transparent);
     opacity: 0;
-
     pointer-events: none;
-
     z-index: 9999;
-
-    transition:
-        opacity .8s ease,
-        transform .8s ease,
-        filter .8s ease;
-
-    transform: scale(1.1);
-
-    filter: blur(0px);
-}
-
-/* =========================
-   ESTADO ATIVO
-   ========================= */
-
-.portal-overlay.active {
-    opacity: .75;
-
-    transform: scale(1);
-
-    filter: blur(4px);
-}
-
-/* =========================
-   TRANSIÇÃO DE SAÍDA
-   ========================= */
-
-body.transition-out {
-    animation:
-        portalFadeOut .5s ease forwards;
-}
-
-@keyframes portalFadeOut {
-    from {
-        opacity: 1;
-        filter: blur(0px);
-    }
-
-    to {
-        opacity: 0;
-        filter: blur(8px);
-    }
+    transition: opacity 0.8s ease;
 }
