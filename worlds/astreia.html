@@ -19,34 +19,359 @@
             --asura-glow: rgba(40, 123, 255, 0.6);
             --asura-gradient: linear-gradient(135deg, #287bff, #44aaff);
         }
-        body { background: radial-gradient(circle at 30% 20%, #050b20, #030108); }
+        body { background: radial-gradient(circle at 30% 20%, #050b20, #030108); margin: 0; overflow-x: hidden; }
+        
+        /* PORTAL PLANNER BOTÃO */
+        .portal-planner-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            color: #287bff;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 28px;
+            z-index: 9999;
+            border: 2px solid #287bff;
+            box-shadow: 0 0 20px rgba(40, 123, 255, 0.4);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .portal-planner-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 35px rgba(40, 123, 255, 0.8);
+            background: rgba(40, 123, 255, 0.2);
+        }
+        
+        .portal-planner-btn::before {
+            content: "🗺️ Portal Planner";
+            position: absolute;
+            top: 70px;
+            left: 0;
+            background: rgba(0,0,0,0.9);
+            color: #287bff;
+            font-size: 12px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            font-family: 'Poppins', sans-serif;
+            border: 1px solid #287bff;
+        }
+        
+        .portal-planner-btn:hover::before { opacity: 1; }
+        
+        body.transition-out {
+            opacity: 0;
+            transform: scale(0.98);
+            transition: all 0.4s ease;
+        }
+        
+        /* ============================================
+           CHAT 3 NÍVEIS COMPLETO
+           ============================================ */
+        .chat-container {
+            position: fixed !important;
+            bottom: 20px !important;
+            right: 20px !important;
+            background: rgba(5, 11, 32, 0.95) !important;
+            backdrop-filter: blur(12px) !important;
+            border-radius: 16px !important;
+            border: 1px solid rgba(40,123,255,0.3) !important;
+            z-index: 9998 !important;
+            overflow: hidden !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .chat-container.level-0 {
+            width: 320px !important;
+            height: 52px !important;
+        }
+        .chat-container.level-0 .chat-body {
+            display: none !important;
+        }
+        
+        .chat-container.level-1 {
+            width: 380px !important;
+            height: 500px !important;
+        }
+        .chat-container.level-1 .chat-body {
+            display: flex !important;
+            flex-direction: column !important;
+            height: calc(100% - 52px) !important;
+        }
+        
+        .chat-container.level-2 {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            border-radius: 0 !important;
+            z-index: 99999 !important;
+        }
+        .chat-container.level-2 .chat-body {
+            display: flex !important;
+            flex-direction: column !important;
+            height: calc(100% - 52px) !important;
+        }
+        .chat-container.level-2 .chat-messages {
+            flex: 1 !important;
+            min-height: 0 !important;
+        }
+        .chat-container.level-2 .chat-input-area {
+            flex-shrink: 0 !important;
+        }
+        
+        .chat-header {
+            background: rgba(0, 0, 0, 0.9) !important;
+            padding: 12px 15px !important;
+            cursor: pointer !important;
+            border-bottom: 1px solid #287bff !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            height: 52px !important;
+            box-sizing: border-box !important;
+        }
+        
+        .chat-header-info {
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            flex: 1 !important;
+        }
+        
+        .chat-avatar { font-size: 24px !important; }
+        .chat-header-info h4 {
+            font-size: 14px !important;
+            margin: 0 !important;
+            color: #287bff !important;
+            font-family: 'Poppins', sans-serif !important;
+        }
+        .chat-status { font-size: 10px !important; color: #0f0 !important; }
+        
+        .chat-header-actions {
+            display: flex !important;
+            gap: 8px !important;
+            align-items: center !important;
+        }
+        
+        .chat-header-actions button {
+            background: transparent !important;
+            border: none !important;
+            cursor: pointer !important;
+            font-size: 18px !important;
+            padding: 4px 8px !important;
+            border-radius: 8px !important;
+            color: #287bff !important;
+        }
+        .chat-header-actions button:hover {
+            background: rgba(40, 123, 255, 0.2) !important;
+        }
+        
+        .chat-body {
+            display: flex !important;
+            flex-direction: column !important;
+            overflow: hidden !important;
+        }
+        
+        .chat-messages {
+            flex: 1 !important;
+            overflow-y: auto !important;
+            padding: 12px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 10px !important;
+            background: rgba(0, 0, 0, 0.5) !important;
+            min-height: 0 !important;
+        }
+        
+        .message {
+            display: flex !important;
+            gap: 10px !important;
+            max-width: 90% !important;
+        }
+        .message.user {
+            align-self: flex-end !important;
+            flex-direction: row-reverse !important;
+        }
+        
+        .message-avatar {
+            width: 32px !important;
+            height: 32px !important;
+            border-radius: 50% !important;
+            background: rgba(40,123,255,0.2) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 16px !important;
+        }
+        
+        .message-content {
+            background: rgba(40, 123, 255, 0.12) !important;
+            border: 1px solid #287bff !important;
+            border-radius: 15px !important;
+            padding: 8px 12px !important;
+            color: #cceeff !important;
+            font-size: 13px !important;
+            font-family: 'Poppins', sans-serif !important;
+            word-break: break-word !important;
+        }
+        .message.user .message-content {
+            background: rgba(40, 123, 255, 0.2) !important;
+        }
+        
+        .message-time {
+            font-size: 9px !important;
+            color: rgba(255,255,255,0.5) !important;
+            margin-top: 4px !important;
+            text-align: right !important;
+        }
+        
+        .chat-image {
+            max-width: 180px !important;
+            max-height: 150px !important;
+            border-radius: 10px !important;
+            margin-top: 5px !important;
+            border: 1px solid #287bff !important;
+            cursor: pointer !important;
+        }
+        
+        .chat-file {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            background: rgba(40,123,255,0.1) !important;
+            border: 1px solid #287bff !important;
+            border-radius: 10px !important;
+            padding: 8px 12px !important;
+            margin-top: 5px !important;
+            cursor: pointer !important;
+        }
+        .chat-file:hover {
+            background: rgba(40,123,255,0.25) !important;
+        }
+        
+        .file-icon { font-size: 24px !important; }
+        .file-info { flex: 1 !important; }
+        .file-name {
+            font-size: 11px !important;
+            color: #287bff !important;
+        }
+        .file-size { font-size: 9px !important; color: #888 !important; }
+        .file-badge {
+            background: rgba(40,123,255,0.2) !important;
+            border-radius: 4px !important;
+            padding: 2px 6px !important;
+            font-size: 9px !important;
+            color: #287bff !important;
+        }
+        
+        .chat-input-area {
+            display: flex !important;
+            gap: 8px !important;
+            padding: 10px !important;
+            background: rgba(0, 0, 0, 0.85) !important;
+            border-top: 1px solid rgba(40,123,255,0.2) !important;
+            align-items: center !important;
+            flex-shrink: 0 !important;
+        }
+        
+        .chat-input-area input[type="text"] {
+            flex: 1 !important;
+            background: rgba(10, 20, 40, 0.9) !important;
+            border: 1px solid #287bff !important;
+            border-radius: 25px !important;
+            padding: 10px 15px !important;
+            color: #287bff !important;
+            font-family: 'Poppins', sans-serif !important;
+            font-size: 12px !important;
+            outline: none !important;
+        }
+        .chat-input-area input[type="text"]:focus {
+            box-shadow: 0 0 10px rgba(40,123,255,0.5) !important;
+        }
+        
+        .chat-input-area button {
+            background: rgba(0, 0, 0, 0.8) !important;
+            border: 1px solid #287bff !important;
+            color: #287bff !important;
+            width: 38px !important;
+            height: 38px !important;
+            border-radius: 50% !important;
+            cursor: pointer !important;
+            font-size: 16px !important;
+        }
+        .chat-input-area button:hover {
+            background: rgba(40,123,255,0.2) !important;
+        }
+        
+        .attach-btn {
+            background: rgba(0, 0, 0, 0.8) !important;
+            border: 1px solid #287bff !important;
+            color: #287bff !important;
+            width: 38px !important;
+            height: 38px !important;
+            border-radius: 50% !important;
+            cursor: pointer !important;
+            font-size: 16px !important;
+        }
+        .attach-btn:hover {
+            background: rgba(40,123,255,0.2) !important;
+        }
+        
+        .chat-messages::-webkit-scrollbar { width: 5px; }
+        .chat-messages::-webkit-scrollbar-track { background: #0a0a1a; }
+        .chat-messages::-webkit-scrollbar-thumb { background: #287bff; border-radius: 5px; }
+        
+        @media (max-width: 600px) {
+            .chat-container.level-1 { width: calc(100% - 20px) !important; }
+            .chat-container.level-0 { width: calc(100% - 20px) !important; }
+            .chat-image { max-width: 130px !important; }
+        }
     </style>
 </head>
-<body class="asura-astreia">
-    <div id="canvas-container"></div>
+<body>
+    <div id="canvas-container" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"></div>
     
-    <div class="portal-planner-btn" id="portalPlannerBtn">🗺️</div>
+    <div class="portal-planner-btn" id="portalPlannerBtn" title="Abrir Portal Planner">🗺️</div>
     
-    <div class="top-icons">
-        <div class="top-icon" id="backButton">←</div>
-        <div class="top-icon voice-icon" id="voiceButton">
+    <div class="top-icons" style="z-index: 100;">
+        <div class="top-icon" id="backButton" data-tooltip="Voltar ao Grimório">←</div>
+        <div class="top-icon voice-icon" id="voiceButton" data-tooltip="Modo Jarvis (clique para ativar)">
             <span class="brain-icon">👁️</span>
             <span class="mic-icon">🎤</span>
             <div class="mental-wave"></div>
             <div class="brain-waves left"><span></span><span></span><span></span><span></span><span></span></div>
             <div class="brain-waves right"><span></span><span></span><span></span><span></span><span></span></div>
         </div>
-        <div class="top-icon" id="profileButton">👁️</div>
+        <div class="top-icon" id="profileButton" data-tooltip="Perfil da Astreia">👁️</div>
     </div>
     
     <div class="profile-panel" id="profilePanel"></div>
     
-    <div class="chat-container" id="chatContainer">
+    <div class="chat-container" id="chatContainer" style="z-index: 200;">
         <div class="chat-header" id="chatHeader">
             <div class="chat-header-info">
                 <div class="chat-avatar">👁️</div>
-                <div><h4>ASTREIA • Guardiã Celestial</h4><div class="chat-status">🟢 online | vigilância ativa</div></div>
+                <div>
+                    <h4>ASTREIA • Guardiã Celestial</h4>
+                    <div class="chat-status">🟢 online | vigilância ativa</div>
+                </div>
             </div>
+            <div class="chat-toggle" id="chatToggle">▼</div>
         </div>
         <div class="chat-body" id="chatBody">
             <div class="chat-messages" id="chatMessages"></div>
@@ -76,111 +401,85 @@
         import { ChatSystem } from '../shared/js/chat.js';
         import { VoiceAssistant } from '../shared/js/voice-assistant.js';
         
-        // =========================
-        // EXTENDE O CHAT SYSTEM ORIGINAL COM 3 NÍVEIS
-        // =========================
-        const OriginalChatSystem = ChatSystem;
-        
-        class EnhancedChatSystem extends OriginalChatSystem {
+        // ============================================
+        // ENHANCED CHAT SYSTEM COM 3 NÍVEIS
+        // ============================================
+        class EnhancedChatSystem extends ChatSystem {
             constructor(containerId, config, onSpeak) {
                 super(containerId, config, onSpeak);
-                this.chatLevel = 0;
                 this.addAttachButton();
-                this.setupThreeLevels();
-                
-                setTimeout(() => {
-                    if (this.container) {
-                        this.container.classList.add('level-0');
-                        this.container.classList.remove('level-1', 'level-2');
-                    }
-                    if (this.chatToggle) {
-                        this.chatToggle.textContent = '▲';
-                    }
-                }, 100);
+                setTimeout(() => this.setupThreeLevels(), 100);
             }
             
             setupThreeLevels() {
                 const header = this.container.querySelector('.chat-header');
                 if (!header) return;
                 
-                let actionsDiv = header.querySelector('.chat-header-actions');
-                if (!actionsDiv) {
-                    actionsDiv = document.createElement('div');
-                    actionsDiv.className = 'chat-header-actions';
+                // Esconde toggle original
+                const oldToggle = this.container.querySelector('.chat-toggle');
+                if (oldToggle) oldToggle.style.display = 'none';
+                
+                // Cria botões
+                const actionsDiv = document.createElement('div');
+                actionsDiv.className = 'chat-header-actions';
+                
+                const fsBtn = document.createElement('button');
+                fsBtn.className = 'fullscreen-toggle';
+                fsBtn.innerHTML = '⛶';
+                fsBtn.title = 'Tela cheia';
+                
+                const toggleBtn = document.createElement('button');
+                toggleBtn.className = 'chat-toggle';
+                toggleBtn.innerHTML = '▲';
+                toggleBtn.title = 'Expandir';
+                
+                actionsDiv.appendChild(fsBtn);
+                actionsDiv.appendChild(toggleBtn);
+                header.appendChild(actionsDiv);
+                
+                let level = 0;
+                
+                const setLevel = (newLevel) => {
+                    level = newLevel;
+                    this.container.classList.remove('level-0', 'level-1', 'level-2');
+                    this.container.classList.add(`level-${level}`);
                     
-                    const fsBtn = document.createElement('button');
-                    fsBtn.className = 'fullscreen-toggle';
-                    fsBtn.innerHTML = '⛶';
-                    fsBtn.title = 'Tela inteira';
-                    fsBtn.onclick = (e) => {
-                        e.stopPropagation();
-                        this.nextLevel();
-                    };
-                    actionsDiv.appendChild(fsBtn);
+                    toggleBtn.innerHTML = level === 0 ? '▲' : '▼';
+                    toggleBtn.title = level === 0 ? 'Expandir' : 'Minimizar';
+                    fsBtn.innerHTML = level === 2 ? '✖' : '⛶';
+                    fsBtn.title = level === 2 ? 'Sair da tela cheia' : 'Tela cheia';
                     
-                    const toggleBtn = document.createElement('button');
-                    toggleBtn.className = 'chat-toggle';
-                    toggleBtn.innerHTML = '▲';
-                    toggleBtn.onclick = (e) => {
-                        e.stopPropagation();
-                        this.toggle();
-                    };
-                    actionsDiv.appendChild(toggleBtn);
-                    
-                    header.appendChild(actionsDiv);
-                }
+                    if (level === 2) {
+                        if (!this._escHandler) {
+                            this._escHandler = (e) => {
+                                if (e.key === 'Escape') setLevel(1);
+                            };
+                            document.addEventListener('keydown', this._escHandler);
+                        }
+                    } else {
+                        if (this._escHandler) {
+                            document.removeEventListener('keydown', this._escHandler);
+                            this._escHandler = null;
+                        }
+                    }
+                };
+                
+                fsBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    setLevel(level === 2 ? 1 : 2);
+                };
+                
+                toggleBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    setLevel(level === 0 ? 1 : 0);
+                };
                 
                 header.onclick = (e) => {
-                    if (e.target.closest('.fullscreen-toggle')) return;
-                    if (e.target.closest('.chat-toggle')) return;
-                    this.toggle();
+                    if (e.target.closest('button')) return;
+                    setLevel(level === 0 ? 1 : 0);
                 };
-            }
-            
-            nextLevel() {
-                this.chatLevel = (this.chatLevel + 1) % 3;
-                this.updateUI();
-            }
-            
-            toggle() {
-                if (this.chatLevel === 2) {
-                    this.chatLevel = 1;
-                } else if (this.chatLevel === 1) {
-                    this.chatLevel = 0;
-                } else {
-                    this.chatLevel = 1;
-                }
-                this.updateUI();
-            }
-            
-            updateUI() {
-                this.container.classList.remove('level-0', 'level-1', 'level-2');
-                this.container.classList.add(`level-${this.chatLevel}`);
                 
-                const toggleBtn = this.container.querySelector('.chat-toggle');
-                const fsBtn = this.container.querySelector('.fullscreen-toggle');
-                
-                if (toggleBtn) {
-                    toggleBtn.innerHTML = this.chatLevel === 0 ? '▲' : '▼';
-                }
-                
-                if (fsBtn) {
-                    fsBtn.innerHTML = this.chatLevel === 2 ? '✖' : '⛶';
-                    fsBtn.title = this.chatLevel === 2 ? 'Sair da tela inteira' : 'Tela inteira';
-                }
-                
-                if (this.chatLevel === 2) {
-                    this.escHandler = (e) => {
-                        if (e.key === 'Escape') {
-                            this.chatLevel = 1;
-                            this.updateUI();
-                        }
-                    };
-                    document.addEventListener('keydown', this.escHandler);
-                } else if (this.escHandler) {
-                    document.removeEventListener('keydown', this.escHandler);
-                    delete this.escHandler;
-                }
+                setLevel(0);
             }
             
             addAttachButton() {
@@ -190,11 +489,10 @@
                 const attachBtn = document.createElement('button');
                 attachBtn.className = 'attach-btn';
                 attachBtn.innerHTML = '📎';
-                attachBtn.title = 'Enviar arquivo (imagem, PDF, DOC, etc)';
+                attachBtn.title = 'Enviar arquivo';
                 
                 const fileInput = document.createElement('input');
                 fileInput.type = 'file';
-                fileInput.accept = '*/*';
                 fileInput.style.display = 'none';
                 
                 attachBtn.onclick = () => fileInput.click();
@@ -215,15 +513,18 @@
                 const fileType = file.type;
                 const fileName = file.name;
                 const fileSize = this.formatFileSize(file.size);
-                const fileExtension = fileName.split('.').pop().toUpperCase();
                 
                 if (fileType.startsWith('image/')) {
                     const reader = new FileReader();
-                    reader.onload = (ev) => this.addImageMessage(ev.target.result, fileName, fileSize);
+                    reader.onload = (ev) => {
+                        this.addImageMessage(ev.target.result, fileName, fileSize);
+                    };
                     reader.readAsDataURL(file);
                 } else {
                     const reader = new FileReader();
-                    reader.onload = (ev) => this.addFileMessage(ev.target.result, fileName, fileSize, fileExtension);
+                    reader.onload = (ev) => {
+                        this.addFileMessage(ev.target.result, fileName, fileSize);
+                    };
                     reader.readAsDataURL(file);
                 }
             }
@@ -236,21 +537,11 @@
                 return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
             }
             
-            getFileIcon(extension) {
-                const icons = {
-                    'PDF': '📄', 'DOC': '📃', 'DOCX': '📃',
-                    'XLS': '📊', 'XLSX': '📊', 'PPT': '📽️', 'PPTX': '📽️',
-                    'TXT': '📝', 'ZIP': '🗜️', 'RAR': '🗜️',
-                    'MP3': '🎵', 'MP4': '🎬', 'JPG': '🖼️', 'PNG': '🖼️',
-                    'GIF': '🎞️', 'JSON': '🔧', 'XML': '🔧', 'HTML': '🌐'
-                };
-                return icons[extension] || '📎';
-            }
-            
             addImageMessage(imageUrl, fileName, fileSize) {
                 const messageDiv = document.createElement('div');
                 messageDiv.className = 'message user';
                 const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                
                 messageDiv.innerHTML = `
                     <div class="message-avatar">👤</div>
                     <div class="message-content">
@@ -261,25 +552,20 @@
                 `;
                 this.messagesContainer.appendChild(messageDiv);
                 this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
-                
-                const messages = this.getMessages ? this.getMessages() : [];
-                if (this.saveMessages) {
-                    messages.push({ text: `🖼️ ${fileName} (${fileSize})`, image: imageUrl, isUser: true, timestamp: Date.now() });
-                    this.saveMessages(messages);
-                }
             }
             
-            addFileMessage(fileData, fileName, fileSize, extension) {
+            addFileMessage(fileData, fileName, fileSize) {
+                const extension = fileName.split('.').pop().toUpperCase();
                 const messageDiv = document.createElement('div');
                 messageDiv.className = 'message user';
                 const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-                const fileIcon = this.getFileIcon(extension);
+                
                 messageDiv.innerHTML = `
                     <div class="message-avatar">👤</div>
                     <div class="message-content">
                         <div>📎 Arquivo anexado</div>
                         <div class="chat-file" onclick="window.open('${fileData}')">
-                            <div class="file-icon">${fileIcon}</div>
+                            <div class="file-icon">📄</div>
                             <div class="file-info">
                                 <div class="file-name">${fileName}</div>
                                 <div class="file-size">${fileSize}</div>
@@ -291,131 +577,11 @@
                 `;
                 this.messagesContainer.appendChild(messageDiv);
                 this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
-                
-                const messages = this.getMessages ? this.getMessages() : [];
-                if (this.saveMessages) {
-                    messages.push({ text: `📎 ${fileName} (${fileSize})`, fileData: fileData, isUser: true, timestamp: Date.now() });
-                    this.saveMessages(messages);
-                }
-            }
-            
-            addMessage(text, isUser, image = null) {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = isUser ? 'message user' : 'message asura';
-                const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-                
-                if (!isUser) {
-                    messageDiv.innerHTML = `
-                        <div class="message-avatar">${this.config.icon}</div>
-                        <div class="message-content">
-                            <div>${text}</div>
-                            <div class="message-time">${time}</div>
-                        </div>
-                    `;
-                } else {
-                    messageDiv.innerHTML = `
-                        <div class="message-avatar">👤</div>
-                        <div class="message-content">
-                            <div>${text}</div>
-                            <div class="message-time">${time}</div>
-                        </div>
-                    `;
-                }
-                
-                this.messagesContainer.appendChild(messageDiv);
-                this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
-                
-                const messages = this.getMessages();
-                messages.push({ text, image, isUser, timestamp: Date.now() });
-                this.saveMessages(messages);
-            }
-            
-            getMessages() {
-                const stored = localStorage.getItem(`chat_messages_${this.config.name}`);
-                return stored ? JSON.parse(stored) : [];
-            }
-            
-            saveMessages(messages) {
-                if (messages.length > 100) messages.shift();
-                localStorage.setItem(`chat_messages_${this.config.name}`, JSON.stringify(messages));
-            }
-            
-            loadMessages() {
-                const messages = this.getMessages();
-                if (messages.length === 0) return;
-                
-                messages.forEach(msg => {
-                    const messageDiv = document.createElement('div');
-                    messageDiv.className = msg.isUser ? 'message user' : 'message asura';
-                    const time = new Date(msg.timestamp).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-                    
-                    if (!msg.isUser) {
-                        messageDiv.innerHTML = `
-                            <div class="message-avatar">${this.config.icon}</div>
-                            <div class="message-content">
-                                <div>${msg.text}</div>
-                                <div class="message-time">${time}</div>
-                            </div>
-                        `;
-                    } else {
-                        messageDiv.innerHTML = `
-                            <div class="message-avatar">👤</div>
-                            <div class="message-content">
-                                <div>${msg.text}</div>
-                                <div class="message-time">${time}</div>
-                            </div>
-                        `;
-                    }
-                    
-                    if (msg.image) {
-                        const img = document.createElement('img');
-                        img.src = msg.image;
-                        img.className = 'chat-image';
-                        img.onclick = () => window.open(msg.image);
-                        messageDiv.querySelector('.message-content').appendChild(img);
-                    }
-                    
-                    this.messagesContainer.appendChild(messageDiv);
-                });
-                this.scrollToBottom();
-            }
-            
-            send() {
-                const text = this.input.value.trim();
-                if (!text) return;
-                
-                this.addMessage(text, true);
-                this.input.value = '';
-                
-                setTimeout(() => {
-                    const response = this.config.getResponse(text);
-                    this.addMessage(response, false);
-                    if (this.onSpeak) this.onSpeak(response);
-                }, 500);
-            }
-            
-            setupEventListeners() {
-                if (this.sendBtn) {
-                    this.sendBtn.addEventListener('click', () => this.send());
-                }
-                if (this.input) {
-                    this.input.addEventListener('keypress', (e) => {
-                        if (e.key === 'Enter') this.send();
-                    });
-                }
-            }
-            
-            scrollToBottom() {
-                if (this.messagesContainer) {
-                    this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
-                }
             }
         }
         
-        // =========================
-        // CONFIGURAÇÃO ASTREIA
-        // =========================
-        const astreiaConfig = {
+        // CONFIGURAÇÃO DA ASTREIA
+        const config = {
             name: 'ASTREIA',
             title: '✦ REINO CELESTIAL • SEGURANÇA ✦',
             color: '#287bff',
@@ -444,28 +610,37 @@
             }
         };
         
-        // =========================
-        // BOTÃO PORTAL
-        // =========================
-        document.getElementById('portalPlannerBtn').addEventListener('click', () => {
+        // ============================================
+        // PORTAL PLANNER
+        // ============================================
+        const portalPlannerBtn = document.getElementById('portalPlannerBtn');
+        
+        function openPortalPlanner() {
             localStorage.setItem('lastAsura', 'astreia');
             document.body.classList.add('transition-out');
-            const flash = document.createElement('div');
-            flash.style.cssText = `position:fixed;inset:0;background:radial-gradient(circle,#287bff,transparent);opacity:0;transition:.5s;z-index:10000;`;
-            document.body.appendChild(flash);
+            const flashOverlay = document.createElement('div');
+            flashOverlay.style.cssText = `position:fixed;inset:0;background:radial-gradient(circle,#287bff,transparent);opacity:0;transition:opacity 0.5s;z-index:10000;pointer-events:none;`;
+            document.body.appendChild(flashOverlay);
             requestAnimationFrame(() => {
-                flash.style.opacity = '0.8';
+                flashOverlay.style.opacity = '0.8';
                 setTimeout(() => window.location.href = '../shared/portals/portal-system.html?asura=astreia', 400);
             });
-        });
+        }
         
-        // =========================
-        // BOTÃO VOLTAR
-        // =========================
+        if (portalPlannerBtn) {
+            portalPlannerBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                openPortalPlanner();
+            });
+        }
+        
+        // ============================================
+        // VOLTAR AO GRIMÓRIO
+        // ============================================
         function voltarAoGrimorio() {
             document.body.classList.add('transition-out');
             const flash = document.createElement('div');
-            flash.style.cssText = `position:fixed;inset:0;background:radial-gradient(circle,${astreiaConfig.color},transparent);opacity:0;transition:.4s;z-index:100000;`;
+            flash.style.cssText = `position:fixed;inset:0;background:radial-gradient(circle,${config.color},transparent);opacity:0;transition:opacity 0.4s;z-index:100000;pointer-events:none;`;
             document.body.appendChild(flash);
             requestAnimationFrame(() => {
                 flash.style.opacity = '0.8';
@@ -473,25 +648,23 @@
             });
         }
         
-        document.getElementById('backButton').addEventListener('click', voltarAoGrimorio);
-        
-        window.addEventListener('popstate', (e) => {
-            e.preventDefault();
-            history.pushState(null, null, location.href);
+        window.addEventListener('popstate', (event) => {
+            event.preventDefault();
+            history.pushState(null, null, window.location.href);
             voltarAoGrimorio();
         });
-        history.pushState(null, null, location.href);
+        history.pushState(null, null, window.location.href);
         
-        // =========================
-        // SETUP 3D ASTREIA
-        // =========================
+        // ============================================
+        // CENA 3D COMPLETA
+        // ============================================
         const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(astreiaConfig.bgColor);
-        scene.fog = new THREE.FogExp2(astreiaConfig.bgColor, 0.008);
+        scene.background = new THREE.Color(config.bgColor);
+        scene.fog = new THREE.FogExp2(config.bgColor, 0.008);
         
         const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(astreiaConfig.cameraPosition.x, astreiaConfig.cameraPosition.y, astreiaConfig.cameraPosition.z);
+        camera.position.set(config.cameraPosition.x, config.cameraPosition.y, config.cameraPosition.z);
         camera.lookAt(0, 0.8, 0);
         
         const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -507,13 +680,14 @@
         controls.enablePan = true;
         controls.target.set(0, 0.8, 0);
         
+        // LUZES
         const ambientLight = new THREE.AmbientLight(0x113366, 0.6);
         scene.add(ambientLight);
         const mainLight = new THREE.DirectionalLight(0xaaccff, 1.1);
         mainLight.position.set(3, 5, 2);
         mainLight.castShadow = true;
         scene.add(mainLight);
-        const fillLight = new THREE.PointLight(astreiaConfig.color, 0.8);
+        const fillLight = new THREE.PointLight(config.color, 0.8);
         fillLight.position.set(1, 2, 2);
         scene.add(fillLight);
         const backLight = new THREE.PointLight(0x44aaff, 0.5);
@@ -523,33 +697,32 @@
         heavenLight.position.set(2, 2.5, 1.5);
         scene.add(heavenLight);
         
-        const gridHelper = new THREE.GridHelper(14, 24, astreiaConfig.color, 0x224488);
+        // CHÃO E CÍRCULO
+        const gridHelper = new THREE.GridHelper(14, 24, config.color, 0x224488);
         gridHelper.position.y = -0.5;
+        gridHelper.material.transparent = true;
+        gridHelper.material.opacity = 0.4;
         scene.add(gridHelper);
         
-        const groundPlane = new THREE.Mesh(
-            new THREE.PlaneGeometry(9, 9),
-            new THREE.MeshStandardMaterial({ color: 0x0a1540, roughness: 0.5, metalness: 0.3, transparent: true, opacity: 0.5 })
-        );
+        const groundPlane = new THREE.Mesh(new THREE.PlaneGeometry(9, 9), new THREE.MeshStandardMaterial({ color: 0x0a1540, roughness: 0.5, metalness: 0.3, transparent: true, opacity: 0.5 }));
         groundPlane.rotation.x = -Math.PI / 2;
         groundPlane.position.y = -0.5;
+        groundPlane.receiveShadow = true;
         scene.add(groundPlane);
         
-        const circleGlow = new THREE.Mesh(
-            new THREE.CircleGeometry(1.3, 32),
-            new THREE.MeshStandardMaterial({ color: astreiaConfig.color, emissive: astreiaConfig.color, emissiveIntensity: 0.4, transparent: true, opacity: 0.5, side: THREE.DoubleSide })
-        );
+        const circleGlow = new THREE.Mesh(new THREE.CircleGeometry(1.3, 32), new THREE.MeshStandardMaterial({ color: config.color, emissive: config.color, emissiveIntensity: 0.4, transparent: true, opacity: 0.5, side: THREE.DoubleSide }));
         circleGlow.rotation.x = -Math.PI / 2;
         circleGlow.position.y = -0.45;
         scene.add(circleGlow);
         
+        // COLUNAS CELESTIAIS
         const pillarMaterial = new THREE.MeshStandardMaterial({ color: 0x2266aa, emissive: 0x1155aa, emissiveIntensity: 0.2, metalness: 0.7 });
         function createPillar(x, z, height = 1.2) {
             const group = new THREE.Group();
             const pillar = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.2, height, 8), pillarMaterial);
             pillar.position.y = 0;
             group.add(pillar);
-            const topRing = new THREE.Mesh(new THREE.TorusGeometry(0.22, 0.03, 16, 32), new THREE.MeshStandardMaterial({ color: 0x44aaff, emissive: astreiaConfig.color, emissiveIntensity: 0.3 }));
+            const topRing = new THREE.Mesh(new THREE.TorusGeometry(0.22, 0.03, 16, 32), new THREE.MeshStandardMaterial({ color: 0x44aaff, emissive: config.color, emissiveIntensity: 0.3 }));
             topRing.position.y = height / 2;
             topRing.rotation.x = Math.PI / 2;
             group.add(topRing);
@@ -557,29 +730,33 @@
             return group;
         }
         const pillarPositions = [[-2.8,-2.5],[2.8,-2.5],[-2.8,2.5],[2.8,2.5],[-2,-3.2],[2,-3.2],[-3.2,-1.8],[3.2,-1.8],[-3.2,1.8],[3.2,1.8],[-2,3.2],[2,3.2]];
-        pillarPositions.forEach(pos => { const pillar = createPillar(pos[0], pos[1], 1.0 + Math.random() * 0.3); scene.add(pillar); });
+        pillarPositions.forEach(pos => { scene.add(createPillar(pos[0], pos[1], 1.0 + Math.random() * 0.3)); });
         
+        // PARTÍCULAS ESTRELARES
         const particleCount = 1800;
         const particleGeometry = new THREE.BufferGeometry();
         const particlePositions = new Float32Array(particleCount * 3);
-        const particleColors = new Float32Array(particleCount * 3);
         for (let i = 0; i < particleCount; i++) {
             particlePositions[i*3] = (Math.random() - 0.5) * 15;
             particlePositions[i*3+1] = Math.random() * 5;
             particlePositions[i*3+2] = (Math.random() - 0.5) * 13;
+        }
+        particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+        const particleColors = new Float32Array(particleCount * 3);
+        for (let i = 0; i < particleCount; i++) {
             const type = Math.random();
             if (type < 0.6) { particleColors[i*3]=0.1+Math.random()*0.3; particleColors[i*3+1]=0.3+Math.random()*0.5; particleColors[i*3+2]=0.7+Math.random()*0.3; }
             else if (type < 0.8) { particleColors[i*3]=0.8+Math.random()*0.2; particleColors[i*3+1]=0.7+Math.random()*0.3; particleColors[i*3+2]=0.3+Math.random()*0.2; }
             else { particleColors[i*3]=0.9; particleColors[i*3+1]=0.9; particleColors[i*3+2]=1.0; }
         }
-        particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
         particleGeometry.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
         const particleMaterial = new THREE.PointsMaterial({ size: 0.04, vertexColors: true, transparent: true, opacity: 0.5 });
         const particles = new THREE.Points(particleGeometry, particleMaterial);
         scene.add(particles);
         
+        // ANÉIS DE PROTEÇÃO
         const ringGeometry = new THREE.TorusGeometry(1.2, 0.04, 64, 200);
-        const ringMaterial = new THREE.MeshStandardMaterial({ color: astreiaConfig.color, emissive: astreiaConfig.color, emissiveIntensity: 0.5 });
+        const ringMaterial = new THREE.MeshStandardMaterial({ color: config.color, emissive: config.color, emissiveIntensity: 0.5 });
         const ring = new THREE.Mesh(ringGeometry, ringMaterial);
         ring.position.y = 0.15;
         ring.rotation.x = Math.PI / 2;
@@ -592,12 +769,14 @@
         ring2.rotation.x = Math.PI / 2 + 0.3;
         scene.add(ring2);
         
+        // ESCUDO DE PROTEÇÃO
         const shieldGeometry = new THREE.SphereGeometry(2.2, 32, 32);
-        const shieldMaterial = new THREE.MeshStandardMaterial({ color: astreiaConfig.color, emissive: 0x1155cc, emissiveIntensity: 0.1, transparent: true, opacity: 0.08, wireframe: true });
+        const shieldMaterial = new THREE.MeshStandardMaterial({ color: config.color, emissive: 0x1155cc, emissiveIntensity: 0.1, transparent: true, opacity: 0.08, wireframe: true });
         const shield = new THREE.Mesh(shieldGeometry, shieldMaterial);
         shield.position.y = 0.5;
         scene.add(shield);
         
+        // CÂMERAS FLUTUANTES
         function createSecurityCamera(x, z, yOffset = 0.8) {
             const group = new THREE.Group();
             const body = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.15, 0.2), new THREE.MeshStandardMaterial({ color: 0x2288cc, metalness: 0.8 }));
@@ -612,26 +791,26 @@
             return group;
         }
         const cameraPositions = [[-1.5,1.2,1.8],[1.5,1.2,1.8],[-1.8,1.2,-1.5],[1.8,1.2,-1.5],[-2.2,1.5,0.5],[2.2,1.5,0.5],[0.5,1.5,-2.2],[-0.5,1.5,-2.2]];
-        cameraPositions.forEach(pos => { const cam = createSecurityCamera(pos[0], pos[2], pos[1]); scene.add(cam); });
+        cameraPositions.forEach(pos => { scene.add(createSecurityCamera(pos[0], pos[2], pos[1])); });
         
+        // MODELO 3D DA ASTREIA
         const loader = new GLTFLoader();
         let model = null;
         let mixer = null;
         
-        loader.load(astreiaConfig.modelPath, (gltf) => {
+        loader.load(config.modelPath, (gltf) => {
             model = gltf.scene;
-            model.position.set(0, astreiaConfig.modelPositionY, 0);
-            model.scale.set(astreiaConfig.modelScale, astreiaConfig.modelScale, astreiaConfig.modelScale);
-            model.traverse((node) => { if (node.isMesh) { node.castShadow = true; } });
+            model.position.set(0, config.modelPositionY, 0);
+            model.scale.set(config.modelScale, config.modelScale, config.modelScale);
+            model.traverse((node) => { if (node.isMesh) node.castShadow = true; });
             scene.add(model);
             if (gltf.animations && gltf.animations.length > 0) {
                 mixer = new THREE.AnimationMixer(model);
                 gltf.animations.forEach(clip => mixer.clipAction(clip).play());
-                console.log(`✅ ${gltf.animations.length} animação(ões) ativada(s)`);
             }
-            console.log('✅ Modelo da ASTREIA carregado');
         });
         
+        // ANIMAÇÃO
         let time = 0;
         let deltaTime = 0.016;
         let lastTime = performance.now();
@@ -647,20 +826,14 @@
         function animate() {
             requestAnimationFrame(animate);
             time += 0.008;
-            
             if (mixer) mixer.update(deltaTime);
-            
             particles.rotation.y = time * 0.05;
             particles.rotation.x = Math.sin(time * 0.15) * 0.1;
-            
             ring.rotation.z = time * 0.3;
             ring2.rotation.z = -time * 0.25;
-            
             shield.material.emissiveIntensity = 0.08 + Math.sin(time * 2) * 0.04;
-            
             fillLight.intensity = 0.6 + Math.sin(time * 2.5) * 0.2;
             circleGlow.material.emissiveIntensity = 0.25 + Math.sin(time * 2) * 0.15;
-            
             controls.update();
             renderer.render(scene, camera);
         }
@@ -672,38 +845,49 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
         
-        initUI(astreiaConfig);
+        // ============================================
+        // INICIALIZAÇÃO UI, CHAT E VOZ
+        // ============================================
+        initUI(config);
         
-        const chat = new EnhancedChatSystem('chatContainer', astreiaConfig, (response) => {
+        const chat = new EnhancedChatSystem('chatContainer', config, (response) => {
             if (voice?.isJarvisActive?.()) voice.speak(response);
         });
         
         const voiceButtonElem = document.getElementById('voiceButton');
         let voice = null;
         if (voiceButtonElem) {
-            voice = new VoiceAssistant(voiceButtonElem, (text) => { document.getElementById('chatInput').value = text; chat.send(); }, null, { asuraName: astreiaConfig.name, continuous: true });
+            voice = new VoiceAssistant(voiceButtonElem, (text) => { 
+                document.getElementById('chatInput').value = text; 
+                chat.send(); 
+            }, null, { asuraName: config.name, continuous: true });
         }
         
         setTimeout(() => {
-            chat.addMessage(astreiaConfig.welcomeMessage, false);
+            chat.addMessage(config.welcomeMessage, false);
             setTimeout(() => {
-                chat.addMessage("🎤 Dica: Clique no ícone 👁️ no topo para ativar o MODO JARVIS. Vou ficar sempre ouvindo!", false);
-                chat.addMessage("📎 Dica: Clique no ícone 📎 para enviar qualquer arquivo (imagem, PDF, DOC, etc)!", false);
-                chat.addMessage("🗺️ Dica: Clique no botão do mapa 🗺️ no TOPO ESQUERDO para acessar o PORTAL PLANNER!", false);
+                chat.addMessage("🎤 Dica: Clique no ícone 👁️ no topo para ativar o MODO JARVIS.", false);
+                chat.addMessage("📎 Dica: Clique no ícone 📎 para enviar qualquer arquivo.", false);
+                chat.addMessage("🗺️ Dica: Clique no botão 🗺️ no TOPO ESQUERDO para acessar o PORTAL PLANNER!", false);
+                chat.addMessage("🖥️ Dica: Clique em ⛶ para tela cheia! ESC para sair.", false);
             }, 2000);
         }, 500);
         
         const portalOverlay = document.getElementById('portalOverlay');
-        portalOverlay.style.setProperty('--asura-color', astreiaConfig.color);
-        setTimeout(() => {
-            portalOverlay.style.opacity = '0.6';
-            setTimeout(() => {
-                portalOverlay.style.opacity = '0';
-                setTimeout(() => portalOverlay.style.display = 'none', 800);
-            }, 500);
-        }, 50);
+        if (portalOverlay) {
+            portalOverlay.style.setProperty('--asura-color', config.color);
+            setTimeout(() => { 
+                portalOverlay.style.opacity = '0.6'; 
+                setTimeout(() => { 
+                    portalOverlay.style.opacity = '0'; 
+                    setTimeout(() => { 
+                        portalOverlay.style.display = 'none'; 
+                    }, 800); 
+                }, 500); 
+            }, 50);
+        }
         
-        console.log('🟢 ASTREIA carregada com CHAT DE 3 NÍVEIS CORRIGIDO!');
+        console.log('✅ ASTREIA carregada com 3 NÍVEIS no chat e mundo 3D completo!');
     </script>
 </body>
 </html>
