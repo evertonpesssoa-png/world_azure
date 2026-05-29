@@ -1,5 +1,5 @@
 /* =========================
-   ÍCONES DO TOPO (VOLTAR, PERFIL, JARVIS)
+   TOP ICONS - BOTÕES FLUTUANTES
    ========================= */
 
 .top-icons {
@@ -16,69 +16,151 @@
 }
 
 .top-icon {
-    width: 48px;
-    height: 48px;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--asura-color, #287bff);
+    width: 52px;
+    height: 52px;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(12px);
+    border: 1.5px solid var(--asura-color, #287bff);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
+    font-size: 26px;
+    font-weight: bold;
     cursor: pointer;
     pointer-events: auto;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
     color: var(--asura-color, #287bff);
     box-shadow: 0 0 15px rgba(40, 123, 255, 0.3);
+    position: relative;
 }
 
 .top-icon:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 25px var(--asura-color, #287bff);
+    transform: scale(1.12) rotate(2deg);
+    box-shadow: 0 0 28px var(--asura-color, #287bff);
+    border-color: white;
 }
 
+/* Tooltip */
+.top-icon[data-tooltip]::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.9);
+    color: white;
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    font-weight: normal;
+    letter-spacing: 1px;
+}
+
+.top-icon:hover::before {
+    opacity: 1;
+}
+
+/* =========================
+   BOTÃO DE VOZ (JARVIS)
+   ========================= */
 .voice-icon {
     position: relative;
 }
 
-.voice-icon.active {
-    animation: voicePulse 1.5s infinite;
-    box-shadow: 0 0 20px var(--asura-color, #287bff);
-}
-
-@keyframes voicePulse {
-    0% { box-shadow: 0 0 0 0 rgba(40, 123, 255, 0.7); }
-    70% { box-shadow: 0 0 0 15px rgba(40, 123, 255, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(40, 123, 255, 0); }
-}
-
 .brain-icon, .mic-icon {
     position: absolute;
-    transition: opacity 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .voice-icon .mic-icon {
     opacity: 0;
+    transform: scale(0.8);
 }
 
 .voice-icon.active .brain-icon {
     opacity: 0;
+    transform: scale(0.8);
 }
 
 .voice-icon.active .mic-icon {
     opacity: 1;
+    transform: scale(1);
 }
 
+/* Ondas cerebrais (efeito Jarvis) */
+.mental-wave {
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 2px solid var(--asura-color, #287bff);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.voice-icon.active .mental-wave {
+    animation: mentalPulse 1.5s infinite;
+}
+
+@keyframes mentalPulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.8;
+        border-width: 2px;
+    }
+    100% {
+        transform: scale(1.4);
+        opacity: 0;
+        border-width: 1px;
+    }
+}
+
+/* Ondas laterais */
+.brain-waves {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 3px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.brain-waves.left { left: -25px; }
+.brain-waves.right { right: -25px; }
+
+.voice-icon.active .brain-waves {
+    opacity: 1;
+}
+
+.brain-waves span {
+    width: 3px;
+    height: 12px;
+    background: var(--asura-color, #287bff);
+    border-radius: 2px;
+    animation: waveBounce 0.6s ease infinite alternate;
+}
+
+.brain-waves span:nth-child(2) { animation-delay: 0.1s; height: 16px; }
+.brain-waves span:nth-child(3) { animation-delay: 0.2s; height: 20px; }
+.brain-waves span:nth-child(4) { animation-delay: 0.3s; height: 16px; }
+.brain-waves span:nth-child(5) { animation-delay: 0.4s; height: 12px; }
+
+@keyframes waveBounce {
+    from { transform: scaleY(0.6); opacity: 0.5; }
+    to { transform: scaleY(1.2); opacity: 1; }
+}
+
+/* =========================
+   RESPONSIVO
+   ========================= */
 @media (max-width: 768px) {
-    .top-icons {
-        top: 12px;
-        padding: 0 12px;
-    }
-    
-    .top-icon {
-        width: 42px;
-        height: 42px;
-        font-size: 20px;
-    }
+    .top-icons { padding: 0 12px; top: 12px; }
+    .top-icon { width: 44px; height: 44px; font-size: 22px; }
+    .brain-waves { display: none; }
+    .top-icon[data-tooltip]::before { display: none; }
 }
