@@ -1,3 +1,7 @@
+/* =========================
+   TOP ICONS - DESIGN ORIGINAL
+   ========================= */
+
 .top-icons {
     position: fixed;
     top: 20px;
@@ -5,6 +9,7 @@
     display: flex;
     gap: 15px;
     z-index: 1000;
+    pointer-events: none;
 }
 
 .top-icon {
@@ -12,16 +17,28 @@
     height: 52px;
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(10px);
-    border: 1.5px solid #287bff;
+    border: 1.5px solid var(--asura-color, #287bff);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 24px;
     cursor: pointer;
-    color: #287bff;
+    pointer-events: auto;
+    transition: all 0.3s ease;
+    color: var(--asura-color, #287bff);
+    position: relative;
 }
 
+.top-icon:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px var(--asura-color, #287bff);
+    border-color: white;
+}
+
+/* =========================
+   BOTÃO DO PORTAL (FORA DO TOP-ICONS)
+   ========================= */
 .portal-planner-btn {
     position: fixed;
     top: 20px;
@@ -30,7 +47,7 @@
     height: 52px;
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(10px);
-    border: 1.5px solid #287bff;
+    border: 1.5px solid var(--asura-color, #287bff);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -38,21 +55,128 @@
     font-size: 26px;
     cursor: pointer;
     z-index: 1000;
-    color: #287bff;
+    transition: all 0.3s ease;
+    color: var(--asura-color, #287bff);
+}
+
+.portal-planner-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px var(--asura-color, #287bff);
+}
+
+/* =========================
+   VOICE ICON - JARVIS
+   ========================= */
+.voice-icon {
+    position: relative;
 }
 
 .brain-icon, .mic-icon {
     position: absolute;
+    transition: all 0.3s ease;
 }
 
 .voice-icon .mic-icon {
     opacity: 0;
+    transform: scale(0.8);
 }
 
 .voice-icon.active .brain-icon {
     opacity: 0;
+    transform: scale(0.8);
 }
 
 .voice-icon.active .mic-icon {
     opacity: 1;
+    transform: scale(1);
+}
+
+/* Efeito de pulso (onda cerebral) */
+.mental-wave {
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 2px solid var(--asura-color, #287bff);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.voice-icon.active .mental-wave {
+    animation: mentalPulse 1.5s infinite;
+}
+
+@keyframes mentalPulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.8;
+        border-width: 2px;
+    }
+    100% {
+        transform: scale(1.4);
+        opacity: 0;
+        border-width: 1px;
+    }
+}
+
+/* Ondas laterais estilo Jarvis */
+.brain-waves {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 3px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.brain-waves.left { left: -25px; }
+.brain-waves.right { right: -25px; }
+
+.voice-icon.active .brain-waves {
+    opacity: 1;
+}
+
+.brain-waves span {
+    width: 3px;
+    height: 12px;
+    background: var(--asura-color, #287bff);
+    border-radius: 2px;
+    animation: waveBounce 0.6s ease infinite alternate;
+}
+
+.brain-waves span:nth-child(1) { animation-delay: 0s; height: 12px; }
+.brain-waves span:nth-child(2) { animation-delay: 0.1s; height: 16px; }
+.brain-waves span:nth-child(3) { animation-delay: 0.2s; height: 20px; }
+.brain-waves span:nth-child(4) { animation-delay: 0.3s; height: 16px; }
+.brain-waves span:nth-child(5) { animation-delay: 0.4s; height: 12px; }
+
+@keyframes waveBounce {
+    from { transform: scaleY(0.5); opacity: 0.4; }
+    to { transform: scaleY(1.2); opacity: 1; }
+}
+
+/* =========================
+   RESPONSIVO
+   ========================= */
+@media (max-width: 768px) {
+    .top-icons {
+        top: 12px;
+        right: 12px;
+        gap: 10px;
+    }
+    .top-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 20px;
+    }
+    .portal-planner-btn {
+        top: 12px;
+        left: 12px;
+        width: 44px;
+        height: 44px;
+        font-size: 22px;
+    }
+    .brain-waves {
+        display: none;
+    }
 }
