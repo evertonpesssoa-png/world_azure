@@ -16,6 +16,11 @@ import { loadStatueModel } from "./modules/statue.js";
 import { loadBenchModel } from "./modules/bench.js";
 import { loadCeilingLampModel } from "./modules/ceilingLamp.js";
 
+import {
+  setupPlayButton,
+  setupOverlayClose
+} from "./modules/menu.js";
+
 const { camera, controls, renderer } = setupScene();
 
 setupAudio(camera);
@@ -23,6 +28,7 @@ setupAudio(camera);
 const textureLoader = new THREE.TextureLoader();
 
 const walls = createWalls(scene, textureLoader);
+
 setupFloor(scene);
 createCeiling(scene, textureLoader);
 
@@ -37,7 +43,11 @@ addObjectsToScene(scene, paintings);
 
 setupEventListeners(controls);
 
-clickHandling(renderer, camera, paintings);
+clickHandling(
+  renderer,
+  camera,
+  paintings
+);
 
 setupRendering(
   scene,
@@ -53,5 +63,16 @@ loadBenchModel(scene);
 loadCeilingLampModel(scene);
 
 setupVR(renderer);
+
+// =========================
+// MENU E BOTÕES
+// =========================
+
+window.addEventListener("DOMContentLoaded", () => {
+  setupPlayButton(controls);
+  setupOverlayClose();
+
+  console.log("✅ Botões configurados");
+});
 
 console.log("✅ main.js carregado");
