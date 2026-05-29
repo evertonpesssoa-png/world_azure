@@ -9,7 +9,7 @@ import { createBoundingBoxes } from "./modules/boundingBox.js";
 import { setupRendering } from "./modules/rendering.js";
 import { setupEventListeners } from "./modules/eventListeners.js";
 import { addObjectsToScene } from "./modules/sceneHelpers.js";
-import { setupPlayButton } from "./modules/menu.js";
+import { setupPlayButton, startExperience, hideMenu, showMenu } from "./modules/menu.js";
 import { setupAudio } from "./modules/audioGuide.js";
 import { clickHandling } from "./modules/clickHandling.js";
 import { setupVR } from "./modules/VRSupport.js";
@@ -34,7 +34,102 @@ createBoundingBoxes(paintings);
 
 addObjectsToScene(scene, paintings);
 
-setupPlayButton(controls);
+// ============================================================
+// CORREÇÃO DO BOTÃO PLAY - SOLUÇÃO DEFINITIVA
+// ============================================================
+
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+const isTablet = /iPad|Android(?!.*Mobile)/i.test(navigator.userAgent) || (window.innerWidth >= 768 && window.innerWidth <= 1024);
+
+// Função para iniciar a experiência (forçada)
+function forceStartExperience() {
+  console.log("🎮 Forçando início da experiência...");
+  const menu = document.getElementById('menu');
+  if (menu) {
+    menu.style.display = 'none';
+    menu.style.visibility = 'hidden';
+    menu.style.pointerEvents = 'none';
+  }
+  
+  if (!isMobile && controls && controls.lock) {
+    try {
+      controls.lock();
+    } catch(e) { console.warn(e); }
+  }
+  
+  if (renderer && renderer.domElement) {
+    renderer.domElement.focus();
+  }
+}
+
+// Configurar botão PLAY diretamente (sem depender de módulos)
+document.addEventListener('DOMContentLoaded', () => {
+  console.log("🔧 Configurando botões...");
+  
+  // Botão PLAY
+  const playBtn = document.getElementById('play_button');
+  if (playBtn) {
+    // Remover listeners antigos
+    const newPlayBtn = playBtn.cloneNode(true);
+    playBtn.parentNode.replaceChild(newPlayBtn, playBtn);
+    
+    const handlePlay = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log("✅ PLAY clicado!");
+      forceStartExperience();
+    };
+    
+    newPlayBtn.addEventListener('click', handlePlay);
+    newPlayBtn.addEventListener('touchstart', handlePlay, { passive: false });
+    console.log("✅ Botão PLAY configurado");
+  } else {
+    console.warn("⚠️ Botão PLAY não encontrado!");
+  }
+  
+  // Botão ABOUT
+  const aboutBtn = document.getElementById('about_button');
+  if (aboutBtn) {
+    const newAboutBtn = aboutBtn.cloneNode(true);
+    aboutBtn.parentNode.replaceChild(newAboutBtn, aboutBtn);
+    
+    const handleAbout = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log("ℹ️ ABOUT clicado");
+      const overlay = document.getElementById('about-overlay');
+      if (overlay) {
+        overlay.classList.add('active');
+      }
+    };
+    
+    newAboutBtn.addEventListener('click', handleAbout);
+    newAboutBtn.addEventListener('touchstart', handleAbout, { passive: false });
+    console.log("✅ Botão ABOUT configurado");
+  }
+  
+  // Fechar overlay do about
+  const closeAbout = document.getElementById('close-about');
+  if (closeAbout) {
+    const newCloseBtn = closeAbout.cloneNode(true);
+    closeAbout.parentNode.replaceChild(newCloseBtn, closeAbout);
+    newCloseBtn.addEventListener('click', () => {
+      document.getElementById('about-overlay')?.classList.remove('active');
+    });
+    newCloseBtn.addEventListener('touchstart', () => {
+      document.getElementById('about-overlay')?.classList.remove('active');
+    });
+  }
+});
+
+// Chamar setupPlayButton mesmo assim (fallback)
+setTimeout(() => {
+  try {
+    setupPlayButton(controls);
+  } catch(e) {
+    console.warn("setupPlayButton fallback:", e);
+  }
+}, 100);
 
 setupEventListeners(controls);
 
@@ -49,19 +144,13 @@ loadCeilingLampModel(scene);
 setupVR(renderer);
 
 // ============================================================
-// CONTROLES MÓVEIS - VERSÃO QUE FUNCIONA 100%
+// CONTROLES MÓVEIS
 // ============================================================
-
-const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-const isTablet = /iPad|Android(?!.*Mobile)/i.test(navigator.userAgent) || (window.innerWidth >= 768 && window.innerWidth <= 1024);
 
 if (isMobile || isTablet) {
     console.log("📱 Inicializando controles móveis...");
     
-    // Aguardar o DOM estar pronto
     setTimeout(() => {
-        // ========== FUNÇÃO PARA ENVIAR COMANDOS AO THREE.JS ==========
-        // Usa o sistema de eventos diretamente no canvas
         const canvas = renderer?.domElement;
         
         function sendCommand(key, isDown = true) {
@@ -77,7 +166,6 @@ if (isMobile || isTablet) {
             
             const code = keyMap[key] || `Key${key.toUpperCase()}`;
             
-            // Disparar evento no canvas (mais confiável)
             const event = new KeyboardEvent(isDown ? 'keydown' : 'keyup', {
                 key: key,
                 code: code,
@@ -89,12 +177,10 @@ if (isMobile || isTablet) {
             document.dispatchEvent(event);
         }
         
-        // ========== CRIAR BOTÕES HTML COM CSS DIRETO ==========
         function createButton(text, styles, onClick) {
             const btn = document.createElement('button');
             btn.textContent = text;
             
-            // Aplicar estilos diretamente no elemento
             Object.assign(btn.style, {
                 position: 'fixed',
                 zIndex: '10000',
@@ -114,7 +200,6 @@ if (isMobile || isTablet) {
                 ...styles
             });
             
-            // Feedback visual ao toque
             btn.addEventListener('touchstart', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -140,58 +225,45 @@ if (isMobile || isTablet) {
             return btn;
         }
         
-        // ========== CRIAR BOTÕES ==========
-        
-        // Botão W (Andar frente)
+        // Botões de movimento
         createButton('⬆️ W', { bottom: '100px', left: '20px' }, () => {
-            console.log('▶️ Andar frente');
             sendCommand('w', true);
             setTimeout(() => sendCommand('w', false), 150);
         });
         
-        // Botão S (Andar trás)
         createButton('⬇️ S', { bottom: '40px', left: '20px' }, () => {
-            console.log('🔻 Andar trás');
             sendCommand('s', true);
             setTimeout(() => sendCommand('s', false), 150);
         });
         
-        // Botão A (Esquerda)
         createButton('⬅️ A', { bottom: '70px', left: '80px' }, () => {
-            console.log('◀️ Esquerda');
             sendCommand('a', true);
             setTimeout(() => sendCommand('a', false), 100);
         });
         
-        // Botão D (Direita)
         createButton('➡️ D', { bottom: '70px', left: '140px' }, () => {
-            console.log('▶️ Direita');
             sendCommand('d', true);
             setTimeout(() => sendCommand('d', false), 100);
         });
         
-        // Botão MENU (M)
+        // Botão MENU (mostra menu novamente)
         createButton('📋 MENU', { bottom: '20px', right: '20px' }, () => {
-            console.log('📋 Menu');
-            sendCommand('m', true);
-            setTimeout(() => sendCommand('m', false), 50);
-        });
-        
-        // Botão EXPLORAR (Enter)
-        createButton('🎮 EXPLORAR', { bottom: '20px', right: '160px' }, () => {
-            console.log('🎮 Explorar');
-            sendCommand('Enter', true);
-            setTimeout(() => sendCommand('Enter', false), 50);
+            console.log('📋 Abrindo menu');
+            const menu = document.getElementById('menu');
+            if (menu) {
+                menu.style.display = 'flex';
+                menu.style.visibility = 'visible';
+                menu.style.pointerEvents = 'auto';
+            }
         });
         
         // Botão TRAVAR (Espaço)
-        createButton('🔒 TRAVAR', { bottom: '20px', right: '300px' }, () => {
-            console.log('🔒 Travar cursor');
+        createButton('🔒 TRAVAR', { bottom: '20px', right: '160px' }, () => {
             sendCommand(' ', true);
             setTimeout(() => sendCommand(' ', false), 50);
         });
         
-        // ========== CONTROLE DE OLHAR (ARRASTAR) ==========
+        // Controle de olhar (arrastar)
         let touchStartX = 0, touchStartY = 0;
         let isDragging = false;
         
@@ -232,7 +304,7 @@ if (isMobile || isTablet) {
             });
         }
         
-        // ========== DESBLOQUEAR ÁUDIO ==========
+        // Desbloquear áudio
         const unlockAudio = () => {
             const audioElements = document.querySelectorAll('audio');
             audioElements.forEach(audio => {
@@ -246,7 +318,7 @@ if (isMobile || isTablet) {
         };
         document.body.addEventListener('touchstart', unlockAudio);
         
-        // ========== INSTRUÇÃO FLUTUANTE ==========
+        // Instrução flutuante
         const instruction = document.createElement('div');
         instruction.textContent = '👆 Arraste para olhar | Botões para andar';
         instruction.style.cssText = `
@@ -284,5 +356,7 @@ if (isMobile || isTablet) {
         
         console.log("✅ Controles móveis instalados!");
         
-    }, 500); // Delay para garantir que o Three.js carregou
+    }, 500);
 }
+
+console.log("✅ main.js carregado completamente");
