@@ -9,7 +9,6 @@ import { createBoundingBoxes } from "./modules/boundingBox.js";
 import { setupRendering } from "./modules/rendering.js";
 import { setupEventListeners } from "./modules/eventListeners.js";
 import { addObjectsToScene } from "./modules/sceneHelpers.js";
-import { setupPlayButton } from "./modules/menu.js";
 import { setupAudio } from "./modules/audioGuide.js";
 import { clickHandling } from "./modules/clickHandling.js";
 import { setupVR } from "./modules/VRSupport.js";
@@ -34,7 +33,6 @@ createBoundingBoxes(paintings);
 
 addObjectsToScene(scene, paintings);
 
-setupPlayButton(controls);
 setupEventListeners(controls);
 clickHandling(renderer, camera, paintings);
 setupRendering(scene, camera, renderer, paintings, controls, walls);
@@ -45,277 +43,126 @@ loadCeilingLampModel(scene);
 setupVR(renderer);
 
 // ============================================================
-// SOLUÇÃO DEFINITIVA - CONTROLES QUE FUNCIONAM
+// CÓDIGO SIMPLES E DIRETO PARA OS BOTÕES
 // ============================================================
 
-const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+const isMobile = /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-// AGUARDAR O THREE.JS CARREGAR COMPLETAMENTE
-setTimeout(() => {
-  console.log("🚀 Ativando controles de emergência...");
-  
-  const canvas = renderer?.domElement;
-  if (!canvas) {
-    console.error("❌ Canvas não encontrado!");
-    return;
+// Função para esconder o menu
+function esconderMenu() {
+  const menu = document.getElementById('menu');
+  if (menu) {
+    menu.style.display = 'none';
+    console.log("✅ Menu escondido");
   }
+}
+
+// Função para mostrar o menu
+function mostrarMenu() {
+  const menu = document.getElementById('menu');
+  if (menu) {
+    menu.style.display = 'flex';
+    console.log("✅ Menu mostrado");
+  }
+}
+
+// ===== BOTÃO PLAY =====
+const playButton = document.getElementById('play_button');
+if (playButton) {
+  // Remove qualquer listener anterior
+  const novoPlay = playButton.cloneNode(true);
+  playButton.parentNode.replaceChild(novoPlay, playButton);
   
-  // ========== 1. BOTÃO PLAY - FORÇADO ==========
-  const forcePlay = () => {
-    console.log("🎮 PLAY ACIONADO!");
-    const menu = document.getElementById('menu');
-    if (menu) {
-      menu.style.display = 'none';
-      menu.style.visibility = 'hidden';
-    }
-    // Forçar foco no canvas
-    canvas.focus();
-    canvas.click();
+  novoPlay.onclick = function(e) {
+    e.preventDefault();
+    esconderMenu();
   };
   
-  const playBtn = document.getElementById('play_button');
-  if (playBtn) {
-    // Remover todos os listeners antigos
-    const newBtn = playBtn.cloneNode(true);
-    playBtn.parentNode.replaceChild(newBtn, playBtn);
-    newBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      forcePlay();
-    });
-    newBtn.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      forcePlay();
-    });
-    console.log("✅ Botão PLAY conectado");
-  }
-  
-  // ========== 2. MOVIMENTO VIA TOQUE SIMPLES ==========
-  let touchActive = false;
-  let lastTouchX = 0, lastTouchY = 0;
-  
-  // Movimento para frente ao tocar no canvas
-  const moveForward = () => {
-    console.log("🚶 Movendo para frente");
-    // Simular tecla W
-    const keyEvent = new KeyboardEvent('keydown', { key: 'w', code: 'KeyW', bubbles: true });
-    document.dispatchEvent(keyEvent);
-    setTimeout(() => {
-      const keyUp = new KeyboardEvent('keyup', { key: 'w', code: 'KeyW', bubbles: true });
-      document.dispatchEvent(keyUp);
-    }, 100);
+  novoPlay.ontouchstart = function(e) {
+    e.preventDefault();
+    esconderMenu();
   };
   
-  // Arrastar para olhar ao redor
-  canvas.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    touchActive = true;
-    const touch = e.touches[0];
-    lastTouchX = touch.clientX;
-    lastTouchY = touch.clientY;
-    
-    // Primeiro toque = andar para frente (mais intuitivo)
-    moveForward();
-  });
-  
-  canvas.addEventListener('touchmove', (e) => {
-    if (!touchActive) return;
-    e.preventDefault();
-    const touch = e.touches[0];
-    const deltaX = touch.clientX - lastTouchX;
-    const deltaY = touch.clientY - lastTouchY;
-    
-    if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
-      // Simular movimento do mouse para olhar
-      const mouseEvent = new MouseEvent('mousemove', {
-        movementX: deltaX,
-        movementY: deltaY,
-        bubbles: true
-      });
-      canvas.dispatchEvent(mouseEvent);
-    }
-    
-    lastTouchX = touch.clientX;
-    lastTouchY = touch.clientY;
-  });
-  
-  canvas.addEventListener('touchend', (e) => {
-    e.preventDefault();
-    touchActive = false;
-  });
-  
-  // ========== 3. BOTÕES FLUTUANTES ==========
-  function addFloatingButton(text, x, y, onClick) {
-    const btn = document.createElement('button');
-    btn.textContent = text;
-    btn.style.cssText = `
-      position: fixed;
-      bottom: ${y}px;
-      left: ${x}px;
-      z-index: 20000;
-      background: rgba(0,0,0,0.9);
-      border: 2px solid #ff6600;
-      border-radius: 50px;
-      padding: 12px 20px;
-      color: white;
-      font-size: 18px;
-      font-weight: bold;
-      font-family: monospace;
-      cursor: pointer;
-      touch-action: manipulation;
-      box-shadow: 0 0 15px rgba(255,102,0,0.5);
-    `;
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      onClick();
-    });
-    btn.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      onClick();
-    });
-    document.body.appendChild(btn);
-    return btn;
-  }
-  
-  if (isMobile) {
-    // Botão ANDAR (W)
-    addFloatingButton('⬆️ ANDAR', 20, 100, () => {
-      console.log('⬆️ Andar');
-      const keyDown = new KeyboardEvent('keydown', { key: 'w', code: 'KeyW', bubbles: true });
-      document.dispatchEvent(keyDown);
-      setTimeout(() => {
-        const keyUp = new KeyboardEvent('keyup', { key: 'w', code: 'KeyW', bubbles: true });
-        document.dispatchEvent(keyUp);
-      }, 150);
-    });
-    
-    // Botão MENU
-    addFloatingButton('📋 MENU', 20, 50, () => {
-      console.log('📋 Menu');
-      const menu = document.getElementById('menu');
-      if (menu) {
-        menu.style.display = 'flex';
-        menu.style.visibility = 'visible';
-      }
-    });
-    
-    // Instrução
-    const instr = document.createElement('div');
-    instr.textContent = '👆 Toque na tela = andar | Arraste = olhar';
-    instr.style.cssText = `
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,0.8);
-      color: #ffaa00;
-      padding: 8px 16px;
-      border-radius: 30px;
-      font-size: 12px;
-      z-index: 20000;
-      white-space: nowrap;
-      pointer-events: none;
-    `;
-    document.body.appendChild(instr);
-    setTimeout(() => instr.remove(), 4000);
-  }
-  
-  console.log("✅ Controles de emergência ativados!");
-  
-}, 1000);
+  console.log("✅ Botão PLAY configurado");
+} else {
+  console.error("❌ Botão PLAY não encontrado");
+}
 
-// ============================================================
-// CONFIGURAÇÃO DIRETA DOS BOTÕES (SEM DEPENDÊNCIAS)
-// ============================================================
+// ===== BOTÃO ABOUT =====
+const aboutButton = document.getElementById('about_button');
+if (aboutButton) {
+  const novoAbout = aboutButton.cloneNode(true);
+  aboutButton.parentNode.replaceChild(novoAbout, aboutButton);
+  
+  novoAbout.onclick = function(e) {
+    e.preventDefault();
+    const overlay = document.getElementById('about-overlay');
+    if (overlay) overlay.classList.add('active');
+    console.log("✅ About aberto");
+  };
+  
+  novoAbout.ontouchstart = function(e) {
+    e.preventDefault();
+    const overlay = document.getElementById('about-overlay');
+    if (overlay) overlay.classList.add('active');
+  };
+  
+  console.log("✅ Botão ABOUT configurado");
+}
 
-(function() {
-  console.log("🔧 Configurando botões diretamente...");
+// ===== FECHAR ABOUT =====
+const closeAbout = document.getElementById('close-about');
+if (closeAbout) {
+  const novoClose = closeAbout.cloneNode(true);
+  closeAbout.parentNode.replaceChild(novoClose, closeAbout);
   
-  // Botão PLAY
-  const playBtn = document.getElementById('play_button');
-  if (playBtn) {
-    // Remove listeners antigos clonando
-    const newPlay = playBtn.cloneNode(true);
-    playBtn.parentNode.replaceChild(newPlay, playBtn);
-    
-    newPlay.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      console.log("🎮 PLAY - Iniciando galeria");
-      
-      // Esconde o menu
-      const menu = document.getElementById('menu');
-      if (menu) {
-        menu.style.display = 'none';
-        menu.style.visibility = 'hidden';
-      }
-    });
-    
-    newPlay.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      console.log("🎮 PLAY (toque) - Iniciando galeria");
-      const menu = document.getElementById('menu');
-      if (menu) {
-        menu.style.display = 'none';
-        menu.style.visibility = 'hidden';
-      }
-    });
-    
-    console.log("✅ Botão PLAY configurado diretamente");
-  } else {
-    console.error("❌ Botão PLAY não encontrado no DOM");
-  }
+  novoClose.onclick = function() {
+    const overlay = document.getElementById('about-overlay');
+    if (overlay) overlay.classList.remove('active');
+  };
+}
+
+// ===== CONTROLES PARA CELULAR =====
+if (isMobile) {
+  console.log("📱 Ativando controles para celular");
   
-  // Botão ABOUT
-  const aboutBtn = document.getElementById('about_button');
-  if (aboutBtn) {
-    const newAbout = aboutBtn.cloneNode(true);
-    aboutBtn.parentNode.replaceChild(newAbout, aboutBtn);
-    
-    newAbout.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      console.log("ℹ️ ABOUT - Abrindo informações");
-      const overlay = document.getElementById('about-overlay');
-      if (overlay) {
-        overlay.classList.add('active');
-      }
-    });
-    
-    newAbout.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      const overlay = document.getElementById('about-overlay');
-      if (overlay) {
-        overlay.classList.add('active');
-      }
-    });
-    
-    console.log("✅ Botão ABOUT configurado diretamente");
-  }
+  // Botão MENU flutuante (para voltar ao menu)
+  const menuFloatBtn = document.createElement('button');
+  menuFloatBtn.textContent = '📋 MENU';
+  menuFloatBtn.style.cssText = `
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    background: black;
+    border: 2px solid orange;
+    border-radius: 50px;
+    padding: 12px 20px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+  `;
+  menuFloatBtn.onclick = mostrarMenu;
+  menuFloatBtn.ontouchstart = mostrarMenu;
+  document.body.appendChild(menuFloatBtn);
   
-  // Fechar overlay
-  const closeBtn = document.getElementById('close-about');
-  if (closeBtn) {
-    const newClose = closeBtn.cloneNode(true);
-    closeBtn.parentNode.replaceChild(newClose, closeBtn);
-    newClose.addEventListener('click', () => {
-      document.getElementById('about-overlay')?.classList.remove('active');
-    });
-    newClose.addEventListener('touchstart', () => {
-      document.getElementById('about-overlay')?.classList.remove('active');
-    });
-  }
-  
-  // Toggle info panel
-  const toggleBtn = document.getElementById('toggle-info');
-  if (toggleBtn) {
-    toggleBtn.addEventListener('click', () => {
-      document.getElementById('info-panel').classList.toggle('collapsed');
-    });
-  }
-})();
+  // Instrução
+  const instr = document.createElement('div');
+  instr.textContent = '👆 Toque nos botões para andar';
+  instr.style.cssText = `
+    position: fixed;
+    bottom: 100px;
+    left: 20px;
+    background: black;
+    color: orange;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    z-index: 9999;
+  `;
+  document.body.appendChild(instr);
+  setTimeout(() => instr.remove(), 5000);
+}
+
+console.log("✅ main.js carregado - tudo pronto!");
