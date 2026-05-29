@@ -68,11 +68,8 @@ setupVR(renderer);
 // MENU E BOTÕES
 // =========================
 
-window.addEventListener("DOMContentLoaded", () => {
-  setupPlayButton(controls);
-  setupOverlayClose();
+setupPlayButton(controls);
+setupOverlayClose();
 
-  console.log("✅ Botões configurados");
-});
-
+console.log("✅ Botões configurados");
 console.log("✅ main.js carregado");
