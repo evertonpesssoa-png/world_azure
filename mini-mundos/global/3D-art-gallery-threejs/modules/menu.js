@@ -3,164 +3,145 @@
 // =========================
 
 export const hideMenu = () => {
-  const menu = document.getElementById('menu');
+  const menu = document.getElementById("menu");
+
   if (menu) {
-    menu.style.display = 'none';
-    menu.style.visibility = 'hidden';
-    menu.style.pointerEvents = 'none';
+    menu.style.display = "none";
+    menu.style.visibility = "hidden";
+    menu.style.pointerEvents = "none";
   }
 };
 
 export const showMenu = () => {
-  const menu = document.getElementById('menu');
+  const menu = document.getElementById("menu");
+
   if (menu) {
-    menu.style.display = 'flex';
-    menu.style.visibility = 'visible';
-    menu.style.pointerEvents = 'auto';
+    menu.style.display = "flex";
+    menu.style.visibility = "visible";
+    menu.style.pointerEvents = "auto";
   }
 };
 
-// Detecta se é celular
-const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+const isMobile =
+  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  );
 
-// Inicia a experiência
 export const startExperience = (controls) => {
-  console.log("🎮 Iniciando experiência...");
-  
-  // Esconder o menu
   hideMenu();
-  
-  // No celular, NÃO tentar travar o pointer (causa problemas)
+
   if (!isMobile) {
     try {
-      if (controls && typeof controls.lock === 'function') {
+      if (controls && typeof controls.lock === "function") {
         controls.lock();
-        console.log("🔒 Pointer lock ativado (desktop)");
       }
     } catch (err) {
-      console.warn("Erro ao travar pointer:", err);
+      console.warn(err);
     }
   } else {
-    console.log("📱 Modo celular: pointer lock desativado");
-    // No celular, apenas focar no canvas para receber eventos
-    const canvas = document.querySelector('canvas');
+    const canvas = document.querySelector("canvas");
+
     if (canvas) {
+      canvas.setAttribute("tabindex", "0");
       canvas.focus();
-      canvas.setAttribute('tabindex', '0');
     }
   }
-  
-  // Disparar evento personalizado para outros módulos saberem que o menu fechou
-  const event = new CustomEvent('experienceStarted');
-  document.dispatchEvent(event);
+
+  document.dispatchEvent(new CustomEvent("experienceStarted"));
 };
 
-// Sai da experiência e volta ao menu
 export const exitExperience = (controls) => {
-  console.log("🚪 Saindo da experiência...");
   showMenu();
-  
-  if (!isMobile && controls && typeof controls.unlock === 'function') {
+
+  if (!isMobile) {
     try {
-      controls.unlock();
+      if (controls && typeof controls.unlock === "function") {
+        controls.unlock();
+      }
     } catch (err) {
-      console.warn("Erro ao destravar pointer:", err);
+      console.warn(err);
     }
   }
-  
-  const event = new CustomEvent('experienceExited');
-  document.dispatchEvent(event);
+
+  document.dispatchEvent(new CustomEvent("experienceExited"));
 };
 
-// Configurar botão PLAY
 export const setupPlayButton = (controls) => {
-  const playButton = document.getElementById('play_button');
-  const aboutButton = document.getElementById('about_button');
-  
+  const playButton = document.getElementById("play_button");
+  const aboutButton = document.getElementById("about_button");
+  const closeAbout = document.getElementById("close-about");
+
+  // PLAY
   if (playButton) {
-    // Remover event listeners antigos para evitar duplicação
-    const newPlayButton = playButton.cloneNode(true);
-    playButton.parentNode.replaceChild(newPlayButton, playButton);
-    
-    newPlayButton.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      console.log("🎮 Botão PLAY clicado!");
-      startExperience(controls);
-    });
-    
-    // Para toque no celular
-    newPlayButton.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      console.log("🎮 Botão PLAY tocado!");
-      startExperience(controls);
-    });
+    playButton.addEventListener(
+      "pointerdown",
+      (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        startExperience(controls);
+      },
+      { passive: false }
+    );
   }
-  
+
+  // ABOUT
   if (aboutButton) {
-    const newAboutButton = aboutButton.cloneNode(true);
-    aboutButton.parentNode.replaceChild(newAboutButton, aboutButton);
-    
-    newAboutButton.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      const overlay = document.getElementById('about-overlay');
-      if (overlay) {
-        overlay.classList.add('active');
-      }
-    });
-    
-    newAboutButton.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      const overlay = document.getElementById('about-overlay');
-      if (overlay) {
-        overlay.classList.add('active');
-      }
-    });
+    aboutButton.addEventListener(
+      "pointerdown",
+      (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const overlay = document.getElementById("about-overlay");
+
+        if (overlay) {
+          overlay.classList.add("active");
+        }
+      },
+      { passive: false }
+    );
   }
-  
-  // Fechar overlay do about
-  const closeAbout = document.getElementById('close-about');
+
+  // FECHAR ABOUT
   if (closeAbout) {
-    closeAbout.addEventListener('click', () => {
-      const overlay = document.getElementById('about-overlay');
-      if (overlay) overlay.classList.remove('active');
-    });
-    closeAbout.addEventListener('touchstart', () => {
-      const overlay = document.getElementById('about-overlay');
-      if (overlay) overlay.classList.remove('active');
-    });
+    closeAbout.addEventListener(
+      "pointerdown",
+      (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const overlay = document.getElementById("about-overlay");
+
+        if (overlay) {
+          overlay.classList.remove("active");
+        }
+      },
+      { passive: false }
+    );
   }
 };
 
-// Função para verificar se o menu está visível
-export const isMenuVisible = () => {
-  const menu = document.getElementById('menu');
-  return menu && menu.style.display !== 'none';
-};
-
-// Adicione ao final do seu menu.js
-
-// Fechar overlay ao clicar fora (útil no celular)
 export const setupOverlayClose = () => {
-  const overlay = document.getElementById('about-overlay');
-  if (overlay) {
-    overlay.addEventListener('click', (e) => {
+  const overlay = document.getElementById("about-overlay");
+
+  if (!overlay) return;
+
+  overlay.addEventListener(
+    "pointerdown",
+    (e) => {
       if (e.target === overlay) {
-        overlay.classList.remove('active');
+        overlay.classList.remove("active");
       }
-    });
-    overlay.addEventListener('touchstart', (e) => {
-      if (e.target === overlay) {
-        overlay.classList.remove('active');
-      }
-    });
-  }
+    },
+    { passive: true }
+  );
 };
 
-// Chame esta função junto com setupPlayButton
-// No seu main.js, adicione:
-// import { setupOverlayClose } from './modules/menu.js';
-// setupOverlayClose();
+export const isMenuVisible = () => {
+  const menu = document.getElementById("menu");
+
+  if (!menu) return false;
+
+  return menu.style.display !== "none";
+};
