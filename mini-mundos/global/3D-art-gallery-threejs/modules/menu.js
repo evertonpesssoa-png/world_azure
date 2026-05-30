@@ -1,53 +1,49 @@
 // =========================
-// MENU.JS - COMPATÍVEL COM CELULAR
+// MENU.JS
+// SIMPLES E ESTÁVEL
 // =========================
-
-export const hideMenu = () => {
-  const menu = document.getElementById("menu");
-
-  if (menu) {
-    menu.style.display = "none";
-    menu.style.visibility = "hidden";
-    menu.style.pointerEvents = "none";
-  }
-};
-
-export const showMenu = () => {
-  const menu = document.getElementById("menu");
-
-  if (menu) {
-    menu.style.display = "flex";
-    menu.style.visibility = "visible";
-    menu.style.pointerEvents = "auto";
-  }
-};
 
 const isMobile =
   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
     navigator.userAgent
   );
 
+export const hideMenu = () => {
+  const menu = document.getElementById("menu");
+
+  if (!menu) return;
+
+  menu.classList.add("hidden");
+  menu.style.display = "none";
+};
+
+export const showMenu = () => {
+  const menu = document.getElementById("menu");
+
+  if (!menu) return;
+
+  menu.classList.remove("hidden");
+  menu.style.display = "flex";
+  menu.style.visibility = "visible";
+  menu.style.pointerEvents = "auto";
+};
+
 export const startExperience = (controls) => {
   hideMenu();
 
   if (!isMobile) {
     try {
-      if (controls && typeof controls.lock === "function") {
+      if (controls?.lock) {
         controls.lock();
       }
     } catch (err) {
-      console.warn(err);
-    }
-  } else {
-    const canvas = document.querySelector("canvas");
-
-    if (canvas) {
-      canvas.setAttribute("tabindex", "0");
-      canvas.focus();
+      console.warn("Erro ao ativar PointerLock:", err);
     }
   }
 
-  document.dispatchEvent(new CustomEvent("experienceStarted"));
+  document.dispatchEvent(
+    new CustomEvent("experienceStarted")
+  );
 };
 
 export const exitExperience = (controls) => {
@@ -55,87 +51,67 @@ export const exitExperience = (controls) => {
 
   if (!isMobile) {
     try {
-      if (controls && typeof controls.unlock === "function") {
+      if (controls?.unlock) {
         controls.unlock();
       }
     } catch (err) {
-      console.warn(err);
+      console.warn("Erro ao sair:", err);
     }
   }
 
-  document.dispatchEvent(new CustomEvent("experienceExited"));
+  document.dispatchEvent(
+    new CustomEvent("experienceExited")
+  );
 };
 
 export const setupPlayButton = (controls) => {
   const playButton = document.getElementById("play_button");
   const aboutButton = document.getElementById("about_button");
+  const overlay = document.getElementById("about-overlay");
   const closeAbout = document.getElementById("close-about");
 
   // PLAY
   if (playButton) {
-    playButton.addEventListener(
-      "pointerdown",
-      (e) => {
-        e.preventDefault();
-        e.stopPropagation();
+    playButton.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
 
-        startExperience(controls);
-      },
-      { passive: false }
-    );
+      startExperience(controls);
+    };
   }
 
   // ABOUT
   if (aboutButton) {
-    aboutButton.addEventListener(
-      "pointerdown",
-      (e) => {
-        e.preventDefault();
-        e.stopPropagation();
+    aboutButton.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
 
-        const overlay = document.getElementById("about-overlay");
-
-        if (overlay) {
-          overlay.classList.add("active");
-        }
-      },
-      { passive: false }
-    );
+      overlay?.classList.add("active");
+    };
   }
 
-  // FECHAR ABOUT
+  // FECHAR
   if (closeAbout) {
-    closeAbout.addEventListener(
-      "pointerdown",
-      (e) => {
-        e.preventDefault();
-        e.stopPropagation();
+    closeAbout.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
 
-        const overlay = document.getElementById("about-overlay");
+      overlay?.classList.remove("active");
+    };
+  }
 
-        if (overlay) {
-          overlay.classList.remove("active");
-        }
-      },
-      { passive: false }
-    );
+  // FECHAR CLICANDO FORA
+  if (overlay) {
+    overlay.onclick = (e) => {
+      if (e.target === overlay) {
+        overlay.classList.remove("active");
+      }
+    };
   }
 };
 
 export const setupOverlayClose = () => {
-  const overlay = document.getElementById("about-overlay");
-
-  if (!overlay) return;
-
-  overlay.addEventListener(
-    "pointerdown",
-    (e) => {
-      if (e.target === overlay) {
-        overlay.classList.remove("active");
-      }
-    },
-    { passive: true }
-  );
+  // Mantido apenas para compatibilidade
 };
 
 export const isMenuVisible = () => {
