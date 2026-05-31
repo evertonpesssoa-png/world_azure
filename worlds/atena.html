@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>ATENA • Reino Dourado Divino</title>
+    <script src="../shared/js/auth.js"></script>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const asura = urlParams.get('asura');
+    
+    if(typeof PortalAuth !== 'undefined') {
+        PortalAuth.verificarAcesso(asura);
+    }
+</script>
+
     
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&display=swap" rel="stylesheet">
     
