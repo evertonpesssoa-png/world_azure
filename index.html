@@ -374,6 +374,12 @@
         // START TRANSITION - AGORA VAI PARA O PORTAL (viagem.html)
         function startAsuraTransition(selectedItem, asura){
             
+            // 🔐 GERAR TOKEN DE ACESSO ANTES DE SAIR
+            if(typeof PortalAuth !== 'undefined') {
+                PortalAuth.gerarToken(asura);
+                console.log("🔑 Token gerado para:", asura);
+            }
+            
             slider.style.animationPlayState = "paused";
 
             if(hoverSound){
