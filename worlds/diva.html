@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>DIVA • Mundo Neon Arcano</title>
     
+    <script src="../shared/js/auth.js"></script>
+<script>
+    // Pega o nome da asura da URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const asura = urlParams.get('asura');
+    
+    // Verifica acesso
+    if(typeof PortalAuth !== 'undefined') {
+        PortalAuth.verificarAcesso(asura);
+    }
+</script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="../shared/css/base.css">
