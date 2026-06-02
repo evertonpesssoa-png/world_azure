@@ -27,51 +27,21 @@
     // ============================================
     
     const QUESTION_BANK = {
-        // 🔐 SENHA (Nível 1)
         senha: {
             pergunta: "🔐 DIGITE A SENHA DE ACESSO AO GRIMÓRIO",
             dica: "⚡ Dica: Nome da primeira Asura (minúsculo)",
             validar: (r) => r.toLowerCase().trim() === "astreia"
         },
         
-        // 📜 SABEDORIA (Nível 2)
         sabedoria: {
             perguntas: [
-                { 
-                    texto: "📜 O que significa WZ no nome do projeto?", 
-                    dica: "⚡ World _ _ _ _ _", 
-                    validar: (r) => r.toLowerCase().includes("azure") || r.toLowerCase().includes("azul") 
-                },
-                { 
-                    texto: "🔮 Quantos Asuras existem no Grimório?", 
-                    dica: "⚡ Conte os cards giratórios no centro", 
-                    validar: (r) => r === "9" || r === "nove" 
-                },
-                { 
-                    texto: "🕷️ Qual Asura controla as sombras e o vazio?", 
-                    dica: "⚡ Começa com 'U'", 
-                    validar: (r) => r.toLowerCase().includes("umbra") 
-                },
-                { 
-                    texto: "⚡ Qual Asura é conhecida como 'A Maga das Invenções'?", 
-                    dica: "⚡ Começa com 'D'", 
-                    validar: (r) => r.toLowerCase().includes("daedala") 
-                },
-                { 
-                    texto: "🌟 Qual Asura representa a Justiça e as constelações?", 
-                    dica: "⚡ Começa com 'A' e termina com 'a'", 
-                    validar: (r) => r.toLowerCase().includes("astreia") 
-                },
-                {
-                    texto: "🏆 Qual Asura representa a Vitória?",
-                    dica: "⚡ Começa com 'V'",
-                    validar: (r) => r.toLowerCase().includes("victoria")
-                },
-                {
-                    texto: "🔥 Qual Asura protege o lar e a sacralidade?",
-                    dica: "⚡ Começa com 'H'",
-                    validar: (r) => r.toLowerCase().includes("hestia")
-                }
+                { texto: "📜 O que significa WZ no nome do projeto?", dica: "⚡ World _ _ _ _ _", validar: (r) => r.toLowerCase().includes("azure") || r.toLowerCase().includes("azul") },
+                { texto: "🔮 Quantos Asuras existem no Grimório?", dica: "⚡ Conte os cards giratórios no centro", validar: (r) => r === "9" || r === "nove" },
+                { texto: "🕷️ Qual Asura controla as sombras e o vazio?", dica: "⚡ Começa com 'U'", validar: (r) => r.toLowerCase().includes("umbra") },
+                { texto: "⚡ Qual Asura é conhecida como 'A Maga das Invenções'?", dica: "⚡ Começa com 'D'", validar: (r) => r.toLowerCase().includes("daedala") },
+                { texto: "🌟 Qual Asura representa a Justiça e as constelações?", dica: "⚡ Começa com 'A' e termina com 'a'", validar: (r) => r.toLowerCase().includes("astreia") },
+                { texto: "🏆 Qual Asura representa a Vitória?", dica: "⚡ Começa com 'V'", validar: (r) => r.toLowerCase().includes("victoria") },
+                { texto: "🔥 Qual Asura protege o lar e a sacralidade?", dica: "⚡ Começa com 'H'", validar: (r) => r.toLowerCase().includes("hestia") }
             ],
             getRandomQuestions: function() {
                 const shuffled = [...this.perguntas];
@@ -83,55 +53,34 @@
             }
         },
         
-        // 🌟 VIRTUDE (Nível 3)
         virtude: {
             perguntas: [
-                { 
-                    texto: "⚖️ O QUE FARIA COM O PODER DA HÉCATE?", 
-                    dica: "⚡ Proteger? Justiça? Compartilhar?", 
-                    opcoes: ["Proteger os fracos", "Fazer justiça", "Compartilhar o poder"], 
-                    validar: (r) => { 
-                        const rl = r.toLowerCase(); 
-                        if(rl.includes("proteger")) return 10; 
-                        if(rl.includes("justiça")) return 9; 
-                        if(rl.includes("compartilhar")) return 7; 
-                        return 5; 
-                    }
-                },
-                { 
-                    texto: "❤️ VIRTUDE MAIS IMPORTANTE PARA UM GUARDIÃO?", 
-                    dica: "⚡ Compaixão, Justiça, Sabedoria...", 
-                    opcoes: ["Compaixão", "Justiça", "Sabedoria"], 
-                    validar: (r) => { 
-                        const rl = r.toLowerCase(); 
-                        if(rl.includes("compaixão")) return 10; 
-                        if(rl.includes("justiça")) return 9; 
-                        if(rl.includes("sabedoria")) return 8; 
-                        return 5; 
-                    }
-                },
-                { 
-                    texto: "🕯️ ACEITA A RESPONSABILIDADE DE PROTEGER O MULTIVERSO?", 
-                    dica: "⚡ Sim ou Não", 
-                    opcoes: ["Sim, aceito", "Sim, com honra", "Aceito"], 
-                    validar: (r) => { 
-                        const rl = r.toLowerCase(); 
-                        if(rl.includes("sim") || rl.includes("aceito")) return 10; 
-                        return 0; 
-                    }
-                },
-                {
-                    texto: "🌙 VOCÊ RESPEITARIA AS REGRAS DA HÉCATE?",
-                    dica: "⚡ Sim ou Não",
-                    opcoes: ["Sim, sempre", "Sim, na maioria", "Depende"],
-                    validar: (r) => {
-                        const rl = r.toLowerCase();
-                        if(rl.includes("sempre")) return 10;
-                        if(rl.includes("maioria")) return 7;
-                        if(rl.includes("depende")) return 5;
-                        return 3;
-                    }
-                }
+                { texto: "⚖️ O QUE FARIA COM O PODER DA HÉCATE?", dica: "⚡ Proteger? Justiça? Compartilhar?", opcoes: ["Proteger os fracos", "Fazer justiça", "Compartilhar o poder"], validar: (r) => { 
+                    const rl = r.toLowerCase(); 
+                    if(rl.includes("proteger")) return 10; 
+                    if(rl.includes("justiça")) return 9; 
+                    if(rl.includes("compartilhar")) return 7; 
+                    return 5; 
+                }},
+                { texto: "❤️ VIRTUDE MAIS IMPORTANTE PARA UM GUARDIÃO?", dica: "⚡ Compaixão, Justiça, Sabedoria...", opcoes: ["Compaixão", "Justiça", "Sabedoria"], validar: (r) => { 
+                    const rl = r.toLowerCase(); 
+                    if(rl.includes("compaixão")) return 10; 
+                    if(rl.includes("justiça")) return 9; 
+                    if(rl.includes("sabedoria")) return 8; 
+                    return 5; 
+                }},
+                { texto: "🕯️ ACEITA A RESPONSABILIDADE DE PROTEGER O MULTIVERSO?", dica: "⚡ Sim ou Não", opcoes: ["Sim, aceito", "Sim, com honra", "Aceito"], validar: (r) => { 
+                    const rl = r.toLowerCase(); 
+                    if(rl.includes("sim") || rl.includes("aceito")) return 10; 
+                    return 0; 
+                }},
+                { texto: "🌙 VOCÊ RESPEITARIA AS REGRAS DA HÉCATE?", dica: "⚡ Sim ou Não", opcoes: ["Sim, sempre", "Sim, na maioria", "Depende"], validar: (r) => {
+                    const rl = r.toLowerCase();
+                    if(rl.includes("sempre")) return 10;
+                    if(rl.includes("maioria")) return 7;
+                    if(rl.includes("depende")) return 5;
+                    return 3;
+                }}
             ],
             getRandomQuestions: function() {
                 const shuffled = [...this.perguntas];
@@ -182,7 +131,6 @@
         msg.textContent = text;
         document.body.appendChild(msg);
         
-        // Adicionar animação se não existir
         if (!document.getElementById('hecate-msg-styles')) {
             const style = document.createElement('style');
             style.id = 'hecate-msg-styles';
@@ -213,7 +161,6 @@
         testActive = true;
         onCompleteCallback = onComplete;
         
-        // Criar overlay
         const overlay = document.createElement('div');
         overlay.id = 'hecate-test-overlay';
         overlay.style.cssText = `
@@ -254,14 +201,13 @@
                 <div id="hecateTestContent"></div>
                 
                 <div style="margin-top: 20px; font-size: 11px; color: #555;">
-                    Tentativas restantes: <span id="hecateAttemptsLeft">${Block.getAttempts ? Block.getAttempts() : 0}</span>
+                    Tentativas restantes: <span id="hecateAttemptsLeft">3</span>
                 </div>
             </div>
         `;
         
         document.body.appendChild(overlay);
         
-        // Adicionar estilo de animação
         if (!document.getElementById('hecate-test-styles')) {
             const style = document.createElement('style');
             style.id = 'hecate-test-styles';
@@ -286,15 +232,7 @@
         const content = document.getElementById('hecateTestContent');
         if (!content) return;
         
-        // Atualizar tentativas restantes
-        if (Block.getAttempts) {
-            const remaining = Block.CONFIG?.MAX_ATTEMPTS - Block.getAttempts() || 3;
-            const attemptsSpan = document.getElementById('hecateAttemptsLeft');
-            if (attemptsSpan) attemptsSpan.textContent = remaining;
-        }
-        
         if (level === 1) {
-            // NÍVEL 1: SENHA
             content.innerHTML = `
                 <div style="color: #9b30ff; font-size: 18px; margin-bottom: 15px;">${QUESTION_BANK.senha.pergunta}</div>
                 <div style="color: #666; font-size: 11px; margin-bottom: 20px;">${QUESTION_BANK.senha.dica}</div>
@@ -333,18 +271,19 @@
                 }
             };
             
-            btn.onclick = verify;
+            // 🔥 CORREÇÃO: Substituir o botão para garantir evento
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+            newBtn.onclick = verify;
             input.onkeypress = (e) => { if (e.key === 'Enter') verify(); };
             setTimeout(() => input.focus(), 100);
             
         } else if (level === 2) {
-            // NÍVEL 2: SABEDORIA
             currentQuestions = QUESTION_BANK.sabedoria.getRandomQuestions();
             currentIndex = 0;
             showSabedoriaQuestion();
             
         } else if (level === 3) {
-            // NÍVEL 3: VIRTUDE
             currentQuestions = QUESTION_BANK.virtude.getRandomQuestions();
             currentIndex = 0;
             virtueScore = 0;
@@ -401,7 +340,10 @@
             }
         };
         
-        btn.onclick = answer;
+        // 🔥 CORREÇÃO: Substituir o botão para garantir evento
+        const newBtn = btn.cloneNode(true);
+        btn.parentNode.replaceChild(newBtn, btn);
+        newBtn.onclick = answer;
         input.onkeypress = (e) => { if (e.key === 'Enter') answer(); };
         setTimeout(() => input.focus(), 100);
     }
@@ -435,9 +377,15 @@
             <div style="margin-top: 15px; color: #ffd700;">Pontuação: ${virtueScore}/${MIN_VIRTUE_SCORE}</div>
         `;
         
-        document.querySelectorAll('.hecate-virtue-opt').forEach(btn => {
-            btn.onclick = () => {
-                const pontos = q.validar(btn.dataset.value);
+        // 🔥 CORREÇÃO: Substituir cada botão para garantir evento
+        const botoes = document.querySelectorAll('.hecate-virtue-opt');
+        
+        botoes.forEach(btn => {
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+            
+            newBtn.onclick = () => {
+                const pontos = q.validar(newBtn.dataset.value);
                 virtueScore += pontos;
                 currentIndex++;
                 
@@ -471,14 +419,13 @@
     }
     
     function failTest() {
-        // Registrar tentativa falha
         let result = { blocked: false, blockInfo: null };
         if (Block && Block.incrementAttempts) {
             result = Block.incrementAttempts();
         }
         
         const remaining = Block && Block.getAttempts ? 
-            (Block.CONFIG?.MAX_ATTEMPTS - Block.getAttempts()) : 0;
+            (Block.CONFIG?.MAX_ATTEMPTS - Block.getAttempts()) : 2;
         
         showMessage(`❌ FALHA! Tentativas restantes: ${remaining}`, "#ff3300", 2000);
         
@@ -490,9 +437,7 @@
         
         testActive = false;
         
-        if (result.blocked && onCompleteCallback) {
-            onCompleteCallback(false);
-        } else if (onCompleteCallback) {
+        if (onCompleteCallback) {
             onCompleteCallback(false);
         }
     }
@@ -507,7 +452,6 @@
         getCurrentLevel: () => currentLevel
     };
     
-    // Compatibilidade com nome antigo
     window.ObscuratilTest = window.HecateTest;
     
     console.log('🗝️ Hécate Test System carregado');
