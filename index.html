@@ -21,7 +21,7 @@
 
     <link
         rel="stylesheet"
-        href="./style.css"
+        href="/world_azure/style.css"
     >
 
     <!-- =========================
@@ -104,7 +104,7 @@
                 style="--position: 1"
             >
                 <img
-                    src="images/diva.png"
+                    src="/world_azure/images/diva.png"
                     alt="Diva"
                     draggable="false"
                 >
@@ -119,7 +119,7 @@
                 style="--position: 2"
             >
                 <img
-                    src="images/siria.png"
+                    src="/world_azure/images/siria.png"
                     alt="Siria"
                     draggable="false"
                 >
@@ -134,7 +134,7 @@
                 style="--position: 3"
             >
                 <img
-                    src="images/merlim.png"
+                    src="/world_azure/images/merlim.png"
                     alt="Merlim"
                     draggable="false"
                 >
@@ -149,7 +149,7 @@
                 style="--position: 4"
             >
                 <img
-                    src="images/astreia.png"
+                    src="/world_azure/images/astreia.png"
                     alt="Astreia"
                     draggable="false"
                 >
@@ -164,7 +164,7 @@
                 style="--position: 5"
             >
                 <img
-                    src="images/umbra.png"
+                    src="/world_azure/images/umbra.png"
                     alt="Umbra"
                     draggable="false"
                 >
@@ -179,7 +179,7 @@
                 style="--position: 6"
             >
                 <img
-                    src="images/atena.png"
+                    src="/world_azure/images/atena.png"
                     alt="Atena"
                     draggable="false"
                 >
@@ -194,7 +194,7 @@
                 style="--position: 7"
             >
                 <img
-                    src="images/victoria.png"
+                    src="/world_azure/images/victoria.png"
                     alt="Victoria"
                     draggable="false"
                 >
@@ -209,7 +209,7 @@
                 style="--position: 8"
             >
                 <img
-                    src="images/hestia.png"
+                    src="/world_azure/images/hestia.png"
                     alt="Hestia"
                     draggable="false"
                 >
@@ -224,7 +224,7 @@
                 style="--position: 9"
             >
                 <img
-                    src="images/daedala.png"
+                    src="/world_azure/images/daedala.png"
                     alt="Daedala"
                     draggable="false"
                 >
@@ -263,7 +263,7 @@
 
     <audio
         id="hoverSound"
-        src="sounds/hover.mp3"
+        src="/world_azure/sounds/hover.mp3"
         preload="auto"
     ></audio>
 
@@ -273,7 +273,7 @@
 
     <audio
         id="bgMusic"
-        src="sounds/ambient.mp3"
+        src="/world_azure/sounds/ambient.mp3"
         loop
         preload="auto"
         playsinline
@@ -285,34 +285,34 @@
     ========================== -->
 
     <!-- Core e sistema de eventos -->
-    <script src="shared/js/hecate/core.js"></script>
-    <script src="shared/js/hecate/block-manager.js"></script>
-    <script src="shared/js/hecate/interaction/event-bus.js"></script>
+    <script src="/world_azure/shared/js/hecate/core.js"></script>
+    <script src="/world_azure/shared/js/hecate/block-manager.js"></script>
+    <script src="/world_azure/shared/js/hecate/interaction/event-bus.js"></script>
 
     <!-- Dispositivos -->
-    <script src="shared/js/hecate/devices/desktop.js"></script>
-    <script src="shared/js/hecate/devices/mobile.js"></script>
-    <script src="shared/js/hecate/devices/tablet.js"></script>
+    <script src="/world_azure/shared/js/hecate/devices/desktop.js"></script>
+    <script src="/world_azure/shared/js/hecate/devices/mobile.js"></script>
+    <script src="/world_azure/shared/js/hecate/devices/tablet.js"></script>
 
     <!-- Gestos e gerenciadores -->
-    <script src="shared/js/hecate/gestures/click.js"></script>
-    <script src="shared/js/hecate/interaction/interaction-manager.js"></script>
+    <script src="/world_azure/shared/js/hecate/gestures/click.js"></script>
+    <script src="/world_azure/shared/js/hecate/interaction/interaction-manager.js"></script>
 
     <!-- UI -->
-    <script src="shared/js/hecate/ui/feedback.js"></script>
+    <script src="/world_azure/shared/js/hecate/ui/feedback.js"></script>
 
     <!-- Sistema de teste -->
-    <script src="shared/js/hecate/test-system.js"></script>
+    <script src="/world_azure/shared/js/hecate/test-system.js"></script>
 
     <!-- Módulos de segurança -->
-    <script src="shared/js/hecate/modules/anti-debug.js"></script>
-    <script src="shared/js/hecate/modules/anti-hack.js"></script>
-    <script src="shared/js/hecate/modules/key-combos.js"></script>
-    <script src="shared/js/hecate/modules/network-guard.js"></script>
+    <script src="/world_azure/shared/js/hecate/modules/anti-debug.js"></script>
+    <script src="/world_azure/shared/js/hecate/modules/anti-hack.js"></script>
+    <script src="/world_azure/shared/js/hecate/modules/key-combos.js"></script>
+    <script src="/world_azure/shared/js/hecate/modules/network-guard.js"></script>
 
     <!-- Firewall e autenticação -->
-    <script src="shared/js/hecate/firewall.js"></script>
-    <script src="shared/js/hecate/auth.js"></script>
+    <script src="/world_azure/shared/js/hecate/firewall.js"></script>
+    <script src="/world_azure/shared/js/hecate/auth.js"></script>
 
     <!-- =========================
          SCRIPT COMPLETO DO GRIMÓRIO
@@ -487,7 +487,7 @@
 
                 // REDIRECIONA PARA O PORTAL DE VIAGEM
                 setTimeout(() => {
-                    window.location.href = `viagem.html?asura=${asura}`;
+                    window.location.href = "/world_azure/viagem.html?asura=" + asura;
                 }, 2200);
             }
 
@@ -505,6 +505,31 @@
                     console.log('🗝️ Hécate destravada! Asuras liberados.');
                 });
             }
+
+            // BLOQUEAR CARDS INICIALMENTE (só libera após passar no teste)
+            items.forEach(item => {
+                item.style.pointerEvents = "none";
+                item.style.opacity = "0.4";
+                item.style.filter = "blur(2px)";
+            });
+
+            // Aguardar autenticação para liberar os cards
+            function verificarEAguardarAutenticacao() {
+                if (localStorage.getItem('hecate_auth_complete') === 'true') {
+                    items.forEach(item => {
+                        item.style.pointerEvents = "";
+                        item.style.opacity = "";
+                        item.style.filter = "";
+                    });
+                    console.log('✅ Cards liberados!');
+                    return;
+                }
+                
+                // Verificar periodicamente
+                setTimeout(verificarEAguardarAutenticacao, 1000);
+            }
+            
+            verificarEAguardarAutenticacao();
 
         })();
 
