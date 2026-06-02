@@ -261,7 +261,7 @@
     <script src="/world_azure/shared/js/hecate/auth.js"></script>
 
     <!-- =========================
-         SCRIPT COMPLETO DO GRIMÓRIO
+         SCRIPT COMPLETO DO GRIMÓRIO (SIMPLIFICADO - SEM CONFLITO)
     ========================== -->
 
     <script>
@@ -275,11 +275,13 @@
             const bgMusic = document.getElementById("bgMusic");
             const portalTransition = document.getElementById("portalTransition");
 
+            // CORES DINÂMICAS
             items.forEach(item => {
                 const color = item.dataset.color;
                 item.style.setProperty("--glow-color", color);
             });
 
+            // SOM HOVER
             items.forEach(item => {
                 item.addEventListener("mouseenter", () => {
                     if(!hoverSound) return;
@@ -432,76 +434,8 @@
                 });
             }
 
-            // 🔥 BLOQUEAR CARDS E AGUARDAR INTERAÇÃO PARA ATIVAR HÉCATE 🔥
-            
-            // Bloquear cards inicialmente
-            items.forEach(item => {
-                item.style.pointerEvents = "none";
-                item.style.opacity = "0.4";
-                item.style.filter = "blur(2px)";
-            });
-
-            // Verificar se já está autenticado
-            function verificarEAguardarAutenticacao() {
-                if (localStorage.getItem('hecate_auth_complete') === 'true' ||
-                    localStorage.getItem('wz_obscuratil_complete') === 'true') {
-                    items.forEach(item => {
-                        item.style.pointerEvents = "";
-                        item.style.opacity = "";
-                        item.style.filter = "";
-                    });
-                    console.log('✅ Cards liberados! Usuário já autenticado.');
-                    return;
-                }
-                
-                setTimeout(verificarEAguardarAutenticacao, 1000);
-            }
-            
-            verificarEAguardarAutenticacao();
-
-            // 🔥 DETECTOR DE TOQUE/CLIQUE PARA ATIVAR HÉCATE 🔥
-            let hecateAtivada = false;
-            
-            function ativarHecate() {
-                if (hecateAtivada) return;
-                if (localStorage.getItem('hecate_auth_complete') === 'true') return;
-                if (localStorage.getItem('wz_obscuratil_complete') === 'true') return;
-                
-                hecateAtivada = true;
-                console.log('🔥 Toque/clique detectado! Ativando Hécate...');
-                
-                // Remover listeners
-                document.body.removeEventListener('click', ativarHecate);
-                document.body.removeEventListener('touchstart', ativarHecate);
-                
-                // Chamar o sistema de teste existente
-                if (typeof HecateTest !== 'undefined' && HecateTest.show) {
-                    console.log('📜 Chamando HecateTest.show()');
-                    HecateTest.show(function(success) {
-                        if (success) {
-                            console.log('✅ Teste aprovado!');
-                            localStorage.setItem('hecate_auth_complete', 'true');
-                            items.forEach(item => {
-                                item.style.pointerEvents = "";
-                                item.style.opacity = "";
-                                item.style.filter = "";
-                            });
-                        } else {
-                            console.log('❌ Teste falhou. Aguardando nova tentativa...');
-                            hecateAtivada = false;
-                            document.body.addEventListener('click', ativarHecate);
-                            document.body.addEventListener('touchstart', ativarHecate);
-                        }
-                    });
-                } else {
-                    console.error('❌ HecateTest não encontrado!');
-                }
-            }
-            
-            document.body.addEventListener('click', ativarHecate);
-            document.body.addEventListener('touchstart', ativarHecate);
-            
-            console.log('🗝️ Hécate: Aguardando toque/clique na tela...');
+            // 🔥 O FIREWALL.JS VAI GERENCIAR TUDO - NÃO TEM MAIS CÓDIGO DUPLICADO
+            console.log('🗝️ Grimório carregado - Aguardando Hécate...');
 
         })();
 
