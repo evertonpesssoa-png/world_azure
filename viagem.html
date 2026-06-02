@@ -3,18 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Túnel Dimensional - Portal Astral</title>
+    <title>Túnel Dimensional - Portal Astral</title
     
-    <!-- 🔐 VERIFICAÇÃO DE ACESSO - AUTH -->
-    <script src="../shared/js/auth.js"></script>
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const asura = urlParams.get('asura');
-        
-        if(typeof PortalAuth !== 'undefined') {
-            PortalAuth.verificarAcesso(asura);
-        }
+    if(!localStorage.getItem('hecate_auth_complete')&&!localStorage.getItem('wz_obscuratil_complete'))location.href='/world_azure/index.html';
+    
     </script>
+    
     
     <style>
         html,body{
