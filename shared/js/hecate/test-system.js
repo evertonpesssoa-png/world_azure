@@ -1,16 +1,9 @@
 // ============================================
 // 🗝️ HÉCATE - SISTEMA DE TESTE
-// Deusa da Magia - Teste de Conhecimento, Sabedoria e Virtude
 // ============================================
 
 (function() {
     'use strict';
-    
-    const Core = typeof HecateCore !== 'undefined' ? HecateCore :
-                 (typeof ObscuratilCore !== 'undefined' ? ObscuratilCore : null);
-    
-    const Block = typeof HecateBlock !== 'undefined' ? HecateBlock :
-                  (typeof BlockManager !== 'undefined' ? BlockManager : null);
     
     const QUESTION_BANK = {
         senha: {
@@ -41,8 +34,7 @@
             perguntas: [
                 { texto: "⚖️ O QUE FARIA COM O PODER DA HÉCATE?", opcoes: ["Proteger os fracos", "Fazer justiça", "Compartilhar o poder"], pontos: [10, 9, 7] },
                 { texto: "❤️ VIRTUDE MAIS IMPORTANTE PARA UM GUARDIÃO?", opcoes: ["Compaixão", "Justiça", "Sabedoria"], pontos: [10, 9, 8] },
-                { texto: "🕯️ ACEITA A RESPONSABILIDADE DE PROTEGER?", opcoes: ["Sim, aceito", "Sim, com honra", "Aceito"], pontos: [10, 10, 10] },
-                { texto: "🌙 VOCÊ RESPEITARIA AS REGRAS DA HÉCATE?", opcoes: ["Sim, sempre", "Sim, na maioria", "Depende"], pontos: [10, 7, 5] }
+                { texto: "🕯️ ACEITA A RESPONSABILIDADE DE PROTEGER?", opcoes: ["Sim, aceito", "Sim, com honra", "Aceito"], pontos: [10, 10, 10] }
             ],
             getRandomQuestions: function() {
                 const shuffled = [...this.perguntas];
@@ -80,7 +72,6 @@
             z-index: 900001;
             font-family: monospace;
             font-size: 14px;
-            white-space: nowrap;
         `;
         document.body.appendChild(msg);
         setTimeout(() => msg.remove(), duration);
@@ -110,16 +101,7 @@
         `;
         
         overlay.innerHTML = `
-            <div style="
-                background: linear-gradient(135deg, #0a0a1a, #1a0a2a);
-                border: 2px solid #9b30ff;
-                border-radius: 30px;
-                padding: 30px 25px;
-                max-width: 450px;
-                width: 100%;
-                text-align: center;
-                margin: auto;
-            ">
+            <div style="background: linear-gradient(135deg, #0a0a1a, #1a0a2a); border: 2px solid #9b30ff; border-radius: 30px; padding: 30px 25px; max-width: 450px; width: 100%; text-align: center; margin: auto;">
                 <div style="font-size: 50px;">🗝️</div>
                 <h2 style="color: #9b30ff; margin: 10px 0;">HÉCATE - TESTE</h2>
                 <div id="hecateTestContent"></div>
@@ -145,8 +127,6 @@
             
             const btn = document.getElementById('hecateBtn');
             const input = document.getElementById('hecateInput');
-            
-            // 🔥 CORREÇÃO: cloneNode para garantir evento
             const newBtn = btn.cloneNode(true);
             btn.parentNode.replaceChild(newBtn, btn);
             
@@ -190,14 +170,11 @@
         
         const btn = document.getElementById('hecateBtn');
         const input = document.getElementById('hecateInput');
-        
-        // 🔥 CORREÇÃO: cloneNode para garantir evento
         const newBtn = btn.cloneNode(true);
         btn.parentNode.replaceChild(newBtn, btn);
         
         const answer = () => {
-            const resposta = input.value;
-            if (q.validar(resposta)) {
+            if (q.validar(input.value)) {
                 currentIndex++;
                 if (currentIndex >= currentQuestions.length) {
                     showMessage("✅ Sabedoria comprovada!", "#00ffcc");
@@ -232,7 +209,6 @@
             <div style="margin-top: 15px; color: #ffd700;">Pontuação: ${virtueScore}/${MIN_VIRTUE_SCORE}</div>
         `;
         
-        // 🔥 CORREÇÃO: cloneNode para cada botão de virtude
         const botoes = document.querySelectorAll('.virtue-opt');
         botoes.forEach(btn => {
             const newBtn = btn.cloneNode(true);
@@ -259,19 +235,19 @@
     }
     
     function completeTest(success) {
+        if (success) {
+            // 🔥 SALVAR AUTENTICAÇÃO NO LOCALSTORAGE
+            localStorage.setItem('hecate_auth_complete', 'true');
+            console.log('✅ Hécate: Autenticação salva! Cards serão liberados.');
+        }
+        
         if (overlay) overlay.remove();
         testActive = false;
         if (onCompleteCallback) onCompleteCallback(success);
     }
     
     function failTest() {
-        if (Block && Block.incrementAttempts) {
-            Block.incrementAttempts();
-        }
-        
-        const remaining = Block ? (3 - Block.getAttempts()) : 2;
-        showMessage(`❌ FALHA! Tentativas restantes: ${remaining}`, "#ff3300");
-        
+        showMessage(`❌ FALHA!`, "#ff3300");
         if (overlay) overlay.remove();
         testActive = false;
         if (onCompleteCallback) onCompleteCallback(false);
@@ -281,8 +257,6 @@
         show: showTestInterface,
         isActive: () => testActive
     };
-    
-    window.ObscuratilTest = window.HecateTest;
     
     console.log('🗝️ HecateTest carregado');
 })();
