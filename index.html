@@ -39,7 +39,7 @@
         // Registrar Service Worker
         if ('serviceWorker' in navigator) {
             // Garantir que o caminho está correto para o GitHub Pages
-            const swPath = '/world_azure/sw.js';
+            const swPath = '/world_azure/service-worker.js';
             
             navigator.serviceWorker.register(swPath)
                 .then(reg => {
@@ -48,11 +48,13 @@
                     // Verificar se precisa atualizar
                     reg.onupdatefound = () => {
                         const installing = reg.installing;
-                        installing.onstatechange = () => {
-                            if (installing.state === 'installed' && navigator.serviceWorker.controller) {
-                                console.log('🗝️ Hécate: Nova versão disponível');
-                            }
-                        };
+                        if (installing) {
+                            installing.onstatechange = () => {
+                                if (installing.state === 'installed' && navigator.serviceWorker.controller) {
+                                    console.log('🗝️ Hécate: Nova versão disponível');
+                                }
+                            };
+                        }
                     };
                 })
                 .catch(err => {
