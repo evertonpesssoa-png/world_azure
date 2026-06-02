@@ -30,6 +30,44 @@
 
     <title>ASURAS - Grimório Dimensional | Hécate Guardiã</title>
 
+    <!-- =========================
+         🗝️ HÉCATE - SERVICE WORKER
+         Protege contra acesso direto às páginas
+    ========================== -->
+
+    <script>
+        // Registrar Service Worker
+        if ('serviceWorker' in navigator) {
+            // Garantir que o caminho está correto para o GitHub Pages
+            const swPath = '/world_azure/sw.js';
+            
+            navigator.serviceWorker.register(swPath)
+                .then(reg => {
+                    console.log('🗝️ Hécate: Service Worker registrado com sucesso!');
+                    
+                    // Verificar se precisa atualizar
+                    reg.onupdatefound = () => {
+                        const installing = reg.installing;
+                        installing.onstatechange = () => {
+                            if (installing.state === 'installed' && navigator.serviceWorker.controller) {
+                                console.log('🗝️ Hécate: Nova versão disponível');
+                            }
+                        };
+                    };
+                })
+                .catch(err => {
+                    console.log('❌ Hécate: Service Worker falhou:', err);
+                });
+            
+            // Verificar se o Service Worker está controlando a página
+            navigator.serviceWorker.ready.then(() => {
+                console.log('🗝️ Hécate: Service Worker está ativo e controlando a página');
+            });
+        } else {
+            console.log('⚠️ Hécate: Service Worker não suportado neste navegador');
+        }
+    </script>
+
 </head>
 
 <body>
