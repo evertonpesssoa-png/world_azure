@@ -146,6 +146,10 @@
             const btn = document.getElementById('hecateBtn');
             const input = document.getElementById('hecateInput');
             
+            // 🔥 CORREÇÃO: cloneNode para garantir evento
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+            
             const verify = () => {
                 if (QUESTION_BANK.senha.validar(input.value)) {
                     showMessage("✅ Senha correta!", "#00ff88");
@@ -155,7 +159,7 @@
                 }
             };
             
-            btn.onclick = verify;
+            newBtn.onclick = verify;
             input.onkeypress = (e) => { if (e.key === 'Enter') verify(); };
             setTimeout(() => input.focus(), 300);
             
@@ -187,8 +191,13 @@
         const btn = document.getElementById('hecateBtn');
         const input = document.getElementById('hecateInput');
         
+        // 🔥 CORREÇÃO: cloneNode para garantir evento
+        const newBtn = btn.cloneNode(true);
+        btn.parentNode.replaceChild(newBtn, btn);
+        
         const answer = () => {
-            if (q.validar(input.value)) {
+            const resposta = input.value;
+            if (q.validar(resposta)) {
                 currentIndex++;
                 if (currentIndex >= currentQuestions.length) {
                     showMessage("✅ Sabedoria comprovada!", "#00ffcc");
@@ -201,7 +210,7 @@
             }
         };
         
-        btn.onclick = answer;
+        newBtn.onclick = answer;
         input.onkeypress = (e) => { if (e.key === 'Enter') answer(); };
         setTimeout(() => input.focus(), 300);
     }
@@ -223,9 +232,14 @@
             <div style="margin-top: 15px; color: #ffd700;">Pontuação: ${virtueScore}/${MIN_VIRTUE_SCORE}</div>
         `;
         
-        document.querySelectorAll('.virtue-opt').forEach(btn => {
-            btn.onclick = () => {
-                const pontos = parseInt(btn.dataset.pontos);
+        // 🔥 CORREÇÃO: cloneNode para cada botão de virtude
+        const botoes = document.querySelectorAll('.virtue-opt');
+        botoes.forEach(btn => {
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+            
+            newBtn.onclick = () => {
+                const pontos = parseInt(newBtn.dataset.pontos);
                 virtueScore += pontos;
                 currentIndex++;
                 
@@ -255,7 +269,8 @@
             Block.incrementAttempts();
         }
         
-        showMessage(`❌ FALHA! Tentativas restantes: ${Block ? (3 - Block.getAttempts()) : 2}`, "#ff3300");
+        const remaining = Block ? (3 - Block.getAttempts()) : 2;
+        showMessage(`❌ FALHA! Tentativas restantes: ${remaining}`, "#ff3300");
         
         if (overlay) overlay.remove();
         testActive = false;
