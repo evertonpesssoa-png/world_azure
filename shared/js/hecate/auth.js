@@ -4,12 +4,15 @@
 // Integrado com Hécate (Deusa da Proteção)
 // ============================================
 
+
 (function() {
     'use strict';
     
+    // 🔥 CORREÇÃO: O objeto CONFIG precisa estar completo!
     const CONFIG = {
-        GRIMOIRE_PATH: 'index.html',
-        ACCESS_DENIED_PATH: 'shared/error/access-denied.html',
+        GRIMOIRE_PATH: '/world_azure/index.html',
+        ACCESS_DENIED_PATH: '/world_azure/shared/error/access-denied.html',
+        
         
         // Páginas protegidas (expansível)
         PROTECTED_PAGES: [
