@@ -178,16 +178,50 @@ function initAudio() {
 
 function playMusic() {
     if(!audioElement) return;
-    audioElement.play();
+    
+    // Garantir volume inicial
+    audioElement.volume = 0.3;
+    
+    // Tocar música
+    audioElement.play().catch(e => console.log('Áudio:', e));
     startTime = performance.now();
     isAudioPlaying = true;
     
-    const fadeOutStart = musicDuration - 1000;
-    setTimeout(() => {
-        if(audioElement) {
-            audioElement.volume = 0;
+    // ESPERAR a música carregar para saber a duração real
+    const onCanPlay = () => {
+        musicDuration = audioElement.duration * 1000;
+        
+        // Fade out apenas nos ÚLTIMOS 2 segundos
+        const fadeOutStart = musicDuration - 2000;
+        
+        if(fadeOutStart > 0) {
+            setTimeout(() => {
+                if(audioElement && isAudioPlaying) {
+                    // Fade out suave
+                    const fadeInterval = setInterval(() => {
+                        if(audioElement.volume > 0.05) {
+                            audioElement.volume -= 0.05;
+                        } else {
+                            audioElement.volume = 0;
+                            audioElement.pause();
+                            clearInterval(fadeInterval);
+                        }
+                    }, 100);
+                }
+            }, fadeOutStart);
         }
-    }, fadeOutStart);
+        
+        audioElement.removeEventListener('canplaythrough', onCanPlay);
+    };
+    
+    audioElement.addEventListener('canplaythrough', onCanPlay);
+    
+    // Fallback: se não carregar em 2 segundos, usa duração padrão
+    setTimeout(() => {
+        if(musicDuration === 15000) {
+            musicDuration = audioElement.duration * 1000 || 15000;
+        }
+    }, 2000);
 }
 
 document.getElementById("audio-control").addEventListener("click", () => {
