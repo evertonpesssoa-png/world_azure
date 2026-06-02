@@ -1,6 +1,7 @@
 // ============================================
 // 🗝️ HÉCATE - SERVICE WORKER
 // Protege todas as páginas do World Azure
+// GitHub Pages: https://evertonpesssoa-png.github.io/world_azure/
 // ============================================
 
 const CACHE_NAME = 'hecate-protector-v1';
@@ -17,7 +18,8 @@ const PUBLIC_PAGES = [
 // Extensões de arquivos que NÃO devem ser bloqueados
 const ALLOWED_EXTENSIONS = [
     '.css', '.js', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico',
-    '.mp3', '.wav', '.ogg', '.json', '.glb', '.gltf', '.bin'
+    '.mp3', '.wav', '.ogg', '.json', '.glb', '.gltf', '.bin',
+    '.mp4', '.webm', '.woff', '.woff2', '.ttf', '.eot'
 ];
 
 // ============================================
@@ -101,4 +103,4 @@ self.addEventListener('message', (event) => {
     }
 });
 
-console.log('🗝️ Hécate Service Worker carregado');
+console.log('🗝️ Hécate Service Worker carregado - Protegendo o World Azure');
