@@ -2,310 +2,111 @@
 <html lang="pt-BR">
 
 <head>
-
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
-    <meta
-        http-equiv="X-UA-Compatible"
-        content="IE=edge"
-    >
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, user-scalable=no"
-    >
-
-    <!-- =========================
-         CSS
-    ========================== -->
-
-    <link
-        rel="stylesheet"
-        href="/world_azure/style.css"
-    >
-
-    <!-- =========================
-         TITLE
-    ========================== -->
+    <link rel="stylesheet" href="/world_azure/style.css">
 
     <title>ASURAS - Grimório Dimensional | Hécate Guardiã</title>
 
-    <!-- =========================
-         🗝️ HÉCATE - SERVICE WORKER
-         Protege contra acesso direto às páginas
-    ========================== -->
-
+    <!-- Service Worker -->
     <script>
-        // Registrar Service Worker
         if ('serviceWorker' in navigator) {
-            const swPath = '/world_azure/service-worker.js';
-            
-            navigator.serviceWorker.register(swPath)
-                .then(reg => {
-                    console.log('🗝️ Hécate: Service Worker registrado com sucesso!');
-                    reg.onupdatefound = () => {
-                        const installing = reg.installing;
-                        if (installing) {
-                            installing.onstatechange = () => {
-                                if (installing.state === 'installed' && navigator.serviceWorker.controller) {
-                                    console.log('🗝️ Hécate: Nova versão disponível');
-                                }
-                            };
-                        }
-                    };
-                })
-                .catch(err => {
-                    console.log('❌ Hécate: Service Worker falhou:', err);
-                });
-            
-            navigator.serviceWorker.ready.then(() => {
-                console.log('🗝️ Hécate: Service Worker está ativo e controlando a página');
-            });
-        } else {
-            console.log('⚠️ Hécate: Service Worker não suportado neste navegador');
+            navigator.serviceWorker.register('/world_azure/service-worker.js')
+                .then(reg => console.log('✅ Service Worker registrado'))
+                .catch(err => console.log('❌ Service Worker falhou:', err));
         }
     </script>
-
 </head>
 
 <body>
 
-    <!-- =========================
-         BANNER
-    ========================== -->
-
     <div class="banner">
-
         <canvas id="particles"></canvas>
-
-        <div
-            class="slider"
-            style="--quantity: 9"
-        >
-
-            <div
-                class="item"
-                data-asura="diva"
-                data-color="#ff4db8"
-                style="--position: 1"
-            >
-                <img
-                    src="/world_azure/images/diva.png"
-                    alt="Diva"
-                    draggable="false"
-                >
+        <div class="slider" style="--quantity: 9">
+            <div class="item" data-asura="diva" data-color="#ff4db8" style="--position: 1">
+                <img src="/world_azure/images/diva.png" alt="Diva" draggable="false">
             </div>
-
-            <div
-                class="item"
-                data-asura="siria"
-                data-color="#35ff9c"
-                style="--position: 2"
-            >
-                <img
-                    src="/world_azure/images/siria.png"
-                    alt="Siria"
-                    draggable="false"
-                >
+            <div class="item" data-asura="siria" data-color="#35ff9c" style="--position: 2">
+                <img src="/world_azure/images/siria.png" alt="Siria" draggable="false">
             </div>
-
-            <div
-                class="item"
-                data-asura="merlim"
-                data-color="#00d9ff"
-                style="--position: 3"
-            >
-                <img
-                    src="/world_azure/images/merlim.png"
-                    alt="Merlim"
-                    draggable="false"
-                >
+            <div class="item" data-asura="merlim" data-color="#00d9ff" style="--position: 3">
+                <img src="/world_azure/images/merlim.png" alt="Merlim" draggable="false">
             </div>
-
-            <div
-                class="item"
-                data-asura="astreia"
-                data-color="#287bff"
-                style="--position: 4"
-            >
-                <img
-                    src="/world_azure/images/astreia.png"
-                    alt="Astreia"
-                    draggable="false"
-                >
+            <div class="item" data-asura="astreia" data-color="#287bff" style="--position: 4">
+                <img src="/world_azure/images/astreia.png" alt="Astreia" draggable="false">
             </div>
-
-            <div
-                class="item"
-                data-asura="umbra"
-                data-color="#8b2fff"
-                style="--position: 5"
-            >
-                <img
-                    src="/world_azure/images/umbra.png"
-                    alt="Umbra"
-                    draggable="false"
-                >
+            <div class="item" data-asura="umbra" data-color="#8b2fff" style="--position: 5">
+                <img src="/world_azure/images/umbra.png" alt="Umbra" draggable="false">
             </div>
-
-            <div
-                class="item"
-                data-asura="atena"
-                data-color="#ffd54f"
-                style="--position: 6"
-            >
-                <img
-                    src="/world_azure/images/atena.png"
-                    alt="Atena"
-                    draggable="false"
-                >
+            <div class="item" data-asura="atena" data-color="#ffd54f" style="--position: 6">
+                <img src="/world_azure/images/atena.png" alt="Atena" draggable="false">
             </div>
-
-            <div
-                class="item"
-                data-asura="victoria"
-                data-color="#ff4444"
-                style="--position: 7"
-            >
-                <img
-                    src="/world_azure/images/victoria.png"
-                    alt="Victoria"
-                    draggable="false"
-                >
+            <div class="item" data-asura="victoria" data-color="#ff4444" style="--position: 7">
+                <img src="/world_azure/images/victoria.png" alt="Victoria" draggable="false">
             </div>
-
-            <div
-                class="item"
-                data-asura="hestia"
-                data-color="#fff0b3"
-                style="--position: 8"
-            >
-                <img
-                    src="/world_azure/images/hestia.png"
-                    alt="Hestia"
-                    draggable="false"
-                >
+            <div class="item" data-asura="hestia" data-color="#fff0b3" style="--position: 8">
+                <img src="/world_azure/images/hestia.png" alt="Hestia" draggable="false">
             </div>
-
-            <div
-                class="item"
-                data-asura="daedala"
-                data-color="#00ffd5"
-                style="--position: 9"
-            >
-                <img
-                    src="/world_azure/images/daedala.png"
-                    alt="Daedala"
-                    draggable="false"
-                >
+            <div class="item" data-asura="daedala" data-color="#00ffd5" style="--position: 9">
+                <img src="/world_azure/images/daedala.png" alt="Daedala" draggable="false">
             </div>
-
         </div>
-
         <div class="content">
             <div class="model"></div>
         </div>
-
     </div>
 
-    <!-- =========================
-         PORTAL TRANSITION
-    ========================== -->
+    <div id="portalTransition" class="portal-flash"></div>
 
-    <div
-        id="portalTransition"
-        class="portal-flash"
-    ></div>
+    <audio id="hoverSound" src="/world_azure/sounds/hover.mp3" preload="auto"></audio>
+    <audio id="bgMusic" src="/world_azure/sounds/ambient.mp3" loop preload="auto" playsinline></audio>
 
-    <!-- =========================
-         AUDIO HOVER
-    ========================== -->
-
-    <audio
-        id="hoverSound"
-        src="/world_azure/sounds/hover.mp3"
-        preload="auto"
-    ></audio>
-
-    <!-- =========================
-         AMBIENT MUSIC
-    ========================== -->
-
-    <audio
-        id="bgMusic"
-        src="/world_azure/sounds/ambient.mp3"
-        loop
-        preload="auto"
-        playsinline
-    ></audio>
-    
-    <!-- =========================
-         🗝️ HÉCATE - SISTEMA DE DEFESA DO GRIMÓRIO
-    ========================== -->
-
+    <!-- HÉCATE - SISTEMA COMPLETO -->
     <script src="/world_azure/shared/js/hecate/core.js"></script>
     <script src="/world_azure/shared/js/hecate/block-manager.js"></script>
-    <script src="/world_azure/shared/js/hecate/interaction/event-bus.js"></script>
-    <script src="/world_azure/shared/js/hecate/devices/desktop.js"></script>
-    <script src="/world_azure/shared/js/hecate/devices/mobile.js"></script>
-    <script src="/world_azure/shared/js/hecate/devices/tablet.js"></script>
-    <script src="/world_azure/shared/js/hecate/gestures/click.js"></script>
-    <script src="/world_azure/shared/js/hecate/interaction/interaction-manager.js"></script>
-    <script src="/world_azure/shared/js/hecate/ui/feedback.js"></script>
     <script src="/world_azure/shared/js/hecate/test-system.js"></script>
-    <script src="/world_azure/shared/js/hecate/modules/anti-debug.js"></script>
-    <script src="/world_azure/shared/js/hecate/modules/anti-hack.js"></script>
-    <script src="/world_azure/shared/js/hecate/modules/key-combos.js"></script>
-    <script src="/world_azure/shared/js/hecate/modules/network-guard.js"></script>
-    <script src="/world_azure/shared/js/hecate/firewall.js"></script>
     <script src="/world_azure/shared/js/hecate/auth.js"></script>
 
-    <!-- =========================
-         SCRIPT COMPLETO DO GRIMÓRIO (SIMPLIFICADO - SEM CONFLITO)
-    ========================== -->
-
+    <!-- CÓDIGO PRINCIPAL DO GRIMÓRIO -->
     <script>
-
         (function() {
-            'use strict';
-
             const items = document.querySelectorAll(".item");
             const slider = document.querySelector(".slider");
             const hoverSound = document.getElementById("hoverSound");
             const bgMusic = document.getElementById("bgMusic");
             const portalTransition = document.getElementById("portalTransition");
 
-            // CORES DINÂMICAS
+            // CORES
             items.forEach(item => {
-                const color = item.dataset.color;
-                item.style.setProperty("--glow-color", color);
+                item.style.setProperty("--glow-color", item.dataset.color);
             });
 
             // SOM HOVER
             items.forEach(item => {
                 item.addEventListener("mouseenter", () => {
-                    if(!hoverSound) return;
-                    hoverSound.volume = 0.12;
-                    hoverSound.currentTime = 0;
-                    hoverSound.play().catch(() => {});
+                    if(hoverSound) {
+                        hoverSound.volume = 0.12;
+                        hoverSound.currentTime = 0;
+                        hoverSound.play().catch(() => {});
+                    }
                 });
             });
 
-            // PARTICLES
+            // PARTÍCULAS
             const canvas = document.getElementById("particles");
             const ctx = canvas.getContext("2d");
-
-            function resizeCanvas(){
+            
+            function resizeCanvas() {
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
             }
-
             resizeCanvas();
+            window.addEventListener("resize", resizeCanvas);
 
             const particles = [];
-            const particleCount = 120;
-
-            for(let i = 0; i < particleCount; i++){
+            for(let i = 0; i < 120; i++) {
                 particles.push({
                     x: Math.random() * canvas.width,
                     y: Math.random() * canvas.height,
@@ -316,129 +117,148 @@
                 });
             }
 
-            function drawParticles(){
+            function drawParticles() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                particles.forEach(particle => {
+                particles.forEach(p => {
                     ctx.beginPath();
-                    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(255,255,255,${particle.opacity})`;
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255,255,255,${p.opacity})`;
                     ctx.fill();
-                    particle.x += particle.speedX;
-                    particle.y += particle.speedY;
-                    if(particle.x < 0 || particle.x > canvas.width){
-                        particle.speedX *= -1;
-                    }
-                    if(particle.y < 0 || particle.y > canvas.height){
-                        particle.speedY *= -1;
-                    }
+                    p.x += p.speedX;
+                    p.y += p.speedY;
+                    if(p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+                    if(p.y < 0 || p.y > canvas.height) p.speedY *= -1;
                 });
                 requestAnimationFrame(drawParticles);
             }
-
             drawParticles();
 
-            window.addEventListener("resize", () => {
-                resizeCanvas();
-            });
-
-            // AMBIENT MUSIC
-            if(bgMusic){
+            // MÚSICA
+            if(bgMusic) {
                 bgMusic.volume = 0;
                 bgMusic.play().then(() => {
-                    setTimeout(() => {
-                        bgMusic.volume = 0.12;
-                    }, 800);
+                    setTimeout(() => bgMusic.volume = 0.12, 800);
                 }).catch(() => {
-                    window.addEventListener("click", handleFirstInteraction, { once: true });
-                    window.addEventListener("touchstart", handleFirstInteraction, { once: true });
+                    window.addEventListener("click", () => { bgMusic.volume = 0.12; bgMusic.play(); }, { once: true });
+                    window.addEventListener("touchstart", () => { bgMusic.volume = 0.12; bgMusic.play(); }, { once: true });
                 });
             }
 
-            function handleFirstInteraction(){
-                if(!bgMusic) return;
-                bgMusic.volume = 0.12;
-                bgMusic.play().catch(() => {});
-            }
-
-            document.body.style.cursor = "default";
-
+            // TRANSIÇÃO
             let transitioning = false;
-
-            function createPortalFlash(color){
+            
+            function createPortalFlash(color) {
                 const flash = document.createElement("div");
                 flash.className = "portal-flash";
                 flash.style.setProperty("--flash-color", color);
                 document.body.appendChild(flash);
-                requestAnimationFrame(() => {
-                    flash.classList.add("show");
-                });
+                requestAnimationFrame(() => flash.classList.add("show"));
                 setTimeout(() => {
                     flash.classList.remove("show");
-                    setTimeout(() => {
-                        flash.remove();
-                    }, 1000);
+                    setTimeout(() => flash.remove(), 1000);
                 }, 900);
             }
 
-            function startAsuraTransition(selectedItem, asura){
+            function startAsuraTransition(selectedItem, asura) {
+                if(transitioning) return;
+                transitioning = true;
                 
                 if(typeof PortalAuth !== 'undefined') {
                     PortalAuth.generateToken(asura);
-                    console.log("🔑 Token gerado para:", asura);
                 }
                 
                 if(slider) slider.style.animationPlayState = "paused";
-
-                if(hoverSound){
+                if(hoverSound) {
                     hoverSound.volume = 0.2;
                     hoverSound.currentTime = 0;
                     hoverSound.play().catch(() => {});
                 }
-
-                if(bgMusic){
+                if(bgMusic) {
                     const fadeAudio = setInterval(() => {
-                        if(bgMusic.volume > 0.02){
+                        if(bgMusic.volume > 0.02) {
                             bgMusic.volume -= 0.01;
-                        }else{
+                        } else {
                             bgMusic.volume = 0;
                             clearInterval(fadeAudio);
                         }
                     }, 40);
                 }
-
                 if(slider) slider.classList.add("fade-all");
                 selectedItem.classList.add("active");
-
                 document.body.style.transition = "transform 1.6s ease";
                 document.body.style.transform = "scale(1.03)";
-
-                if(portalTransition){
-                    portalTransition.classList.add("active");
-                }
-
+                if(portalTransition) portalTransition.classList.add("active");
                 createPortalFlash(selectedItem.dataset.color);
-
-                console.log("✨ Abrindo portal dimensional para:", asura);
-
+                
                 setTimeout(() => {
                     window.location.href = "/world_azure/viagem.html?asura=" + asura;
                 }, 2200);
             }
 
-            window.startAsuraTransition = startAsuraTransition;
-            window.createPortalFlash = createPortalFlash;
-
-            if (typeof HecateEvents !== 'undefined') {
-                HecateEvents.on('hecate:unlocked', () => {
-                    console.log('🗝️ Hécate destravada! Asuras liberados.');
+            // ============================================
+            // 🔥 HÉCATE - SISTEMA DE BLOQUEIO E TESTE 🔥
+            // ============================================
+            
+            // Verificar se já passou no teste
+            if (localStorage.getItem('hecate_auth_complete') === 'true') {
+                console.log('✅ Usuário já autenticado');
+                // Cards liberados, só adicionar evento de clique
+                items.forEach(item => {
+                    item.addEventListener("click", () => {
+                        startAsuraTransition(item, item.dataset.asura);
+                    });
                 });
+            } else {
+                // Bloquear cards
+                items.forEach(item => {
+                    item.style.pointerEvents = "none";
+                    item.style.opacity = "0.4";
+                    item.style.filter = "blur(2px)";
+                });
+                
+                // Aguardar toque/clique para ativar Hécate
+                let testeAtivo = false;
+                
+                function ativarHecate() {
+                    if(testeAtivo) return;
+                    testeAtivo = true;
+                    
+                    console.log('🔥 Ativando Hécate...');
+                    document.body.removeEventListener('click', ativarHecate);
+                    document.body.removeEventListener('touchstart', ativarHecate);
+                    
+                    if (typeof HecateTest !== 'undefined' && HecateTest.show) {
+                        HecateTest.show(function(success) {
+                            if (success) {
+                                console.log('✅ Teste aprovado! Liberando cards...');
+                                localStorage.setItem('hecate_auth_complete', 'true');
+                                
+                                // Liberar cards e adicionar eventos de clique
+                                items.forEach(item => {
+                                    item.style.pointerEvents = "";
+                                    item.style.opacity = "";
+                                    item.style.filter = "";
+                                    item.addEventListener("click", () => {
+                                        startAsuraTransition(item, item.dataset.asura);
+                                    });
+                                });
+                            } else {
+                                console.log('❌ Teste falhou');
+                                testeAtivo = false;
+                                document.body.addEventListener('click', ativarHecate);
+                                document.body.addEventListener('touchstart', ativarHecate);
+                            }
+                        });
+                    } else {
+                        console.error('❌ HecateTest não encontrado!');
+                    }
+                }
+                
+                document.body.addEventListener('click', ativarHecate);
+                document.body.addEventListener('touchstart', ativarHecate);
+                console.log('🗝️ Hécate: Toque na tela para ativar o teste');
             }
-
-            // 🔥 O FIREWALL.JS VAI GERENCIAR TUDO - NÃO TEM MAIS CÓDIGO DUPLICADO
-            console.log('🗝️ Grimório carregado - Aguardando Hécate...');
-
         })();
-
     </script>
 
 </body>
