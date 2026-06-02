@@ -12,7 +12,7 @@
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0"
+        content="width=device-width, initial-scale=1.0, user-scalable=no"
     >
 
     <!-- =========================
@@ -28,7 +28,7 @@
          TITLE
     ========================== -->
 
-    <title>ASURAS - Grimório Dimensional</title>
+    <title>ASURAS - Grimório Dimensional | Hécate Guardiã</title>
 
 </head>
 
@@ -240,14 +240,42 @@
     ></audio>
     
     <!-- =========================
-     OBSCURÁTIL + SISTEMA DE SEGURANÇA
+         🗝️ HÉCATE - SISTEMA DE DEFESA DO GRIMÓRIO
+         Deusa da Magia, Encruzilhadas e Proteção
     ========================== -->
 
-<script src="shared/js/obscuratil.js"></script>
-<script src="shared/js/auth.js"></script>
+    <!-- Core e sistema de eventos -->
+    <script src="shared/js/hecate/core.js"></script>
+    <script src="shared/js/hecate/block-manager.js"></script>
+    <script src="shared/js/hecate/interaction/event-bus.js"></script>
+
+    <!-- Dispositivos -->
+    <script src="shared/js/hecate/devices/desktop.js"></script>
+    <script src="shared/js/hecate/devices/mobile.js"></script>
+    <script src="shared/js/hecate/devices/tablet.js"></script>
+
+    <!-- Gestos e gerenciadores -->
+    <script src="shared/js/hecate/gestures/click.js"></script>
+    <script src="shared/js/hecate/interaction/interaction-manager.js"></script>
+
+    <!-- UI -->
+    <script src="shared/js/hecate/ui/feedback.js"></script>
+
+    <!-- Sistema de teste -->
+    <script src="shared/js/hecate/test-system.js"></script>
+
+    <!-- Módulos de segurança -->
+    <script src="shared/js/hecate/modules/anti-debug.js"></script>
+    <script src="shared/js/hecate/modules/anti-hack.js"></script>
+    <script src="shared/js/hecate/modules/key-combos.js"></script>
+    <script src="shared/js/hecate/modules/network-guard.js"></script>
+
+    <!-- Firewall e autenticação -->
+    <script src="shared/js/hecate/firewall.js"></script>
+    <script src="shared/js/hecate/auth.js"></script>
 
     <!-- =========================
-         SCRIPT COMPLETO
+         SCRIPT COMPLETO DO GRIMÓRIO
     ========================== -->
 
     <script>
@@ -256,179 +284,189 @@
         // ASURAS - SISTEMA COMPLETO
         // =========================
 
-        // ELEMENTOS
-        const items = document.querySelectorAll(".item");
-        const slider = document.querySelector(".slider");
-        const hoverSound = document.getElementById("hoverSound");
-        const bgMusic = document.getElementById("bgMusic");
-        const portalTransition = document.getElementById("portalTransition");
+        (function() {
+            'use strict';
 
-        // CORES DINÂMICAS
-        items.forEach(item => {
-            const color = item.dataset.color;
-            item.style.setProperty("--glow-color", color);
-        });
+            // ELEMENTOS
+            const items = document.querySelectorAll(".item");
+            const slider = document.querySelector(".slider");
+            const hoverSound = document.getElementById("hoverSound");
+            const bgMusic = document.getElementById("bgMusic");
+            const portalTransition = document.getElementById("portalTransition");
 
-        // SOM HOVER
-        items.forEach(item => {
-            item.addEventListener("mouseenter", () => {
-                if(!hoverSound) return;
-                hoverSound.volume = 0.12;
-                hoverSound.currentTime = 0;
-                hoverSound.play().catch(() => {});
+            // CORES DINÂMICAS
+            items.forEach(item => {
+                const color = item.dataset.color;
+                item.style.setProperty("--glow-color", color);
             });
-        });
 
-        // PARTICLES
-        const canvas = document.getElementById("particles");
-        const ctx = canvas.getContext("2d");
-
-        function resizeCanvas(){
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-
-        resizeCanvas();
-
-        const particles = [];
-        const particleCount = 120;
-
-        for(let i = 0; i < particleCount; i++){
-            particles.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                size: Math.random() * 2 + 1,
-                speedX: (Math.random() - 0.5) * 0.3,
-                speedY: (Math.random() - 0.5) * 0.3,
-                opacity: Math.random() * 0.5
+            // SOM HOVER
+            items.forEach(item => {
+                item.addEventListener("mouseenter", () => {
+                    if(!hoverSound) return;
+                    hoverSound.volume = 0.12;
+                    hoverSound.currentTime = 0;
+                    hoverSound.play().catch(() => {});
+                });
             });
-        }
 
-        function drawParticles(){
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(particle => {
-                ctx.beginPath();
-                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255,255,255,${particle.opacity})`;
-                ctx.fill();
-                particle.x += particle.speedX;
-                particle.y += particle.speedY;
-                if(particle.x < 0 || particle.x > canvas.width){
-                    particle.speedX *= -1;
-                }
-                if(particle.y < 0 || particle.y > canvas.height){
-                    particle.speedY *= -1;
-                }
-            });
-            requestAnimationFrame(drawParticles);
-        }
+            // PARTICLES
+            const canvas = document.getElementById("particles");
+            const ctx = canvas.getContext("2d");
 
-        drawParticles();
+            function resizeCanvas(){
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
 
-        window.addEventListener("resize", () => {
             resizeCanvas();
-        });
 
-        // AMBIENT MUSIC
-        if(bgMusic){
-            bgMusic.volume = 0;
-            bgMusic.play().then(() => {
-                setTimeout(() => {
-                    bgMusic.volume = 0.12;
-                }, 800);
-            }).catch(() => {
-                window.addEventListener("click", handleFirstInteraction, { once: true });
-                window.addEventListener("touchstart", handleFirstInteraction, { once: true });
-            });
-        }
+            const particles = [];
+            const particleCount = 120;
 
-        function handleFirstInteraction(){
-            if(!bgMusic) return;
-            bgMusic.volume = 0.12;
-            bgMusic.play().catch(() => {});
-        }
-
-        // CURSOR BASE
-        document.body.style.cursor = "default";
-
-        // CONTROLE DE TRANSIÇÃO
-        let transitioning = false;
-
-        // FLASH PORTAL
-        function createPortalFlash(color){
-            const flash = document.createElement("div");
-            flash.className = "portal-flash";
-            flash.style.setProperty("--flash-color", color);
-            document.body.appendChild(flash);
-            requestAnimationFrame(() => {
-                flash.classList.add("show");
-            });
-            setTimeout(() => {
-                flash.classList.remove("show");
-                setTimeout(() => {
-                    flash.remove();
-                }, 1000);
-            }, 900);
-        }
-
-        // START TRANSITION - AGORA VAI PARA O PORTAL (viagem.html)
-        function startAsuraTransition(selectedItem, asura){
-            
-            // 🔐 GERAR TOKEN DE ACESSO ANTES DE SAIR
-            if(typeof PortalAuth !== 'undefined') {
-                PortalAuth.gerarToken(asura);
-                console.log("🔑 Token gerado para:", asura);
-            }
-            
-            slider.style.animationPlayState = "paused";
-
-            if(hoverSound){
-                hoverSound.volume = 0.2;
-                hoverSound.currentTime = 0;
-                hoverSound.play().catch(() => {});
+            for(let i = 0; i < particleCount; i++){
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 2 + 1,
+                    speedX: (Math.random() - 0.5) * 0.3,
+                    speedY: (Math.random() - 0.5) * 0.3,
+                    opacity: Math.random() * 0.5
+                });
             }
 
-            // fade out da música ambiente
-            if(bgMusic){
-                const fadeAudio = setInterval(() => {
-                    if(bgMusic.volume > 0.02){
-                        bgMusic.volume -= 0.01;
-                    }else{
-                        bgMusic.volume = 0;
-                        clearInterval(fadeAudio);
+            function drawParticles(){
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(particle => {
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255,255,255,${particle.opacity})`;
+                    ctx.fill();
+                    particle.x += particle.speedX;
+                    particle.y += particle.speedY;
+                    if(particle.x < 0 || particle.x > canvas.width){
+                        particle.speedX *= -1;
                     }
-                }, 40);
+                    if(particle.y < 0 || particle.y > canvas.height){
+                        particle.speedY *= -1;
+                    }
+                });
+                requestAnimationFrame(drawParticles);
             }
 
-            slider.classList.add("fade-all");
-            selectedItem.classList.add("active");
+            drawParticles();
 
-            document.body.style.transition = "transform 1.6s ease";
-            document.body.style.transform = "scale(1.03)";
-
-            if(portalTransition){
-                portalTransition.classList.add("active");
-            }
-
-            createPortalFlash(selectedItem.dataset.color);
-
-            console.log("✨ Abrindo portal dimensional para:", asura);
-
-            // REDIRECIONA PARA O PORTAL DE VIAGEM
-            setTimeout(() => {
-                window.location.href = `viagem.html?asura=${asura}`;
-            }, 2200);
-        }
-
-        // CLICK ASURA
-        items.forEach(item => {
-            item.addEventListener("click", () => {
-                if(transitioning) return;
-                transitioning = true;
-                const asura = item.dataset.asura;
-                startAsuraTransition(item, asura);
+            window.addEventListener("resize", () => {
+                resizeCanvas();
             });
-        });
+
+            // AMBIENT MUSIC
+            if(bgMusic){
+                bgMusic.volume = 0;
+                bgMusic.play().then(() => {
+                    setTimeout(() => {
+                        bgMusic.volume = 0.12;
+                    }, 800);
+                }).catch(() => {
+                    window.addEventListener("click", handleFirstInteraction, { once: true });
+                    window.addEventListener("touchstart", handleFirstInteraction, { once: true });
+                });
+            }
+
+            function handleFirstInteraction(){
+                if(!bgMusic) return;
+                bgMusic.volume = 0.12;
+                bgMusic.play().catch(() => {});
+            }
+
+            // CURSOR BASE
+            document.body.style.cursor = "default";
+
+            // CONTROLE DE TRANSIÇÃO
+            let transitioning = false;
+
+            // FLASH PORTAL
+            function createPortalFlash(color){
+                const flash = document.createElement("div");
+                flash.className = "portal-flash";
+                flash.style.setProperty("--flash-color", color);
+                document.body.appendChild(flash);
+                requestAnimationFrame(() => {
+                    flash.classList.add("show");
+                });
+                setTimeout(() => {
+                    flash.classList.remove("show");
+                    setTimeout(() => {
+                        flash.remove();
+                    }, 1000);
+                }, 900);
+            }
+
+            // START TRANSITION - VAI PARA O PORTAL (viagem.html)
+            function startAsuraTransition(selectedItem, asura){
+                
+                // 🔐 GERAR TOKEN DE ACESSO ANTES DE SAIR
+                if(typeof PortalAuth !== 'undefined') {
+                    PortalAuth.generateToken(asura);
+                    console.log("🔑 Token gerado para:", asura);
+                }
+                
+                if(slider) slider.style.animationPlayState = "paused";
+
+                if(hoverSound){
+                    hoverSound.volume = 0.2;
+                    hoverSound.currentTime = 0;
+                    hoverSound.play().catch(() => {});
+                }
+
+                // fade out da música ambiente
+                if(bgMusic){
+                    const fadeAudio = setInterval(() => {
+                        if(bgMusic.volume > 0.02){
+                            bgMusic.volume -= 0.01;
+                        }else{
+                            bgMusic.volume = 0;
+                            clearInterval(fadeAudio);
+                        }
+                    }, 40);
+                }
+
+                if(slider) slider.classList.add("fade-all");
+                selectedItem.classList.add("active");
+
+                document.body.style.transition = "transform 1.6s ease";
+                document.body.style.transform = "scale(1.03)";
+
+                if(portalTransition){
+                    portalTransition.classList.add("active");
+                }
+
+                createPortalFlash(selectedItem.dataset.color);
+
+                console.log("✨ Abrindo portal dimensional para:", asura);
+
+                // REDIRECIONA PARA O PORTAL DE VIAGEM
+                setTimeout(() => {
+                    window.location.href = `viagem.html?asura=${asura}`;
+                }, 2200);
+            }
+
+            // CLICK ASURA (SÓ FUNCIONA SE HÉCATE ESTIVER DESTRAVADA)
+            // Os handlers são recriados pelo firewall.js após aprovação
+            // Por enquanto, apenas armazenamos a função para ser usada depois
+            
+            // Armazenar função global para ser usada pelo firewall
+            window.startAsuraTransition = startAsuraTransition;
+            window.createPortalFlash = createPortalFlash;
+
+            // Observar quando Hécate for destravada
+            if (typeof HecateEvents !== 'undefined') {
+                HecateEvents.on('hecate:unlocked', () => {
+                    console.log('🗝️ Hécate destravada! Asuras liberados.');
+                });
+            }
+
+        })();
 
     </script>
 
