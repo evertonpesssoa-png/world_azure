@@ -6,219 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background: radial-gradient(circle at center, #0a0a2a 0%, #000000 100%);
-            min-height: 100vh;
-            overflow-x: hidden;
-            font-family: 'Segoe UI', 'Poppins', system-ui, -apple-system, sans-serif;
-            transition: transform 1.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-        }
-
-        /* Banner */
-        .banner {
-            width: 100%;
-            height: 100vh;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        /* Partículas */
-        #particles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        /* Slider 3D */
-        .slider {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            perspective: 1200px;
-            transform-style: preserve-3d;
-            animation: rotateSlides 40s infinite linear;
-            z-index: 2;
-        }
-
-        @keyframes rotateSlides {
-            from {
-                transform: rotateY(0deg);
-            }
-            to {
-                transform: rotateY(360deg);
-            }
-        }
-
-        .slider.fade-all {
-            animation: fadeOut 1.2s forwards;
-        }
-
-        @keyframes fadeOut {
-            0% {
-                opacity: 1;
-                transform: rotateY(0deg);
-            }
-            100% {
-                opacity: 0;
-                transform: rotateY(180deg) scale(0.8);
-                visibility: hidden;
-            }
-        }
-
-        .item {
-            position: absolute;
-            width: 200px;
-            height: 280px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            transform-style: preserve-3d;
-            transform: rotateY(calc((var(--position) - 1) * (360 / var(--quantity)) * 1deg)) translateZ(400px);
-            filter: drop-shadow(0 0 8px var(--glow-color));
-            border-radius: 16px;
-            pointer-events: auto;
-        }
-
-        .item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 16px;
-            box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
-            transition: all 0.3s ease;
-        }
-
-        .item:hover {
-            transform: rotateY(calc((var(--position) - 1) * (360 / var(--quantity)) * 1deg)) translateZ(480px) scale(1.08);
-            filter: drop-shadow(0 0 20px var(--glow-color));
-        }
-
-        .item.active {
-            animation: explodeCard 0.8s forwards;
-            pointer-events: none;
-        }
-
-        @keyframes explodeCard {
-            0% {
-                transform: rotateY(calc((var(--position) - 1) * (360 / var(--quantity)) * 1deg)) translateZ(400px) scale(1);
-                opacity: 1;
-                filter: drop-shadow(0 0 20px var(--glow-color));
-            }
-            50% {
-                transform: rotateY(calc((var(--position) - 1) * (360 / var(--quantity)) * 1deg)) translateZ(600px) scale(1.4);
-                opacity: 0.8;
-                filter: drop-shadow(0 0 50px var(--glow-color));
-            }
-            100% {
-                transform: rotateY(calc((var(--position) - 1) * (360 / var(--quantity)) * 1deg)) translateZ(800px) scale(1.8);
-                opacity: 0;
-                filter: drop-shadow(0 0 80px var(--glow-color));
-            }
-        }
-
-        /* Portal Flash */
-        .portal-flash {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, var(--flash-color, #fff) 0%, rgba(255,255,255,0.8) 50%, transparent 100%);
-            opacity: 0;
-            pointer-events: none;
-            z-index: 9999;
-            transition: opacity 0.4s ease;
-        }
-
-        .portal-flash.show {
-            opacity: 1;
-            animation: portalPulse 0.8s ease-out forwards;
-        }
-
-        @keyframes portalPulse {
-            0% {
-                opacity: 1;
-                transform: scale(0.9);
-            }
-            100% {
-                opacity: 0;
-                transform: scale(1.5);
-            }
-        }
-
-        .portal-flash.active {
-            animation: portalTravel 1.6s forwards;
-        }
-
-        @keyframes portalTravel {
-            0% {
-                opacity: 0;
-                transform: scale(0.5);
-            }
-            20% {
-                opacity: 1;
-                transform: scale(1.2);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(2);
-                background: white;
-            }
-        }
-
-        /* Responsivo */
-        @media (max-width: 768px) {
-            .item {
-                width: 140px;
-                height: 200px;
-                transform: rotateY(calc((var(--position) - 1) * (360 / var(--quantity)) * 1deg)) translateZ(280px);
-            }
-            .item:hover {
-                transform: rotateY(calc((var(--position) - 1) * (360 / var(--quantity)) * 1deg)) translateZ(340px) scale(1.05);
-            }
-        }
-
-        @media (max-width: 480px) {
-            .item {
-                width: 100px;
-                height: 140px;
-                transform: rotateY(calc((var(--position) - 1) * (360 / var(--quantity)) * 1deg)) translateZ(180px);
-            }
-        }
-
-        /* Loading */
-        .hecate-loading {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            color: rgba(255,255,255,0.5);
-            font-size: 12px;
-            font-family: monospace;
-            z-index: 100;
-            background: rgba(0,0,0,0.5);
-            padding: 5px 10px;
-            border-radius: 8px;
-            pointer-events: none;
-        }
-    </style>
+    <link rel="stylesheet" href="/world_azure/style.css">
 
     <title>ASURAS - Grimório Dimensional | Hécate Guardiã</title>
 
@@ -275,160 +63,38 @@
     <audio id="hoverSound" src="/world_azure/sounds/hover.mp3" preload="auto"></audio>
     <audio id="bgMusic" src="/world_azure/sounds/ambient.mp3" loop preload="auto" playsinline></audio>
 
-    <!-- HÉCATE - SISTEMA COMPLETO (SIMULADO) -->
-    <script>
-        // ============================================
-        // 🔥 HÉCATE - SISTEMA DE BLOQUEIO E TESTE 🔥
-        // ============================================
-        
-        // Simulação do sistema Hecate (já que os arquivos originais podem não existir)
-        const HecateTest = {
-            show: function(callback) {
-                console.log('🗝️ Hécate: Iniciando teste de proteção...');
-                
-                // Criar modal de teste
-                const modal = document.createElement('div');
-                modal.style.cssText = `
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background: rgba(0,0,0,0.95);
-                    z-index: 10000;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    font-family: monospace;
-                    animation: fadeIn 0.3s ease;
-                `;
-                
-                const content = document.createElement('div');
-                content.style.cssText = `
-                    background: linear-gradient(135deg, #1a0a2a, #0a0a2a);
-                    padding: 40px;
-                    border-radius: 20px;
-                    text-align: center;
-                    border: 2px solid #8b2fff;
-                    box-shadow: 0 0 50px rgba(139,47,255,0.3);
-                    max-width: 400px;
-                    margin: 20px;
-                `;
-                
-                content.innerHTML = `
-                    <h2 style="color: #8b2fff; margin-bottom: 20px;">🔮 HÉCATE GUARDIÃ 🔮</h2>
-                    <p style="color: white; margin-bottom: 20px;">Responda corretamente para acessar o grimório:</p>
-                    <p style="color: #ffd54f; margin-bottom: 15px;">Qual é a guardiã do grimório dimensional?</p>
-                    <input type="text" id="hecateAnswer" placeholder="Sua resposta..." style="
-                        width: 100%;
-                        padding: 12px;
-                        background: rgba(255,255,255,0.1);
-                        border: 1px solid #8b2fff;
-                        color: white;
-                        border-radius: 8px;
-                        margin-bottom: 20px;
-                        font-size: 16px;
-                    ">
-                    <button id="hecateSubmit" style="
-                        background: linear-gradient(135deg, #8b2fff, #4a0e8a);
-                        color: white;
-                        border: none;
-                        padding: 12px 30px;
-                        border-radius: 8px;
-                        cursor: pointer;
-                        font-size: 16px;
-                        transition: transform 0.2s;
-                    ">✨ RESPONDER ✨</button>
-                    <p style="color: rgba(255,255,255,0.5); margin-top: 20px; font-size: 12px;">Dica: É uma deusa grega da magia</p>
-                `;
-                
-                modal.appendChild(content);
-                document.body.appendChild(modal);
-                
-                const input = document.getElementById('hecateAnswer');
-                const submitBtn = document.getElementById('hecateSubmit');
-                
-                const checkAnswer = () => {
-                    const answer = input.value.toLowerCase().trim();
-                    if(answer === 'hécate' || answer === 'hecate' || answer === 'hécate') {
-                        modal.remove();
-                        callback(true);
-                    } else {
-                        input.style.border = '2px solid #ff4444';
-                        input.style.animation = 'shake 0.3s ease';
-                        setTimeout(() => {
-                            input.style.border = '1px solid #8b2fff';
-                            input.style.animation = '';
-                        }, 500);
-                        // Não chama callback false, apenas permite tentar novamente
-                    }
-                };
-                
-                submitBtn.onclick = checkAnswer;
-                input.onkeypress = (e) => {
-                    if(e.key === 'Enter') checkAnswer();
-                };
-                
-                // Adicionar animação shake
-                const style = document.createElement('style');
-                style.textContent = `
-                    @keyframes shake {
-                        0%, 100% { transform: translateX(0); }
-                        25% { transform: translateX(-10px); }
-                        75% { transform: translateX(10px); }
-                    }
-                    @keyframes fadeIn {
-                        from { opacity: 0; }
-                        to { opacity: 1; }
-                    }
-                `;
-                document.head.appendChild(style);
-            }
-        };
-        
-        // Simulação do PortalAuth
-        const PortalAuth = {
-            generateToken: function(asura) {
-                const token = btoa(JSON.stringify({
-                    asura: asura,
-                    timestamp: Date.now(),
-                    hash: Math.random().toString(36)
-                }));
-                localStorage.setItem('portal_token', token);
-                console.log('🔐 Token gerado para:', asura);
-                return token;
-            }
-        };
-    </script>
+    <!-- HÉCATE - SISTEMA COMPLETO -->
+    <script src="/world_azure/shared/js/hecate/core.js"></script>
+    <script src="/world_azure/shared/js/hecate/block-manager.js"></script>
+    <script src="/world_azure/shared/js/hecate/test-system.js"></script>
+    <script src="/world_azure/shared/js/hecate/auth.js"></script>
 
     <!-- CÓDIGO PRINCIPAL DO GRIMÓRIO -->
     <script>
         (function() {
-            console.log('🎮 Iniciando Grimório Dimensional...');
-            
             const items = document.querySelectorAll(".item");
             const slider = document.querySelector(".slider");
             const hoverSound = document.getElementById("hoverSound");
             const bgMusic = document.getElementById("bgMusic");
             const portalTransition = document.getElementById("portalTransition");
 
-            // Aplicar cores glow
+            // CORES
             items.forEach(item => {
                 item.style.setProperty("--glow-color", item.dataset.color);
             });
 
-            // Som hover
+            // SOM HOVER
             items.forEach(item => {
                 item.addEventListener("mouseenter", () => {
                     if(hoverSound) {
                         hoverSound.volume = 0.12;
                         hoverSound.currentTime = 0;
-                        hoverSound.play().catch(() => console.log('Áudio hover bloqueado'));
+                        hoverSound.play().catch(() => {});
                     }
                 });
             });
 
-            // Sistema de partículas
+            // PARTÍCULAS
             const canvas = document.getElementById("particles");
             const ctx = canvas.getContext("2d");
             
@@ -452,7 +118,6 @@
             }
 
             function drawParticles() {
-                if(!ctx) return;
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 particles.forEach(p => {
                     ctx.beginPath();
@@ -468,268 +133,134 @@
             }
             drawParticles();
 
-            // Música ambiente
+            // MÚSICA
             if(bgMusic) {
                 bgMusic.volume = 0;
-                const playMusic = () => {
-                    bgMusic.play().then(() => {
-                        let vol = 0;
-                        const fadeIn = setInterval(() => {
-                            if(vol < 0.12) {
-                                vol += 0.01;
-                                bgMusic.volume = vol;
-                            } else {
-                                clearInterval(fadeIn);
-                            }
-                        }, 100);
-                    }).catch(() => {
-                        console.log('Música precisa de interação');
-                    });
-                };
-                
-                // Tentar tocar automaticamente
-                playMusic();
-                
-                // Garantir que toque após interação
-                document.body.addEventListener('click', () => {
-                    if(bgMusic.paused || bgMusic.volume === 0) {
-                        playMusic();
-                    }
-                }, { once: true });
+                bgMusic.play().then(() => {
+                    setTimeout(() => bgMusic.volume = 0.12, 800);
+                }).catch(() => {
+                    window.addEventListener("click", () => { bgMusic.volume = 0.12; bgMusic.play(); }, { once: true });
+                    window.addEventListener("touchstart", () => { bgMusic.volume = 0.12; bgMusic.play(); }, { once: true });
+                });
             }
 
-            // Função de flash do portal
+            // TRANSIÇÃO
+            let transitioning = false;
+            
             function createPortalFlash(color) {
                 const flash = document.createElement("div");
                 flash.className = "portal-flash";
-                flash.style.setProperty("--flash-color", color || "#ffffff");
+                flash.style.setProperty("--flash-color", color);
                 document.body.appendChild(flash);
-                setTimeout(() => flash.classList.add("show"), 10);
+                requestAnimationFrame(() => flash.classList.add("show"));
                 setTimeout(() => {
                     flash.classList.remove("show");
                     setTimeout(() => flash.remove(), 1000);
                 }, 900);
             }
 
-            // Função de transição CORRIGIDA
-            let transitioning = false;
-            
             function startAsuraTransition(selectedItem, asura) {
-                if(transitioning) {
-                    console.log('⚠️ Transição já em andamento');
-                    return;
-                }
+                if(transitioning) return;
                 transitioning = true;
                 
-                console.log('🚀 Iniciando transição para:', asura);
-                
-                // Gerar token
                 if(typeof PortalAuth !== 'undefined') {
                     PortalAuth.generateToken(asura);
                 }
                 
-                // Pausar animação do slider
-                if(slider) {
-                    slider.style.animationPlayState = "paused";
-                }
-                
-                // Som de clique
+                if(slider) slider.style.animationPlayState = "paused";
                 if(hoverSound) {
                     hoverSound.volume = 0.2;
                     hoverSound.currentTime = 0;
                     hoverSound.play().catch(() => {});
                 }
-                
-                // Fade out da música
-                if(bgMusic && bgMusic.volume > 0) {
+                if(bgMusic) {
                     const fadeAudio = setInterval(() => {
                         if(bgMusic.volume > 0.02) {
-                            bgMusic.volume -= 0.02;
+                            bgMusic.volume -= 0.01;
                         } else {
                             bgMusic.volume = 0;
-                            bgMusic.pause();
                             clearInterval(fadeAudio);
                         }
-                    }, 50);
+                    }, 40);
                 }
-                
-                // Animação do slider
                 if(slider) slider.classList.add("fade-all");
-                
-                // Animação do card
                 selectedItem.classList.add("active");
-                
-                // Animação do body
-                document.body.style.transition = "transform 1.6s cubic-bezier(0.2, 0.9, 0.4, 1.1)";
-                document.body.style.transform = "scale(1.05)";
-                
-                // Flash do portal
-                if(portalTransition) {
-                    portalTransition.classList.add("active");
-                }
+                document.body.style.transition = "transform 1.6s ease";
+                document.body.style.transform = "scale(1.03)";
+                if(portalTransition) portalTransition.classList.add("active");
                 createPortalFlash(selectedItem.dataset.color);
                 
-                // REDIRECIONAMENTO GARANTIDO
-                const targetUrl = `/world_azure/viagem.html?asura=${asura}`;
-                console.log('🌐 Redirecionando para:', targetUrl);
-                
-                // Timeout principal
                 setTimeout(() => {
-                    window.location.href = targetUrl;
-                }, 2000);
-                
-                // Fallback de segurança
-                setTimeout(() => {
-                    if(window.location.pathname !== targetUrl.split('?')[0]) {
-                        console.log('⚠️ Fallback: forçando redirecionamento');
-                        window.location.href = targetUrl;
-                    }
-                }, 3500);
+                    window.location.href = "/world_azure/viagem.html?asura=" + asura;
+                }, 2200);
             }
 
             // ============================================
-            // 🔥 CONFIGURAÇÃO DE BLOQUEIO E LIBERAÇÃO 🔥
+            // 🔥 HÉCATE - SISTEMA DE BLOQUEIO E TESTE 🔥
             // ============================================
             
             // Verificar se já passou no teste
-            const authComplete = localStorage.getItem('hecate_auth_complete') === 'true';
-            
-            if (authComplete) {
-                console.log('✅ Usuário já autenticado - Cards liberados');
-                // Liberar cards imediatamente
+            if (localStorage.getItem('hecate_auth_complete') === 'true') {
+                console.log('✅ Usuário já autenticado');
+                // Cards liberados, só adicionar evento de clique
                 items.forEach(item => {
-                    item.style.pointerEvents = "auto";
-                    item.style.opacity = "1";
-                    item.style.filter = "none";
-                    item.style.cursor = "pointer";
-                    
-                    // Adicionar evento de clique
-                    item.addEventListener("click", (e) => {
-                        e.stopPropagation();
-                        const asura = item.dataset.asura;
-                        if(asura) {
-                            startAsuraTransition(item, asura);
-                        } else {
-                            console.error('❌ Asura não identificado');
-                        }
+                    item.addEventListener("click", () => {
+                        startAsuraTransition(item, item.dataset.asura);
                     });
                 });
             } else {
-                console.log('🔒 Cards bloqueados - Aguardando autenticação Hécate');
-                
                 // Bloquear cards
                 items.forEach(item => {
                     item.style.pointerEvents = "none";
                     item.style.opacity = "0.4";
                     item.style.filter = "blur(2px)";
-                    item.style.cursor = "default";
                 });
                 
-                // Adicionar indicador visual
-                const loadingDiv = document.createElement('div');
-                loadingDiv.className = 'hecate-loading';
-                loadingDiv.innerHTML = '🔮 Toque para ativar Hécate Guardiã 🔮';
-                document.body.appendChild(loadingDiv);
-                
-                // Aguardar interação do usuário
+                // Aguardar toque/clique para ativar Hécate
                 let testeAtivo = false;
                 
                 function ativarHecate() {
                     if(testeAtivo) return;
                     testeAtivo = true;
                     
-                    console.log('🔥 Ativando guardiã Hécate...');
-                    
-                    // Remover listener e indicador
+                    console.log('🔥 Ativando Hécate...');
                     document.body.removeEventListener('click', ativarHecate);
                     document.body.removeEventListener('touchstart', ativarHecate);
-                    if(loadingDiv) loadingDiv.remove();
                     
-                    // Mostrar teste
                     if (typeof HecateTest !== 'undefined' && HecateTest.show) {
                         HecateTest.show(function(success) {
                             if (success) {
-                                console.log('✅ Teste aprovado! Liberando grimório...');
+                                console.log('✅ Teste aprovado! Liberando cards...');
                                 localStorage.setItem('hecate_auth_complete', 'true');
                                 
-                                // Liberar cards
+                                // Liberar cards e adicionar eventos de clique
                                 items.forEach(item => {
-                                    item.style.pointerEvents = "auto";
+                                    item.style.pointerEvents = "";
                                     item.style.opacity = "";
                                     item.style.filter = "";
-                                    item.style.cursor = "pointer";
-                                    
-                                    // Adicionar eventos de clique
-                                    item.addEventListener("click", (e) => {
-                                        e.stopPropagation();
-                                        const asura = item.dataset.asura;
-                                        if(asura) {
-                                            startAsuraTransition(item, asura);
-                                        }
+                                    item.addEventListener("click", () => {
+                                        startAsuraTransition(item, item.dataset.asura);
                                     });
                                 });
-                                
-                                // Mostrar mensagem de sucesso
-                                const successMsg = document.createElement('div');
-                                successMsg.style.cssText = `
-                                    position: fixed;
-                                    bottom: 20px;
-                                    left: 50%;
-                                    transform: translateX(-50%);
-                                    background: rgba(139,47,255,0.9);
-                                    color: white;
-                                    padding: 10px 20px;
-                                    border-radius: 30px;
-                                    font-family: monospace;
-                                    z-index: 1000;
-                                    animation: fadeInUp 0.5s ease;
-                                `;
-                                successMsg.innerHTML = '✨ Grimório Liberado! Toque nos cards para viajar ✨';
-                                document.body.appendChild(successMsg);
-                                setTimeout(() => successMsg.remove(), 3000);
                             } else {
-                                console.log('❌ Teste falhou - Mantendo bloqueio');
+                                console.log('❌ Teste falhou');
                                 testeAtivo = false;
-                                // Permitir nova tentativa
                                 document.body.addEventListener('click', ativarHecate);
                                 document.body.addEventListener('touchstart', ativarHecate);
                             }
                         });
                     } else {
                         console.error('❌ HecateTest não encontrado!');
-                        // Fallback: liberar automaticamente (apenas para desenvolvimento)
-                        console.log('⚠️ Modo desenvolvimento: liberando cards');
-                        localStorage.setItem('hecate_auth_complete', 'true');
-                        location.reload();
                     }
                 }
                 
-                // Adicionar listeners para ativar Hécate
                 document.body.addEventListener('click', ativarHecate);
                 document.body.addEventListener('touchstart', ativarHecate);
-                console.log('🗝️ Hécate: Aguardando toque para ativar proteção...');
+                console.log('🗝️ Hécate: Toque na tela para ativar o teste');
             }
-            
-            // Adicionar animação de fadeInUp
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes fadeInUp {
-                    from {
-                        opacity: 0;
-                        transform: translateX(-50%) translateY(20px);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateX(-50%) translateY(0);
-                    }
-                }
-            `;
-            document.head.appendChild(style);
-            
-            console.log('🎉 Grimório inicializado com sucesso!');
         })();
     </script>
 
 </body>
 
-</html>
+</html>0
