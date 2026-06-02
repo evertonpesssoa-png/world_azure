@@ -38,14 +38,11 @@
     <script>
         // Registrar Service Worker
         if ('serviceWorker' in navigator) {
-            // Garantir que o caminho está correto para o GitHub Pages
             const swPath = '/world_azure/service-worker.js';
             
             navigator.serviceWorker.register(swPath)
                 .then(reg => {
                     console.log('🗝️ Hécate: Service Worker registrado com sucesso!');
-                    
-                    // Verificar se precisa atualizar
                     reg.onupdatefound = () => {
                         const installing = reg.installing;
                         if (installing) {
@@ -61,7 +58,6 @@
                     console.log('❌ Hécate: Service Worker falhou:', err);
                 });
             
-            // Verificar se o Service Worker está controlando a página
             navigator.serviceWorker.ready.then(() => {
                 console.log('🗝️ Hécate: Service Worker está ativo e controlando a página');
             });
@@ -80,22 +76,12 @@
 
     <div class="banner">
 
-        <!-- =========================
-             PARTICLES
-        ========================== -->
-
         <canvas id="particles"></canvas>
-
-        <!-- =========================
-             SLIDER 3D
-        ========================== -->
 
         <div
             class="slider"
             style="--quantity: 9"
         >
-
-            <!-- DIVA -->
 
             <div
                 class="item"
@@ -110,8 +96,6 @@
                 >
             </div>
 
-            <!-- SIRIA -->
-
             <div
                 class="item"
                 data-asura="siria"
@@ -124,8 +108,6 @@
                     draggable="false"
                 >
             </div>
-
-            <!-- MERLIM -->
 
             <div
                 class="item"
@@ -140,8 +122,6 @@
                 >
             </div>
 
-            <!-- ASTREIA -->
-
             <div
                 class="item"
                 data-asura="astreia"
@@ -154,8 +134,6 @@
                     draggable="false"
                 >
             </div>
-
-            <!-- UMBRA -->
 
             <div
                 class="item"
@@ -170,8 +148,6 @@
                 >
             </div>
 
-            <!-- ATENA -->
-
             <div
                 class="item"
                 data-asura="atena"
@@ -184,8 +160,6 @@
                     draggable="false"
                 >
             </div>
-
-            <!-- VICTORIA -->
 
             <div
                 class="item"
@@ -200,8 +174,6 @@
                 >
             </div>
 
-            <!-- HESTIA -->
-
             <div
                 class="item"
                 data-asura="hestia"
@@ -214,8 +186,6 @@
                     draggable="false"
                 >
             </div>
-
-            <!-- DAEDALA -->
 
             <div
                 class="item"
@@ -232,18 +202,8 @@
 
         </div>
 
-        <!-- =========================
-             CONTENT
-        ========================== -->
-
         <div class="content">
-
-            <!-- =========================
-                 MAGO CENTRAL
-            ========================== -->
-
             <div class="model"></div>
-
         </div>
 
     </div>
@@ -281,36 +241,22 @@
     
     <!-- =========================
          🗝️ HÉCATE - SISTEMA DE DEFESA DO GRIMÓRIO
-         Deusa da Magia, Encruzilhadas e Proteção
     ========================== -->
 
-    <!-- Core e sistema de eventos -->
     <script src="/world_azure/shared/js/hecate/core.js"></script>
     <script src="/world_azure/shared/js/hecate/block-manager.js"></script>
     <script src="/world_azure/shared/js/hecate/interaction/event-bus.js"></script>
-
-    <!-- Dispositivos -->
     <script src="/world_azure/shared/js/hecate/devices/desktop.js"></script>
     <script src="/world_azure/shared/js/hecate/devices/mobile.js"></script>
     <script src="/world_azure/shared/js/hecate/devices/tablet.js"></script>
-
-    <!-- Gestos e gerenciadores -->
     <script src="/world_azure/shared/js/hecate/gestures/click.js"></script>
     <script src="/world_azure/shared/js/hecate/interaction/interaction-manager.js"></script>
-
-    <!-- UI -->
     <script src="/world_azure/shared/js/hecate/ui/feedback.js"></script>
-
-    <!-- Sistema de teste -->
     <script src="/world_azure/shared/js/hecate/test-system.js"></script>
-
-    <!-- Módulos de segurança -->
     <script src="/world_azure/shared/js/hecate/modules/anti-debug.js"></script>
     <script src="/world_azure/shared/js/hecate/modules/anti-hack.js"></script>
     <script src="/world_azure/shared/js/hecate/modules/key-combos.js"></script>
     <script src="/world_azure/shared/js/hecate/modules/network-guard.js"></script>
-
-    <!-- Firewall e autenticação -->
     <script src="/world_azure/shared/js/hecate/firewall.js"></script>
     <script src="/world_azure/shared/js/hecate/auth.js"></script>
 
@@ -320,27 +266,20 @@
 
     <script>
 
-        // =========================
-        // ASURAS - SISTEMA COMPLETO
-        // =========================
-
         (function() {
             'use strict';
 
-            // ELEMENTOS
             const items = document.querySelectorAll(".item");
             const slider = document.querySelector(".slider");
             const hoverSound = document.getElementById("hoverSound");
             const bgMusic = document.getElementById("bgMusic");
             const portalTransition = document.getElementById("portalTransition");
 
-            // CORES DINÂMICAS
             items.forEach(item => {
                 const color = item.dataset.color;
                 item.style.setProperty("--glow-color", color);
             });
 
-            // SOM HOVER
             items.forEach(item => {
                 item.addEventListener("mouseenter", () => {
                     if(!hoverSound) return;
@@ -419,13 +358,10 @@
                 bgMusic.play().catch(() => {});
             }
 
-            // CURSOR BASE
             document.body.style.cursor = "default";
 
-            // CONTROLE DE TRANSIÇÃO
             let transitioning = false;
 
-            // FLASH PORTAL
             function createPortalFlash(color){
                 const flash = document.createElement("div");
                 flash.className = "portal-flash";
@@ -442,10 +378,8 @@
                 }, 900);
             }
 
-            // START TRANSITION - VAI PARA O PORTAL (viagem.html)
             function startAsuraTransition(selectedItem, asura){
                 
-                // 🔐 GERAR TOKEN DE ACESSO ANTES DE SAIR
                 if(typeof PortalAuth !== 'undefined') {
                     PortalAuth.generateToken(asura);
                     console.log("🔑 Token gerado para:", asura);
@@ -459,7 +393,6 @@
                     hoverSound.play().catch(() => {});
                 }
 
-                // fade out da música ambiente
                 if(bgMusic){
                     const fadeAudio = setInterval(() => {
                         if(bgMusic.volume > 0.02){
@@ -485,51 +418,90 @@
 
                 console.log("✨ Abrindo portal dimensional para:", asura);
 
-                // REDIRECIONA PARA O PORTAL DE VIAGEM
                 setTimeout(() => {
                     window.location.href = "/world_azure/viagem.html?asura=" + asura;
                 }, 2200);
             }
 
-            // CLICK ASURA (SÓ FUNCIONA SE HÉCATE ESTIVER DESTRAVADA)
-            // Os handlers são recriados pelo firewall.js após aprovação
-            // Por enquanto, apenas armazenamos a função para ser usada depois
-            
-            // Armazenar função global para ser usada pelo firewall
             window.startAsuraTransition = startAsuraTransition;
             window.createPortalFlash = createPortalFlash;
 
-            // Observar quando Hécate for destravada
             if (typeof HecateEvents !== 'undefined') {
                 HecateEvents.on('hecate:unlocked', () => {
                     console.log('🗝️ Hécate destravada! Asuras liberados.');
                 });
             }
 
-            // BLOQUEAR CARDS INICIALMENTE (só libera após passar no teste)
+            // 🔥 BLOQUEAR CARDS E AGUARDAR INTERAÇÃO PARA ATIVAR HÉCATE 🔥
+            
+            // Bloquear cards inicialmente
             items.forEach(item => {
                 item.style.pointerEvents = "none";
                 item.style.opacity = "0.4";
                 item.style.filter = "blur(2px)";
             });
 
-            // Aguardar autenticação para liberar os cards
+            // Verificar se já está autenticado
             function verificarEAguardarAutenticacao() {
-                if (localStorage.getItem('hecate_auth_complete') === 'true') {
+                if (localStorage.getItem('hecate_auth_complete') === 'true' ||
+                    localStorage.getItem('wz_obscuratil_complete') === 'true') {
                     items.forEach(item => {
                         item.style.pointerEvents = "";
                         item.style.opacity = "";
                         item.style.filter = "";
                     });
-                    console.log('✅ Cards liberados!');
+                    console.log('✅ Cards liberados! Usuário já autenticado.');
                     return;
                 }
                 
-                // Verificar periodicamente
                 setTimeout(verificarEAguardarAutenticacao, 1000);
             }
             
             verificarEAguardarAutenticacao();
+
+            // 🔥 DETECTOR DE TOQUE/CLIQUE PARA ATIVAR HÉCATE 🔥
+            let hecateAtivada = false;
+            
+            function ativarHecate() {
+                if (hecateAtivada) return;
+                if (localStorage.getItem('hecate_auth_complete') === 'true') return;
+                if (localStorage.getItem('wz_obscuratil_complete') === 'true') return;
+                
+                hecateAtivada = true;
+                console.log('🔥 Toque/clique detectado! Ativando Hécate...');
+                
+                // Remover listeners
+                document.body.removeEventListener('click', ativarHecate);
+                document.body.removeEventListener('touchstart', ativarHecate);
+                
+                // Chamar o sistema de teste existente
+                if (typeof HecateTest !== 'undefined' && HecateTest.show) {
+                    console.log('📜 Chamando HecateTest.show()');
+                    HecateTest.show(function(success) {
+                        if (success) {
+                            console.log('✅ Teste aprovado!');
+                            localStorage.setItem('hecate_auth_complete', 'true');
+                            items.forEach(item => {
+                                item.style.pointerEvents = "";
+                                item.style.opacity = "";
+                                item.style.filter = "";
+                            });
+                        } else {
+                            console.log('❌ Teste falhou. Aguardando nova tentativa...');
+                            hecateAtivada = false;
+                            document.body.addEventListener('click', ativarHecate);
+                            document.body.addEventListener('touchstart', ativarHecate);
+                        }
+                    });
+                } else {
+                    console.error('❌ HecateTest não encontrado!');
+                }
+            }
+            
+            document.body.addEventListener('click', ativarHecate);
+            document.body.addEventListener('touchstart', ativarHecate);
+            
+            console.log('🗝️ Hécate: Aguardando toque/clique na tela...');
 
         })();
 
