@@ -381,10 +381,8 @@
         // Guardiã do Grimório Dimensional
         // ============================================
         
-        // 📍 CAMINHO CORRETO PARA O GRIMÓRIO (RAIZ DO PROJETO)
-        // A estrutura é: shared/error/access-denied.html
-        // O grimório está em: ../../index.html (sobe 2 pastas)
-        const GRIMOIRE_PATH = '../../index.html';
+        // 📍 CAMINHO CORRETO PARA O GRIMÓRIO (ABSOLUTO)
+        const GRIMOIRE_PATH = '/world_azure/index.html';
         
         // Obter informações da sessão
         const deniedReason = sessionStorage.getItem('access_denied_reason') || 'unauthorized';
@@ -487,7 +485,7 @@
             }
         }
         
-        // Voltar ao grimório (caminho corrigido!)
+        // Voltar ao grimório
         function voltarAoGrimorio() {
             console.log('🗝️ Hécate: Redirecionando para o grimório em:', GRIMOIRE_PATH);
             
