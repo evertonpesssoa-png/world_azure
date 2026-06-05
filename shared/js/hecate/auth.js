@@ -1,4 +1,4 @@
-// ============================================
+.// ============================================
 // 🗝️ HÉCATE - AUTH.JS
 // Sistema de autenticação global
 // Integrado com Hécate (Deusa da Proteção)
@@ -18,7 +18,7 @@
         PROTECTED_PAGES: [
             'viagem.html',
             'astreia.html', 'atena.html', 'daedala.html', 'diva.html',
-            'hestia.html', 'merlim.html', 'siria.html', 'umbra.html', 'victoria.html', 'portal-system.htm', 'sistema_solar.html', 'earth.html', 'galaxy.html', 'planner.html', 'gallery.html'
+            'hestia.html', 'merlim.html', 'siria.html', 'umbra.html', 'victoria.html', 'portal-system.htm', 'sistema_solar.html', 'earth.html', 'galaxy.html', 'planner.html', 'gallery.html', 'buraco_negro.html'
         ],
         
         // Páginas sempre acessíveis
