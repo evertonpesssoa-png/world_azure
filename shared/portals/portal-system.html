@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>🗺️ Portal Planner • Mapa de Portais</title>
+    
+    <!-- 🔥 IMPORTS DO HÉCATE (OBRIGATÓRIO) 🔥 -->
+    <script src="/world_azure/shared/js/hecate/core.js"></script>
+    <script src="/world_azure/shared/js/hecate/block-manager.js"></script>
+    <script src="/world_azure/shared/js/hecate/test-system.js"></script>
+    <script src="/world_azure/shared/js/hecate/auth.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -752,7 +759,7 @@
                 return;
             }
             
-            portals.push({ name, icon, x, y, z });
+            portals.push({ namewarning.id, icon, x, y, z });
             selectedPortalIndex = portals.length - 1;
             updatePortalsList();
             
