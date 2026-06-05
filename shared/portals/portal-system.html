@@ -743,29 +743,36 @@
         // EVENTOS
         // =========================
         document.getElementById('addPortalBtn')?.addEventListener('click', () => {
-            const x = parseFloat(document.getElementById('posX').value);
-            const z = parseFloat(document.getElementById('posZ').value);
-            const y = parseFloat(document.getElementById('posY').value);
-            const name = document.getElementById('portalName').value.trim();
-            const icon = document.getElementById('portalIcon').value.trim() || '🚪';
-            
-            if (!name) {
-                alert('⚠️ Digite um nome para o portal');
-                return;
-            }
-            
-            if (portals.length >= 20) {
-                alert('⚠️ Máximo de 20 portais por Asura');
-                return;
-            }
-            
-            portals.push({ namewarning.id, icon, x, y, z });
-            selectedPortalIndex = portals.length - 1;
-            updatePortalsList();
-            
-            document.getElementById('portalName').value = '';
-            document.getElementById('portalIcon').value = '🚪';
-        });
+    const x = parseFloat(document.getElementById('posX').value);
+    const z = parseFloat(document.getElementById('posZ').value);
+    const y = parseFloat(document.getElementById('posY').value);
+    const name = document.getElementById('portalName').value.trim();
+    const icon = document.getElementById('portalIcon').value.trim() || '🚪';
+    
+    if (!name) {
+        alert('⚠️ Digite um nome para o portal');
+        return;
+    }
+    
+    if (portals.length >= 20) {
+        alert('⚠️ Máximo de 20 portais por Asura');
+        return;
+    }
+    
+    portals.push({
+        name,
+        icon,
+        x,
+        y,
+        z
+    });
+    
+    selectedPortalIndex = portals.length - 1;
+    updatePortalsList();
+    
+    document.getElementById('portalName').value = '';
+    document.getElementById('portalIcon').value = '🚪';
+});
         
         document.querySelectorAll('.coord-preset').forEach(el => {
             el.addEventListener('click', () => {
@@ -816,68 +823,91 @@
         // =========================
         // BOTÃO VOLTAR FÍSICO
         // =========================
-        document.getElementById('backToAsuraBtn')?.addEventListener('click', () => {
-            const lastAsura = localStorage.getItem('lastAsura') || currentAsura;
-            document.body.classList.add('transition-out');
-            const corAsura = asurasConfig[lastAsura]?.color || '#00ffcc';
-            const flash = document.createElement('div');
-            flash.style.cssText = `
-                position: fixed;
-                inset: 0;
-                background: radial-gradient(circle, ${corAsura}, transparent);
-                opacity: 0;
-                transition: opacity 0.4s ease;
-                z-index: 100000;
-                pointer-events: none;
-            `;
-            document.body.appendChild(flash);
-            requestAnimationFrame(() => {
-                flash.style.opacity = '0.8';
-                setTimeout(() => {
-                    window.location.href = BASE_URL + `worlds/${lastAsura}.html`;
-                }, 350);
-            });
-        });
+        document.getElementById('backToAsuraBtn')?.addEventListener('click', voltarParaAsura);
+    
         
         // =========================
-        // BOTÃO VOLTAR DO CELULAR
-        // =========================
-        function voltarParaAsura() {
-            const asuraParaVoltar = localStorage.getItem('lastAsura') || currentAsura;
-            
-            document.body.classList.add('transition-out');
-            
-            const corAsura = asurasConfig[asuraParaVoltar]?.color || '#00ffcc';
-            
-            const flash = document.createElement('div');
-            flash.style.cssText = `
-                position: fixed;
-                inset: 0;
-                background: radial-gradient(circle, ${corAsura}, transparent);
-                opacity: 0;
-                transition: opacity 0.4s ease;
-                z-index: 100000;
-                pointer-events: none;
-            `;
-            document.body.appendChild(flash);
-            
-            requestAnimationFrame(() => {
-                flash.style.opacity = '0.8';
-                setTimeout(() => {
-                    window.location.href = BASE_URL + `worlds/${asuraParaVoltar}.html`;
-                }, 350);
-            });
-        }
-        
-        window.addEventListener('popstate', (event) => {
-            event.preventDefault();
-            history.pushState(null, null, window.location.href);
-            voltarParaAsura();
-        });
-        
-        history.pushState(null, null, window.location.href);
-        console.log("✅ Botão 'voltar' do celular configurado para voltar à asura!");
-        
+// VOLTAR MOBILE + BOTÃO FÍSICO
+// =========================
+
+function voltarParaAsura() {
+
+    if (isRedirecting) return;
+
+    isRedirecting = true;
+
+    const asuraParaVoltar =
+        localStorage.getItem('lastAsura') || currentAsura;
+
+    const corAsura =
+        asurasConfig[asuraParaVoltar]?.color || '#00ffcc';
+
+    document.body.classList.add('transition-out');
+
+    const flash = document.createElement('div');
+
+    flash.style.cssText = `
+        position: fixed;
+        inset: 0;
+        background: radial-gradient(circle, ${corAsura}, transparent);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        z-index: 100000;
+        pointer-events: none;
+    `;
+
+    document.body.appendChild(flash);
+
+    requestAnimationFrame(() => {
+
+        flash.style.opacity = '0.8';
+
+        setTimeout(() => {
+
+            window.location.replace(
+                BASE_URL + `worlds/${asuraParaVoltar}.html`
+            );
+
+        }, 350);
+
+    });
+}
+
+
+// =========================
+// HISTÓRICO FAKE MOBILE
+// =========================
+
+// empilha 2 estados
+history.pushState({ portalPlanner: true }, '');
+history.pushState({ portalPlanner: true }, '');
+
+window.addEventListener('popstate', (event) => {
+
+    // recria o estado imediatamente
+    history.pushState({ portalPlanner: true }, '');
+
+    voltarParaAsura();
+
+});
+
+
+// =========================
+// RESTORE AO VOLTAR PRA ABA
+// =========================
+
+window.addEventListener('pageshow', () => {
+
+    if (!history.state?.portalPlanner) {
+
+        history.pushState({ portalPlanner: true }, '');
+        history.pushState({ portalPlanner: true }, '');
+
+    }
+
+});
+
+console.log("✅ Sistema de voltar mobile ativado!");
         // =========================
         // INICIAR
         // =========================
