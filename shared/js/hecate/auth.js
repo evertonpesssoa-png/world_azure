@@ -18,7 +18,7 @@
         PROTECTED_PAGES: [
             'viagem.html',
             'astreia.html', 'atena.html', 'daedala.html', 'diva.html',
-            'hestia.html', 'merlim.html', 'siria.html', 'umbra.html', 'victoria.html', 'portal-system.htm', 'sistema_solar.html', 'earth.html', 'galaxy.html'
+            'hestia.html', 'merlim.html', 'siria.html', 'umbra.html', 'victoria.html', 'portal-system.htm', 'sistema_solar.html', 'earth.html', 'galaxy.html', 'planner.html'
         ],
         
         // Páginas sempre acessíveis
