@@ -100,7 +100,7 @@ body {
 }
 
 /* =========================
-   GLOW - DIMINUÍDO PARA PERFORMANCE
+   GLOW DA CARTA - DIMINUÍDO PARA PERFORMANCE
 ========================= */
 
 .banner .slider .item::before {
@@ -206,7 +206,7 @@ body {
 }
 
 /* =========================
-   MAGE
+   MAGE - GLOW ROXO FORTE
 ========================= */
 
 .banner .content .model {
@@ -218,20 +218,20 @@ body {
     background-repeat: no-repeat;
     background-position: center bottom;
     background-size: contain;
-    opacity: 0.85;
-    filter: drop-shadow(0 0 30px rgba(120, 80, 255, 0.08));
+    opacity: 1;
+    filter: drop-shadow(0 0 40px rgba(160, 80, 255, 0.3)) drop-shadow(0 0 80px rgba(160, 80, 255, 0.2)) drop-shadow(0 0 120px rgba(160, 80, 255, 0.1));
     z-index: 1;
     pointer-events: none;
 }
 
 /* =========================
-   PORTAL
+   PORTAL - ROXO
 ========================= */
 
 #portalTransition {
     position: fixed;
     inset: 0;
-    background: radial-gradient(circle, rgba(120, 80, 255, 0.12), rgba(0, 0, 0, 0.97));
+    background: radial-gradient(circle, rgba(160, 80, 255, 0.15), rgba(0, 0, 0, 0.97));
     backdrop-filter: blur(10px);
     opacity: 0;
     pointer-events: none;
@@ -973,4 +973,121 @@ body {
     .banner .slider .item.tarot-card .rune.corner-tr,
     .banner .slider .item.tarot-card .rune.corner-bl,
     .banner .slider .item.tarot-card .rune.corner-br {
-        font-size
+        font-size: 8px;
+    }
+
+    .banner .slider .item.tarot-card .particle {
+        width: 2px !important;
+        height: 2px !important;
+    }
+
+    .banner .slider .item.tarot-card::after {
+        inset: -1px;
+        border-radius: 13px;
+    }
+
+    .banner .content .model {
+        background-size: contain;
+        opacity: 1;
+        background-position: center bottom;
+    }
+
+    #portalTransition {
+        backdrop-filter: blur(4px);
+    }
+}
+
+/* ============================================
+   RESPONSIVIDADE - CELULAR PEQUENO
+   ============================================ */
+
+@media (max-width: 480px) {
+    .banner .slider {
+        width: 130px;
+        height: 180px;
+        top: 40%;
+    }
+
+    .banner .slider .item {
+        transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(260px);
+    }
+
+    .banner .slider .item.active {
+        transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(300px) scale(1.15);
+    }
+
+    .banner .slider .item.tarot-card {
+        padding: 4px;
+        border-radius: 10px;
+    }
+
+    .banner .slider .item.tarot-card::before {
+        inset: 2px;
+        border-radius: 7px;
+        border-width: 0.5px;
+    }
+
+    .banner .slider .item.tarot-card img {
+        border-radius: 5px;
+    }
+
+    .banner .slider .item.tarot-card .holo-layer {
+        inset: 4px;
+        border-radius: 5px;
+    }
+
+    .banner .slider .item.tarot-card .tarot-number {
+        font-size: 9px;
+        top: 4px;
+        padding: 1px 8px;
+        letter-spacing: 1px;
+    }
+
+    .banner .slider .item.tarot-card .tarot-name {
+        font-size: 8px;
+        bottom: 4px;
+        padding: 1px 8px;
+        letter-spacing: 2px;
+    }
+
+    .banner .slider .item.tarot-card .tarot-symbol {
+        font-size: 10px;
+    }
+
+    .banner .slider .item.tarot-card .tarot-symbol.tl {
+        top: 2px;
+        left: 4px;
+    }
+    .banner .slider .item.tarot-card .tarot-symbol.tr {
+        top: 2px;
+        right: 4px;
+    }
+    .banner .slider .item.tarot-card .tarot-symbol.bl {
+        bottom: 2px;
+        left: 4px;
+    }
+    .banner .slider .item.tarot-card .tarot-symbol.br {
+        bottom: 2px;
+        right: 4px;
+    }
+
+    .banner .slider .item.tarot-card .rune {
+        font-size: 8px;
+    }
+
+    .banner .slider .item.tarot-card .rune.corner-tl,
+    .banner .slider .item.tarot-card .rune.corner-tr,
+    .banner .slider .item.tarot-card .rune.corner-bl,
+    .banner .slider .item.tarot-card .rune.corner-br {
+        font-size: 6px;
+    }
+
+    .banner .slider .item.tarot-card .particle {
+        width: 1.5px !important;
+        height: 1.5px !important;
+    }
+
+    .banner .content .model {
+        opacity: 1;
+    }
+}
