@@ -127,7 +127,7 @@ body {
 }
 
 /* ============================================
-   MAGE - COM GLOW ROXO
+   MAGE - SEM GLOW ROXO (VOLTOU AO NORMAL)
    ============================================ */
 
 .banner .content .model {
@@ -140,7 +140,7 @@ body {
     background-position: center bottom;
     background-size: contain;
     opacity: 0.95;
-    filter: drop-shadow(0 0 40px rgba(160, 80, 255, 0.3)) drop-shadow(0 0 80px rgba(160, 80, 255, 0.15));
+    filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.05));
     z-index: 1;
     pointer-events: none;
 }
