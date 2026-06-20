@@ -277,7 +277,7 @@
     }
 
     // ============================================
-    // 🚀 START TRANSITION - EFEITO "ENTRANDO NA CARTA" (CORRIGIDO)
+    // 🚀 START TRANSITION - EFEITO "TELA CHEIA"
     // ============================================
 
     function startAsuraTransition(selectedItem, asura) {
@@ -285,56 +285,116 @@
         transitioning = true;
 
         const color = selectedItem.dataset.color;
+        const asuraName = selectedItem.dataset.asura;
+        const imgSrc = selectedItem.querySelector('img').src;
+        const glowColor = selectedItem.dataset.color;
+
+        // Pegar todos os elementos da carta original
+        const numberSpan = selectedItem.querySelector('.tarot-number');
+        const nameSpan = selectedItem.querySelector('.tarot-name');
+        const symbolSpans = selectedItem.querySelectorAll('.tarot-symbol');
+        const runeSpans = selectedItem.querySelectorAll('.rune');
+        
+        const number = numberSpan ? numberSpan.textContent : '?';
+        const name = nameSpan ? nameSpan.textContent : '?';
+        
+        // Pegar símbolos e runas
+        const symbols = [];
+        const runes = [];
+        symbolSpans.forEach(el => symbols.push(el.textContent));
+        runeSpans.forEach(el => runes.push(el.textContent));
 
         // ============================================
-        // DETECTAR DISPOSITIVO - ANIMAÇÃO MAIS LENTA
+        // DETECTAR DISPOSITIVO
         // ============================================
 
         const isMobile = window.innerWidth <= 768;
-        const isTablet = window.innerWidth > 768 && window.innerWidth <= 1024;
         const isSmallMobile = window.innerWidth <= 480;
+        const isTablet = window.innerWidth > 768 && window.innerWidth <= 1024;
         const isLargeScreen = window.innerWidth >= 1920;
 
-        let sparkCount = 60;
-        let sparkSize = [2, 6];
-        let animationDuration = 3500; // ANTES: 2400
-        let flashDelay = 2000; // ANTES: 1500
-        let overlayDelay = 400; // ANTES: 300
+        let fullscreenDuration = 3000;
+        let sparkCount = 50;
 
         if (isSmallMobile) {
+            fullscreenDuration = 2500;
             sparkCount = 25;
-            sparkSize = [1, 3];
-            animationDuration = 2400; // ANTES: 2000
-            flashDelay = 1500; // ANTES: 1000
-            overlayDelay = 250;
         } else if (isMobile) {
+            fullscreenDuration = 2700;
             sparkCount = 35;
-            sparkSize = [1, 4];
-            animationDuration = 2800; // ANTES: 2100
-            flashDelay = 1700; // ANTES: 1200
-            overlayDelay = 300;
         } else if (isTablet) {
+            fullscreenDuration = 2800;
             sparkCount = 45;
-            sparkSize = [2, 5];
-            animationDuration = 3200; // ANTES: 2200
-            flashDelay = 1850; // ANTES: 1300
-            overlayDelay = 350;
         } else if (isLargeScreen) {
-            sparkCount = 80;
-            sparkSize = [3, 8];
-            animationDuration = 4000; // ANTES: 2600
-            flashDelay = 2200; // ANTES: 1700
-            overlayDelay = 450;
+            fullscreenDuration = 3500;
+            sparkCount = 70;
         }
 
         // ============================================
-        // 1. CONGELAR CARROSSEL
+        // 1. CRIAR CLONE DA CARTA EM TELA CHEIA
+        // ============================================
+
+        const clone = document.createElement('div');
+        clone.className = 'portal-card-fullscreen';
+        clone.style.setProperty('--glow-color', glowColor);
+
+        // Imagem
+        const img = document.createElement('img');
+        img.src = imgSrc;
+        img.alt = asuraName;
+        clone.appendChild(img);
+
+        // Número
+        const numClone = document.createElement('span');
+        numClone.className = 'tarot-number-full';
+        numClone.textContent = number;
+        clone.appendChild(numClone);
+
+        // Nome
+        const nameClone = document.createElement('span');
+        nameClone.className = 'tarot-name-full';
+        nameClone.textContent = name;
+        clone.appendChild(nameClone);
+
+        // Símbolos dos cantos
+        const symbolPositions = ['tl', 'tr', 'bl', 'br'];
+        symbols.forEach((sym, i) => {
+            if (i < 4) {
+                const symClone = document.createElement('span');
+                symClone.className = `tarot-symbol-full ${symbolPositions[i]}`;
+                symClone.textContent = sym;
+                clone.appendChild(symClone);
+            }
+        });
+
+        // Runas das bordas
+        const runePositions = ['top', 'right', 'bottom', 'left'];
+        runes.forEach((rune, i) => {
+            if (i < 4) {
+                const runeClone = document.createElement('span');
+                runeClone.className = `rune-full ${runePositions[i]}`;
+                runeClone.textContent = rune;
+                clone.appendChild(runeClone);
+            }
+        });
+
+        // Holograma
+        const holoClone = document.createElement('div');
+        holoClone.className = 'holo-layer-full';
+        clone.appendChild(holoClone);
+
+        document.body.appendChild(clone);
+
+        // ============================================
+        // 2. CONGELAR CARROSSEL
         // ============================================
 
         if (slider) slider.style.animationPlayState = "paused";
+        if (slider) slider.classList.add("fade-all");
+        selectedItem.classList.add("active");
 
         // ============================================
-        // 2. SOM DO PORTAL
+        // 3. SOM DO PORTAL
         // ============================================
 
         if (hoverSound) {
@@ -344,7 +404,7 @@
         }
 
         // ============================================
-        // 3. FADE DA MÚSICA
+        // 4. FADE DA MÚSICA
         // ============================================
 
         if (bgMusic) {
@@ -359,39 +419,32 @@
         }
 
         // ============================================
-        // 4. APLICAR EXPANSÃO NA CARTA
-        // ============================================
-
-        if (slider) slider.classList.add("fade-all");
-        selectedItem.classList.add("active");
-        selectedItem.classList.add("portal-expanding");
-
-        // ============================================
-        // 5. CRIAR OVERLAY
+        // 5. OVERLAY ESCURO
         // ============================================
 
         const overlay = document.createElement('div');
         overlay.className = 'portal-overlay';
+        overlay.style.transition = 'opacity 1.5s ease';
         document.body.appendChild(overlay);
 
         setTimeout(() => {
             overlay.classList.add('active');
-        }, overlayDelay);
+        }, isMobile ? 200 : 350);
 
         // ============================================
-        // 6. CRIAR PARTÍCULAS DO PORTAL
+        // 6. PARTÍCULAS DO PORTAL
         // ============================================
 
-        const sparkColors = [color, '#ffffff', '#ffd700', '#ff6b6b', '#4ecdc4'];
+        const sparkColors = [glowColor, '#ffffff', '#ffd700', '#ff6b6b', '#4ecdc4', '#ff9ff3'];
         const centerOffset = isMobile ? 15 : 20;
 
         for (let i = 0; i < sparkCount; i++) {
             const spark = document.createElement('div');
             spark.className = 'portal-spark';
             
-            const size = sparkSize[0] + Math.random() * (sparkSize[1] - sparkSize[0]);
+            const size = (isSmallMobile ? 1 : isMobile ? 2 : 3) + Math.random() * (isSmallMobile ? 2 : isMobile ? 3 : 5);
             const angle = Math.random() * Math.PI * 2;
-            const distance = isMobile ? (50 + Math.random() * 150) : (100 + Math.random() * 300);
+            const distance = isMobile ? (50 + Math.random() * 150) : (100 + Math.random() * 350);
             const tx = Math.cos(angle) * distance;
             const ty = Math.sin(angle) * distance;
             
@@ -401,15 +454,16 @@
                 background: ${sparkColors[Math.floor(Math.random() * sparkColors.length)]};
                 top: ${50 + (Math.random() - 0.5) * centerOffset}%;
                 left: ${50 + (Math.random() - 0.5) * centerOffset}%;
-                box-shadow: 0 0 ${size * (isMobile ? 2 : 3)}px ${color};
+                box-shadow: 0 0 ${size * (isMobile ? 2 : 4)}px ${glowColor};
                 --tx: ${tx}px;
                 --ty: ${ty}px;
                 animation-delay: ${Math.random() * (isMobile ? 0.5 : 0.8)}s;
                 animation-duration: ${(isMobile ? 1.5 : 2.0) + Math.random() * (isMobile ? 0.8 : 1.2)}s;
+                z-index: 99999;
             `;
             document.body.appendChild(spark);
             
-            setTimeout(() => spark.remove(), isMobile ? 3000 : 3500);
+            setTimeout(() => spark.remove(), isMobile ? 3000 : 4000);
         }
 
         // ============================================
@@ -424,23 +478,25 @@
             z-index: 99999;
             opacity: 0;
             pointer-events: none;
-            transition: opacity ${isMobile ? '0.4s' : '0.6s'} ease;
+            transition: opacity 0.6s ease;
         `;
         document.body.appendChild(flash);
+
+        const flashDelay = isSmallMobile ? 1800 : isMobile ? 2000 : isTablet ? 2200 : 2500;
 
         setTimeout(() => {
             flash.style.opacity = isMobile ? '0.5' : '0.7';
             setTimeout(() => {
                 flash.style.opacity = '0';
                 setTimeout(() => flash.remove(), 400);
-            }, isMobile ? 300 : 400);
+            }, 400);
         }, flashDelay);
 
         // ============================================
         // 8. CRIAR FLASH DO PORTAL (ORIGINAL)
         // ============================================
 
-        createPortalFlash(color);
+        createPortalFlash(glowColor);
 
         // ============================================
         // 9. BODY SCALE
@@ -459,11 +515,22 @@
         // 11. LOG E REDIRECIONAMENTO
         // ============================================
 
-        console.log(`🚀 Entrando no mundo: ${asura} (${isMobile ? 'Mobile' : isTablet ? 'Tablet' : 'Desktop'})`);
+        console.log(`🚀 Entrando no mundo: ${asura} (${isMobile ? 'Mobile' : isTablet ? 'Tablet' : 'Desktop'}) - Tela cheia por ${fullscreenDuration/1000}s`);
+
+        // Remover clone após a animação
+        setTimeout(() => {
+            if (clone && clone.parentNode) {
+                clone.style.transition = 'opacity 0.5s ease';
+                clone.style.opacity = '0';
+                setTimeout(() => {
+                    if (clone.parentNode) clone.remove();
+                }, 500);
+            }
+        }, fullscreenDuration - 500);
 
         setTimeout(() => {
             window.location.href = "/world_azure/viagem.html?asura=" + asura;
-        }, animationDuration);
+        }, fullscreenDuration + 200);
     }
 
     // ============================================
