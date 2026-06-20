@@ -88,7 +88,7 @@ body {
     -webkit-backface-visibility: visible;
     will-change: transform, filter, opacity;
     transition: transform 0.8s ease, filter 0.8s ease, opacity 0.8s ease;
-    transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(clamp(350px, 55vw, 750px));
+    transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(clamp(450px, 65vw, 900px));
     z-index: 1;
 }
 
