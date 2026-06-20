@@ -277,7 +277,7 @@
     }
 
     // ============================================
-    // 🚀 START TRANSITION - EFEITO "TELA CHEIA"
+    // 🚀 START TRANSITION - CLONE COM TODOS OS EFEITOS (4 SEGUNDOS)
     // ============================================
 
     function startAsuraTransition(selectedItem, asura) {
@@ -287,33 +287,71 @@
         const glowColor = selectedItem.dataset.color;
         const imgSrc = selectedItem.querySelector('img').src;
 
-        // Pegar número e nome
+        // Pegar TODOS os elementos da carta original
         const numberSpan = selectedItem.querySelector('.tarot-number');
         const nameSpan = selectedItem.querySelector('.tarot-name');
+        const symbolSpans = selectedItem.querySelectorAll('.tarot-symbol');
+        const runeSpans = selectedItem.querySelectorAll('.rune');
+        
         const number = numberSpan ? numberSpan.textContent : '?';
         const name = nameSpan ? nameSpan.textContent : '?';
+        
+        const symbols = [];
+        const runes = [];
+        symbolSpans.forEach(el => symbols.push(el.textContent));
+        runeSpans.forEach(el => runes.push(el.textContent));
 
         // ============================================
-        // 1. CRIAR CLONE DA CARTA EM TELA CHEIA
+        // 1. CRIAR CLONE COM TODOS OS EFEITOS
         // ============================================
 
         const clone = document.createElement('div');
         clone.className = 'portal-card-fullscreen';
         clone.style.setProperty('--glow-color', glowColor);
 
+        // Imagem
         const img = document.createElement('img');
         img.src = imgSrc;
         clone.appendChild(img);
 
+        // Número
         const numClone = document.createElement('span');
         numClone.className = 'tarot-number-full';
         numClone.textContent = number;
         clone.appendChild(numClone);
 
+        // Nome
         const nameClone = document.createElement('span');
         nameClone.className = 'tarot-name-full';
         nameClone.textContent = name;
         clone.appendChild(nameClone);
+
+        // Símbolos dos cantos
+        const symbolPositions = ['tl', 'tr', 'bl', 'br'];
+        symbols.forEach((sym, i) => {
+            if (i < 4) {
+                const symClone = document.createElement('span');
+                symClone.className = `tarot-symbol-full ${symbolPositions[i]}`;
+                symClone.textContent = sym;
+                clone.appendChild(symClone);
+            }
+        });
+
+        // Runas das bordas
+        const runePositions = ['top', 'right', 'bottom', 'left'];
+        runes.forEach((rune, i) => {
+            if (i < 4) {
+                const runeClone = document.createElement('span');
+                runeClone.className = `rune-full ${runePositions[i]}`;
+                runeClone.textContent = rune;
+                clone.appendChild(runeClone);
+            }
+        });
+
+        // Holograma
+        const holoClone = document.createElement('div');
+        holoClone.className = 'holo-layer-full';
+        clone.appendChild(holoClone);
 
         document.body.appendChild(clone);
 
@@ -372,7 +410,7 @@
                 flash.style.opacity = '0';
                 setTimeout(() => flash.remove(), 300);
             }, 300);
-        }, 1500);
+        }, 2000);
 
         // ============================================
         // 6. CRIAR FLASH DO PORTAL (ORIGINAL)
@@ -389,7 +427,7 @@
         if (portalTransition) portalTransition.classList.add("active");
 
         // ============================================
-        // 8. REMOVER CLONE E REDIRECIONAR
+        // 8. REMOVER CLONE E REDIRECIONAR (4 SEGUNDOS)
         // ============================================
 
         console.log(`🚀 Entrando no mundo: ${asura}`);
@@ -402,11 +440,11 @@
                     if (clone.parentNode) clone.remove();
                 }, 500);
             }
-        }, 2500);
+        }, 3500);
 
         setTimeout(() => {
             window.location.href = "/world_azure/viagem.html?asura=" + asura;
-        }, 3200);
+        }, 4200);
     }
 
     // ============================================
