@@ -201,7 +201,7 @@
     });
 
     // ============================================
-    // ✨ PARTÍCULAS BACKGROUND
+    // ✨ PARTÍCULAS BACKGROUND - ROXAS!
     // ============================================
 
     const canvas = document.getElementById("particles");
@@ -231,7 +231,8 @@
         particles.forEach(p => {
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255,255,255,${p.opacity})`;
+            // 🔥 COR ROXA NAS PARTÍCULAS DO FUNDO
+            ctx.fillStyle = `rgba(160, 80, 255, ${p.opacity})`;
             ctx.fill();
             p.x += p.speedX;
             p.y += p.speedY;
@@ -448,10 +449,9 @@
     }
 
     // ============================================
-    // 🔥 HÉCATE - SISTEMA DE BLOQUEIO E TESTE (CORRIGIDO)
+    // 🔥 HÉCATE - SISTEMA DE BLOQUEIO E TESTE
     // ============================================
 
-    // Função para liberar os cards
     function liberarCards() {
         console.log('🔓 Liberando cards...');
         items.forEach(item => {
@@ -464,7 +464,6 @@
         });
     }
 
-    // Função para bloquear os cards
     function bloquearCards() {
         console.log('🔒 Bloqueando cards...');
         items.forEach(item => {
@@ -476,15 +475,10 @@
         });
     }
 
-    // Handler do clique nos cards
     function handleCardClick(e) {
         const item = e.currentTarget;
         startAsuraTransition(item, item.dataset.asura);
     }
-
-    // ============================================
-    // EXECUTAR HÉCATE (COM DELAY PARA GARANTIR)
-    // ============================================
 
     setTimeout(function() {
         console.log('🔍 Verificando autenticação...');
