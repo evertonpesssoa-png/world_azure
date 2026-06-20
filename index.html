@@ -17,6 +17,11 @@
     <div class="banner">
         <canvas id="particles"></canvas>
         <div class="slider" style="--quantity: 9">
+            
+            <!-- ⭐ MAGO NO CENTRO DO CARROSSEL ⭐ -->
+            <div class="mago-center"></div>
+            
+            <!-- CARTAS -->
             <div class="item" data-asura="diva" data-color="#ff4db8" style="--position: 1">
                 <img src="/world_azure/images/diva2.png" alt="Diva" draggable="false">
             </div>
@@ -46,7 +51,7 @@
             </div>
         </div>
         <div class="content">
-            <div class="model"></div>
+            <!-- REMOVIDO O .model DAQUI - AGORA ESTÁ DENTRO DO SLIDER -->
         </div>
     </div>
 
@@ -191,7 +196,7 @@
             });
 
             // ============================================
-            // ✨ PARTÍCULAS BACKGROUND
+            // ✨ PARTÍCULAS BACKGROUND - ROXAS
             // ============================================
             const canvas = document.getElementById("particles");
             const ctx = canvas.getContext("2d");
@@ -220,7 +225,8 @@
                 particles.forEach(p => {
                     ctx.beginPath();
                     ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(255,255,255,${p.opacity})`;
+                    // 🔥 COR ROXA
+                    ctx.fillStyle = `rgba(160, 80, 255, ${p.opacity})`;
                     ctx.fill();
                     p.x += p.speedX;
                     p.y += p.speedY;
