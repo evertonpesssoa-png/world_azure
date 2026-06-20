@@ -34,7 +34,7 @@ body {
 }
 
 /* ============================================
-   MAGO - ACOMPANHA O CARROSSEL NO DESKTOP
+   MAGO - FORA DO SLIDER (POSIÇÃO INDEPENDENTE)
    ============================================ */
 
 .banner .mago-center {
@@ -695,6 +695,7 @@ body {
         top: 42%;
     }
 
+    /* 🔥 MAGO INDEPENDENTE - VOCÊ PODE EDITAR AQUI 🔥 */
     .banner .mago-center {
         top: 65%;
     }
