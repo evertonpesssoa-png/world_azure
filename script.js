@@ -277,63 +277,23 @@
     }
 
     // ============================================
-    // 🚀 START TRANSITION - EFEITO "TELA CHEIA"
+    // 🚀 START TRANSITION - EFEITO "TELA CHEIA" (CORRIGIDO)
     // ============================================
 
     function startAsuraTransition(selectedItem, asura) {
         if (transitioning) return;
         transitioning = true;
 
-        const color = selectedItem.dataset.color;
-        const asuraName = selectedItem.dataset.asura;
-        const imgSrc = selectedItem.querySelector('img').src;
         const glowColor = selectedItem.dataset.color;
+        const imgSrc = selectedItem.querySelector('img').src;
 
-        // Pegar todos os elementos da carta original
+        // Pegar número e nome
         const numberSpan = selectedItem.querySelector('.tarot-number');
         const nameSpan = selectedItem.querySelector('.tarot-name');
-        const symbolSpans = selectedItem.querySelectorAll('.tarot-symbol');
-        const runeSpans = selectedItem.querySelectorAll('.rune');
-        
         const number = numberSpan ? numberSpan.textContent : '?';
         const name = nameSpan ? nameSpan.textContent : '?';
-        
-        // Pegar símbolos e runas
-        const symbols = [];
-        const runes = [];
-        symbolSpans.forEach(el => symbols.push(el.textContent));
-        runeSpans.forEach(el => runes.push(el.textContent));
 
-        // ============================================
-        // DETECTAR DISPOSITIVO
-        // ============================================
-
-        const isMobile = window.innerWidth <= 768;
-        const isSmallMobile = window.innerWidth <= 480;
-        const isTablet = window.innerWidth > 768 && window.innerWidth <= 1024;
-        const isLargeScreen = window.innerWidth >= 1920;
-
-        let fullscreenDuration = 3000;
-        let sparkCount = 50;
-
-        if (isSmallMobile) {
-            fullscreenDuration = 2500;
-            sparkCount = 25;
-        } else if (isMobile) {
-            fullscreenDuration = 2700;
-            sparkCount = 35;
-        } else if (isTablet) {
-            fullscreenDuration = 2800;
-            sparkCount = 45;
-        } else if (isLargeScreen) {
-            fullscreenDuration = 3500;
-            sparkCount = 70;
-        }
-
-        // ============================================
-        // 1. CRIAR CLONE DA CARTA EM TELA CHEIA
-        // ============================================
-
+        // Criar clone em tela cheia
         const clone = document.createElement('div');
         clone.className = 'portal-card-fullscreen';
         clone.style.setProperty('--glow-color', glowColor);
@@ -341,7 +301,6 @@
         // Imagem
         const img = document.createElement('img');
         img.src = imgSrc;
-        img.alt = asuraName;
         clone.appendChild(img);
 
         // Número
@@ -356,120 +315,33 @@
         nameClone.textContent = name;
         clone.appendChild(nameClone);
 
-        // Símbolos dos cantos
-        const symbolPositions = ['tl', 'tr', 'bl', 'br'];
-        symbols.forEach((sym, i) => {
-            if (i < 4) {
-                const symClone = document.createElement('span');
-                symClone.className = `tarot-symbol-full ${symbolPositions[i]}`;
-                symClone.textContent = sym;
-                clone.appendChild(symClone);
-            }
-        });
-
-        // Runas das bordas
-        const runePositions = ['top', 'right', 'bottom', 'left'];
-        runes.forEach((rune, i) => {
-            if (i < 4) {
-                const runeClone = document.createElement('span');
-                runeClone.className = `rune-full ${runePositions[i]}`;
-                runeClone.textContent = rune;
-                clone.appendChild(runeClone);
-            }
-        });
-
-        // Holograma
-        const holoClone = document.createElement('div');
-        holoClone.className = 'holo-layer-full';
-        clone.appendChild(holoClone);
-
         document.body.appendChild(clone);
 
-        // ============================================
-        // 2. CONGELAR CARROSSEL
-        // ============================================
-
+        // Congelar carrossel
         if (slider) slider.style.animationPlayState = "paused";
         if (slider) slider.classList.add("fade-all");
         selectedItem.classList.add("active");
 
-        // ============================================
-        // 3. SOM DO PORTAL
-        // ============================================
-
+        // Som
         if (hoverSound) {
-            hoverSound.volume = isMobile ? 0.15 : 0.25;
+            hoverSound.volume = 0.2;
             hoverSound.currentTime = 0;
             hoverSound.play().catch(() => {});
         }
 
-        // ============================================
-        // 4. FADE DA MÚSICA
-        // ============================================
-
+        // Fade música
         if (bgMusic) {
             const fadeAudio = setInterval(() => {
                 if (bgMusic.volume > 0.02) {
-                    bgMusic.volume -= isMobile ? 0.02 : 0.015;
+                    bgMusic.volume -= 0.015;
                 } else {
                     bgMusic.volume = 0;
                     clearInterval(fadeAudio);
                 }
-            }, isMobile ? 20 : 30);
+            }, 30);
         }
 
-        // ============================================
-        // 5. OVERLAY ESCURO
-        // ============================================
-
-        const overlay = document.createElement('div');
-        overlay.className = 'portal-overlay';
-        overlay.style.transition = 'opacity 1.5s ease';
-        document.body.appendChild(overlay);
-
-        setTimeout(() => {
-            overlay.classList.add('active');
-        }, isMobile ? 200 : 350);
-
-        // ============================================
-        // 6. PARTÍCULAS DO PORTAL
-        // ============================================
-
-        const sparkColors = [glowColor, '#ffffff', '#ffd700', '#ff6b6b', '#4ecdc4', '#ff9ff3'];
-        const centerOffset = isMobile ? 15 : 20;
-
-        for (let i = 0; i < sparkCount; i++) {
-            const spark = document.createElement('div');
-            spark.className = 'portal-spark';
-            
-            const size = (isSmallMobile ? 1 : isMobile ? 2 : 3) + Math.random() * (isSmallMobile ? 2 : isMobile ? 3 : 5);
-            const angle = Math.random() * Math.PI * 2;
-            const distance = isMobile ? (50 + Math.random() * 150) : (100 + Math.random() * 350);
-            const tx = Math.cos(angle) * distance;
-            const ty = Math.sin(angle) * distance;
-            
-            spark.style.cssText = `
-                width: ${size}px;
-                height: ${size}px;
-                background: ${sparkColors[Math.floor(Math.random() * sparkColors.length)]};
-                top: ${50 + (Math.random() - 0.5) * centerOffset}%;
-                left: ${50 + (Math.random() - 0.5) * centerOffset}%;
-                box-shadow: 0 0 ${size * (isMobile ? 2 : 4)}px ${glowColor};
-                --tx: ${tx}px;
-                --ty: ${ty}px;
-                animation-delay: ${Math.random() * (isMobile ? 0.5 : 0.8)}s;
-                animation-duration: ${(isMobile ? 1.5 : 2.0) + Math.random() * (isMobile ? 0.8 : 1.2)}s;
-                z-index: 99999;
-            `;
-            document.body.appendChild(spark);
-            
-            setTimeout(() => spark.remove(), isMobile ? 3000 : 4000);
-        }
-
-        // ============================================
-        // 7. FLASH BRANCO
-        // ============================================
-
+        // Flash branco
         const flash = document.createElement('div');
         flash.style.cssText = `
             position: fixed;
@@ -478,46 +350,29 @@
             z-index: 99999;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.6s ease;
+            transition: opacity 0.4s ease;
         `;
         document.body.appendChild(flash);
 
-        const flashDelay = isSmallMobile ? 1800 : isMobile ? 2000 : isTablet ? 2200 : 2500;
-
         setTimeout(() => {
-            flash.style.opacity = isMobile ? '0.5' : '0.7';
+            flash.style.opacity = '0.5';
             setTimeout(() => {
                 flash.style.opacity = '0';
-                setTimeout(() => flash.remove(), 400);
-            }, 400);
-        }, flashDelay);
+                setTimeout(() => flash.remove(), 300);
+            }, 300);
+        }, 1500);
 
-        // ============================================
-        // 8. CRIAR FLASH DO PORTAL (ORIGINAL)
-        // ============================================
-
+        // Portal flash
         createPortalFlash(glowColor);
 
-        // ============================================
-        // 9. BODY SCALE
-        // ============================================
-
+        // Body scale
         document.body.style.transition = "transform 1.6s ease";
-        document.body.style.transform = isMobile ? "scale(1.01)" : "scale(1.03)";
-
-        // ============================================
-        // 10. PORTAL TRANSITION (ORIGINAL)
-        // ============================================
-
+        document.body.style.transform = "scale(1.03)";
         if (portalTransition) portalTransition.classList.add("active");
 
-        // ============================================
-        // 11. LOG E REDIRECIONAMENTO
-        // ============================================
+        console.log(`🚀 Entrando no mundo: ${asura}`);
 
-        console.log(`🚀 Entrando no mundo: ${asura} (${isMobile ? 'Mobile' : isTablet ? 'Tablet' : 'Desktop'}) - Tela cheia por ${fullscreenDuration/1000}s`);
-
-        // Remover clone após a animação
+        // Remover clone
         setTimeout(() => {
             if (clone && clone.parentNode) {
                 clone.style.transition = 'opacity 0.5s ease';
@@ -526,11 +381,12 @@
                     if (clone.parentNode) clone.remove();
                 }, 500);
             }
-        }, fullscreenDuration - 500);
+        }, 2500);
 
+        // Redirecionar
         setTimeout(() => {
             window.location.href = "/world_azure/viagem.html?asura=" + asura;
-        }, fullscreenDuration + 200);
+        }, 3200);
     }
 
     // ============================================
