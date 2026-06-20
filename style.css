@@ -34,12 +34,12 @@ body {
 }
 
 /* ============================================
-   MAGO CENTRALIZADO - PARADO E GRANDE
+   MAGO - ACOMPANHA O CARROSSEL NO DESKTOP
    ============================================ */
 
 .banner .mago-center {
     position: absolute;
-    top: 50%;
+    top: 30%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 120%;
@@ -695,7 +695,6 @@ body {
         top: 42%;
     }
 
-    /* 🔥 MAGO DESCE MAIS NO CELULAR 🔥 */
     .banner .mago-center {
         top: 58%;
     }
