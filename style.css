@@ -7,10 +7,6 @@
     box-sizing: border-box;
 }
 
-/* =========================
-   BODY - FUNDO PRETO
-========================= */
-
 body {
     background: #000000;
     overflow: hidden;
@@ -18,10 +14,6 @@ body {
     min-height: 100vh;
     color: white;
 }
-
-/* =========================
-   BANNER
-========================= */
 
 .banner {
     width: 100%;
@@ -32,10 +24,6 @@ body {
     background: #000000;
 }
 
-/* =========================
-   PARTICLES - BOLINHAS ROXAS PISCANDO
-========================= */
-
 #particles {
     position: absolute;
     inset: 0;
@@ -44,12 +32,6 @@ body {
     z-index: 0;
     pointer-events: none;
 }
-
-/* As bolinhas serão criadas pelo JavaScript com cor roxa */
-
-/* =========================
-   SLIDER
-========================= */
 
 .banner .slider {
     position: absolute;
@@ -64,17 +46,9 @@ body {
     will-change: transform;
 }
 
-/* =========================
-   HOVER PAUSE
-========================= */
-
 .banner .slider:hover {
     animation-play-state: paused;
 }
-
-/* =========================
-   ANIMATION
-========================= */
 
 @keyframes autoRun {
     from {
@@ -84,10 +58,6 @@ body {
         transform: translate(-50%, -50%) rotateX(-16deg) rotateY(360deg);
     }
 }
-
-/* =========================
-   ITEMS
-========================= */
 
 .banner .slider .item {
     position: absolute;
@@ -101,29 +71,29 @@ body {
     transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(clamp(286px, 49vw, 650px));
 }
 
-/* =========================
-   GLOW DA CARTA - COR DA ASURA
-========================= */
+/* ============================================
+   GLOW DA CARTA - CADA UMA COM SUA COR
+   ============================================ */
 
 .banner .slider .item::before {
     content: "";
     position: absolute;
-    inset: -15px;
+    inset: -20px;
     border-radius: 20px;
     background: radial-gradient(circle, var(--glow-color), transparent 70%);
-    filter: blur(25px);
+    filter: blur(30px);
     opacity: 0;
-    transition: opacity 0.5s ease;
+    transition: opacity 0.6s ease;
     z-index: -1;
 }
 
 .banner .slider .item:hover::before {
-    opacity: 0.8;
+    opacity: 0.9;
 }
 
-/* =========================
-   IMAGE
-========================= */
+.banner .slider .item.active::before {
+    opacity: 1;
+}
 
 .banner .slider .item img {
     width: 100%;
@@ -138,28 +108,16 @@ body {
     -webkit-user-drag: none;
 }
 
-/* =========================
-   HOVER - GLOW DA COR DA ASURA
-========================= */
-
 .banner .slider .item:hover img {
     transform: scale(1.05) translateY(-5px);
     filter: brightness(1.15) saturate(1.2);
     box-shadow: 0 0 30px var(--glow-color), 0 0 60px var(--glow-color), 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-/* =========================
-   DIM OTHERS
-========================= */
-
 .banner .slider:hover .item:not(:hover) {
     filter: brightness(0.4) saturate(0.3);
     opacity: 0.5;
 }
-
-/* =========================
-   CONTENT
-========================= */
 
 .banner .content {
     position: absolute;
@@ -168,9 +126,24 @@ body {
     pointer-events: none;
 }
 
-/* =========================
-   TITLE
-========================= */
+/* ============================================
+   MAGE - COM GLOW ROXO
+   ============================================ */
+
+.banner .content .model {
+    background-image: url(images/mago3.png);
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-size: contain;
+    opacity: 0.95;
+    filter: drop-shadow(0 0 40px rgba(160, 80, 255, 0.3)) drop-shadow(0 0 80px rgba(160, 80, 255, 0.15));
+    z-index: 1;
+    pointer-events: none;
+}
 
 .banner .content h1 {
     font-family: 'ICA Rubrik';
@@ -193,10 +166,6 @@ body {
     color: transparent;
 }
 
-/* =========================
-   AUTHOR
-========================= */
-
 .banner .content .author {
     position: absolute;
     right: 30px;
@@ -206,18 +175,6 @@ body {
     color: #ffffffd7;
     z-index: 4;
 }
-
-/* =========================
-   MAGE - REMOVIDO (FUNDO PRETO)
-========================= */
-
-.banner .content .model {
-    display: none;
-}
-
-/* =========================
-   PORTAL - ROXO
-========================= */
 
 #portalTransition {
     position: fixed;
@@ -234,28 +191,16 @@ body {
     opacity: 1;
 }
 
-/* =========================
-   CLICK ACTIVE
-========================= */
-
 .banner .slider .item.active {
     z-index: 999;
     filter: brightness(1.3) saturate(1.2) drop-shadow(0 0 30px var(--glow-color)) drop-shadow(0 0 60px var(--glow-color));
     transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(clamp(338px, 55vw, 728px)) scale(1.25);
 }
 
-/* =========================
-   FADE OTHERS
-========================= */
-
 .banner .slider.fade-all .item:not(.active) {
     opacity: 0.05;
     filter: blur(3px) brightness(0.1);
 }
-
-/* =========================
-   ASURA WORLD
-========================= */
 
 #asuraWorld {
     position: fixed;
@@ -276,10 +221,6 @@ body {
     pointer-events: auto;
 }
 
-/* =========================
-   FLASH
-========================= */
-
 .portal-flash {
     position: fixed;
     inset: 0;
@@ -293,10 +234,6 @@ body {
 .portal-flash.show {
     opacity: 1;
 }
-
-/* =========================
-   PERFORMANCE
-========================= */
 
 .banner,
 .slider,
@@ -318,10 +255,6 @@ body {
     transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-/* ============================================
-   MOLDURA INTERNA DA CARTA
-   ============================================ */
-
 .banner .slider .item.tarot-card::before {
     content: '';
     position: absolute;
@@ -332,10 +265,6 @@ body {
     z-index: 1;
     transition: border-color 0.5s ease;
 }
-
-/* ============================================
-   BRILHO ESTÁTICO - COR DA ASURA
-   ============================================ */
 
 .banner .slider .item.tarot-card::after {
     content: '';
@@ -348,10 +277,6 @@ body {
     opacity: 0.1;
 }
 
-/* ============================================
-   IMAGEM DA CARTA
-   ============================================ */
-
 .banner .slider .item.tarot-card img {
     position: relative;
     z-index: 2;
@@ -360,10 +285,6 @@ body {
     filter: brightness(0.95) contrast(1.05);
     transition: all 0.5s ease;
 }
-
-/* ============================================
-   NÚMERO DA CARTA
-   ============================================ */
 
 .banner .slider .item.tarot-card .tarot-number {
     position: absolute;
@@ -383,10 +304,6 @@ body {
     padding: 2px 12px;
     border-radius: 4px;
 }
-
-/* ============================================
-   NOME DA CARTA
-   ============================================ */
 
 .banner .slider .item.tarot-card .tarot-name {
     position: absolute;
@@ -409,10 +326,6 @@ body {
     backdrop-filter: blur(2px);
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
-
-/* ============================================
-   SÍMBOLOS DOS CANTOS
-   ============================================ */
 
 .banner .slider .item.tarot-card .tarot-symbol {
     position: absolute;
@@ -440,10 +353,6 @@ body {
     bottom: 8px;
     right: 10px;
 }
-
-/* ============================================
-   RUNAS NAS BORDAS
-   ============================================ */
 
 .banner .slider .item.tarot-card .rune {
     position: absolute;
@@ -493,10 +402,6 @@ body {
     right: -2px;
 }
 
-/* ============================================
-   HOLOGRAMA
-   ============================================ */
-
 .banner .slider .item.tarot-card .holo-layer {
     position: absolute;
     inset: 8px;
@@ -507,10 +412,6 @@ body {
     mix-blend-mode: overlay;
     opacity: 0.3;
 }
-
-/* ============================================
-   PARTÍCULAS DA CARTA - COR DA ASURA
-   ============================================ */
 
 .banner .slider .item.tarot-card .particle-container {
     position: absolute;
@@ -538,10 +439,6 @@ body {
         transform: translate(var(--tx), var(--ty)) scale(0);
     }
 }
-
-/* ============================================
-   HOVER - EFEITOS DA COR DA ASURA
-   ============================================ */
 
 .banner .slider .item.tarot-card:hover {
     border-color: var(--glow-color);
@@ -571,7 +468,7 @@ body {
 }
 
 /* ============================================
-   🔒 HÉCATE - GARANTIR BLOQUEIO
+   🔒 HÉCATE - BLOQUEIO
    ============================================ */
 
 .item[style*="pointer-events: none"] {
@@ -600,7 +497,7 @@ body {
 }
 
 /* ============================================
-   🚀 EFEITO "TELA CHEIA" - CLONE DA CARTA
+   🚀 EFEITO TELA CHEIA
    ============================================ */
 
 .portal-card-fullscreen {
@@ -744,10 +641,6 @@ body {
     50% { opacity: 0.5; }
 }
 
-/* ============================================
-   💫 PARTÍCULAS DO PORTAL
-   ============================================ */
-
 .portal-spark {
     position: fixed;
     border-radius: 50%;
@@ -767,10 +660,6 @@ body {
     }
 }
 
-/* ============================================
-   🌌 OVERLAY DE TRANSIÇÃO
-   ============================================ */
-
 .portal-overlay {
     position: fixed;
     inset: 0;
@@ -786,86 +675,7 @@ body {
 }
 
 /* ============================================
-   RESPONSIVIDADE DO CLONE
-   ============================================ */
-
-@media (max-width: 768px) {
-    .portal-card-fullscreen {
-        padding: 10px !important;
-        border-width: 2px !important;
-    }
-    
-    .portal-card-fullscreen .tarot-number-full {
-        top: 15px;
-        padding: 4px 16px;
-        font-size: clamp(18px, 4vw, 28px);
-    }
-    
-    .portal-card-fullscreen .tarot-name-full {
-        bottom: 15px;
-        padding: 4px 16px;
-        font-size: clamp(14px, 3vw, 22px);
-        letter-spacing: 4px;
-    }
-    
-    .portal-card-fullscreen .tarot-symbol-full {
-        font-size: clamp(16px, 4vw, 28px);
-    }
-    
-    .portal-card-fullscreen .tarot-symbol-full.tl { top: 12px; left: 16px; }
-    .portal-card-fullscreen .tarot-symbol-full.tr { top: 12px; right: 16px; }
-    .portal-card-fullscreen .tarot-symbol-full.bl { bottom: 12px; left: 16px; }
-    .portal-card-fullscreen .tarot-symbol-full.br { bottom: 12px; right: 16px; }
-    
-    .portal-card-fullscreen .rune-full {
-        font-size: clamp(12px, 2.5vw, 20px);
-    }
-    
-    .portal-card-fullscreen .holo-layer-full {
-        inset: 10px;
-    }
-}
-
-@media (max-width: 480px) {
-    .portal-card-fullscreen {
-        padding: 6px !important;
-        border-width: 1.5px !important;
-    }
-    
-    .portal-card-fullscreen .tarot-number-full {
-        top: 10px;
-        padding: 2px 12px;
-        font-size: clamp(14px, 4vw, 20px);
-        letter-spacing: 2px;
-    }
-    
-    .portal-card-fullscreen .tarot-name-full {
-        bottom: 10px;
-        padding: 2px 12px;
-        font-size: clamp(10px, 3vw, 16px);
-        letter-spacing: 2px;
-    }
-    
-    .portal-card-fullscreen .tarot-symbol-full {
-        font-size: clamp(12px, 4vw, 20px);
-    }
-    
-    .portal-card-fullscreen .tarot-symbol-full.tl { top: 8px; left: 10px; }
-    .portal-card-fullscreen .tarot-symbol-full.tr { top: 8px; right: 10px; }
-    .portal-card-fullscreen .tarot-symbol-full.bl { bottom: 8px; left: 10px; }
-    .portal-card-fullscreen .tarot-symbol-full.br { bottom: 8px; right: 10px; }
-    
-    .portal-card-fullscreen .rune-full {
-        font-size: clamp(8px, 2.5vw, 14px);
-    }
-    
-    .portal-card-fullscreen .holo-layer-full {
-        inset: 6px;
-    }
-}
-
-/* ============================================
-   RESPONSIVIDADE - MOBILE
+   RESPONSIVIDADE
    ============================================ */
 
 @media (max-width: 768px) {
@@ -961,11 +771,42 @@ body {
     #portalTransition {
         backdrop-filter: blur(4px);
     }
-}
 
-/* ============================================
-   RESPONSIVIDADE - CELULAR PEQUENO
-   ============================================ */
+    .portal-card-fullscreen {
+        padding: 10px !important;
+        border-width: 2px !important;
+    }
+    
+    .portal-card-fullscreen .tarot-number-full {
+        top: 15px;
+        padding: 4px 16px;
+        font-size: clamp(18px, 4vw, 28px);
+    }
+    
+    .portal-card-fullscreen .tarot-name-full {
+        bottom: 15px;
+        padding: 4px 16px;
+        font-size: clamp(14px, 3vw, 22px);
+        letter-spacing: 4px;
+    }
+    
+    .portal-card-fullscreen .tarot-symbol-full {
+        font-size: clamp(16px, 4vw, 28px);
+    }
+    
+    .portal-card-fullscreen .tarot-symbol-full.tl { top: 12px; left: 16px; }
+    .portal-card-fullscreen .tarot-symbol-full.tr { top: 12px; right: 16px; }
+    .portal-card-fullscreen .tarot-symbol-full.bl { bottom: 12px; left: 16px; }
+    .portal-card-fullscreen .tarot-symbol-full.br { bottom: 12px; right: 16px; }
+    
+    .portal-card-fullscreen .rune-full {
+        font-size: clamp(12px, 2.5vw, 20px);
+    }
+    
+    .portal-card-fullscreen .holo-layer-full {
+        inset: 10px;
+    }
+}
 
 @media (max-width: 480px) {
     .banner .slider {
@@ -1051,5 +892,41 @@ body {
     .banner .slider .item.tarot-card .particle {
         width: 1.5px !important;
         height: 1.5px !important;
+    }
+
+    .portal-card-fullscreen {
+        padding: 6px !important;
+        border-width: 1.5px !important;
+    }
+    
+    .portal-card-fullscreen .tarot-number-full {
+        top: 10px;
+        padding: 2px 12px;
+        font-size: clamp(14px, 4vw, 20px);
+        letter-spacing: 2px;
+    }
+    
+    .portal-card-fullscreen .tarot-name-full {
+        bottom: 10px;
+        padding: 2px 12px;
+        font-size: clamp(10px, 3vw, 16px);
+        letter-spacing: 2px;
+    }
+    
+    .portal-card-fullscreen .tarot-symbol-full {
+        font-size: clamp(12px, 4vw, 20px);
+    }
+    
+    .portal-card-fullscreen .tarot-symbol-full.tl { top: 8px; left: 10px; }
+    .portal-card-fullscreen .tarot-symbol-full.tr { top: 8px; right: 10px; }
+    .portal-card-fullscreen .tarot-symbol-full.bl { bottom: 8px; left: 10px; }
+    .portal-card-fullscreen .tarot-symbol-full.br { bottom: 8px; right: 10px; }
+    
+    .portal-card-fullscreen .rune-full {
+        font-size: clamp(8px, 2.5vw, 14px);
+    }
+    
+    .portal-card-fullscreen .holo-layer-full {
+        inset: 6px;
     }
 }
