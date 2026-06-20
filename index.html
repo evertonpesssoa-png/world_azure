@@ -12,22 +12,17 @@
 
     <style>
         /* ============================================
-           AJUSTES PARA CELULAR - CARTAS MAIORES
+           AJUSTE SUTIL PARA CELULAR - CARTAS UM POUCO MAIORES
+           SEM MEXER NA POSIÇÃO DO CARROSSEL
            ============================================ */
         
-        /* Aumentar o tamanho do slider no celular */
         @media (max-width: 768px) {
-            .slider {
-                width: 100% !important;
-                height: 85vh !important;
-                min-height: 500px !important;
-            }
-
+            /* Aumenta só um pouco as cartas */
             .slider .item {
-                width: 200px !important;
-                height: 280px !important;
-                min-width: 180px !important;
-                min-height: 260px !important;
+                width: 170px !important;
+                height: 240px !important;
+                min-width: 150px !important;
+                min-height: 220px !important;
             }
 
             .slider .item img {
@@ -36,119 +31,64 @@
                 object-fit: contain !important;
             }
 
-            /* Tarot - números maiores */
+            /* Tarot - ajuste fino */
             .tarot-number {
-                font-size: 28px !important;
-                top: 8px !important;
-                left: 12px !important;
+                font-size: 24px !important;
+                top: 6px !important;
+                left: 10px !important;
             }
 
             .tarot-name {
-                font-size: 11px !important;
-                bottom: 10px !important;
+                font-size: 10px !important;
+                bottom: 8px !important;
                 left: 50% !important;
                 transform: translateX(-50%) !important;
                 letter-spacing: 1.5px !important;
             }
 
             .tarot-symbol {
-                font-size: 18px !important;
+                font-size: 16px !important;
             }
 
             .rune {
-                font-size: 14px !important;
-            }
-
-            /* Badge de status (opcional - manter pequeno) */
-            #hecate-status-badge {
-                font-size: 10px !important;
-                padding: 4px 10px !important;
-                top: 5px !important;
-                right: 5px !important;
+                font-size: 12px !important;
             }
         }
 
         /* Para telas muito pequenas (até 400px) */
         @media (max-width: 400px) {
             .slider .item {
-                width: 160px !important;
-                height: 230px !important;
-                min-width: 140px !important;
-                min-height: 210px !important;
+                width: 140px !important;
+                height: 200px !important;
+                min-width: 120px !important;
+                min-height: 180px !important;
             }
 
             .tarot-number {
-                font-size: 22px !important;
-                top: 6px !important;
-                left: 10px !important;
+                font-size: 20px !important;
+                top: 5px !important;
+                left: 8px !important;
             }
 
             .tarot-name {
-                font-size: 9px !important;
-                bottom: 6px !important;
+                font-size: 8px !important;
+                bottom: 5px !important;
                 letter-spacing: 1px !important;
             }
 
             .tarot-symbol {
-                font-size: 14px !important;
+                font-size: 12px !important;
             }
 
             .rune {
-                font-size: 11px !important;
+                font-size: 10px !important;
             }
-        }
-
-        /* Badge de status */
-        #hecate-status-badge {
-            position: fixed !important;
-            top: 10px !important;
-            right: 10px !important;
-            padding: 6px 12px !important;
-            border-radius: 20px !important;
-            font-size: 11px !important;
-            font-weight: bold !important;
-            z-index: 9999999 !important;
-            font-family: 'Courier New', monospace !important;
-            pointer-events: none !important;
-            text-transform: uppercase !important;
-            letter-spacing: 1px !important;
-            border: 2px solid !important;
-            transition: all 0.3s !important;
-            background: rgba(0, 0, 0, 0.85) !important;
-            backdrop-filter: blur(4px) !important;
-        }
-
-        #hecate-status-badge.locked {
-            color: #ff4444 !important;
-            border-color: #ff4444 !important;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.2) !important;
-        }
-
-        #hecate-status-badge.unlocked {
-            color: #44ff44 !important;
-            border-color: #44ff44 !important;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2) !important;
-        }
-
-        #hecate-status-badge.testing {
-            color: #ffaa00 !important;
-            border-color: #ffaa00 !important;
-            box-shadow: 0 0 20px rgba(255, 170, 0, 0.2) !important;
-            animation: pulse-badge 1s ease-in-out infinite !important;
-        }
-
-        @keyframes pulse-badge {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
         }
     </style>
 
 </head>
 
 <body>
-
-    <!-- BADGE DE STATUS (PEQUENO) -->
-    <div id="hecate-status-badge" class="locked">🔒 BLOQUEADO</div>
 
     <div class="banner">
         <canvas id="particles"></canvas>
@@ -208,14 +148,6 @@
             const hoverSound = document.getElementById("hoverSound");
             const bgMusic = document.getElementById("bgMusic");
             const portalTransition = document.getElementById("portalTransition");
-            const statusBadge = document.getElementById('hecate-status-badge');
-
-            function setStatus(text, type = 'locked') {
-                if (statusBadge) {
-                    statusBadge.textContent = text;
-                    statusBadge.className = type;
-                }
-            }
 
             // ============================================
             // 🎴 INFORMAÇÕES DAS CARTAS DE TAROT
@@ -447,9 +379,6 @@
             // 🔥 HÉCATE - SISTEMA DE BLOQUEIO
             // ============================================
 
-            // 🔥 FORÇAR BLOQUEIO SEMPRE NO INÍCIO
-            setStatus('🔒 BLOQUEADO', 'locked');
-
             // Bloquear cards IMEDIATAMENTE
             items.forEach(item => {
                 item.style.pointerEvents = "none";
@@ -464,8 +393,6 @@
                 if (testeAtivo) return;
                 testeAtivo = true;
 
-                setStatus('🧪 TESTANDO...', 'testing');
-
                 document.body.removeEventListener('click', ativarHecate);
                 document.body.removeEventListener('touchstart', ativarHecate);
 
@@ -473,7 +400,6 @@
                     try {
                         HecateTest.show(function(success) {
                             if (success) {
-                                setStatus('🔓 LIBERADO', 'unlocked');
                                 localStorage.setItem('hecate_auth_complete', 'true');
 
                                 items.forEach(item => {
@@ -485,20 +411,17 @@
                                     });
                                 });
                             } else {
-                                setStatus('🔒 BLOQUEADO', 'locked');
                                 testeAtivo = false;
                                 document.body.addEventListener('click', ativarHecate);
                                 document.body.addEventListener('touchstart', ativarHecate);
                             }
                         });
                     } catch (err) {
-                        setStatus('🔒 ERRO', 'locked');
                         testeAtivo = false;
                         document.body.addEventListener('click', ativarHecate);
                         document.body.addEventListener('touchstart', ativarHecate);
                     }
                 } else {
-                    setStatus('🔒 ERRO', 'locked');
                     testeAtivo = false;
                     document.body.addEventListener('click', ativarHecate);
                     document.body.addEventListener('touchstart', ativarHecate);
