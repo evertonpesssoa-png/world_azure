@@ -57,7 +57,7 @@ body {
     position: absolute;
     width: clamp(180px, 30vw, 300px);
     height: clamp(240px, 40vw, 380px);
-    top: 20%;
+    top: 30%;
     left: 50%;
     transform-style: preserve-3d;
     transform: translate(-50%, -50%) rotateX(-25deg);
@@ -696,7 +696,7 @@ body {
     }
 
     .banner .mago-center {
-        top: 58%;
+        top: 60%;
     }
 
     .banner .slider .item {
