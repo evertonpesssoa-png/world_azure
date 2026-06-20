@@ -12,37 +12,38 @@
 
     <style>
         /* ============================================
-           DEBUG VISUAL - MOSTRA ERROS NA TELA
+           DEBUG VISUAL - FORÇADO PRA APARECER NO CELULAR
            ============================================ */
         #debug-console {
-            position: fixed;
-            bottom: 10px;
-            left: 10px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.9);
-            color: #0f0;
-            font-family: 'Courier New', monospace;
-            font-size: 11px;
-            padding: 10px;
-            border-radius: 8px;
-            max-height: 200px;
-            overflow-y: auto;
-            z-index: 999999;
-            border: 1px solid rgba(0, 255, 0, 0.3);
-            pointer-events: none;
-            text-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
-            line-height: 1.6;
-            scrollbar-width: thin;
-            scrollbar-color: #0f0 transparent;
+            position: fixed !important;
+            bottom: 10px !important;
+            left: 10px !important;
+            right: 10px !important;
+            background: rgba(0, 0, 0, 0.95) !important;
+            color: #0f0 !important;
+            font-family: 'Courier New', monospace !important;
+            font-size: 11px !important;
+            padding: 10px !important;
+            border-radius: 8px !important;
+            max-height: 250px !important;
+            overflow-y: auto !important;
+            z-index: 9999999 !important;
+            border: 2px solid #0f0 !important;
+            pointer-events: auto !important;
+            text-shadow: 0 0 5px rgba(0, 255, 0, 0.3) !important;
+            line-height: 1.6 !important;
+            scrollbar-width: thin !important;
+            scrollbar-color: #0f0 transparent !important;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.2) !important;
         }
 
         #debug-console::-webkit-scrollbar {
-            width: 4px;
+            width: 4px !important;
         }
 
         #debug-console::-webkit-scrollbar-thumb {
-            background: #0f0;
-            border-radius: 4px;
+            background: #0f0 !important;
+            border-radius: 4px !important;
         }
 
         .debug-error {
@@ -65,49 +66,83 @@
             text-shadow: 0 0 10px rgba(68, 170, 255, 0.5) !important;
         }
 
-        /* Indicador de status da Hécate */
+        #debug-title {
+            color: #888 !important;
+            border-bottom: 1px solid #333 !important;
+            padding-bottom: 4px !important;
+            margin-bottom: 4px !important;
+            font-weight: bold !important;
+        }
+
+        /* Badge de status - FORÇADO */
         #hecate-status-badge {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            z-index: 999999;
-            font-family: 'Courier New', monospace;
-            pointer-events: none;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border: 2px solid;
-            transition: all 0.3s;
+            position: fixed !important;
+            top: 10px !important;
+            right: 10px !important;
+            padding: 8px 16px !important;
+            border-radius: 20px !important;
+            font-size: 14px !important;
+            font-weight: bold !important;
+            z-index: 9999999 !important;
+            font-family: 'Courier New', monospace !important;
+            pointer-events: none !important;
+            text-transform: uppercase !important;
+            letter-spacing: 1px !important;
+            border: 2px solid !important;
+            transition: all 0.3s !important;
+            background: rgba(0, 0, 0, 0.9) !important;
         }
 
         #hecate-status-badge.locked {
-            background: rgba(255, 0, 0, 0.2);
-            color: #ff4444;
-            border-color: #ff4444;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
+            color: #ff4444 !important;
+            border-color: #ff4444 !important;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3) !important;
         }
 
         #hecate-status-badge.unlocked {
-            background: rgba(0, 255, 0, 0.2);
-            color: #44ff44;
-            border-color: #44ff44;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+            color: #44ff44 !important;
+            border-color: #44ff44 !important;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3) !important;
         }
 
         #hecate-status-badge.testing {
-            background: rgba(255, 170, 0, 0.2);
-            color: #ffaa00;
-            border-color: #ffaa00;
-            box-shadow: 0 0 20px rgba(255, 170, 0, 0.2);
-            animation: pulse-badge 1s ease-in-out infinite;
+            color: #ffaa00 !important;
+            border-color: #ffaa00 !important;
+            box-shadow: 0 0 20px rgba(255, 170, 0, 0.3) !important;
+            animation: pulse-badge 1s ease-in-out infinite !important;
+        }
+
+        #hecate-status-badge.error {
+            color: #ff0000 !important;
+            border-color: #ff0000 !important;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5) !important;
+            animation: pulse-badge 0.5s ease-in-out infinite !important;
         }
 
         @keyframes pulse-badge {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
+        }
+
+        /* Botão de copiar debug */
+        #copy-debug-btn {
+            position: fixed !important;
+            bottom: 270px !important;
+            right: 10px !important;
+            padding: 6px 12px !important;
+            background: rgba(0,0,0,0.9) !important;
+            color: #0f0 !important;
+            border: 1px solid #0f0 !important;
+            border-radius: 6px !important;
+            font-size: 10px !important;
+            z-index: 9999999 !important;
+            cursor: pointer !important;
+            font-family: 'Courier New', monospace !important;
+            pointer-events: auto !important;
+        }
+
+        #copy-debug-btn:active {
+            background: rgba(0,255,0,0.2) !important;
         }
     </style>
 
@@ -115,14 +150,15 @@
 
 <body>
 
-    <!-- BADGE DE STATUS DA HÉCATE -->
+    <!-- BADGE DE STATUS -->
     <div id="hecate-status-badge" class="locked">🔒 BLOQUEADO</div>
 
-    <!-- CONSOLE DE DEBUG VISUAL -->
+    <!-- BOTÃO COPIAR -->
+    <button id="copy-debug-btn">📋 COPIAR</button>
+
+    <!-- CONSOLE DE DEBUG -->
     <div id="debug-console">
-        <div style="color:#888; border-bottom:1px solid #333; padding-bottom:4px; margin-bottom:4px;">
-            🐞 DEBUG HÉCATE
-        </div>
+        <div id="debug-title">🐞 DEBUG HÉCATE</div>
         <div id="debug-log"></div>
     </div>
 
@@ -173,7 +209,7 @@
     <script src="/world_azure/shared/js/hecate/test-system.js"></script>
     <script src="/world_azure/shared/js/hecate/auth.js"></script>
 
-    <!-- CÓDIGO PRINCIPAL DO GRIMÓRIO COM TAROT + DEBUG -->
+    <!-- CÓDIGO PRINCIPAL COM DEBUG -->
     <script>
         (function() {
             // ============================================
@@ -181,6 +217,9 @@
             // ============================================
             const debugLog = document.getElementById('debug-log');
             const statusBadge = document.getElementById('hecate-status-badge');
+
+            // Limpar debug anterior
+            debugLog.innerHTML = '';
 
             function debug(msg, type = 'info') {
                 const time = new Date().toLocaleTimeString();
@@ -202,7 +241,6 @@
                 debugLog.appendChild(entry);
                 debugLog.scrollTop = debugLog.scrollHeight;
 
-                // Também loga no console
                 console.log(`[DEBUG] ${msg}`);
             }
 
@@ -211,8 +249,31 @@
                 statusBadge.className = type;
             }
 
-            // Limpar debug anterior
-            debugLog.innerHTML = '';
+            // ============================================
+            // 📋 BOTÃO COPIAR DEBUG
+            // ============================================
+            document.getElementById('copy-debug-btn').addEventListener('click', function() {
+                const text = debugLog.innerText;
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        this.textContent = '✅ COPIADO!';
+                        setTimeout(() => this.textContent = '📋 COPIAR', 2000);
+                    }).catch(() => {
+                        this.textContent = '❌ ERRO';
+                        setTimeout(() => this.textContent = '📋 COPIAR', 2000);
+                    });
+                } else {
+                    // Fallback para celular
+                    const textarea = document.createElement('textarea');
+                    textarea.value = text;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    this.textContent = '✅ COPIADO!';
+                    setTimeout(() => this.textContent = '📋 COPIAR', 2000);
+                }
+            });
 
             // ============================================
             // CONFIGURAÇÃO INICIAL
@@ -289,7 +350,7 @@
             };
 
             // ============================================
-            // 🎴 APLICAR ESTILO TAROT NOS CARDS
+            // 🎴 APLICAR ESTILO TAROT
             // ============================================
 
             debug('🎴 Aplicando estilo Tarot...', 'info');
@@ -467,12 +528,10 @@
             // 🔥 HÉCATE - SISTEMA DE BLOQUEIO E TESTE
             // ============================================
 
-            // Verificar HecateTest
             debug(`🔍 Verificando HecateTest: ${typeof HecateTest}`, 'info');
             debug(`🔍 Verificando HecateBlock: ${typeof HecateBlock}`, 'info');
             debug(`🔍 Verificando PortalAuth: ${typeof PortalAuth}`, 'info');
 
-            // Verificar se já passou no teste
             const authComplete = localStorage.getItem('hecate_auth_complete') === 'true';
             debug(`📋 localStorage hecate_auth_complete: ${authComplete}`, 'info');
 
@@ -489,7 +548,6 @@
                 debug('🔒 Usuário NÃO autenticado - Bloqueando cards', 'warn');
                 setStatus('🔒 BLOQUEADO', 'locked');
 
-                // Bloquear cards
                 items.forEach(item => {
                     item.style.pointerEvents = "none";
                     item.style.opacity = "0.4";
@@ -513,11 +571,10 @@
 
                         try {
                             HecateTest.show(function(success) {
-                                debug(`📝 Resultado do teste: ${success}`, success ? 'success' :
-                                    'error');
+                                debug(`📝 Resultado: ${success}`, success ? 'success' : 'error');
 
                                 if (success) {
-                                    debug('✅ Teste aprovado! Liberando cards...', 'success');
+                                    debug('✅ APROVADO! Liberando cards...', 'success');
                                     setStatus('🔓 LIBERADO', 'unlocked');
                                     localStorage.setItem('hecate_auth_complete', 'true');
 
@@ -531,7 +588,7 @@
                                         });
                                     });
                                 } else {
-                                    debug('❌ Teste falhou!', 'error');
+                                    debug('❌ REPROVADO!', 'error');
                                     setStatus('🔒 BLOQUEADO', 'locked');
                                     testeAtivo = false;
                                     document.body.addEventListener('click', ativarHecate);
@@ -539,41 +596,38 @@
                                 }
                             });
                         } catch (err) {
-                            debug(`❌ ERRO no HecateTest.show: ${err.message}`, 'error');
-                            setStatus('🔒 ERRO', 'locked');
+                            debug(`❌ ERRO: ${err.message}`, 'error');
+                            setStatus('🔒 ERRO', 'error');
                             testeAtivo = false;
                             document.body.addEventListener('click', ativarHecate);
                             document.body.addEventListener('touchstart', ativarHecate);
                         }
                     } else {
-                        debug('❌ HecateTest NÃO encontrado!', 'error');
-                        debug(`📋 HecateTest é: ${typeof HecateTest}`, 'error');
-                        setStatus('🔒 ERRO', 'locked');
+                        debug('❌ HecateTest NÃO ENCONTRADO!', 'error');
+                        debug(`📋 Tipo: ${typeof HecateTest}`, 'error');
+                        setStatus('🔒 ERRO', 'error');
 
-                        // Tentar carregar novamente após 2 segundos
-                        debug('🔄 Tentando recarregar Hécate em 2 segundos...', 'warn');
+                        // Tenta recarregar
+                        debug('🔄 Tentando recarregar em 3s...', 'warn');
                         setTimeout(() => {
-                            debug('🔍 Verificando HecateTest novamente...', 'info');
-                            debug(`📋 HecateTest: ${typeof HecateTest}`, 'info');
-
+                            debug(`🔍 HecateTest agora: ${typeof HecateTest}`, 'info');
                             if (typeof HecateTest !== 'undefined' && HecateTest.show) {
-                                debug('✅ HecateTest carregou! Tentando novamente...', 'success');
+                                debug('✅ Carregou! Tente novamente.', 'success');
                                 testeAtivo = false;
                                 document.body.addEventListener('click', ativarHecate);
                                 document.body.addEventListener('touchstart', ativarHecate);
                             } else {
-                                debug('❌ HecateTest ainda não disponível', 'error');
-                                debug('💡 Verifique se os arquivos estão no caminho correto:', 'warn');
-                                debug('📁 /world_azure/shared/js/hecate/test-system.js', 'warn');
-                                setStatus('🔒 ERRO', 'locked');
+                                debug('❌ Ainda não disponível', 'error');
+                                debug('📁 Verifique: /world_azure/shared/js/hecate/test-system.js', 'warn');
                             }
-                        }, 2000);
+                        }, 3000);
                     }
                 }
 
                 document.body.addEventListener('click', ativarHecate);
                 document.body.addEventListener('touchstart', ativarHecate);
-                debug('🗝️ Toque na tela para ativar o teste da Hécate', 'info');
+                debug('🗝️ Toque na tela para ativar a Hécate', 'info');
+                debug('💡 O debug está VISÍVEL agora!', 'success');
             }
 
         })();
