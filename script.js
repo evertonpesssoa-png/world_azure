@@ -277,7 +277,7 @@
     }
 
     // ============================================
-    // 🚀 START TRANSITION - EFEITO "TELA CHEIA" (CORRIGIDO)
+    // 🚀 START TRANSITION - EFEITO "TELA CHEIA"
     // ============================================
 
     function startAsuraTransition(selectedItem, asura) {
@@ -293,23 +293,23 @@
         const number = numberSpan ? numberSpan.textContent : '?';
         const name = nameSpan ? nameSpan.textContent : '?';
 
-        // Criar clone em tela cheia
+        // ============================================
+        // 1. CRIAR CLONE DA CARTA EM TELA CHEIA
+        // ============================================
+
         const clone = document.createElement('div');
         clone.className = 'portal-card-fullscreen';
         clone.style.setProperty('--glow-color', glowColor);
 
-        // Imagem
         const img = document.createElement('img');
         img.src = imgSrc;
         clone.appendChild(img);
 
-        // Número
         const numClone = document.createElement('span');
         numClone.className = 'tarot-number-full';
         numClone.textContent = number;
         clone.appendChild(numClone);
 
-        // Nome
         const nameClone = document.createElement('span');
         nameClone.className = 'tarot-name-full';
         nameClone.textContent = name;
@@ -317,19 +317,28 @@
 
         document.body.appendChild(clone);
 
-        // Congelar carrossel
+        // ============================================
+        // 2. CONGELAR CARROSSEL
+        // ============================================
+
         if (slider) slider.style.animationPlayState = "paused";
         if (slider) slider.classList.add("fade-all");
         selectedItem.classList.add("active");
 
-        // Som
+        // ============================================
+        // 3. SOM DO PORTAL
+        // ============================================
+
         if (hoverSound) {
             hoverSound.volume = 0.2;
             hoverSound.currentTime = 0;
             hoverSound.play().catch(() => {});
         }
 
-        // Fade música
+        // ============================================
+        // 4. FADE DA MÚSICA
+        // ============================================
+
         if (bgMusic) {
             const fadeAudio = setInterval(() => {
                 if (bgMusic.volume > 0.02) {
@@ -341,7 +350,10 @@
             }, 30);
         }
 
-        // Flash branco
+        // ============================================
+        // 5. FLASH BRANCO
+        // ============================================
+
         const flash = document.createElement('div');
         flash.style.cssText = `
             position: fixed;
@@ -362,17 +374,26 @@
             }, 300);
         }, 1500);
 
-        // Portal flash
+        // ============================================
+        // 6. CRIAR FLASH DO PORTAL (ORIGINAL)
+        // ============================================
+
         createPortalFlash(glowColor);
 
-        // Body scale
+        // ============================================
+        // 7. BODY SCALE
+        // ============================================
+
         document.body.style.transition = "transform 1.6s ease";
         document.body.style.transform = "scale(1.03)";
         if (portalTransition) portalTransition.classList.add("active");
 
+        // ============================================
+        // 8. REMOVER CLONE E REDIRECIONAR
+        // ============================================
+
         console.log(`🚀 Entrando no mundo: ${asura}`);
 
-        // Remover clone
         setTimeout(() => {
             if (clone && clone.parentNode) {
                 clone.style.transition = 'opacity 0.5s ease';
@@ -383,7 +404,6 @@
             }
         }, 2500);
 
-        // Redirecionar
         setTimeout(() => {
             window.location.href = "/world_azure/viagem.html?asura=" + asura;
         }, 3200);
