@@ -313,61 +313,39 @@ body {
 }
 
 /* ============================================
-   🎴 ESTILO CARTA DE TAROT
+   🎴 ESTILO CARTA DE TAROT - SEM PULSO
    ============================================ */
 
 .banner .slider .item.tarot-card {
     background: linear-gradient(145deg, rgba(25, 20, 30, 0.95), rgba(10, 8, 15, 0.98));
-    border: 2px solid rgba(200, 170, 100, 0.25);
+    border: 2px solid rgba(200, 170, 100, 0.4);
     border-radius: 16px;
     padding: 8px;
     box-shadow: 0 15px 50px rgba(0, 0, 0, 0.9), 0 0 80px rgba(200, 170, 100, 0.05), inset 0 1px 0 rgba(255, 215, 0, 0.08);
     transform-style: preserve-3d;
     transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-    animation: goldenFrame 3s ease-in-out infinite;
-}
-
-/* Moldura dourada que acende */
-@keyframes goldenFrame {
-    0%,
-    100% {
-        border-color: rgba(200, 170, 100, 0.25);
-        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.9), 0 0 80px rgba(200, 170, 100, 0.05);
-    }
-    50% {
-        border-color: rgba(200, 170, 100, 0.8);
-        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.9), 0 0 80px rgba(200, 170, 100, 0.2), 0 0 120px rgba(200, 170, 100, 0.1);
-    }
 }
 
 /* ============================================
-   MOLDURA INTERNA DA CARTA (FIX)
+   MOLDURA INTERNA DA CARTA - SEM PULSO
    ============================================ */
 
 .banner .slider .item.tarot-card::before {
     content: '';
     position: absolute;
     inset: 4px;
-    border: 1.5px solid rgba(200, 170, 100, 0.15);
+    border: 1.5px solid rgba(200, 170, 100, 0.25);
     border-radius: 12px;
     pointer-events: none;
     z-index: 1;
     background: repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(200, 170, 100, 0.03) 15px, rgba(200, 170, 100, 0.03) 16px);
     transition: border-color 0.5s ease;
-    animation: innerFrame 3s ease-in-out infinite;
 }
 
-@keyframes innerFrame {
-    0%,
-    100% {
-        border-color: rgba(200, 170, 100, 0.15);
-    }
-    50% {
-        border-color: rgba(200, 170, 100, 0.6);
-    }
-}
+/* ============================================
+   BRILHO ESTÁTICO - SEM PULSO
+   ============================================ */
 
-/* Brilho pulsante com a cor do Asura */
 .banner .slider .item.tarot-card::after {
     content: '';
     position: absolute;
@@ -376,18 +354,7 @@ body {
     background: radial-gradient(circle at 30% 20%, var(--glow-color, rgba(200, 170, 100, 0.05)), transparent 60%);
     pointer-events: none;
     z-index: 0;
-    animation: tarotGlow 4s ease-in-out infinite;
-    opacity: 0.2;
-}
-
-@keyframes tarotGlow {
-    0%,
-    100% {
-        opacity: 0.2;
-    }
-    50% {
-        opacity: 0.6;
-    }
+    opacity: 0.15;
 }
 
 /* ============================================
@@ -404,7 +371,7 @@ body {
 }
 
 /* ============================================
-   NÚMERO DA CARTA (FIX)
+   NÚMERO DA CARTA
    ============================================ */
 
 .banner .slider .item.tarot-card .tarot-number {
@@ -473,18 +440,18 @@ body {
 }
 
 /* ============================================
-   RUNAS NAS BORDAS
+   RUNAS NAS BORDAS - SEM PULSO
    ============================================ */
 
 .banner .slider .item.tarot-card .rune {
     position: absolute;
     z-index: 10;
     font-size: 14px;
-    color: rgba(200, 170, 100, 0.2);
+    color: rgba(200, 170, 100, 0.25);
     pointer-events: none;
     font-family: 'Georgia', serif;
-    animation: runeGlow 4s ease-in-out infinite;
     text-shadow: 0 0 10px rgba(200, 170, 100, 0.1);
+    transition: all 0.4s ease;
 }
 
 .banner .slider .item.tarot-card .rune.top {
@@ -525,21 +492,8 @@ body {
     right: -2px;
 }
 
-@keyframes runeGlow {
-    0%,
-    100% {
-        opacity: 0.3;
-        transform: scale(1) rotate(0deg);
-    }
-    50% {
-        opacity: 0.8;
-        transform: scale(1.2) rotate(10deg);
-        text-shadow: 0 0 20px rgba(200, 170, 100, 0.3);
-    }
-}
-
 /* ============================================
-   HOLOGRAMA
+   HOLOGRAMA - SEM PULSO
    ============================================ */
 
 .banner .slider .item.tarot-card .holo-layer {
@@ -548,9 +502,9 @@ body {
     z-index: 3;
     border-radius: 10px;
     pointer-events: none;
-    background: linear-gradient(135deg, rgba(200, 170, 100, 0) 0%, rgba(200, 170, 100, 0.05) 25%, rgba(255, 215, 0, 0.1) 50%, rgba(200, 170, 100, 0.05) 75%, rgba(200, 170, 100, 0) 100%);
-    animation: holographic 6s ease-in-out infinite;
+    background: linear-gradient(135deg, rgba(200, 170, 100, 0) 0%, rgba(200, 170, 100, 0.05) 25%, rgba(255, 215, 0, 0.08) 50%, rgba(200, 170, 100, 0.05) 75%, rgba(200, 170, 100, 0) 100%);
     mix-blend-mode: overlay;
+    opacity: 0.4;
 }
 
 .banner .slider .item.tarot-card .holo-layer::after {
@@ -559,28 +513,6 @@ body {
     inset: 0;
     border-radius: 10px;
     background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 215, 0, 0.03) 10px, rgba(255, 215, 0, 0.03) 11px);
-    animation: holoPattern 4s linear infinite;
-}
-
-@keyframes holographic {
-    0%,
-    100% {
-        opacity: 0.3;
-        transform: scale(1) rotate(0deg);
-    }
-    50% {
-        opacity: 0.8;
-        transform: scale(1.02) rotate(2deg);
-    }
-}
-
-@keyframes holoPattern {
-    0% {
-        transform: translateX(0) translateY(0);
-    }
-    100% {
-        transform: translateX(20px) translateY(20px);
-    }
 }
 
 /* ============================================
@@ -619,12 +551,12 @@ body {
    ============================================ */
 
 .banner .slider .item.tarot-card:hover {
-    border-color: rgba(200, 170, 100, 0.5);
+    border-color: rgba(200, 170, 100, 0.6);
     box-shadow: 0 25px 80px rgba(0, 0, 0, 0.95), 0 0 100px rgba(200, 170, 100, 0.12), 0 0 150px rgba(200, 170, 100, 0.05);
 }
 
 .banner .slider .item.tarot-card:hover::before {
-    border-color: rgba(200, 170, 100, 0.3);
+    border-color: rgba(200, 170, 100, 0.4);
 }
 
 .banner .slider .item.tarot-card:hover img {
@@ -633,18 +565,16 @@ body {
 }
 
 .banner .slider .item.tarot-card:hover .tarot-symbol {
-    color: rgba(200, 170, 100, 0.3);
+    color: rgba(200, 170, 100, 0.35);
     transform: scale(1.2);
 }
 
 .banner .slider .item.tarot-card:hover .rune {
     color: rgba(200, 170, 100, 0.5);
-    animation-duration: 1.5s;
 }
 
 .banner .slider .item.tarot-card:hover .holo-layer {
-    opacity: 1;
-    animation-duration: 2s;
+    opacity: 0.7;
 }
 
 /* ============================================
