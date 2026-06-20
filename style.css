@@ -695,6 +695,11 @@ body {
         top: 42%;
     }
 
+    /* 🔥 SÓ ADICIONEI ISSO 🔥 */
+    .banner .mago-center {
+        top: 55%;
+    }
+
     .banner .slider .item {
         transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(380px);
     }
