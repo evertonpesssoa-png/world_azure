@@ -135,8 +135,8 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) translateZ(0px);
-    width: 100%;
-    height: 100%;
+    width: 120%;
+    height: 120%;
     background-image: url(images/mago3.png);
     background-repeat: no-repeat;
     background-position: center bottom;
@@ -414,6 +414,10 @@ body {
     opacity: 0.3;
 }
 
+/* ============================================
+   💫 PARTÍCULAS DA CARTA - COR DA ASURA
+   ============================================ */
+
 .banner .slider .item.tarot-card .particle-container {
     position: absolute;
     inset: 0;
@@ -440,6 +444,10 @@ body {
         transform: translate(var(--tx), var(--ty)) scale(0);
     }
 }
+
+/* ============================================
+   HOVER - EFEITOS COM COR DA ASURA
+   ============================================ */
 
 .banner .slider .item.tarot-card:hover {
     border-color: var(--glow-color);
