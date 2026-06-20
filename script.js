@@ -277,7 +277,7 @@
     }
 
     // ============================================
-    // 🚀 START TRANSITION - EFEITO "ENTRANDO NA CARTA"
+    // 🚀 START TRANSITION - EFEITO "ENTRANDO NA CARTA" (CORRIGIDO)
     // ============================================
 
     function startAsuraTransition(selectedItem, asura) {
@@ -287,7 +287,7 @@
         const color = selectedItem.dataset.color;
 
         // ============================================
-        // DETECTAR DISPOSITIVO
+        // DETECTAR DISPOSITIVO - ANIMAÇÃO MAIS LENTA
         // ============================================
 
         const isMobile = window.innerWidth <= 768;
@@ -297,34 +297,34 @@
 
         let sparkCount = 60;
         let sparkSize = [2, 6];
-        let animationDuration = 2400;
-        let flashDelay = 1500;
-        let overlayDelay = 300;
+        let animationDuration = 3500; // ANTES: 2400
+        let flashDelay = 2000; // ANTES: 1500
+        let overlayDelay = 400; // ANTES: 300
 
         if (isSmallMobile) {
             sparkCount = 25;
             sparkSize = [1, 3];
-            animationDuration = 2000;
-            flashDelay = 1000;
-            overlayDelay = 200;
+            animationDuration = 2400; // ANTES: 2000
+            flashDelay = 1500; // ANTES: 1000
+            overlayDelay = 250;
         } else if (isMobile) {
             sparkCount = 35;
             sparkSize = [1, 4];
-            animationDuration = 2100;
-            flashDelay = 1200;
-            overlayDelay = 250;
+            animationDuration = 2800; // ANTES: 2100
+            flashDelay = 1700; // ANTES: 1200
+            overlayDelay = 300;
         } else if (isTablet) {
             sparkCount = 45;
             sparkSize = [2, 5];
-            animationDuration = 2200;
-            flashDelay = 1300;
-            overlayDelay = 280;
+            animationDuration = 3200; // ANTES: 2200
+            flashDelay = 1850; // ANTES: 1300
+            overlayDelay = 350;
         } else if (isLargeScreen) {
             sparkCount = 80;
             sparkSize = [3, 8];
-            animationDuration = 2600;
-            flashDelay = 1700;
-            overlayDelay = 350;
+            animationDuration = 4000; // ANTES: 2600
+            flashDelay = 2200; // ANTES: 1700
+            overlayDelay = 450;
         }
 
         // ============================================
@@ -405,11 +405,11 @@
                 --tx: ${tx}px;
                 --ty: ${ty}px;
                 animation-delay: ${Math.random() * (isMobile ? 0.5 : 0.8)}s;
-                animation-duration: ${(isMobile ? 1.2 : 1.5) + Math.random() * (isMobile ? 0.8 : 1)}s;
+                animation-duration: ${(isMobile ? 1.5 : 2.0) + Math.random() * (isMobile ? 0.8 : 1.2)}s;
             `;
             document.body.appendChild(spark);
             
-            setTimeout(() => spark.remove(), isMobile ? 2500 : 3000);
+            setTimeout(() => spark.remove(), isMobile ? 3000 : 3500);
         }
 
         // ============================================
@@ -424,16 +424,16 @@
             z-index: 99999;
             opacity: 0;
             pointer-events: none;
-            transition: opacity ${isMobile ? '0.3s' : '0.5s'} ease;
+            transition: opacity ${isMobile ? '0.4s' : '0.6s'} ease;
         `;
         document.body.appendChild(flash);
 
         setTimeout(() => {
-            flash.style.opacity = isMobile ? '0.4' : '0.6';
+            flash.style.opacity = isMobile ? '0.5' : '0.7';
             setTimeout(() => {
                 flash.style.opacity = '0';
-                setTimeout(() => flash.remove(), 300);
-            }, isMobile ? 200 : 300);
+                setTimeout(() => flash.remove(), 400);
+            }, isMobile ? 300 : 400);
         }, flashDelay);
 
         // ============================================
