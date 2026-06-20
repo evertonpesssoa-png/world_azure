@@ -12,59 +12,100 @@
 
     <style>
         /* ============================================
-           DEBUG VISUAL
+           AJUSTES PARA CELULAR - CARTAS MAIORES
            ============================================ */
-        #debug-console {
-            position: fixed !important;
-            bottom: 10px !important;
-            left: 10px !important;
-            right: 10px !important;
-            background: rgba(0, 0, 0, 0.95) !important;
-            color: #0f0 !important;
-            font-family: 'Courier New', monospace !important;
-            font-size: 11px !important;
-            padding: 10px !important;
-            border-radius: 8px !important;
-            max-height: 250px !important;
-            overflow-y: auto !important;
-            z-index: 9999999 !important;
-            border: 2px solid #0f0 !important;
-            pointer-events: auto !important;
-            text-shadow: 0 0 5px rgba(0, 255, 0, 0.3) !important;
-            line-height: 1.6 !important;
-            scrollbar-width: thin !important;
-            scrollbar-color: #0f0 transparent !important;
-            box-shadow: 0 0 30px rgba(0, 255, 0, 0.2) !important;
+        
+        /* Aumentar o tamanho do slider no celular */
+        @media (max-width: 768px) {
+            .slider {
+                width: 100% !important;
+                height: 85vh !important;
+                min-height: 500px !important;
+            }
+
+            .slider .item {
+                width: 200px !important;
+                height: 280px !important;
+                min-width: 180px !important;
+                min-height: 260px !important;
+            }
+
+            .slider .item img {
+                width: 100% !important;
+                height: 100% !important;
+                object-fit: contain !important;
+            }
+
+            /* Tarot - números maiores */
+            .tarot-number {
+                font-size: 28px !important;
+                top: 8px !important;
+                left: 12px !important;
+            }
+
+            .tarot-name {
+                font-size: 11px !important;
+                bottom: 10px !important;
+                left: 50% !important;
+                transform: translateX(-50%) !important;
+                letter-spacing: 1.5px !important;
+            }
+
+            .tarot-symbol {
+                font-size: 18px !important;
+            }
+
+            .rune {
+                font-size: 14px !important;
+            }
+
+            /* Badge de status (opcional - manter pequeno) */
+            #hecate-status-badge {
+                font-size: 10px !important;
+                padding: 4px 10px !important;
+                top: 5px !important;
+                right: 5px !important;
+            }
         }
 
-        #debug-console::-webkit-scrollbar {
-            width: 4px !important;
-        }
-        #debug-console::-webkit-scrollbar-thumb {
-            background: #0f0 !important;
-            border-radius: 4px !important;
+        /* Para telas muito pequenas (até 400px) */
+        @media (max-width: 400px) {
+            .slider .item {
+                width: 160px !important;
+                height: 230px !important;
+                min-width: 140px !important;
+                min-height: 210px !important;
+            }
+
+            .tarot-number {
+                font-size: 22px !important;
+                top: 6px !important;
+                left: 10px !important;
+            }
+
+            .tarot-name {
+                font-size: 9px !important;
+                bottom: 6px !important;
+                letter-spacing: 1px !important;
+            }
+
+            .tarot-symbol {
+                font-size: 14px !important;
+            }
+
+            .rune {
+                font-size: 11px !important;
+            }
         }
 
-        .debug-error { color: #ff4444 !important; text-shadow: 0 0 10px rgba(255,0,0,0.5) !important; }
-        .debug-success { color: #44ff44 !important; text-shadow: 0 0 10px rgba(0,255,0,0.5) !important; }
-        .debug-warn { color: #ffaa00 !important; text-shadow: 0 0 10px rgba(255,170,0,0.5) !important; }
-        .debug-info { color: #44aaff !important; text-shadow: 0 0 10px rgba(68,170,255,0.5) !important; }
-
-        #debug-title {
-            color: #888 !important;
-            border-bottom: 1px solid #333 !important;
-            padding-bottom: 4px !important;
-            margin-bottom: 4px !important;
-            font-weight: bold !important;
-        }
-
+        /* Badge de status */
         #hecate-status-badge {
             position: fixed !important;
             top: 10px !important;
             right: 10px !important;
-            padding: 8px 16px !important;
+            padding: 6px 12px !important;
             border-radius: 20px !important;
-            font-size: 14px !important;
+            font-size: 11px !important;
             font-weight: bold !important;
             z-index: 9999999 !important;
             font-family: 'Courier New', monospace !important;
@@ -73,79 +114,32 @@
             letter-spacing: 1px !important;
             border: 2px solid !important;
             transition: all 0.3s !important;
-            background: rgba(0, 0, 0, 0.9) !important;
+            background: rgba(0, 0, 0, 0.85) !important;
+            backdrop-filter: blur(4px) !important;
         }
 
         #hecate-status-badge.locked {
             color: #ff4444 !important;
             border-color: #ff4444 !important;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3) !important;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.2) !important;
         }
 
         #hecate-status-badge.unlocked {
             color: #44ff44 !important;
             border-color: #44ff44 !important;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3) !important;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2) !important;
         }
 
         #hecate-status-badge.testing {
             color: #ffaa00 !important;
             border-color: #ffaa00 !important;
-            box-shadow: 0 0 20px rgba(255, 170, 0, 0.3) !important;
+            box-shadow: 0 0 20px rgba(255, 170, 0, 0.2) !important;
             animation: pulse-badge 1s ease-in-out infinite !important;
-        }
-
-        #hecate-status-badge.error {
-            color: #ff0000 !important;
-            border-color: #ff0000 !important;
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5) !important;
-            animation: pulse-badge 0.5s ease-in-out infinite !important;
         }
 
         @keyframes pulse-badge {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
-        }
-
-        #copy-debug-btn {
-            position: fixed !important;
-            bottom: 270px !important;
-            right: 10px !important;
-            padding: 6px 12px !important;
-            background: rgba(0,0,0,0.9) !important;
-            color: #0f0 !important;
-            border: 1px solid #0f0 !important;
-            border-radius: 6px !important;
-            font-size: 10px !important;
-            z-index: 9999999 !important;
-            cursor: pointer !important;
-            font-family: 'Courier New', monospace !important;
-            pointer-events: auto !important;
-        }
-
-        #copy-debug-btn:active {
-            background: rgba(0,255,0,0.2) !important;
-        }
-
-        /* Botão reset */
-        #reset-btn {
-            position: fixed !important;
-            bottom: 310px !important;
-            right: 10px !important;
-            padding: 6px 12px !important;
-            background: rgba(255,0,0,0.2) !important;
-            color: #ff4444 !important;
-            border: 1px solid #ff4444 !important;
-            border-radius: 6px !important;
-            font-size: 10px !important;
-            z-index: 9999999 !important;
-            cursor: pointer !important;
-            font-family: 'Courier New', monospace !important;
-            pointer-events: auto !important;
-        }
-
-        #reset-btn:active {
-            background: rgba(255,0,0,0.4) !important;
         }
     </style>
 
@@ -153,18 +147,8 @@
 
 <body>
 
-    <!-- BADGE DE STATUS -->
+    <!-- BADGE DE STATUS (PEQUENO) -->
     <div id="hecate-status-badge" class="locked">🔒 BLOQUEADO</div>
-
-    <!-- BOTÕES -->
-    <button id="reset-btn">🔄 RESETAR</button>
-    <button id="copy-debug-btn">📋 COPIAR</button>
-
-    <!-- CONSOLE DE DEBUG -->
-    <div id="debug-console">
-        <div id="debug-title">🐞 DEBUG HÉCATE</div>
-        <div id="debug-log"></div>
-    </div>
 
     <div class="banner">
         <canvas id="particles"></canvas>
@@ -213,112 +197,89 @@
     <script src="/world_azure/shared/js/hecate/test-system.js"></script>
     <script src="/world_azure/shared/js/hecate/auth.js"></script>
 
-    <!-- CÓDIGO PRINCIPAL COM DEBUG E BLOQUEIO FORÇADO -->
+    <!-- CÓDIGO PRINCIPAL DO GRIMÓRIO -->
     <script>
         (function() {
             // ============================================
-            // 🐞 SISTEMA DE DEBUG
+            // CONFIGURAÇÃO INICIAL
             // ============================================
-            const debugLog = document.getElementById('debug-log');
-            const statusBadge = document.getElementById('hecate-status-badge');
-
-            debugLog.innerHTML = '';
-
-            function debug(msg, type = 'info') {
-                const time = new Date().toLocaleTimeString();
-                const colors = {
-                    error: 'debug-error',
-                    success: 'debug-success',
-                    warn: 'debug-warn',
-                    info: 'debug-info'
-                };
-                const prefix = {
-                    error: '❌',
-                    success: '✅',
-                    warn: '⚠️',
-                    info: 'ℹ️'
-                };
-                const entry = document.createElement('div');
-                entry.className = colors[type] || 'debug-info';
-                entry.textContent = `[${time}] ${prefix[type] || '•'} ${msg}`;
-                debugLog.appendChild(entry);
-                debugLog.scrollTop = debugLog.scrollHeight;
-                console.log(`[DEBUG] ${msg}`);
-            }
-
-            function setStatus(text, type = 'locked') {
-                statusBadge.textContent = text;
-                statusBadge.className = type;
-            }
-
-            // ============================================
-            // 📋 BOTÃO COPIAR
-            // ============================================
-            document.getElementById('copy-debug-btn').addEventListener('click', function() {
-                const text = debugLog.innerText;
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(text).then(() => {
-                        this.textContent = '✅ COPIADO!';
-                        setTimeout(() => this.textContent = '📋 COPIAR', 2000);
-                    }).catch(() => {
-                        this.textContent = '❌ ERRO';
-                        setTimeout(() => this.textContent = '📋 COPIAR', 2000);
-                    });
-                } else {
-                    const textarea = document.createElement('textarea');
-                    textarea.value = text;
-                    document.body.appendChild(textarea);
-                    textarea.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(textarea);
-                    this.textContent = '✅ COPIADO!';
-                    setTimeout(() => this.textContent = '📋 COPIAR', 2000);
-                }
-            });
-
-            // ============================================
-            // 🔄 BOTÃO RESETAR - LIMPA O localStorage
-            // ============================================
-            document.getElementById('reset-btn').addEventListener('click', function() {
-                localStorage.removeItem('hecate_auth_complete');
-                debug('🔄 localStorage resetado! Recarregando...', 'warn');
-                setStatus('🔒 RESETADO', 'locked');
-                setTimeout(() => location.reload(), 1000);
-            });
-
-            // ============================================
-            // 🚀 INICIALIZAÇÃO
-            // ============================================
-            debug('🚀 Inicializando Grimório...', 'info');
-
             const items = document.querySelectorAll(".item");
             const slider = document.querySelector(".slider");
             const hoverSound = document.getElementById("hoverSound");
             const bgMusic = document.getElementById("bgMusic");
             const portalTransition = document.getElementById("portalTransition");
+            const statusBadge = document.getElementById('hecate-status-badge');
 
-            debug(`📦 Encontrados ${items.length} cards`, 'info');
+            function setStatus(text, type = 'locked') {
+                if (statusBadge) {
+                    statusBadge.textContent = text;
+                    statusBadge.className = type;
+                }
+            }
 
             // ============================================
-            // 🎴 TAROT INFO
+            // 🎴 INFORMAÇÕES DAS CARTAS DE TAROT
             // ============================================
             const tarotInfo = {
-                'diva': { number: 'I', name: 'A ILUSIONISTA', symbols: ['🌀', '✦', '🌀', '✦'], runes: ['ᚠ', 'ᚢ', 'ᚦ', 'ᚨ'] },
-                'siria': { number: 'VII', name: 'A FORTUNA', symbols: ['🌳', '💰', '🌳', '💰'], runes: ['ᚱ', 'ᚲ', 'ᚷ', 'ᚹ'] },
-                'astreia': { number: 'XII', name: 'A PROTETORA', symbols: ['🛡️', '⚔️', '🛡️', '⚔️'], runes: ['ᚺ', 'ᚾ', 'ᛁ', 'ᛃ'] },
-                'merlim': { number: 'V', name: 'A FEITICEIRA', symbols: ['⚗️', '🔮', '⚗️', '🔮'], runes: ['ᛈ', 'ᛇ', 'ᛉ', 'ᛊ'] },
-                'umbra': { number: 'XIII', name: 'A CAÇADORA', symbols: ['🗡️', '🎯', '🗡️', '🎯'], runes: ['ᛏ', 'ᛒ', 'ᛖ', 'ᛗ'] },
-                'atena': { number: 'III', name: 'A MESTRA', symbols: ['📚', '🦉', '📚', '🦉'], runes: ['ᛚ', 'ᛝ', 'ᛟ', 'ᛞ'] },
-                'victoria': { number: 'VI', name: 'A GENERAL', symbols: ['⚔️', '🏛️', '⚔️', '🏛️'], runes: ['ᚪ', 'ᚫ', 'ᚣ', 'ᛡ'] },
-                'hestia': { number: 'XV', name: 'A ORÁCULO', symbols: ['🔮', '👁️', '🔮', '👁️'], runes: ['ᛠ', 'ᛢ', 'ᛣ', 'ᛤ'] },
-                'daedala': { number: 'IV', name: 'A INVENTORA', symbols: ['⚙️', '🔧', '⚙️', '🔧'], runes: ['ᛥ', 'ᛦ', 'ᛧ', 'ᛨ'] }
+                'diva': {
+                    number: 'I',
+                    name: 'A ILUSIONISTA',
+                    symbols: ['🌀', '✦', '🌀', '✦'],
+                    runes: ['ᚠ', 'ᚢ', 'ᚦ', 'ᚨ']
+                },
+                'siria': {
+                    number: 'VII',
+                    name: 'A FORTUNA',
+                    symbols: ['🌳', '💰', '🌳', '💰'],
+                    runes: ['ᚱ', 'ᚲ', 'ᚷ', 'ᚹ']
+                },
+                'astreia': {
+                    number: 'XII',
+                    name: 'A PROTETORA',
+                    symbols: ['🛡️', '⚔️', '🛡️', '⚔️'],
+                    runes: ['ᚺ', 'ᚾ', 'ᛁ', 'ᛃ']
+                },
+                'merlim': {
+                    number: 'V',
+                    name: 'A FEITICEIRA',
+                    symbols: ['⚗️', '🔮', '⚗️', '🔮'],
+                    runes: ['ᛈ', 'ᛇ', 'ᛉ', 'ᛊ']
+                },
+                'umbra': {
+                    number: 'XIII',
+                    name: 'A CAÇADORA',
+                    symbols: ['🗡️', '🎯', '🗡️', '🎯'],
+                    runes: ['ᛏ', 'ᛒ', 'ᛖ', 'ᛗ']
+                },
+                'atena': {
+                    number: 'III',
+                    name: 'A MESTRA',
+                    symbols: ['📚', '🦉', '📚', '🦉'],
+                    runes: ['ᛚ', 'ᛝ', 'ᛟ', 'ᛞ']
+                },
+                'victoria': {
+                    number: 'VI',
+                    name: 'A GENERAL',
+                    symbols: ['⚔️', '🏛️', '⚔️', '🏛️'],
+                    runes: ['ᚪ', 'ᚫ', 'ᚣ', 'ᛡ']
+                },
+                'hestia': {
+                    number: 'XV',
+                    name: 'A ORÁCULO',
+                    symbols: ['🔮', '👁️', '🔮', '👁️'],
+                    runes: ['ᛠ', 'ᛢ', 'ᛣ', 'ᛤ']
+                },
+                'daedala': {
+                    number: 'IV',
+                    name: 'A INVENTORA',
+                    symbols: ['⚙️', '🔧', '⚙️', '🔧'],
+                    runes: ['ᛥ', 'ᛦ', 'ᛧ', 'ᛨ']
+                }
             };
 
             // ============================================
-            // 🎴 APLICAR TAROT
+            // 🎴 APLICAR ESTILO TAROT
             // ============================================
-            debug('🎴 Aplicando estilo Tarot...', 'info');
-
             items.forEach(item => {
                 const asura = item.dataset.asura;
                 const info = tarotInfo[asura];
@@ -360,10 +321,8 @@
                 item.style.setProperty("--glow-color", item.dataset.color);
             });
 
-            debug('✅ Estilo Tarot aplicado', 'success');
-
             // ============================================
-            // 🔊 SOM
+            // 🔊 SOM HOVER
             // ============================================
             items.forEach(item => {
                 item.addEventListener("mouseenter", () => {
@@ -376,7 +335,7 @@
             });
 
             // ============================================
-            // ✨ PARTÍCULAS
+            // ✨ PARTÍCULAS BACKGROUND
             // ============================================
             const canvas = document.getElementById("particles");
             const ctx = canvas.getContext("2d");
@@ -417,7 +376,7 @@
             drawParticles();
 
             // ============================================
-            // 🎵 MÚSICA
+            // 🎵 MÚSICA AMBIENTE
             // ============================================
             if (bgMusic) {
                 bgMusic.volume = 0;
@@ -432,7 +391,7 @@
             }
 
             // ============================================
-            // 🌌 TRANSIÇÃO
+            // 🌌 TRANSIÇÃO PORTAL
             // ============================================
             let transitioning = false;
 
@@ -485,15 +444,10 @@
             }
 
             // ============================================
-            // 🔥 HÉCATE - COM BLOQUEIO FORÇADO
+            // 🔥 HÉCATE - SISTEMA DE BLOQUEIO
             // ============================================
 
-            debug(`🔍 Verificando HecateTest: ${typeof HecateTest}`, 'info');
-            debug(`🔍 Verificando HecateBlock: ${typeof HecateBlock}`, 'info');
-            debug(`🔍 Verificando PortalAuth: ${typeof PortalAuth}`, 'info');
-
-            // 🔥 FORÇAR BLOQUEIO - IGNORAR localStorage
-            debug('🔥 FORÇANDO BLOQUEIO DA HÉCATE', 'warn');
+            // 🔥 FORÇAR BLOQUEIO SEMPRE NO INÍCIO
             setStatus('🔒 BLOQUEADO', 'locked');
 
             // Bloquear cards IMEDIATAMENTE
@@ -501,11 +455,8 @@
                 item.style.pointerEvents = "none";
                 item.style.opacity = "0.4";
                 item.style.filter = "blur(2px)";
-                // Remover qualquer evento de clique antigo
                 item.removeEventListener('click', startAsuraTransition);
             });
-
-            debug('🔒 Cards BLOQUEADOS', 'error');
 
             let testeAtivo = false;
 
@@ -513,21 +464,15 @@
                 if (testeAtivo) return;
                 testeAtivo = true;
 
-                debug('🔥 Ativando Hécate...', 'info');
                 setStatus('🧪 TESTANDO...', 'testing');
 
                 document.body.removeEventListener('click', ativarHecate);
                 document.body.removeEventListener('touchstart', ativarHecate);
 
                 if (typeof HecateTest !== 'undefined' && HecateTest.show) {
-                    debug('✅ HecateTest encontrado! Executando teste...', 'success');
-
                     try {
                         HecateTest.show(function(success) {
-                            debug(`📝 Resultado: ${success}`, success ? 'success' : 'error');
-
                             if (success) {
-                                debug('✅ TESTE APROVADO! Liberando cards...', 'success');
                                 setStatus('🔓 LIBERADO', 'unlocked');
                                 localStorage.setItem('hecate_auth_complete', 'true');
 
@@ -539,9 +484,7 @@
                                         startAsuraTransition(item, item.dataset.asura);
                                     });
                                 });
-                                debug('🎉 Cards LIBERADOS!', 'success');
                             } else {
-                                debug('❌ TESTE REPROVADO! Cards BLOQUEADOS', 'error');
                                 setStatus('🔒 BLOQUEADO', 'locked');
                                 testeAtivo = false;
                                 document.body.addEventListener('click', ativarHecate);
@@ -549,16 +492,13 @@
                             }
                         });
                     } catch (err) {
-                        debug(`❌ ERRO: ${err.message}`, 'error');
-                        setStatus('🔒 ERRO', 'error');
+                        setStatus('🔒 ERRO', 'locked');
                         testeAtivo = false;
                         document.body.addEventListener('click', ativarHecate);
                         document.body.addEventListener('touchstart', ativarHecate);
                     }
                 } else {
-                    debug('❌ HecateTest NÃO ENCONTRADO!', 'error');
-                    debug(`📋 Tipo: ${typeof HecateTest}`, 'error');
-                    setStatus('🔒 ERRO', 'error');
+                    setStatus('🔒 ERRO', 'locked');
                     testeAtivo = false;
                     document.body.addEventListener('click', ativarHecate);
                     document.body.addEventListener('touchstart', ativarHecate);
@@ -567,8 +507,6 @@
 
             document.body.addEventListener('click', ativarHecate);
             document.body.addEventListener('touchstart', ativarHecate);
-            debug('🗝️ Toque na tela para ativar a Hécate', 'info');
-            debug('🔒 Cards BLOQUEADOS até passar no teste!', 'error');
 
         })();
     </script>
