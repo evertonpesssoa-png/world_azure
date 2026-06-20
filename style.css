@@ -127,14 +127,14 @@ body {
 }
 
 /* ============================================
-   MAGO NO CENTRO DO CARROSSEL
+   MAGO PARADO NO CENTRO - NÃO GIRA!
    ============================================ */
 
 .banner .slider .mago-center {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%) translateZ(0px);
+    transform: translate(-50%, -50%) translateZ(0px) !important;
     width: 120%;
     height: 120%;
     background-image: url(images/mago3.png);
@@ -144,6 +144,8 @@ body {
     opacity: 0.85;
     z-index: 1;
     pointer-events: none;
+    animation: none !important;
+    /* 🔥 GARANTE QUE NÃO GIRA */
 }
 
 .banner .content h1 {
