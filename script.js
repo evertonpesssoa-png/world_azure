@@ -276,40 +276,194 @@
         }, 900);
     }
 
+    // ============================================
+    // 🚀 START TRANSITION - EFEITO "ENTRANDO NA CARTA"
+    // ============================================
+
     function startAsuraTransition(selectedItem, asura) {
         if (transitioning) return;
         transitioning = true;
 
-        if (typeof PortalAuth !== 'undefined') {
-            PortalAuth.generateToken(asura);
+        const color = selectedItem.dataset.color;
+
+        // ============================================
+        // DETECTAR DISPOSITIVO
+        // ============================================
+
+        const isMobile = window.innerWidth <= 768;
+        const isTablet = window.innerWidth > 768 && window.innerWidth <= 1024;
+        const isSmallMobile = window.innerWidth <= 480;
+        const isLargeScreen = window.innerWidth >= 1920;
+
+        let sparkCount = 60;
+        let sparkSize = [2, 6];
+        let animationDuration = 2400;
+        let flashDelay = 1500;
+        let overlayDelay = 300;
+
+        if (isSmallMobile) {
+            sparkCount = 25;
+            sparkSize = [1, 3];
+            animationDuration = 2000;
+            flashDelay = 1000;
+            overlayDelay = 200;
+        } else if (isMobile) {
+            sparkCount = 35;
+            sparkSize = [1, 4];
+            animationDuration = 2100;
+            flashDelay = 1200;
+            overlayDelay = 250;
+        } else if (isTablet) {
+            sparkCount = 45;
+            sparkSize = [2, 5];
+            animationDuration = 2200;
+            flashDelay = 1300;
+            overlayDelay = 280;
+        } else if (isLargeScreen) {
+            sparkCount = 80;
+            sparkSize = [3, 8];
+            animationDuration = 2600;
+            flashDelay = 1700;
+            overlayDelay = 350;
         }
 
+        // ============================================
+        // 1. CONGELAR CARROSSEL
+        // ============================================
+
         if (slider) slider.style.animationPlayState = "paused";
+
+        // ============================================
+        // 2. SOM DO PORTAL
+        // ============================================
+
         if (hoverSound) {
-            hoverSound.volume = 0.2;
+            hoverSound.volume = isMobile ? 0.15 : 0.25;
             hoverSound.currentTime = 0;
             hoverSound.play().catch(() => {});
         }
+
+        // ============================================
+        // 3. FADE DA MÚSICA
+        // ============================================
+
         if (bgMusic) {
             const fadeAudio = setInterval(() => {
                 if (bgMusic.volume > 0.02) {
-                    bgMusic.volume -= 0.01;
+                    bgMusic.volume -= isMobile ? 0.02 : 0.015;
                 } else {
                     bgMusic.volume = 0;
                     clearInterval(fadeAudio);
                 }
-            }, 40);
+            }, isMobile ? 20 : 30);
         }
+
+        // ============================================
+        // 4. APLICAR EXPANSÃO NA CARTA
+        // ============================================
+
         if (slider) slider.classList.add("fade-all");
         selectedItem.classList.add("active");
+        selectedItem.classList.add("portal-expanding");
+
+        // ============================================
+        // 5. CRIAR OVERLAY
+        // ============================================
+
+        const overlay = document.createElement('div');
+        overlay.className = 'portal-overlay';
+        document.body.appendChild(overlay);
+
+        setTimeout(() => {
+            overlay.classList.add('active');
+        }, overlayDelay);
+
+        // ============================================
+        // 6. CRIAR PARTÍCULAS DO PORTAL
+        // ============================================
+
+        const sparkColors = [color, '#ffffff', '#ffd700', '#ff6b6b', '#4ecdc4'];
+        const centerOffset = isMobile ? 15 : 20;
+
+        for (let i = 0; i < sparkCount; i++) {
+            const spark = document.createElement('div');
+            spark.className = 'portal-spark';
+            
+            const size = sparkSize[0] + Math.random() * (sparkSize[1] - sparkSize[0]);
+            const angle = Math.random() * Math.PI * 2;
+            const distance = isMobile ? (50 + Math.random() * 150) : (100 + Math.random() * 300);
+            const tx = Math.cos(angle) * distance;
+            const ty = Math.sin(angle) * distance;
+            
+            spark.style.cssText = `
+                width: ${size}px;
+                height: ${size}px;
+                background: ${sparkColors[Math.floor(Math.random() * sparkColors.length)]};
+                top: ${50 + (Math.random() - 0.5) * centerOffset}%;
+                left: ${50 + (Math.random() - 0.5) * centerOffset}%;
+                box-shadow: 0 0 ${size * (isMobile ? 2 : 3)}px ${color};
+                --tx: ${tx}px;
+                --ty: ${ty}px;
+                animation-delay: ${Math.random() * (isMobile ? 0.5 : 0.8)}s;
+                animation-duration: ${(isMobile ? 1.2 : 1.5) + Math.random() * (isMobile ? 0.8 : 1)}s;
+            `;
+            document.body.appendChild(spark);
+            
+            setTimeout(() => spark.remove(), isMobile ? 2500 : 3000);
+        }
+
+        // ============================================
+        // 7. FLASH BRANCO
+        // ============================================
+
+        const flash = document.createElement('div');
+        flash.style.cssText = `
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle, white, transparent 70%);
+            z-index: 99999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity ${isMobile ? '0.3s' : '0.5s'} ease;
+        `;
+        document.body.appendChild(flash);
+
+        setTimeout(() => {
+            flash.style.opacity = isMobile ? '0.4' : '0.6';
+            setTimeout(() => {
+                flash.style.opacity = '0';
+                setTimeout(() => flash.remove(), 300);
+            }, isMobile ? 200 : 300);
+        }, flashDelay);
+
+        // ============================================
+        // 8. CRIAR FLASH DO PORTAL (ORIGINAL)
+        // ============================================
+
+        createPortalFlash(color);
+
+        // ============================================
+        // 9. BODY SCALE
+        // ============================================
+
         document.body.style.transition = "transform 1.6s ease";
-        document.body.style.transform = "scale(1.03)";
+        document.body.style.transform = isMobile ? "scale(1.01)" : "scale(1.03)";
+
+        // ============================================
+        // 10. PORTAL TRANSITION (ORIGINAL)
+        // ============================================
+
         if (portalTransition) portalTransition.classList.add("active");
-        createPortalFlash(selectedItem.dataset.color);
+
+        // ============================================
+        // 11. LOG E REDIRECIONAMENTO
+        // ============================================
+
+        console.log(`🚀 Entrando no mundo: ${asura} (${isMobile ? 'Mobile' : isTablet ? 'Tablet' : 'Desktop'})`);
 
         setTimeout(() => {
             window.location.href = "/world_azure/viagem.html?asura=" + asura;
-        }, 2200);
+        }, animationDuration);
     }
 
     // ============================================
@@ -324,7 +478,6 @@
             item.style.pointerEvents = "";
             item.style.opacity = "";
             item.style.filter = "";
-            // Adicionar evento de clique (removendo duplicatas)
             item.removeEventListener('click', handleCardClick);
             item.addEventListener('click', handleCardClick);
         });
@@ -338,7 +491,6 @@
             item.style.pointerEvents = "none";
             item.style.opacity = "0.4";
             item.style.filter = "blur(2px)";
-            // Remover evento de clique durante bloqueio
             item.removeEventListener('click', handleCardClick);
         });
     }
@@ -353,7 +505,6 @@
     // EXECUTAR HÉCATE (COM DELAY PARA GARANTIR)
     // ============================================
 
-    // Pequeno delay para garantir que o DOM e Tarot foram aplicados
     setTimeout(function() {
         console.log('🔍 Verificando autenticação...');
         console.log('localStorage hecate_auth_complete:', localStorage.getItem('hecate_auth_complete'));
@@ -366,7 +517,6 @@
             console.log('🔒 Usuário NÃO autenticado - Bloqueando cards');
             bloquearCards();
 
-            // Aguardar toque/clique para ativar Hécate
             let testeAtivo = false;
 
             function ativarHecate() {
@@ -394,8 +544,6 @@
                     });
                 } else {
                     console.error('❌ HecateTest NÃO encontrado!');
-                    console.error('Verifique se os scripts foram carregados.');
-                    // Fallback: liberar cards
                     console.warn('⚠️ Fallback: Liberando cards sem teste');
                     liberarCards();
                 }
@@ -405,5 +553,6 @@
             document.body.addEventListener('touchstart', ativarHecate);
             console.log('🗝️ Hécate: Toque na tela para ativar o teste');
         }
-    }, 200); // Delay de 200ms para garantir
+    }, 200);
+
 })();
