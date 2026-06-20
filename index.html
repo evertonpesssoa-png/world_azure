@@ -5,6 +5,26 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#09090f">
+    <meta name="description" content="ASURAS - Grimório Dimensional | Hécate Guardiã">
+    <meta name="keywords" content="asuras, grimório, tarot, dimensional, hécate, cartas, magia">
+    <meta name="author" content="Grimório Dimensional">
+
+    <!-- Prefetch das imagens para melhor performance -->
+    <link rel="prefetch" href="/world_azure/images/diva2.png">
+    <link rel="prefetch" href="/world_azure/images/siria2.png">
+    <link rel="prefetch" href="/world_azure/images/merlim2.png">
+    <link rel="prefetch" href="/world_azure/images/astreia2.png">
+    <link rel="prefetch" href="/world_azure/images/umbra2.png">
+    <link rel="prefetch" href="/world_azure/images/atena2.png">
+    <link rel="prefetch" href="/world_azure/images/victoria2.png">
+    <link rel="prefetch" href="/world_azure/images/hestia2.png">
+    <link rel="prefetch" href="/world_azure/images/daedala2.png">
+    <link rel="prefetch" href="/world_azure/images/mago3.png">
+
+    <!-- Pré-conexão para fontes -->
+    <link rel="preconnect" href="https://fonts.cdnfonts.com">
+    <link rel="dns-prefetch" href="https://fonts.cdnfonts.com">
 
     <link rel="stylesheet" href="/world_azure/style.css">
 
@@ -14,70 +34,177 @@
 
 <body>
 
-    <div class="banner">
-        <canvas id="particles"></canvas>
-        <div class="slider" style="--quantity: 9">
-            <div class="item" data-asura="diva" data-color="#ff4db8" style="--position: 1">
-                <img src="/world_azure/images/diva2.png" alt="Diva" draggable="false">
+    <!-- ============================================ -->
+    <!-- BANNER PRINCIPAL -->
+    <!-- ============================================ -->
+    <div class="banner" role="main" aria-label="Grimório Dimensional das Asuras">
+
+        <!-- Partículas de fundo -->
+        <canvas id="particles" aria-hidden="true"></canvas>
+
+        <!-- Slider 3D com as cartas -->
+        <div class="slider" style="--quantity: 9" role="list" aria-label="Cartas das Asuras">
+
+            <!-- DIVA - A ILUSIONISTA -->
+            <div class="item" data-asura="diva" data-color="#ff4db8" style="--position: 1" role="listitem" tabindex="0" aria-label="Diva - A Ilusionista">
+                <img src="/world_azure/images/diva2.png" alt="Diva - A Ilusionista" draggable="false" loading="lazy" decoding="async">
             </div>
-            <div class="item" data-asura="siria" data-color="#35ff9c" style="--position: 2">
-                <img src="/world_azure/images/siria2.png" alt="Siria" draggable="false">
+
+            <!-- SIRIA - A FORTUNA -->
+            <div class="item" data-asura="siria" data-color="#35ff9c" style="--position: 2" role="listitem" tabindex="0" aria-label="Siria - A Fortuna">
+                <img src="/world_azure/images/siria2.png" alt="Siria - A Fortuna" draggable="false" loading="lazy" decoding="async">
             </div>
-            <div class="item" data-asura="merlim" data-color="#00d9ff" style="--position: 3">
-                <img src="/world_azure/images/merlim2.png" alt="Merlim" draggable="false">
+
+            <!-- MERLIM - A FEITICEIRA -->
+            <div class="item" data-asura="merlim" data-color="#00d9ff" style="--position: 3" role="listitem" tabindex="0" aria-label="Merlim - A Feiticeira">
+                <img src="/world_azure/images/merlim2.png" alt="Merlim - A Feiticeira" draggable="false" loading="lazy" decoding="async">
             </div>
-            <div class="item" data-asura="astreia" data-color="#287bff" style="--position: 4">
-                <img src="/world_azure/images/astreia2.png" alt="Astreia" draggable="false">
+
+            <!-- ASTREIA - A PROTETORA -->
+            <div class="item" data-asura="astreia" data-color="#287bff" style="--position: 4" role="listitem" tabindex="0" aria-label="Astreia - A Protetora">
+                <img src="/world_azure/images/astreia2.png" alt="Astreia - A Protetora" draggable="false" loading="lazy" decoding="async">
             </div>
-            <div class="item" data-asura="umbra" data-color="#8b2fff" style="--position: 5">
-                <img src="/world_azure/images/umbra2.png" alt="Umbra" draggable="false">
+
+            <!-- UMBRA - A CAÇADORA -->
+            <div class="item" data-asura="umbra" data-color="#8b2fff" style="--position: 5" role="listitem" tabindex="0" aria-label="Umbra - A Caçadora">
+                <img src="/world_azure/images/umbra2.png" alt="Umbra - A Caçadora" draggable="false" loading="lazy" decoding="async">
             </div>
-            <div class="item" data-asura="atena" data-color="#ffd54f" style="--position: 6">
-                <img src="/world_azure/images/atena2.png" alt="Atena" draggable="false">
+
+            <!-- ATENA - A MESTRA -->
+            <div class="item" data-asura="atena" data-color="#ffd54f" style="--position: 6" role="listitem" tabindex="0" aria-label="Atena - A Mestra">
+                <img src="/world_azure/images/atena2.png" alt="Atena - A Mestra" draggable="false" loading="lazy" decoding="async">
             </div>
-            <div class="item" data-asura="victoria" data-color="#ff4444" style="--position: 7">
-                <img src="/world_azure/images/victoria2.png" alt="Victoria" draggable="false">
+
+            <!-- VICTORIA - A GENERAL -->
+            <div class="item" data-asura="victoria" data-color="#ff4444" style="--position: 7" role="listitem" tabindex="0" aria-label="Victoria - A General">
+                <img src="/world_azure/images/victoria2.png" alt="Victoria - A General" draggable="false" loading="lazy" decoding="async">
             </div>
-            <div class="item" data-asura="hestia" data-color="#fff0b3" style="--position: 8">
-                <img src="/world_azure/images/hestia2.png" alt="Hestia" draggable="false">
+
+            <!-- HESTIA - A ORÁCULO -->
+            <div class="item" data-asura="hestia" data-color="#fff0b3" style="--position: 8" role="listitem" tabindex="0" aria-label="Hestia - A Oráculo">
+                <img src="/world_azure/images/hestia2.png" alt="Hestia - A Oráculo" draggable="false" loading="lazy" decoding="async">
             </div>
-            <div class="item" data-asura="daedala" data-color="#00ffd5" style="--position: 9">
-                <img src="/world_azure/images/daedala2.png" alt="Daedala" draggable="false">
+
+            <!-- DAEDALA - A INVENTORA -->
+            <div class="item" data-asura="daedala" data-color="#00ffd5" style="--position: 9" role="listitem" tabindex="0" aria-label="Daedala - A Inventora">
+                <img src="/world_azure/images/daedala2.png" alt="Daedala - A Inventora" draggable="false" loading="lazy" decoding="async">
             </div>
+
         </div>
+
+        <!-- Conteúdo sobreposto -->
         <div class="content">
-            <div class="model"></div>
+            <div class="model" aria-hidden="true"></div>
+            <h1 data-content="ASURAS" aria-label="ASURAS">ASURAS</h1>
+            <div class="author" aria-label="Créditos">
+                <span>⚔️ Grimório Dimensional</span>
+                <span>🌙 Hécate Guardiã</span>
+            </div>
         </div>
+
     </div>
 
-    <div id="portalTransition" class="portal-flash"></div>
+    <!-- ============================================ -->
+    <!-- ELEMENTOS DE TRANSIÇÃO -->
+    <!-- ============================================ -->
 
-    <audio id="hoverSound" src="/world_azure/sounds/hover.mp3" preload="auto"></audio>
-    <audio id="bgMusic" src="/world_azure/sounds/ambient.mp3" loop preload="auto" playsinline></audio>
+    <div id="portalTransition" class="portal-flash" aria-hidden="true"></div>
+    <div id="asuraWorld" aria-hidden="true"></div>
 
+    <!-- ============================================ -->
+    <!-- CONTROLES DE ÁUDIO -->
+    <!-- ============================================ -->
+
+    <div id="audioControls" aria-label="Controles de áudio" role="toolbar">
+        <button id="toggleMusic" aria-label="Ativar/desativar música ambiente" title="Música ambiente" type="button">
+            <span id="musicIcon" aria-hidden="true">🔊</span>
+        </button>
+        <button id="toggleSound" aria-label="Ativar/desativar efeitos sonoros" title="Efeitos sonoros" type="button">
+            <span id="soundIcon" aria-hidden="true">🔊</span>
+        </button>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- ÁUDIOS -->
+    <!-- ============================================ -->
+
+    <audio id="hoverSound" src="/world_azure/sounds/hover.mp3" preload="auto" aria-hidden="true"></audio>
+    <audio id="bgMusic" src="/world_azure/sounds/ambient.mp3" loop preload="auto" playsinline aria-hidden="true"></audio>
+
+    <!-- ============================================ -->
     <!-- HÉCATE - SISTEMA COMPLETO -->
-    <script src="/world_azure/shared/js/hecate/core.js"></script>
-    <script src="/world_azure/shared/js/hecate/block-manager.js"></script>
-    <script src="/world_azure/shared/js/hecate/test-system.js"></script>
-    <script src="/world_azure/shared/js/hecate/auth.js"></script>
+    <!-- ============================================ -->
 
+    <script src="/world_azure/shared/js/hecate/core.js" defer></script>
+    <script src="/world_azure/shared/js/hecate/block-manager.js" defer></script>
+    <script src="/world_azure/shared/js/hecate/test-system.js" defer></script>
+    <script src="/world_azure/shared/js/hecate/auth.js" defer></script>
+
+    <!-- ============================================ -->
     <!-- VERIFICAÇÃO DE HÉCATE -->
+    <!-- ============================================ -->
+
     <script>
-        console.log('🔍 VERIFICANDO HÉCATE...');
-        console.log('HecateTest:', typeof HecateTest);
-        console.log('HecateBlock:', typeof HecateBlock);
-        console.log('PortalAuth:', typeof PortalAuth);
-        console.log('localStorage hecate_auth_complete:', localStorage.getItem('hecate_auth_complete'));
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔍 VERIFICANDO HÉCATE...');
+            console.log('HecateTest:', typeof HecateTest);
+            console.log('HecateBlock:', typeof HecateBlock);
+            console.log('PortalAuth:', typeof PortalAuth);
+            console.log('localStorage hecate_auth_complete:', localStorage.getItem('hecate_auth_complete'));
+            console.log('✅ DOM carregado com sucesso!');
+        });
     </script>
 
+    <!-- ============================================ -->
     <!-- CÓDIGO PRINCIPAL DO GRIMÓRIO COM TAROT -->
+    <!-- ============================================ -->
+
     <script>
         (function() {
+            'use strict';
+
+            // ============================================
+            // CONFIGURAÇÕES
+            // ============================================
+
+            const CONFIG = {
+                TRANSITION_DURATION: 4200,
+                CLONE_FADE_DURATION: 3500,
+                AUDIO_FADE_STEP: 0.015,
+                AUDIO_FADE_INTERVAL: 30,
+                PARTICLE_INTERVAL: 400,
+                PARTICLE_LIFETIME: 2000,
+                BACKGROUND_PARTICLES: 120,
+                MUSIC_VOLUME: 0.12,
+                HOVER_VOLUME: 0.12,
+                PORTAL_VOLUME: 0.2,
+                SPARK_COUNT: 50,
+                DEBOUNCE_DELAY: 300
+            };
+
+            // ============================================
+            // DOM ELEMENTOS
+            // ============================================
+
             const items = document.querySelectorAll(".item");
             const slider = document.querySelector(".slider");
             const hoverSound = document.getElementById("hoverSound");
             const bgMusic = document.getElementById("bgMusic");
             const portalTransition = document.getElementById("portalTransition");
+            const toggleMusicBtn = document.getElementById("toggleMusic");
+            const toggleSoundBtn = document.getElementById("toggleSound");
+            const musicIcon = document.getElementById("musicIcon");
+            const soundIcon = document.getElementById("soundIcon");
+
+            // ============================================
+            // ESTADO
+            // ============================================
+
+            let transitioning = false;
+            let isMusicMuted = false;
+            let isSoundMuted = false;
+            let musicFadeInterval = null;
+            let particleIntervals = [];
 
             // ============================================
             // 🎴 INFORMAÇÕES DAS CARTAS DE TAROT
@@ -144,59 +271,70 @@
             // 🎴 APLICAR ESTILO TAROT NOS CARDS
             // ============================================
 
-            items.forEach(item => {
-                const asura = item.dataset.asura;
-                const info = tarotInfo[asura];
+            function applyTarotStyles() {
+                items.forEach(item => {
+                    const asura = item.dataset.asura;
+                    const info = tarotInfo[asura];
 
-                if (info) {
-                    item.classList.add('tarot-card');
+                    if (info) {
+                        item.classList.add('tarot-card');
 
-                    const numberSpan = document.createElement('span');
-                    numberSpan.className = 'tarot-number';
-                    numberSpan.textContent = info.number;
-                    item.appendChild(numberSpan);
+                        // Número
+                        const numberSpan = document.createElement('span');
+                        numberSpan.className = 'tarot-number';
+                        numberSpan.textContent = info.number;
+                        item.appendChild(numberSpan);
 
-                    const nameSpan = document.createElement('span');
-                    nameSpan.className = 'tarot-name';
-                    nameSpan.textContent = info.name;
-                    item.appendChild(nameSpan);
+                        // Nome
+                        const nameSpan = document.createElement('span');
+                        nameSpan.className = 'tarot-name';
+                        nameSpan.textContent = info.name;
+                        item.appendChild(nameSpan);
 
-                    const positions = ['tl', 'tr', 'bl', 'br'];
-                    info.symbols.forEach((sym, i) => {
-                        const symSpan = document.createElement('span');
-                        symSpan.className = `tarot-symbol ${positions[i]}`;
-                        symSpan.textContent = sym;
-                        item.appendChild(symSpan);
-                    });
+                        // Símbolos
+                        const positions = ['tl', 'tr', 'bl', 'br'];
+                        info.symbols.forEach((sym, i) => {
+                            const symSpan = document.createElement('span');
+                            symSpan.className = `tarot-symbol ${positions[i]}`;
+                            symSpan.textContent = sym;
+                            item.appendChild(symSpan);
+                        });
 
-                    const runePositions = ['top', 'right', 'bottom', 'left'];
-                    info.runes.forEach((rune, i) => {
-                        const runeSpan = document.createElement('span');
-                        runeSpan.className = `rune ${runePositions[i]}`;
-                        runeSpan.textContent = rune;
-                        item.appendChild(runeSpan);
-                    });
+                        // Runas
+                        const runePositions = ['top', 'right', 'bottom', 'left'];
+                        info.runes.forEach((rune, i) => {
+                            const runeSpan = document.createElement('span');
+                            runeSpan.className = `rune ${runePositions[i]}`;
+                            runeSpan.textContent = rune;
+                            item.appendChild(runeSpan);
+                        });
 
-                    const cornerRunas = ['ᚠ', 'ᚢ', 'ᚦ', 'ᚨ'];
-                    const cornerPositions = ['corner-tl', 'corner-tr', 'corner-bl', 'corner-br'];
-                    cornerRunas.forEach((rune, i) => {
-                        const runeSpan = document.createElement('span');
-                        runeSpan.className = `rune ${cornerPositions[i]}`;
-                        runeSpan.textContent = rune;
-                        runeSpan.style.fontSize = '10px';
-                        item.appendChild(runeSpan);
-                    });
+                        // Runas dos cantos
+                        const cornerRunas = ['ᚠ', 'ᚢ', 'ᚦ', 'ᚨ'];
+                        const cornerPositions = ['corner-tl', 'corner-tr', 'corner-bl', 'corner-br'];
+                        cornerRunas.forEach((rune, i) => {
+                            const runeSpan = document.createElement('span');
+                            runeSpan.className = `rune ${cornerPositions[i]}`;
+                            runeSpan.textContent = rune;
+                            runeSpan.style.fontSize = '10px';
+                            item.appendChild(runeSpan);
+                        });
 
-                    const holoLayer = document.createElement('div');
-                    holoLayer.className = 'holo-layer';
-                    item.appendChild(holoLayer);
+                        // Holograma
+                        const holoLayer = document.createElement('div');
+                        holoLayer.className = 'holo-layer';
+                        item.appendChild(holoLayer);
 
-                    createCardParticles(item);
-                }
-            });
+                        // Partículas da carta (apenas se não for mobile pequeno)
+                        if (window.innerWidth > 480) {
+                            createCardParticles(item);
+                        }
+                    }
+                });
+            }
 
             // ============================================
-            // 💫 PARTÍCULAS DA CARTA TAROT
+            // 💫 PARTÍCULAS DA CARTA
             // ============================================
 
             function createCardParticles(item) {
@@ -204,9 +342,13 @@
                 container.className = 'particle-container';
                 item.appendChild(container);
 
-                setInterval(() => {
-                    if (item.classList.contains('fade-all') || item.classList.contains('active')) return;
-                    if (item.style.opacity === '0' || item.style.opacity === '0.08') return;
+                const interval = setInterval(() => {
+                    if (item.classList.contains('fade-all') || 
+                        item.classList.contains('active') || 
+                        item.style.opacity === '0' || 
+                        item.style.opacity === '0.08') {
+                        return;
+                    }
 
                     const rect = item.getBoundingClientRect();
                     if (rect.width === 0 || rect.height === 0) return;
@@ -245,98 +387,185 @@
                         container.appendChild(particle);
 
                         setTimeout(() => {
-                            particle.remove();
-                        }, 2000);
+                            if (particle.parentNode) {
+                                particle.remove();
+                            }
+                        }, CONFIG.PARTICLE_LIFETIME);
                     }
-                }, 400);
+                }, CONFIG.PARTICLE_INTERVAL);
+
+                particleIntervals.push(interval);
             }
 
             // ============================================
             // 🎨 CORES DINÂMICAS
             // ============================================
 
-            items.forEach(item => {
-                const color = item.dataset.color;
-                item.style.setProperty("--glow-color", color);
-            });
+            function applyDynamicColors() {
+                items.forEach(item => {
+                    const color = item.dataset.color;
+                    item.style.setProperty("--glow-color", color);
+                });
+            }
 
             // ============================================
-            // 🔊 SOM HOVER
+            // 🔊 SISTEMA DE ÁUDIO
             // ============================================
 
-            items.forEach(item => {
-                item.addEventListener("mouseenter", () => {
-                    if (hoverSound) {
-                        hoverSound.volume = 0.12;
-                        hoverSound.currentTime = 0;
-                        hoverSound.play().catch(() => {});
+            function setupAudio() {
+                // Hover sound
+                items.forEach(item => {
+                    item.addEventListener("mouseenter", () => {
+                        if (!isSoundMuted && hoverSound) {
+                            hoverSound.volume = CONFIG.HOVER_VOLUME;
+                            hoverSound.currentTime = 0;
+                            hoverSound.play().catch(() => {});
+                        }
+                    });
+                });
+
+                // Background music
+                if (bgMusic) {
+                    bgMusic.volume = 0;
+                    bgMusic.play().then(() => {
+                        setTimeout(() => {
+                            if (!isMusicMuted) {
+                                bgMusic.volume = CONFIG.MUSIC_VOLUME;
+                            }
+                        }, 800);
+                    }).catch(() => {
+                        const playMusic = () => {
+                            if (!isMusicMuted) {
+                                bgMusic.volume = CONFIG.MUSIC_VOLUME;
+                                bgMusic.play().catch(() => {});
+                            }
+                            document.removeEventListener('click', playMusic);
+                            document.removeEventListener('touchstart', playMusic);
+                        };
+                        document.addEventListener('click', playMusic, { once: true });
+                        document.addEventListener('touchstart', playMusic, { once: true });
+                    });
+                }
+
+                // Controles de áudio
+                if (toggleMusicBtn) {
+                    toggleMusicBtn.addEventListener('click', toggleMusic);
+                }
+
+                if (toggleSoundBtn) {
+                    toggleSoundBtn.addEventListener('click', toggleSound);
+                }
+            }
+
+            function toggleMusic() {
+                isMusicMuted = !isMusicMuted;
+                if (bgMusic) {
+                    bgMusic.volume = isMusicMuted ? 0 : CONFIG.MUSIC_VOLUME;
+                }
+                if (musicIcon) {
+                    musicIcon.textContent = isMusicMuted ? '🔇' : '🔊';
+                }
+                if (toggleMusicBtn) {
+                    toggleMusicBtn.classList.toggle('muted', isMusicMuted);
+                }
+                console.log(`🎵 Música ${isMusicMuted ? '🔇 mutada' : '🔊 ativada'}`);
+            }
+
+            function toggleSound() {
+                isSoundMuted = !isSoundMuted;
+                if (soundIcon) {
+                    soundIcon.textContent = isSoundMuted ? '🔇' : '🔊';
+                }
+                if (toggleSoundBtn) {
+                    toggleSoundBtn.classList.toggle('muted', isSoundMuted);
+                }
+                console.log(`🔊 Efeitos sonoros ${isSoundMuted ? '🔇 mutados' : '🔊 ativados'}`);
+            }
+
+            function fadeOutMusic() {
+                if (musicFadeInterval) {
+                    clearInterval(musicFadeInterval);
+                }
+                musicFadeInterval = setInterval(() => {
+                    if (bgMusic && bgMusic.volume > CONFIG.AUDIO_FADE_STEP) {
+                        bgMusic.volume -= CONFIG.AUDIO_FADE_STEP;
+                    } else {
+                        if (bgMusic) bgMusic.volume = 0;
+                        clearInterval(musicFadeInterval);
+                        musicFadeInterval = null;
                     }
-                });
-            });
-
-            // ============================================
-            // ✨ PARTÍCULAS BACKGROUND
-            // ============================================
-
-            const canvas = document.getElementById("particles");
-            const ctx = canvas.getContext("2d");
-
-            function resizeCanvas() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
-            resizeCanvas();
-            window.addEventListener("resize", resizeCanvas);
-
-            const particles = [];
-            for (let i = 0; i < 120; i++) {
-                particles.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    size: Math.random() * 2 + 1,
-                    speedX: (Math.random() - 0.5) * 0.3,
-                    speedY: (Math.random() - 0.5) * 0.3,
-                    opacity: Math.random() * 0.5
-                });
+                }, CONFIG.AUDIO_FADE_INTERVAL);
             }
 
-            function drawParticles() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                particles.forEach(p => {
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(255,255,255,${p.opacity})`;
-                    ctx.fill();
-                    p.x += p.speedX;
-                    p.y += p.speedY;
-                    if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
-                    if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
-                });
-                requestAnimationFrame(drawParticles);
-            }
-            drawParticles();
-
-            // ============================================
-            // 🎵 MÚSICA AMBIENTE
-            // ============================================
-
-            if (bgMusic) {
-                bgMusic.volume = 0;
-                bgMusic.play().then(() => {
-                    setTimeout(() => bgMusic.volume = 0.12, 800);
-                }).catch(() => {
-                    window.addEventListener("click", () => { bgMusic.volume = 0.12;
-                        bgMusic.play(); }, { once: true });
-                    window.addEventListener("touchstart", () => { bgMusic.volume = 0.12;
-                        bgMusic.play(); }, { once: true });
-                });
+            function restoreMusic() {
+                if (musicFadeInterval) {
+                    clearInterval(musicFadeInterval);
+                    musicFadeInterval = null;
+                }
+                if (bgMusic && !isMusicMuted) {
+                    bgMusic.volume = CONFIG.MUSIC_VOLUME;
+                }
             }
 
             // ============================================
-            // 🌌 TRANSIÇÃO PORTAL
+            // ✨ PARTÍCULAS DE FUNDO
             // ============================================
 
-            let transitioning = false;
+            function setupBackgroundParticles() {
+                const canvas = document.getElementById("particles");
+                if (!canvas) return;
+
+                const ctx = canvas.getContext("2d");
+
+                function resizeCanvas() {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                }
+                resizeCanvas();
+                window.addEventListener("resize", resizeCanvas);
+
+                const particles = [];
+                const count = window.innerWidth <= 480 ? 60 : CONFIG.BACKGROUND_PARTICLES;
+
+                for (let i = 0; i < count; i++) {
+                    particles.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        size: Math.random() * 2 + 1,
+                        speedX: (Math.random() - 0.5) * 0.3,
+                        speedY: (Math.random() - 0.5) * 0.3,
+                        opacity: Math.random() * 0.5
+                    });
+                }
+
+                let animationId = null;
+
+                function drawParticles() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    particles.forEach(p => {
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(255,255,255,${p.opacity})`;
+                        ctx.fill();
+                        p.x += p.speedX;
+                        p.y += p.speedY;
+                        if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+                        if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+                    });
+                    animationId = requestAnimationFrame(drawParticles);
+                }
+                drawParticles();
+
+                return () => {
+                    if (animationId) {
+                        cancelAnimationFrame(animationId);
+                    }
+                };
+            }
+
+            // ============================================
+            // 🚀 TRANSIÇÃO PORTAL
+            // ============================================
 
             function createPortalFlash(color) {
                 const flash = document.createElement("div");
@@ -350,175 +579,18 @@
                 }, 900);
             }
 
-            // ============================================
-            // 🚀 START TRANSITION - EFEITO "TELA CHEIA"
-            // ============================================
+            function createSparkles(color, count = CONFIG.SPARK_COUNT) {
+                const isMobile = window.innerWidth <= 480;
+                const actualCount = isMobile ? Math.floor(count / 2) : count;
+                const sparkColors = [color, '#ffffff', '#ffd700', '#ff6b6b', '#4ecdc4', '#ff9ff3'];
 
-            function startAsuraTransition(selectedItem, asura) {
-                if (transitioning) return;
-                transitioning = true;
-
-                const color = selectedItem.dataset.color;
-                const asuraName = selectedItem.dataset.asura;
-                const imgSrc = selectedItem.querySelector('img').src;
-                const glowColor = selectedItem.dataset.color;
-
-                // Pegar todos os elementos da carta original
-                const numberSpan = selectedItem.querySelector('.tarot-number');
-                const nameSpan = selectedItem.querySelector('.tarot-name');
-                const symbolSpans = selectedItem.querySelectorAll('.tarot-symbol');
-                const runeSpans = selectedItem.querySelectorAll('.rune');
-                
-                const number = numberSpan ? numberSpan.textContent : '?';
-                const name = nameSpan ? nameSpan.textContent : '?';
-                
-                // Pegar símbolos e runas
-                const symbols = [];
-                const runes = [];
-                symbolSpans.forEach(el => symbols.push(el.textContent));
-                runeSpans.forEach(el => runes.push(el.textContent));
-
-                // ============================================
-                // DETECTAR DISPOSITIVO
-                // ============================================
-
-                const isMobile = window.innerWidth <= 768;
-                const isSmallMobile = window.innerWidth <= 480;
-                const isTablet = window.innerWidth > 768 && window.innerWidth <= 1024;
-                const isLargeScreen = window.innerWidth >= 1920;
-
-                let fullscreenDuration = 3000;
-                let sparkCount = 50;
-
-                if (isSmallMobile) {
-                    fullscreenDuration = 2500;
-                    sparkCount = 25;
-                } else if (isMobile) {
-                    fullscreenDuration = 2700;
-                    sparkCount = 35;
-                } else if (isTablet) {
-                    fullscreenDuration = 2800;
-                    sparkCount = 45;
-                } else if (isLargeScreen) {
-                    fullscreenDuration = 3500;
-                    sparkCount = 70;
-                }
-
-                // ============================================
-                // 1. CRIAR CLONE DA CARTA EM TELA CHEIA
-                // ============================================
-
-                const clone = document.createElement('div');
-                clone.className = 'portal-card-fullscreen';
-                clone.style.setProperty('--glow-color', glowColor);
-
-                // Imagem
-                const img = document.createElement('img');
-                img.src = imgSrc;
-                img.alt = asuraName;
-                clone.appendChild(img);
-
-                // Número
-                const numClone = document.createElement('span');
-                numClone.className = 'tarot-number-full';
-                numClone.textContent = number;
-                clone.appendChild(numClone);
-
-                // Nome
-                const nameClone = document.createElement('span');
-                nameClone.className = 'tarot-name-full';
-                nameClone.textContent = name;
-                clone.appendChild(nameClone);
-
-                // Símbolos dos cantos
-                const symbolPositions = ['tl', 'tr', 'bl', 'br'];
-                symbols.forEach((sym, i) => {
-                    if (i < 4) {
-                        const symClone = document.createElement('span');
-                        symClone.className = `tarot-symbol-full ${symbolPositions[i]}`;
-                        symClone.textContent = sym;
-                        clone.appendChild(symClone);
-                    }
-                });
-
-                // Runas das bordas
-                const runePositions = ['top', 'right', 'bottom', 'left'];
-                runes.forEach((rune, i) => {
-                    if (i < 4) {
-                        const runeClone = document.createElement('span');
-                        runeClone.className = `rune-full ${runePositions[i]}`;
-                        runeClone.textContent = rune;
-                        clone.appendChild(runeClone);
-                    }
-                });
-
-                // Holograma
-                const holoClone = document.createElement('div');
-                holoClone.className = 'holo-layer-full';
-                clone.appendChild(holoClone);
-
-                document.body.appendChild(clone);
-
-                // ============================================
-                // 2. CONGELAR CARROSSEL
-                // ============================================
-
-                if (slider) slider.style.animationPlayState = "paused";
-                if (slider) slider.classList.add("fade-all");
-                selectedItem.classList.add("active");
-
-                // ============================================
-                // 3. SOM DO PORTAL
-                // ============================================
-
-                if (hoverSound) {
-                    hoverSound.volume = isMobile ? 0.15 : 0.25;
-                    hoverSound.currentTime = 0;
-                    hoverSound.play().catch(() => {});
-                }
-
-                // ============================================
-                // 4. FADE DA MÚSICA
-                // ============================================
-
-                if (bgMusic) {
-                    const fadeAudio = setInterval(() => {
-                        if (bgMusic.volume > 0.02) {
-                            bgMusic.volume -= isMobile ? 0.02 : 0.015;
-                        } else {
-                            bgMusic.volume = 0;
-                            clearInterval(fadeAudio);
-                        }
-                    }, isMobile ? 20 : 30);
-                }
-
-                // ============================================
-                // 5. OVERLAY ESCURO
-                // ============================================
-
-                const overlay = document.createElement('div');
-                overlay.className = 'portal-overlay';
-                overlay.style.transition = 'opacity 1.5s ease';
-                document.body.appendChild(overlay);
-
-                setTimeout(() => {
-                    overlay.classList.add('active');
-                }, isMobile ? 200 : 350);
-
-                // ============================================
-                // 6. PARTÍCULAS DO PORTAL
-                // ============================================
-
-                const sparkColors = [glowColor, '#ffffff', '#ffd700', '#ff6b6b', '#4ecdc4', '#ff9ff3'];
-                const centerOffset = isMobile ? 15 : 20;
-
-                for (let i = 0; i < sparkCount; i++) {
+                for (let i = 0; i < actualCount; i++) {
                     const spark = document.createElement('div');
                     spark.className = 'portal-spark';
                     
-                    const size = (isSmallMobile ? 1 : isMobile ? 2 : 3) + Math.random() * (isSmallMobile ? 2 : isMobile ? 3 : 5);
+                    const size = (isMobile ? 1 : 2) + Math.random() * (isMobile ? 2 : 4);
                     const angle = Math.random() * Math.PI * 2;
-                    const distance = isMobile ? (50 + Math.random() * 150) : (100 + Math.random() * 350);
+                    const distance = isMobile ? (50 + Math.random() * 150) : (100 + Math.random() * 300);
                     const tx = Math.cos(angle) * distance;
                     const ty = Math.sin(angle) * distance;
                     
@@ -526,193 +598,278 @@
                         width: ${size}px;
                         height: ${size}px;
                         background: ${sparkColors[Math.floor(Math.random() * sparkColors.length)]};
-                        top: ${50 + (Math.random() - 0.5) * centerOffset}%;
-                        left: ${50 + (Math.random() - 0.5) * centerOffset}%;
-                        box-shadow: 0 0 ${size * (isMobile ? 2 : 4)}px ${glowColor};
+                        top: ${45 + Math.random() * 10}%;
+                        left: ${45 + Math.random() * 10}%;
+                        box-shadow: 0 0 ${size * 3}px ${color};
                         --tx: ${tx}px;
                         --ty: ${ty}px;
-                        animation-delay: ${Math.random() * (isMobile ? 0.5 : 0.8)}s;
-                        animation-duration: ${(isMobile ? 1.5 : 2.0) + Math.random() * (isMobile ? 0.8 : 1.2)}s;
+                        animation-delay: ${Math.random() * 0.5}s;
+                        animation-duration: ${(isMobile ? 1.5 : 2.0) + Math.random() * (isMobile ? 0.8 : 1.0)}s;
                         z-index: 99999;
                     `;
+                    
                     document.body.appendChild(spark);
                     
-                    setTimeout(() => spark.remove(), isMobile ? 3000 : 4000);
-                }
-
-                // ============================================
-                // 7. FLASH BRANCO
-                // ============================================
-
-                const flash = document.createElement('div');
-                flash.style.cssText = `
-                    position: fixed;
-                    inset: 0;
-                    background: radial-gradient(circle, white, transparent 70%);
-                    z-index: 99999;
-                    opacity: 0;
-                    pointer-events: none;
-                    transition: opacity 0.6s ease;
-                `;
-                document.body.appendChild(flash);
-
-                const flashDelay = isSmallMobile ? 1800 : isMobile ? 2000 : isTablet ? 2200 : 2500;
-
-                setTimeout(() => {
-                    flash.style.opacity = isMobile ? '0.5' : '0.7';
                     setTimeout(() => {
-                        flash.style.opacity = '0';
-                        setTimeout(() => flash.remove(), 400);
-                    }, 400);
-                }, flashDelay);
+                        if (spark.parentNode) spark.remove();
+                    }, 3000);
+                }
+            }
 
-                // ============================================
-                // 8. CRIAR FLASH DO PORTAL (ORIGINAL)
-                // ============================================
+            function startAsuraTransition(selectedItem, asura) {
+                if (transitioning) return;
+                transitioning = true;
 
-                createPortalFlash(glowColor);
+                console.log(`🚀 Iniciando transição para: ${asura}`);
 
-                // ============================================
-                // 9. BODY SCALE
-                // ============================================
+                try {
+                    const glowColor = selectedItem.dataset.color;
+                    const imgSrc = selectedItem.querySelector('img').src;
 
-                document.body.style.transition = "transform 1.6s ease";
-                document.body.style.transform = isMobile ? "scale(1.01)" : "scale(1.03)";
+                    // Pegar elementos da carta
+                    const numberSpan = selectedItem.querySelector('.tarot-number');
+                    const nameSpan = selectedItem.querySelector('.tarot-name');
+                    const symbolSpans = selectedItem.querySelectorAll('.tarot-symbol');
+                    const runeSpans = selectedItem.querySelectorAll('.rune');
+                    
+                    const number = numberSpan ? numberSpan.textContent : '?';
+                    const name = nameSpan ? nameSpan.textContent : '?';
+                    
+                    const symbols = [];
+                    const runes = [];
+                    symbolSpans.forEach(el => symbols.push(el.textContent));
+                    runeSpans.forEach(el => runes.push(el.textContent));
 
-                // ============================================
-                // 10. PORTAL TRANSITION (ORIGINAL)
-                // ============================================
+                    // Detecta dispositivo para ajustes
+                    const isMobile = window.innerWidth <= 768;
+                    const isSmallMobile = window.innerWidth <= 480;
+                    const isTablet = window.innerWidth > 768 && window.innerWidth <= 1024;
 
-                if (portalTransition) portalTransition.classList.add("active");
+                    // ============================================
+                    // 1. CRIAR CLONE FULLSCREEN
+                    // ============================================
 
-                // ============================================
-                // 11. LOG E REDIRECIONAMENTO
-                // ============================================
+                    const clone = document.createElement('div');
+                    clone.className = 'portal-card-fullscreen';
+                    clone.style.setProperty('--glow-color', glowColor);
 
-                console.log(`🚀 Entrando no mundo: ${asura} (${isMobile ? 'Mobile' : isTablet ? 'Tablet' : 'Desktop'}) - Tela cheia por ${fullscreenDuration/1000}s`);
+                    // Imagem
+                    const img = document.createElement('img');
+                    img.src = imgSrc;
+                    img.alt = asura;
+                    clone.appendChild(img);
 
-                // Remover clone após a animação
-                setTimeout(() => {
-                    if (clone && clone.parentNode) {
-                        clone.style.transition = 'opacity 0.5s ease';
-                        clone.style.opacity = '0';
-                        setTimeout(() => {
-                            if (clone.parentNode) clone.remove();
-                        }, 500);
+                    // Número
+                    const numClone = document.createElement('span');
+                    numClone.className = 'tarot-number-full';
+                    numClone.textContent = number;
+                    clone.appendChild(numClone);
+
+                    // Nome
+                    const nameClone = document.createElement('span');
+                    nameClone.className = 'tarot-name-full';
+                    nameClone.textContent = name;
+                    clone.appendChild(nameClone);
+
+                    // Símbolos
+                    const symbolPositions = ['tl', 'tr', 'bl', 'br'];
+                    symbols.forEach((sym, i) => {
+                        if (i < 4) {
+                            const symClone = document.createElement('span');
+                            symClone.className = `tarot-symbol-full ${symbolPositions[i]}`;
+                            symClone.textContent = sym;
+                            clone.appendChild(symClone);
+                        }
+                    });
+
+                    // Runas
+                    const runePositions = ['top', 'right', 'bottom', 'left'];
+                    runes.forEach((rune, i) => {
+                        if (i < 4) {
+                            const runeClone = document.createElement('span');
+                            runeClone.className = `rune-full ${runePositions[i]}`;
+                            runeClone.textContent = rune;
+                            clone.appendChild(runeClone);
+                        }
+                    });
+
+                    // Holograma
+                    const holoClone = document.createElement('div');
+                    holoClone.className = 'holo-layer-full';
+                    clone.appendChild(holoClone);
+
+                    document.body.appendChild(clone);
+
+                    // ============================================
+                    // 2. CONGELAR CARROSSEL
+                    // ============================================
+
+                    if (slider) {
+                        slider.style.animationPlayState = "paused";
+                        slider.classList.add("fade-all");
                     }
-                }, fullscreenDuration - 500);
+                    selectedItem.classList.add("active");
 
-                setTimeout(() => {
-                    window.location.href = "/world_azure/viagem.html?asura=" + asura;
-                }, fullscreenDuration + 200);
+                    // ============================================
+                    // 3. EFEITOS
+                    // ============================================
+
+                    // Som do portal
+                    if (!isSoundMuted && hoverSound) {
+                        hoverSound.volume = isMobile ? 0.15 : CONFIG.PORTAL_VOLUME;
+                        hoverSound.currentTime = 0;
+                        hoverSound.play().catch(() => {});
+                    }
+
+                    // Fade da música
+                    fadeOutMusic();
+
+                    // Overlay escuro
+                    const overlay = document.createElement('div');
+                    overlay.className = 'portal-overlay';
+                    document.body.appendChild(overlay);
+                    setTimeout(() => {
+                        overlay.classList.add('active');
+                    }, isMobile ? 200 : 350);
+
+                    // Sparkles
+                    createSparkles(glowColor);
+
+                    // Flash branco
+                    const flash = document.createElement('div');
+                    flash.style.cssText = `
+                        position: fixed;
+                        inset: 0;
+                        background: radial-gradient(circle, white, transparent 70%);
+                        z-index: 99999;
+                        opacity: 0;
+                        pointer-events: none;
+                        transition: opacity 0.6s ease;
+                    `;
+                    document.body.appendChild(flash);
+
+                    const flashDelay = isSmallMobile ? 1800 : isMobile ? 2000 : 2500;
+
+                    setTimeout(() => {
+                        flash.style.opacity = isMobile ? '0.5' : '0.7';
+                        setTimeout(() => {
+                            flash.style.opacity = '0';
+                            setTimeout(() => flash.remove(), 400);
+                        }, 400);
+                    }, flashDelay);
+
+                    // Flash colorido
+                    createPortalFlash(glowColor);
+
+                    // Body scale
+                    document.body.style.transition = "transform 1.6s ease";
+                    document.body.style.transform = isMobile ? "scale(1.01)" : "scale(1.03)";
+
+                    if (portalTransition) portalTransition.classList.add("active");
+
+                    // ============================================
+                    // 4. LIMPEZA E REDIRECIONAMENTO
+                    // ============================================
+
+                    const fullscreenDuration = isSmallMobile ? 2500 : isMobile ? 3000 : isTablet ? 3500 : 4200;
+
+                    console.log(`✅ Portal aberto para: ${asura} (${isMobile ? 'Mobile' : isTablet ? 'Tablet' : 'Desktop'})`);
+
+                    setTimeout(() => {
+                        if (clone && clone.parentNode) {
+                            clone.style.transition = 'opacity 0.5s ease';
+                            clone.style.opacity = '0';
+                            setTimeout(() => {
+                                if (clone.parentNode) clone.remove();
+                            }, 500);
+                        }
+                    }, fullscreenDuration - 500);
+
+                    setTimeout(() => {
+                        window.location.href = "/world_azure/viagem.html?asura=" + asura;
+                    }, fullscreenDuration + 200);
+
+                } catch (error) {
+                    console.error('❌ Erro na transição:', error);
+                    transitioning = false;
+                    restoreMusic();
+                    if (slider) {
+                        slider.style.animationPlayState = "running";
+                        slider.classList.remove("fade-all");
+                    }
+                    items.forEach(item => item.classList.remove('active'));
+                }
             }
 
             // ============================================
-            // 🔥 HÉCATE - SISTEMA DE BLOQUEIO E TESTE
+            // DEBOUNCE
             // ============================================
 
-            // Função para liberar os cards
+            function debounce(func, wait) {
+                let timeout;
+                return function(...args) {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(this, args), wait);
+                };
+            }
+
+            // ============================================
+            // 🗝️ HÉCATE - SISTEMA DE AUTENTICAÇÃO
+            // ============================================
+
             function liberarCards() {
                 console.log('🔓 Liberando cards...');
                 items.forEach(item => {
+                    item.classList.remove('hecate-blocked');
                     item.style.pointerEvents = "";
                     item.style.opacity = "";
                     item.style.filter = "";
                     item.removeEventListener('click', handleCardClick);
                     item.addEventListener('click', handleCardClick);
+                    
+                    // Suporte a teclado
+                    item.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            handleCardClick.call(item, e);
+                        }
+                    });
                 });
             }
 
-            // Função para bloquear os cards
             function bloquearCards() {
                 console.log('🔒 Bloqueando cards...');
                 items.forEach(item => {
+                    item.classList.add('hecate-blocked');
                     item.style.pointerEvents = "none";
                     item.style.opacity = "0.4";
                     item.style.filter = "blur(2px)";
                     item.removeEventListener('click', handleCardClick);
+                    item.setAttribute('aria-disabled', 'true');
                 });
             }
 
-            // Handler do clique
-            function handleCardClick(e) {
-                const item = e.currentTarget;
+            const handleCardClick = debounce(function(e) {
+                const item = e.currentTarget || this;
+                if (item.classList.contains('hecate-blocked')) return;
                 startAsuraTransition(item, item.dataset.asura);
-            }
+            }, CONFIG.DEBOUNCE_DELAY);
 
-            // Executar Hécate com delay
-            setTimeout(function() {
+            function initHecate() {
                 console.log('🔍 Verificando autenticação...');
                 console.log('localStorage hecate_auth_complete:', localStorage.getItem('hecate_auth_complete'));
 
                 if (localStorage.getItem('hecate_auth_complete') === 'true') {
                     console.log('✅ Usuário já autenticado - Liberando cards');
                     liberarCards();
-                } else {
-                    console.log('🔒 Usuário NÃO autenticado - Bloqueando cards');
-                    bloquearCards();
-
-                    let testeAtivo = false;
-
-                    function ativarHecate() {
-                        if (testeAtivo) return;
-                        testeAtivo = true;
-
-                        console.log('🔥 Ativando Hécate...');
-                        document.body.removeEventListener('click', ativarHecate);
-                        document.body.removeEventListener('touchstart', ativarHecate);
-
-                        if (typeof HecateTest !== 'undefined' && HecateTest.show) {
-                            console.log('✅ HecateTest encontrado!');
-                            HecateTest.show(function(success) {
-                                console.log('📝 Resultado do teste:', success);
-                                if (success) {
-                                    console.log('✅ Teste aprovado! Liberando cards...');
-                                    localStorage.setItem('hecate_auth_complete', 'true');
-                                    liberarCards();
-                                } else {
-                                    console.log('❌ Teste falhou');
-                                    testeAtivo = false;
-                                    document.body.addEventListener('click', ativarHecate);
-                                    document.body.addEventListener('touchstart', ativarHecate);
-                                }
-                            });
-                        } else {
-                            console.error('❌ HecateTest NÃO encontrado!');
-                            console.warn('⚠️ Fallback: Liberando cards sem teste');
-                            liberarCards();
-                        }
-                    }
-
-                    document.body.addEventListener('click', ativarHecate);
-                    document.body.addEventListener('touchstart', ativarHecate);
-                    console.log('🗝️ Hécate: Toque na tela para ativar o teste');
+                    return;
                 }
-            }, 300);
 
-        })();
-    </script>
+                console.log('🔒 Usuário NÃO autenticado - Bloqueando cards');
+                bloquearCards();
 
-    <!-- FORÇAR BLOQUEIO MANUAL (CASO HÉCATE FALHE) -->
-    <script>
-        // Aguardar página carregar completamente
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                const items = document.querySelectorAll('.item');
-                const autenticado = localStorage.getItem('hecate_auth_complete') === 'true';
-                
-                if (!autenticado) {
-                    console.log('🔒 [FALLBACK] Bloqueando cards manualmente');
-                    items.forEach(item => {
-                        item.style.pointerEvents = 'none';
-                        item.style.opacity = '0.4';
-                        item.style.filter = 'blur(2px)';
-                    });
-                }
-            }, 1000);
-        });
-    </script>
+                let testeAtivo = false;
 
-</body>
-
-</html>
+                function ativarHecate() {
+                    if (testeAtivo) return;
+                    testeAtivo = true;
