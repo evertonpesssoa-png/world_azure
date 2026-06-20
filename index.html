@@ -10,17 +10,158 @@
 
     <title>ASURAS - Grimório Dimensional | Hécate Guardiã</title>
 
+    <style>
+        /* ============================================
+           DEBUG VISUAL - MOSTRA TUDO NA TELA
+           ============================================ */
+        #debug-console {
+            position: fixed !important;
+            bottom: 10px !important;
+            left: 10px !important;
+            right: 10px !important;
+            background: rgba(0, 0, 0, 0.95) !important;
+            color: #0f0 !important;
+            font-family: 'Courier New', monospace !important;
+            font-size: 11px !important;
+            padding: 10px !important;
+            border-radius: 8px !important;
+            max-height: 200px !important;
+            overflow-y: auto !important;
+            z-index: 9999999 !important;
+            border: 2px solid #0f0 !important;
+            pointer-events: auto !important;
+            line-height: 1.6 !important;
+            scrollbar-width: thin !important;
+            scrollbar-color: #0f0 transparent !important;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.2) !important;
+        }
+
+        #debug-console::-webkit-scrollbar {
+            width: 4px !important;
+        }
+        #debug-console::-webkit-scrollbar-thumb {
+            background: #0f0 !important;
+            border-radius: 4px !important;
+        }
+
+        .debug-error { color: #ff4444 !important; text-shadow: 0 0 10px rgba(255,0,0,0.5) !important; }
+        .debug-success { color: #44ff44 !important; text-shadow: 0 0 10px rgba(0,255,0,0.5) !important; }
+        .debug-warn { color: #ffaa00 !important; text-shadow: 0 0 10px rgba(255,170,0,0.5) !important; }
+        .debug-info { color: #44aaff !important; text-shadow: 0 0 10px rgba(68,170,255,0.5) !important; }
+
+        #debug-title {
+            color: #888 !important;
+            border-bottom: 1px solid #333 !important;
+            padding-bottom: 4px !important;
+            margin-bottom: 4px !important;
+            font-weight: bold !important;
+        }
+
+        #hecate-status-badge {
+            position: fixed !important;
+            top: 10px !important;
+            right: 10px !important;
+            padding: 8px 16px !important;
+            border-radius: 20px !important;
+            font-size: 12px !important;
+            font-weight: bold !important;
+            z-index: 9999999 !important;
+            font-family: 'Courier New', monospace !important;
+            pointer-events: none !important;
+            text-transform: uppercase !important;
+            letter-spacing: 1px !important;
+            border: 2px solid !important;
+            transition: all 0.3s !important;
+            background: rgba(0, 0, 0, 0.9) !important;
+        }
+
+        #hecate-status-badge.locked {
+            color: #ff4444 !important;
+            border-color: #ff4444 !important;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3) !important;
+        }
+
+        #hecate-status-badge.unlocked {
+            color: #44ff44 !important;
+            border-color: #44ff44 !important;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3) !important;
+        }
+
+        #hecate-status-badge.testing {
+            color: #ffaa00 !important;
+            border-color: #ffaa00 !important;
+            box-shadow: 0 0 20px rgba(255, 170, 0, 0.3) !important;
+            animation: pulse-badge 1s ease-in-out infinite !important;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        #copy-debug-btn {
+            position: fixed !important;
+            bottom: 220px !important;
+            right: 10px !important;
+            padding: 6px 12px !important;
+            background: rgba(0,0,0,0.9) !important;
+            color: #0f0 !important;
+            border: 1px solid #0f0 !important;
+            border-radius: 6px !important;
+            font-size: 10px !important;
+            z-index: 9999999 !important;
+            cursor: pointer !important;
+            font-family: 'Courier New', monospace !important;
+            pointer-events: auto !important;
+        }
+
+        #copy-debug-btn:active {
+            background: rgba(0,255,0,0.2) !important;
+        }
+
+        /* ============================================
+           MAGO FORA DO SLIDER - 120%
+           ============================================ */
+        .banner .mago-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120%;
+            height: 120%;
+            background-image: url(images/mago3.png);
+            background-repeat: no-repeat;
+            background-position: center bottom;
+            background-size: contain;
+            opacity: 0.95;
+            z-index: 2;
+            pointer-events: none;
+        }
+    </style>
+
 </head>
 
 <body>
 
+    <!-- BADGE DE STATUS -->
+    <div id="hecate-status-badge" class="locked">🔒 BLOQUEADO</div>
+
+    <!-- BOTÃO COPIAR -->
+    <button id="copy-debug-btn">📋 COPIAR</button>
+
+    <!-- CONSOLE DE DEBUG -->
+    <div id="debug-console">
+        <div id="debug-title">🐞 DEBUG GRIMÓRIO</div>
+        <div id="debug-log"></div>
+    </div>
+
     <div class="banner">
         <canvas id="particles"></canvas>
+        
+        <!-- ⭐ MAGO FORA DO SLIDER (PARADO E GRANDE) ⭐ -->
+        <div class="mago-center"></div>
+        
         <div class="slider" style="--quantity: 9">
-            
-            <!-- ⭐ MAGO NO CENTRO DO CARROSSEL ⭐ -->
-            <div class="mago-center"></div>
-            
             <!-- CARTAS -->
             <div class="item" data-asura="diva" data-color="#ff4db8" style="--position: 1">
                 <img src="/world_azure/images/diva2.png" alt="Diva" draggable="false">
@@ -51,7 +192,7 @@
             </div>
         </div>
         <div class="content">
-            <!-- REMOVIDO O .model DAQUI - AGORA ESTÁ DENTRO DO SLIDER -->
+            <!-- REMOVIDO O .model DAQUI -->
         </div>
     </div>
 
@@ -66,81 +207,111 @@
     <script src="/world_azure/shared/js/hecate/test-system.js"></script>
     <script src="/world_azure/shared/js/hecate/auth.js"></script>
 
-    <!-- CÓDIGO PRINCIPAL DO GRIMÓRIO -->
+    <!-- CÓDIGO PRINCIPAL COM DEBUG -->
     <script>
         (function() {
             // ============================================
+            // 🐞 SISTEMA DE DEBUG VISUAL
+            // ============================================
+            const debugLog = document.getElementById('debug-log');
+            const statusBadge = document.getElementById('hecate-status-badge');
+
+            debugLog.innerHTML = '';
+
+            function debug(msg, type = 'info') {
+                const time = new Date().toLocaleTimeString();
+                const colors = {
+                    error: 'debug-error',
+                    success: 'debug-success',
+                    warn: 'debug-warn',
+                    info: 'debug-info'
+                };
+                const prefix = {
+                    error: '❌',
+                    success: '✅',
+                    warn: '⚠️',
+                    info: 'ℹ️'
+                };
+                const entry = document.createElement('div');
+                entry.className = colors[type] || 'debug-info';
+                entry.textContent = `[${time}] ${prefix[type] || '•'} ${msg}`;
+                debugLog.appendChild(entry);
+                debugLog.scrollTop = debugLog.scrollHeight;
+                console.log(`[DEBUG] ${msg}`);
+            }
+
+            function setStatus(text, type = 'locked') {
+                statusBadge.textContent = text;
+                statusBadge.className = type;
+            }
+
+            // ============================================
+            // 📋 BOTÃO COPIAR
+            // ============================================
+            document.getElementById('copy-debug-btn').addEventListener('click', function() {
+                const text = debugLog.innerText;
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        this.textContent = '✅ COPIADO!';
+                        setTimeout(() => this.textContent = '📋 COPIAR', 2000);
+                    }).catch(() => {
+                        this.textContent = '❌ ERRO';
+                        setTimeout(() => this.textContent = '📋 COPIAR', 2000);
+                    });
+                } else {
+                    const textarea = document.createElement('textarea');
+                    textarea.value = text;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    this.textContent = '✅ COPIADO!';
+                    setTimeout(() => this.textContent = '📋 COPIAR', 2000);
+                }
+            });
+
+            // ============================================
             // CONFIGURAÇÃO INICIAL
             // ============================================
+            debug('🚀 Inicializando Grimório...', 'info');
+
             const items = document.querySelectorAll(".item");
             const slider = document.querySelector(".slider");
             const hoverSound = document.getElementById("hoverSound");
             const bgMusic = document.getElementById("bgMusic");
             const portalTransition = document.getElementById("portalTransition");
 
+            debug(`📦 Encontrados ${items.length} cards`, 'info');
+
+            // Verificar se o mago existe
+            const mago = document.querySelector('.mago-center');
+            if (mago) {
+                debug('✅ Mago encontrado no DOM', 'success');
+                debug(`📐 Mago size: ${mago.offsetWidth}x${mago.offsetHeight}`, 'info');
+            } else {
+                debug('❌ Mago NÃO encontrado no DOM!', 'error');
+            }
+
             // ============================================
-            // 🎴 INFORMAÇÕES DAS CARTAS DE TAROT
+            // 🎴 TAROT INFO
             // ============================================
             const tarotInfo = {
-                'diva': {
-                    number: 'I',
-                    name: 'A ILUSIONISTA',
-                    symbols: ['🌀', '✦', '🌀', '✦'],
-                    runes: ['ᚠ', 'ᚢ', 'ᚦ', 'ᚨ']
-                },
-                'siria': {
-                    number: 'VII',
-                    name: 'A FORTUNA',
-                    symbols: ['🌳', '💰', '🌳', '💰'],
-                    runes: ['ᚱ', 'ᚲ', 'ᚷ', 'ᚹ']
-                },
-                'astreia': {
-                    number: 'XII',
-                    name: 'A PROTETORA',
-                    symbols: ['🛡️', '⚔️', '🛡️', '⚔️'],
-                    runes: ['ᚺ', 'ᚾ', 'ᛁ', 'ᛃ']
-                },
-                'merlim': {
-                    number: 'V',
-                    name: 'A FEITICEIRA',
-                    symbols: ['⚗️', '🔮', '⚗️', '🔮'],
-                    runes: ['ᛈ', 'ᛇ', 'ᛉ', 'ᛊ']
-                },
-                'umbra': {
-                    number: 'XIII',
-                    name: 'A CAÇADORA',
-                    symbols: ['🗡️', '🎯', '🗡️', '🎯'],
-                    runes: ['ᛏ', 'ᛒ', 'ᛖ', 'ᛗ']
-                },
-                'atena': {
-                    number: 'III',
-                    name: 'A MESTRA',
-                    symbols: ['📚', '🦉', '📚', '🦉'],
-                    runes: ['ᛚ', 'ᛝ', 'ᛟ', 'ᛞ']
-                },
-                'victoria': {
-                    number: 'VI',
-                    name: 'A GENERAL',
-                    symbols: ['⚔️', '🏛️', '⚔️', '🏛️'],
-                    runes: ['ᚪ', 'ᚫ', 'ᚣ', 'ᛡ']
-                },
-                'hestia': {
-                    number: 'XV',
-                    name: 'A ORÁCULO',
-                    symbols: ['🔮', '👁️', '🔮', '👁️'],
-                    runes: ['ᛠ', 'ᛢ', 'ᛣ', 'ᛤ']
-                },
-                'daedala': {
-                    number: 'IV',
-                    name: 'A INVENTORA',
-                    symbols: ['⚙️', '🔧', '⚙️', '🔧'],
-                    runes: ['ᛥ', 'ᛦ', 'ᛧ', 'ᛨ']
-                }
+                'diva': { number: 'I', name: 'A ILUSIONISTA', symbols: ['🌀', '✦', '🌀', '✦'], runes: ['ᚠ', 'ᚢ', 'ᚦ', 'ᚨ'] },
+                'siria': { number: 'VII', name: 'A FORTUNA', symbols: ['🌳', '💰', '🌳', '💰'], runes: ['ᚱ', 'ᚲ', 'ᚷ', 'ᚹ'] },
+                'astreia': { number: 'XII', name: 'A PROTETORA', symbols: ['🛡️', '⚔️', '🛡️', '⚔️'], runes: ['ᚺ', 'ᚾ', 'ᛁ', 'ᛃ'] },
+                'merlim': { number: 'V', name: 'A FEITICEIRA', symbols: ['⚗️', '🔮', '⚗️', '🔮'], runes: ['ᛈ', 'ᛇ', 'ᛉ', 'ᛊ'] },
+                'umbra': { number: 'XIII', name: 'A CAÇADORA', symbols: ['🗡️', '🎯', '🗡️', '🎯'], runes: ['ᛏ', 'ᛒ', 'ᛖ', 'ᛗ'] },
+                'atena': { number: 'III', name: 'A MESTRA', symbols: ['📚', '🦉', '📚', '🦉'], runes: ['ᛚ', 'ᛝ', 'ᛟ', 'ᛞ'] },
+                'victoria': { number: 'VI', name: 'A GENERAL', symbols: ['⚔️', '🏛️', '⚔️', '🏛️'], runes: ['ᚪ', 'ᚫ', 'ᚣ', 'ᛡ'] },
+                'hestia': { number: 'XV', name: 'A ORÁCULO', symbols: ['🔮', '👁️', '🔮', '👁️'], runes: ['ᛠ', 'ᛢ', 'ᛣ', 'ᛤ'] },
+                'daedala': { number: 'IV', name: 'A INVENTORA', symbols: ['⚙️', '🔧', '⚙️', '🔧'], runes: ['ᛥ', 'ᛦ', 'ᛧ', 'ᛨ'] }
             };
 
             // ============================================
-            // 🎴 APLICAR ESTILO TAROT
+            // 🎴 APLICAR TAROT
             // ============================================
+            debug('🎴 Aplicando estilo Tarot...', 'info');
+
             items.forEach(item => {
                 const asura = item.dataset.asura;
                 const info = tarotInfo[asura];
@@ -181,6 +352,8 @@
 
                 item.style.setProperty("--glow-color", item.dataset.color);
             });
+
+            debug('✅ Estilo Tarot aplicado', 'success');
 
             // ============================================
             // 🔊 SOM HOVER
@@ -225,7 +398,6 @@
                 particles.forEach(p => {
                     ctx.beginPath();
                     ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                    // 🔥 COR ROXA
                     ctx.fillStyle = `rgba(160, 80, 255, ${p.opacity})`;
                     ctx.fill();
                     p.x += p.speedX;
@@ -236,9 +408,10 @@
                 requestAnimationFrame(drawParticles);
             }
             drawParticles();
+            debug('✅ Partículas de fundo ROXAS ativadas', 'success');
 
             // ============================================
-            // 🎵 MÚSICA AMBIENTE
+            // 🎵 MÚSICA
             // ============================================
             if (bgMusic) {
                 bgMusic.volume = 0;
@@ -306,60 +479,93 @@
             }
 
             // ============================================
-            // 🔥 HÉCATE - SISTEMA DE BLOQUEIO
+            // 🔥 HÉCATE
             // ============================================
+            debug('🔍 Verificando HecateTest: ' + typeof HecateTest, 'info');
 
-            // Bloquear cards IMEDIATAMENTE
-            items.forEach(item => {
-                item.style.pointerEvents = "none";
-                item.style.opacity = "0.4";
-                item.style.filter = "blur(2px)";
-                item.removeEventListener('click', startAsuraTransition);
-            });
+            if (localStorage.getItem('hecate_auth_complete') === 'true') {
+                debug('✅ Usuário já autenticado', 'success');
+                setStatus('🔓 LIBERADO', 'unlocked');
+                items.forEach(item => {
+                    item.style.pointerEvents = "";
+                    item.style.opacity = "";
+                    item.style.filter = "";
+                    item.addEventListener("click", () => {
+                        startAsuraTransition(item, item.dataset.asura);
+                    });
+                });
+            } else {
+                debug('🔒 Usuário NÃO autenticado', 'warn');
+                setStatus('🔒 BLOQUEADO', 'locked');
 
-            let testeAtivo = false;
+                items.forEach(item => {
+                    item.style.pointerEvents = "none";
+                    item.style.opacity = "0.4";
+                    item.style.filter = "blur(2px)";
+                    item.removeEventListener('click', startAsuraTransition);
+                });
 
-            function ativarHecate() {
-                if (testeAtivo) return;
-                testeAtivo = true;
+                let testeAtivo = false;
 
-                document.body.removeEventListener('click', ativarHecate);
-                document.body.removeEventListener('touchstart', ativarHecate);
+                function ativarHecate() {
+                    if (testeAtivo) return;
+                    testeAtivo = true;
 
-                if (typeof HecateTest !== 'undefined' && HecateTest.show) {
-                    try {
-                        HecateTest.show(function(success) {
-                            if (success) {
-                                localStorage.setItem('hecate_auth_complete', 'true');
+                    debug('🔥 Ativando Hécate...', 'info');
+                    setStatus('🧪 TESTANDO...', 'testing');
 
-                                items.forEach(item => {
-                                    item.style.pointerEvents = "";
-                                    item.style.opacity = "";
-                                    item.style.filter = "";
-                                    item.addEventListener("click", () => {
-                                        startAsuraTransition(item, item.dataset.asura);
+                    document.body.removeEventListener('click', ativarHecate);
+                    document.body.removeEventListener('touchstart', ativarHecate);
+
+                    if (typeof HecateTest !== 'undefined' && HecateTest.show) {
+                        debug('✅ HecateTest encontrado!', 'success');
+                        try {
+                            HecateTest.show(function(success) {
+                                debug('📝 Resultado: ' + success, success ? 'success' : 'error');
+                                if (success) {
+                                    debug('✅ APROVADO! Liberando cards...', 'success');
+                                    setStatus('🔓 LIBERADO', 'unlocked');
+                                    localStorage.setItem('hecate_auth_complete', 'true');
+
+                                    items.forEach(item => {
+                                        item.style.pointerEvents = "";
+                                        item.style.opacity = "";
+                                        item.style.filter = "";
+                                        item.addEventListener("click", () => {
+                                            startAsuraTransition(item, item.dataset.asura);
+                                        });
                                     });
-                                });
-                            } else {
-                                testeAtivo = false;
-                                document.body.addEventListener('click', ativarHecate);
-                                document.body.addEventListener('touchstart', ativarHecate);
-                            }
-                        });
-                    } catch (err) {
+                                } else {
+                                    debug('❌ REPROVADO!', 'error');
+                                    setStatus('🔒 BLOQUEADO', 'locked');
+                                    testeAtivo = false;
+                                    document.body.addEventListener('click', ativarHecate);
+                                    document.body.addEventListener('touchstart', ativarHecate);
+                                }
+                            });
+                        } catch (err) {
+                            debug('❌ ERRO: ' + err.message, 'error');
+                            setStatus('🔒 ERRO', 'locked');
+                            testeAtivo = false;
+                            document.body.addEventListener('click', ativarHecate);
+                            document.body.addEventListener('touchstart', ativarHecate);
+                        }
+                    } else {
+                        debug('❌ HecateTest NÃO encontrado!', 'error');
+                        setStatus('🔒 ERRO', 'locked');
                         testeAtivo = false;
                         document.body.addEventListener('click', ativarHecate);
                         document.body.addEventListener('touchstart', ativarHecate);
                     }
-                } else {
-                    testeAtivo = false;
-                    document.body.addEventListener('click', ativarHecate);
-                    document.body.addEventListener('touchstart', ativarHecate);
                 }
+
+                document.body.addEventListener('click', ativarHecate);
+                document.body.addEventListener('touchstart', ativarHecate);
+                debug('🗝️ Toque na tela para ativar a Hécate', 'info');
             }
 
-            document.body.addEventListener('click', ativarHecate);
-            document.body.addEventListener('touchstart', ativarHecate);
+            debug('✅ Grimório inicializado!', 'success');
+            debug('📱 Toque no DEBUG e copie com o botão 📋 COPIAR', 'info');
 
         })();
     </script>
