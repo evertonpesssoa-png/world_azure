@@ -313,12 +313,12 @@ body {
 }
 
 /* ============================================
-   🎴 ESTILO CARTA DE TAROT - SEM PULSO
+   🎴 ESTILO CARTA DE TAROT
    ============================================ */
 
 .banner .slider .item.tarot-card {
     background: linear-gradient(145deg, rgba(25, 20, 30, 0.95), rgba(10, 8, 15, 0.98));
-    border: 2px solid rgba(200, 170, 100, 0.4);
+    border: 2px solid rgba(200, 170, 100, 0.25);
     border-radius: 16px;
     padding: 8px;
     box-shadow: 0 15px 50px rgba(0, 0, 0, 0.9), 0 0 80px rgba(200, 170, 100, 0.05), inset 0 1px 0 rgba(255, 215, 0, 0.08);
@@ -327,14 +327,14 @@ body {
 }
 
 /* ============================================
-   MOLDURA INTERNA DA CARTA - SEM PULSO
+   MOLDURA INTERNA DA CARTA
    ============================================ */
 
 .banner .slider .item.tarot-card::before {
     content: '';
     position: absolute;
     inset: 4px;
-    border: 1.5px solid rgba(200, 170, 100, 0.25);
+    border: 1.5px solid rgba(200, 170, 100, 0.15);
     border-radius: 12px;
     pointer-events: none;
     z-index: 1;
@@ -343,7 +343,7 @@ body {
 }
 
 /* ============================================
-   BRILHO ESTÁTICO - SEM PULSO
+   BRILHO ESTÁTICO
    ============================================ */
 
 .banner .slider .item.tarot-card::after {
@@ -440,7 +440,7 @@ body {
 }
 
 /* ============================================
-   RUNAS NAS BORDAS - SEM PULSO
+   RUNAS NAS BORDAS
    ============================================ */
 
 .banner .slider .item.tarot-card .rune {
@@ -493,7 +493,7 @@ body {
 }
 
 /* ============================================
-   HOLOGRAMA - SEM PULSO
+   HOLOGRAMA
    ============================================ */
 
 .banner .slider .item.tarot-card .holo-layer {
@@ -551,12 +551,12 @@ body {
    ============================================ */
 
 .banner .slider .item.tarot-card:hover {
-    border-color: rgba(200, 170, 100, 0.6);
+    border-color: rgba(200, 170, 100, 0.5);
     box-shadow: 0 25px 80px rgba(0, 0, 0, 0.95), 0 0 100px rgba(200, 170, 100, 0.12), 0 0 150px rgba(200, 170, 100, 0.05);
 }
 
 .banner .slider .item.tarot-card:hover::before {
-    border-color: rgba(200, 170, 100, 0.4);
+    border-color: rgba(200, 170, 100, 0.3);
 }
 
 .banner .slider .item.tarot-card:hover img {
@@ -578,7 +578,39 @@ body {
 }
 
 /* ============================================
-   RESPONSIVIDADE - MOBILE (ORIGINAL)
+   🔒 HÉCATE - GARANTIR BLOQUEIO
+   ============================================ */
+
+/* Quando Hécate bloqueia um item, todos os filhos também são bloqueados */
+.item[style*="pointer-events: none"] {
+    pointer-events: none !important;
+    opacity: 0.4 !important;
+    filter: blur(2px) !important;
+    transition: none !important;
+}
+
+/* Todos os filhos de um item bloqueado também herdam o bloqueio */
+.item[style*="pointer-events: none"] * {
+    pointer-events: none !important;
+    opacity: inherit !important;
+    filter: inherit !important;
+}
+
+/* Quando Hécate libera, volta ao normal */
+.item[style*="pointer-events:"]:not([style*="pointer-events: none"]) {
+    pointer-events: auto !important;
+    opacity: 1 !important;
+    filter: none !important;
+}
+
+.item[style*="pointer-events:"]:not([style*="pointer-events: none"]) * {
+    pointer-events: auto !important;
+    opacity: 1 !important;
+    filter: none !important;
+}
+
+/* ============================================
+   RESPONSIVIDADE - MOBILE
    ============================================ */
 
 @media (max-width: 768px) {
@@ -596,7 +628,6 @@ body {
         transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(340px) scale(1.2);
     }
 
-    /* Ajustes dos elementos Tarot para mobile */
     .banner .slider .item.tarot-card {
         padding: 6px;
         border-radius: 12px;
