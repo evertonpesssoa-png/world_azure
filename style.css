@@ -127,20 +127,21 @@ body {
 }
 
 /* ============================================
-   MAGE - SEM GLOW ROXO (VOLTOU AO NORMAL)
+   MAGO NO CENTRO DO CARROSSEL
    ============================================ */
 
-.banner .content .model {
-    background-image: url(images/mago3.png);
+.banner .slider .mago-center {
     position: absolute;
-    inset: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) translateZ(0px);
     width: 100%;
     height: 100%;
+    background-image: url(images/mago3.png);
     background-repeat: no-repeat;
     background-position: center bottom;
     background-size: contain;
-    opacity: 0.95;
-    filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.05));
+    opacity: 0.85;
     z-index: 1;
     pointer-events: none;
 }
