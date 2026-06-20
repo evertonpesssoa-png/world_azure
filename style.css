@@ -33,6 +33,26 @@ body {
     pointer-events: none;
 }
 
+/* ============================================
+   MAGO CENTRALIZADO NA TELA (FORA DO SLIDER)
+   ============================================ */
+
+.banner .mago-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    background-image: url(images/mago3.png);
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-size: contain;
+    opacity: 0.95;
+    z-index: 2;
+    pointer-events: none;
+}
+
 .banner .slider {
     position: absolute;
     width: clamp(156px, 26vw, 260px);
@@ -59,10 +79,6 @@ body {
     }
 }
 
-/* ============================================
-   CARTAS - Z-INDEX 1 (ATRÁS DO MAGO)
-   ============================================ */
-
 .banner .slider .item {
     position: absolute;
     inset: 0;
@@ -74,28 +90,6 @@ body {
     transition: transform 0.8s ease, filter 0.8s ease, opacity 0.8s ease;
     transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(clamp(286px, 49vw, 650px));
     z-index: 1;
-}
-
-/* ============================================
-   MAGO PARADO NO CENTRO - Z-INDEX 2 (NA FRENTE)
-   ============================================ */
-
-.banner .slider .mago-center {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) translateZ(0px) !important;
-    width: 100%;
-    height: 100%;
-    background-image: url(images/mago3.png);
-    background-repeat: no-repeat;
-    background-position: center bottom;
-    background-size: contain;
-    opacity: 0.95;
-    z-index: 2;
-    pointer-events: none;
-    animation: none !important;
-    transform-style: flat !important;
 }
 
 /* ============================================
