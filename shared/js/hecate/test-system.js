@@ -1,84 +1,237 @@
 // ============================================
-// 🗝️ HÉCATE - RITUAL DE ACESSO (VERSÃO CINEMATOGRÁFICA V3)
+// 🗝️ HÉCATE - RITUAL DE ACESSO
+// VERSÃO CINEMATOGRÁFICA V4
 // ============================================
 
 (function() {
     'use strict';
-    
-    // 🔥 BANCO DE PERGUNTAS (INTOCÁVEL) 🔥
+
+    // ==========================================
+    // 🔥 BANCO DE PERGUNTAS
+    // ==========================================
+
     const QUESTION_BANK = {
+
         senha: {
             pergunta: "O GRIMÓRIO ESTÁ TRANCADO",
+
             dica: "nome da primeira Asura",
-            validar: (r) => r.toLowerCase().trim() === "astreia"
+
+            validar: (r) =>
+                r.toLowerCase().trim() === "astreia"
         },
+
         sabedoria: {
+
             perguntas: [
-                { texto: "O que significa WZ no nome do projeto?", dica: "World _ _ _ _ _", validar: (r) => r.toLowerCase().includes("azure") || r.toLowerCase().includes("azul") },
-                { texto: "Quantos Asuras existem no Grimório?", dica: "Conte os cards giratórios", validar: (r) => r === "9" || r === "nove" },
-                { texto: "Qual Asura controla as sombras e o vazio?", dica: "Começa com 'U'", validar: (r) => r.toLowerCase().includes("umbra") },
-                { texto: "Qual Asura é conhecida como 'A Maga das Invenções'?", dica: "Começa com 'D'", validar: (r) => r.toLowerCase().includes("daedala") },
-                { texto: "Qual Asura representa a Justiça e as constelações?", dica: "Começa com 'A'", validar: (r) => r.toLowerCase().includes("astreia") },
-                { texto: "Qual Asura representa a Vitória?", dica: "Começa com 'V'", validar: (r) => r.toLowerCase().includes("victoria") },
-                { texto: "Qual Asura protege o lar e a sacralidade?", dica: "Começa com 'H'", validar: (r) => r.toLowerCase().includes("hestia") }
-            ],
-            getRandomQuestions: function() {
-                const shuffled = [...this.perguntas];
-                for (let i = shuffled.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+
+                {
+                    texto: "O que significa WZ no nome do projeto?",
+                    dica: "World _ _ _ _ _",
+                    validar: (r) =>
+                        r.toLowerCase().includes("azure") ||
+                        r.toLowerCase().includes("azul")
+                },
+
+                {
+                    texto: "Quantos Asuras existem no Grimório?",
+                    dica: "Conte os cards giratórios",
+                    validar: (r) =>
+                        r.trim() === "9" ||
+                        r.toLowerCase().trim() === "nove"
+                },
+
+                {
+                    texto: "Qual Asura controla as sombras e o vazio?",
+                    dica: "Começa com 'U'",
+                    validar: (r) =>
+                        r.toLowerCase().includes("umbra")
+                },
+
+                {
+                    texto: "Qual Asura é conhecida como 'A Maga das Invenções'?",
+                    dica: "Começa com 'D'",
+                    validar: (r) =>
+                        r.toLowerCase().includes("daedala")
+                },
+
+                {
+                    texto: "Qual Asura representa a Justiça e as constelações?",
+                    dica: "Começa com 'A'",
+                    validar: (r) =>
+                        r.toLowerCase().includes("astreia")
+                },
+
+                {
+                    texto: "Qual Asura representa a Vitória?",
+                    dica: "Começa com 'V'",
+                    validar: (r) =>
+                        r.toLowerCase().includes("victoria")
+                },
+
+                {
+                    texto: "Qual Asura protege o lar e a sacralidade?",
+                    dica: "Começa com 'H'",
+                    validar: (r) =>
+                        r.toLowerCase().includes("hestia")
                 }
+            ],
+
+            getRandomQuestions: function() {
+
+                const shuffled = [...this.perguntas];
+
+                for (let i = shuffled.length - 1; i > 0; i--) {
+
+                    const j = Math.floor(Math.random() * (i + 1));
+
+                    [shuffled[i], shuffled[j]] =
+                    [shuffled[j], shuffled[i]];
+                }
+
                 return shuffled.slice(0, 3);
             }
         },
+
         virtude: {
+
             perguntas: [
-                { texto: "O QUE FARIA COM O PODER DA HÉCATE?", opcoes: ["Proteger os fracos", "Fazer justiça", "Compartilhar o poder"], pontos: [10, 9, 7] },
-                { texto: "VIRTUDE MAIS IMPORTANTE PARA UM GUARDIÃO?", opcoes: ["Compaixão", "Justiça", "Sabedoria"], pontos: [10, 9, 8] },
-                { texto: "ACEITA A RESPONSABILIDADE DE PROTEGER?", opcoes: ["Sim, aceito", "Sim, com honra", "Aceito"], pontos: [10, 10, 10] }
-            ],
-            getRandomQuestions: function() {
-                const shuffled = [...this.perguntas];
-                for (let i = shuffled.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+
+                {
+                    texto: "O QUE FARIA COM O PODER DA HÉCATE?",
+                    opcoes: [
+                        "Proteger os fracos",
+                        "Fazer justiça",
+                        "Compartilhar o poder"
+                    ],
+                    pontos: [10, 9, 7]
+                },
+
+                {
+                    texto: "VIRTUDE MAIS IMPORTANTE PARA UM GUARDIÃO?",
+                    opcoes: [
+                        "Compaixão",
+                        "Justiça",
+                        "Sabedoria"
+                    ],
+                    pontos: [10, 9, 8]
+                },
+
+                {
+                    texto: "ACEITA A RESPONSABILIDADE DE PROTEGER?",
+                    opcoes: [
+                        "Sim, aceito",
+                        "Sim, com honra",
+                        "Aceito"
+                    ],
+                    pontos: [10, 10, 10]
                 }
+            ],
+
+            getRandomQuestions: function() {
+
+                const shuffled = [...this.perguntas];
+
+                for (let i = shuffled.length - 1; i > 0; i--) {
+
+                    const j = Math.floor(Math.random() * (i + 1));
+
+                    [shuffled[i], shuffled[j]] =
+                    [shuffled[j], shuffled[i]];
+                }
+
                 return shuffled.slice(0, 3);
             }
         }
     };
-    
+
+
+    // ==========================================
+    // ⚙️ ESTADO
+    // ==========================================
+
     const MIN_VIRTUE_SCORE = 20;
+
     let testActive = false;
+
     let currentLevel = 1;
+
     let currentQuestions = [];
+
     let currentIndex = 0;
+
     let virtueScore = 0;
+
     let onCompleteCallback = null;
+
     let overlay = null;
+
     let isVoiceEnabled = false;
 
-    // 🔥 FUNÇÃO DE VOZ 🔥
-    function speakText(text) {
-        if (!isVoiceEnabled) return;
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'pt-BR';
-            utterance.rate = 0.85;
-            utterance.pitch = 0.8;
-            utterance.volume = 0.6;
-            window.speechSynthesis.speak(utterance);
-        }
+
+    // ==========================================
+    // 🧠 HISTÓRICO
+    // Preparado para futura integração com LLM
+    // ==========================================
+
+    const conversationHistory = [];
+
+
+    function registerMessage(text, isUser, type) {
+
+        conversationHistory.push({
+            role: isUser ? 'user' : 'assistant',
+            content: text,
+            type: type || 'normal',
+            timestamp: Date.now()
+        });
     }
 
-    // 🔥 FUNÇÃO PARA ADICIONAR TEXTO NO CHAT 🔥
-    function addMessageToChat(text, isUser = false, type = 'normal') {
-        const chatMsg = document.getElementById('hecateChatMessages');
+
+    // ==========================================
+    // 🔊 VOZ
+    // ==========================================
+
+    function speakText(text) {
+
+        if (!isVoiceEnabled) return;
+
+        if (!('speechSynthesis' in window)) return;
+
+        window.speechSynthesis.cancel();
+
+        const utterance =
+            new SpeechSynthesisUtterance(text);
+
+        utterance.lang = 'pt-BR';
+        utterance.rate = 0.85;
+        utterance.pitch = 0.8;
+        utterance.volume = 0.6;
+
+        window.speechSynthesis.speak(utterance);
+    }
+
+
+    // ==========================================
+    // 💬 CHAT / HISTÓRICO VISUAL
+    // ==========================================
+
+    function addMessageToChat(
+        text,
+        isUser = false,
+        type = 'normal'
+    ) {
+
+        const chatMsg =
+            document.getElementById('hecateChatMessages');
+
         if (!chatMsg) return;
 
-        const msgDiv = document.createElement('div');
-        
+        registerMessage(text, isUser, type);
+
+        const msgDiv =
+            document.createElement('div');
+
         let color = '#a78bfa';
         let fontSize = '16px';
         let align = 'center';
@@ -87,636 +240,2095 @@
         let marginBottom = '10px';
         let fontStyle = 'normal';
         let prefix = '';
-        let animation = 'aparecerPalavra 1.2s ease-out';
+        let animation =
+            'aparecerPalavra 1.2s ease-out';
+
         let extraClass = '';
-        
+
+        // ------------------------------
+        // PERGUNTA
+        // ------------------------------
+
         if (type === 'question') {
-            color = '#c4b5fd';
-            fontSize = 'clamp(17px, 5vw, 24px)';
-            letterSpacing = 'clamp(2px, 0.8vw, 4px)';
+
+            color = '#d8ceff';
+
+            fontSize =
+                'clamp(17px, 5vw, 24px)';
+
+            letterSpacing =
+                'clamp(2px, 0.8vw, 4px)';
+
             marginBottom = '20px';
+
             fontStyle = 'italic';
-            animation = 'aparecerPalavra 1.5s ease-out, perguntaRespirar 4s ease-in-out 1.5s infinite';
+
+            animation =
+                'aparecerPalavra 1.5s ease-out, ' +
+                'perguntaRespirar 4s ease-in-out 1.5s infinite';
+
             extraClass = 'question-text';
-        } else if (type === 'hint') {
-            color = 'rgba(167,139,250,0.4)';
-            fontSize = '13px';
-            letterSpacing = '3px';
-            marginBottom = '15px';
-            fontStyle = 'normal';
-        } else if (isUser) {
-            color = 'rgba(167,139,250,0.6)';
-            fontSize = '14px';
-            align = 'center';
-            letterSpacing = '3px';
-            opacity = '0.7';
-            marginBottom = '8px';
-            prefix = '✦ ';
-        } else if (type === 'system') {
-            color = 'rgba(255,255,255,0.15)';
-            fontSize = '11px';
-            letterSpacing = '6px';
-            marginBottom = '5px';
         }
-        
+
+        // ------------------------------
+        // DICA
+        // ------------------------------
+
+        else if (type === 'hint') {
+
+            color =
+                'rgba(167,139,250,0.48)';
+
+            fontSize = '13px';
+
+            letterSpacing = '3px';
+
+            marginBottom = '15px';
+        }
+
+        // ------------------------------
+        // USUÁRIO
+        // ------------------------------
+
+        else if (isUser) {
+
+            color =
+                'rgba(167,139,250,0.68)';
+
+            fontSize = '14px';
+
+            letterSpacing = '3px';
+
+            opacity = '0.75';
+
+            marginBottom = '8px';
+
+            prefix = '✦ ';
+        }
+
+        // ------------------------------
+        // SISTEMA
+        // ------------------------------
+
+        else if (type === 'system') {
+
+            color =
+                'rgba(255,255,255,0.28)';
+
+            fontSize = '11px';
+
+            letterSpacing = '6px';
+
+            marginBottom = '8px';
+
+            opacity = '0.7';
+
+            animation =
+                'aparecerSimbolo 1.2s ease-out';
+        }
+
         msgDiv.style.cssText = `
             font-family: 'Georgia', serif;
             font-size: ${fontSize};
             color: ${color};
-            text-shadow: 
+
+            text-shadow:
                 0 2px 3px #000,
                 0 0 8px #000,
                 0 0 18px rgba(0,0,0,0.9);
+
             background: transparent;
+
             text-align: ${align};
+
             width: 100%;
+
             margin-bottom: ${marginBottom};
+
             padding: 2px 0;
+
             animation: ${animation};
+
             letter-spacing: ${letterSpacing};
+
             opacity: ${opacity};
+
             font-style: ${fontStyle};
-            transition: all 0.5s ease;
+
+            transition:
+                opacity 0.5s ease,
+                transform 0.5s ease;
         `;
-        
+
         if (extraClass) {
             msgDiv.className = extraClass;
         }
-        
-        msgDiv.textContent = prefix + text;
+
+        msgDiv.textContent =
+            prefix + text;
+
         chatMsg.appendChild(msgDiv);
-        chatMsg.scrollTop = chatMsg.scrollHeight;
+
+        requestAnimationFrame(() => {
+
+            chatMsg.scrollTo({
+                top: chatMsg.scrollHeight,
+                behavior: 'smooth'
+            });
+
+        });
     }
 
-    // 🔥 MENSAGEM DE STATUS (MINIMALISTA) 🔥
-    function showMessage(text, color, duration = 1500) {
-        const msg = document.createElement('div');
+
+    // ==========================================
+    // ✦ MENSAGEM DE STATUS
+    // ==========================================
+
+    function showMessage(
+        text,
+        color,
+        duration = 1500
+    ) {
+
+        const msg =
+            document.createElement('div');
+
         msg.textContent = text;
+
         msg.style.cssText = `
             position: fixed;
+
             bottom: 30%;
+
             left: 50%;
+
             transform: translateX(-50%);
-            background: rgba(0,0,0,0.8);
+
+            background: rgba(0,0,0,0.82);
+
             border: 1px solid ${color};
+
             color: ${color};
+
             padding: 6px 20px;
+
             border-radius: 20px;
+
             z-index: 900001;
+
             font-family: 'Georgia', serif;
+
             font-size: 13px;
+
             letter-spacing: 6px;
-            box-shadow: 0 0 40px rgba(155, 48, 255, 0.05);
-            text-shadow: 0 2px 8px rgba(0,0,0,0.95);
+
+            box-shadow:
+                0 0 40px rgba(155,48,255,0.05);
+
+            text-shadow:
+                0 2px 8px rgba(0,0,0,0.95);
+
             backdrop-filter: blur(8px);
-            opacity: 0.8;
+
+            opacity: 0.85;
+
+            pointer-events: none;
+
+            animation:
+                aparecerPalavra 0.7s ease-out;
         `;
+
         document.body.appendChild(msg);
+
         setTimeout(() => {
-            msg.style.transition = 'opacity 1s ease';
+
+            msg.style.transition =
+                'opacity 1s ease';
+
             msg.style.opacity = '0';
-            setTimeout(() => msg.remove(), 1000);
+
+            setTimeout(() => {
+
+                if (msg.parentNode) {
+                    msg.remove();
+                }
+
+            }, 1000);
+
         }, duration);
     }
-    
+
+
+    // ==========================================
+    // ✦ TRANSIÇÃO ENTRE NÍVEIS
+    // ==========================================
+
+    function levelTransition(
+        nextLevel,
+        delay = 800
+    ) {
+
+        addMessageToChat(
+            "✦",
+            false,
+            'system'
+        );
+
+        if (isVoiceEnabled) {
+
+            const phrases = {
+
+                2: "A sabedoria será colocada à prova.",
+
+                3: "Agora, revele sua virtude."
+            };
+
+            if (phrases[nextLevel]) {
+                speakText(phrases[nextLevel]);
+            }
+        }
+
+        setTimeout(() => {
+
+            startLevel(nextLevel);
+
+        }, delay);
+    }
+
+
+    // ==========================================
+    // 🎬 INTERFACE PRINCIPAL
+    // ==========================================
+
     function showTestInterface(callback) {
+
         if (testActive) return;
+
         testActive = true;
+
         onCompleteCallback = callback;
-        
-        overlay = document.createElement('div');
-        overlay.id = 'hecate-test-overlay';
+
+        // Reinicia histórico visual da sessão
+        conversationHistory.length = 0;
+
+        overlay =
+            document.createElement('div');
+
+        overlay.id =
+            'hecate-test-overlay';
+
         overlay.style.cssText = `
             position: fixed;
+
             top: 0;
             left: 0;
+
             width: 100vw;
             height: 100dvh;
+
             z-index: 900000;
-            background: #000000;
+
+            background: #000;
+
             display: flex;
+
             align-items: center;
             justify-content: center;
+
             font-family: 'Georgia', serif;
+
             overflow: hidden;
+
+            opacity: 1;
         `;
+
 
         overlay.innerHTML = `
-            <!-- CAMADA 1: FUNDO -->
-            <div style="position: absolute; inset: 0; z-index: 0; background: #000000;"></div>
 
-            <!-- CAMADA 2: HÉCATE (100% OPACA - MOVIMENTO SUTIL) -->
-            <div id="hecate-entity" style="
-                position: absolute;
-                top: 50vh;
-                left: 50%;
-                transform: translate(-50%, -50%) scale(0.8);
-                width: 100vw;
-                height: 100vh;
-                background-image: url('/world_azure/images/hecate1_hq.png');
-                background-repeat: no-repeat;
-                background-position: center bottom;
-                background-size: contain;
-                z-index: 1;
-                pointer-events: none;
-                animation: flutuarEntidade 10s ease-in-out infinite;
-                filter: contrast(1.05) brightness(1.02);
+            <!-- ==================================
+                 CAMADA 1 — VAZIO
+            =================================== -->
+
+            <div style="
+                position:absolute;
+                inset:0;
+                z-index:0;
+                background:#000;
             "></div>
 
-            <!-- CAMADA 3: NÉVOA DE LEITURA (RADIAL MAIS LARGA) -->
-            <div id="hecate-dialog-atmosphere" style="
-                position: absolute;
-                inset: 0;
-                z-index: 2;
-                pointer-events: none;
-                background: radial-gradient(
-                    ellipse 80% 32% at 50% 86%,
-                    rgba(0,0,0,0.92) 0%,
-                    rgba(0,0,0,0.65) 30%,
-                    rgba(0,0,0,0.25) 55%,
-                    transparent 78%
-                );
-            "></div>
 
-            <!-- CAMADA 4: DIÁLOGO -->
-            <div id="hecate-chat-container" style="
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                z-index: 3;
-                display: flex;
-                flex-direction: column;
-                justify-content: flex-end;
-                padding: 20px 20px 35px 20px;
-                pointer-events: auto;
-                background: transparent;
-            ">
-                <!-- Área das Mensagens -->
-                <div id="hecateChatMessages" style="
-                    width: 100%;
-                    max-height: 35vh;
-                    overflow-y: auto;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: flex-end;
-                    gap: 5px;
-                    padding-right: 5px;
-                    scroll-behavior: smooth;
-                    mask-image: linear-gradient(to bottom, transparent, black 10%, black 85%, transparent);
-                    -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 85%, transparent);
-                ">
-                    <!-- Mensagem Inicial -->
-                    <div class="question-text" style="
-                        font-size: clamp(17px, 5vw, 24px);
-                        color: #c4b5fd;
-                        text-shadow: 
-                            0 2px 3px #000,
-                            0 0 8px #000,
-                            0 0 18px rgba(0,0,0,0.9);
-                        background: transparent;
-                        text-align: center;
-                        align-self: center;
-                        animation: aparecerPalavra 2s ease-out, perguntaRespirar 4s ease-in-out 2s infinite;
-                        letter-spacing: clamp(2px, 0.8vw, 4px);
-                        font-style: italic;
-                        margin-bottom: 15px;
-                    ">
+            <!-- ==================================
+                 CAMADA 2 — HÉCATE
+            =================================== -->
+
+            <div
+                id="hecate-entity"
+                style="
+                    position:absolute;
+
+                    top:50vh;
+                    left:50%;
+
+                    transform:
+                        translate(-50%, -50%)
+                        scale(0.8);
+
+                    width:100vw;
+                    height:100vh;
+
+                    background-image:
+                        url('/world_azure/images/hecate1_hq.png');
+
+                    background-repeat:no-repeat;
+
+                    /*
+                     * Contain é mantido para preservar
+                     * a composição completa da entidade.
+                     */
+
+                    background-position:
+                        center 60%;
+
+                    background-size:
+                        contain;
+
+                    z-index:1;
+
+                    pointer-events:none;
+
+                    animation:
+                        flutuarEntidade 10s
+                        ease-in-out infinite;
+
+                    filter:
+                        contrast(1.05)
+                        brightness(1.02);
+                "
+            ></div>
+
+
+            <!-- ==================================
+                 CAMADA 3 — ATMOSFERA
+            =================================== -->
+
+            <div
+                id="hecate-dialog-atmosphere"
+                style="
+                    position:absolute;
+
+                    inset:0;
+
+                    z-index:2;
+
+                    pointer-events:none;
+
+                    background:
+                        radial-gradient(
+                            ellipse 80% 32%
+                            at 50% 86%,
+
+                            rgba(0,0,0,0.92) 0%,
+
+                            rgba(0,0,0,0.65) 30%,
+
+                            rgba(0,0,0,0.25) 55%,
+
+                            transparent 78%
+                        );
+                "
+            ></div>
+
+
+            <!-- ==================================
+                 CAMADA 4 — DIÁLOGO
+            =================================== -->
+
+            <div
+                id="hecate-chat-container"
+                style="
+                    position:absolute;
+
+                    bottom:0;
+                    left:0;
+
+                    width:100%;
+
+                    z-index:3;
+
+                    display:flex;
+
+                    flex-direction:column;
+
+                    justify-content:flex-end;
+
+                    padding:
+                        20px
+                        20px
+                        35px
+                        20px;
+
+                    pointer-events:auto;
+
+                    background:transparent;
+                "
+            >
+
+                <!-- ==============================
+                     HISTÓRICO / DIÁLOGO
+                =============================== -->
+
+                <div
+                    id="hecateChatMessages"
+                    style="
+                        width:100%;
+
+                        max-height:35vh;
+
+                        overflow-y:auto;
+
+                        display:flex;
+
+                        flex-direction:column;
+
+                        align-items:center;
+
+                        justify-content:flex-end;
+
+                        gap:5px;
+
+                        padding:
+                            10px 5px 5px 5px;
+
+                        scroll-behavior:smooth;
+
+                        /*
+                         * IMPORTANTE:
+                         *
+                         * Antes havia transparent
+                         * também no final.
+                         *
+                         * Isso fazia a primeira
+                         * pergunta desaparecer.
+                         *
+                         * Agora o fade existe
+                         * apenas no topo.
+                         */
+
+                        mask-image:
+                            linear-gradient(
+                                to bottom,
+                                transparent 0%,
+                                black 12%,
+                                black 100%
+                            );
+
+                        -webkit-mask-image:
+                            linear-gradient(
+                                to bottom,
+                                transparent 0%,
+                                black 12%,
+                                black 100%
+                            );
+                    "
+                >
+
+                    <!-- PERGUNTA INICIAL -->
+
+                    <div
+                        class="question-text initial-question"
+                        style="
+                            font-size:
+                                clamp(
+                                    17px,
+                                    5vw,
+                                    24px
+                                );
+
+                            color:#d8ceff;
+
+                            opacity:1;
+
+                            text-shadow:
+                                0 2px 3px #000,
+                                0 0 8px #000,
+                                0 0 18px
+                                rgba(0,0,0,0.95);
+
+                            background:transparent;
+
+                            text-align:center;
+
+                            align-self:center;
+
+                            animation:
+                                aparecerPalavra 2s
+                                ease-out,
+
+                                perguntaRespirar 4s
+                                ease-in-out 2s
+                                infinite;
+
+                            letter-spacing:
+                                clamp(
+                                    2px,
+                                    0.8vw,
+                                    4px
+                                );
+
+                            font-style:italic;
+
+                            margin-bottom:15px;
+                        "
+                    >
                         O GRIMÓRIO ESTÁ TRANCADO
                     </div>
-                    <div style="
-                        font-size: 13px;
-                        color: rgba(167,139,250,0.3);
-                        text-shadow: 0 2px 3px #000, 0 0 8px #000;
-                        text-align: center;
-                        letter-spacing: 3px;
-                        animation: aparecerPalavra 2.5s ease-out;
-                        margin-bottom: 5px;
-                    ">
+
+
+                    <!-- DICA INICIAL -->
+
+                    <div
+                        style="
+                            font-size:13px;
+
+                            color:
+                                rgba(
+                                    167,
+                                    139,
+                                    250,
+                                    0.38
+                                );
+
+                            opacity:1;
+
+                            text-shadow:
+                                0 2px 3px #000,
+                                0 0 8px #000;
+
+                            text-align:center;
+
+                            letter-spacing:3px;
+
+                            animation:
+                                aparecerPalavra 2.5s
+                                ease-out;
+
+                            margin-bottom:5px;
+                        "
+                    >
                         nome da primeira Asura
                     </div>
+
                 </div>
 
-                <!-- Input (linha mágica) -->
-                <div id="hecateTestContent" style="
-                    pointer-events: auto; 
-                    width: 100%; 
-                    max-width: 300px; 
-                    margin: 5px auto 0 auto;
-                    position: relative;
-                ">
-                    <input type="password" id="hecateInput" placeholder="—" autocomplete="off" style="
-                        width: 100%;
-                        padding: 8px 0;
-                        background: transparent;
-                        border: none;
-                        color: #f0eaff;
-                        text-align: center;
-                        font-size: clamp(18px, 4vw, 20px);
-                        outline: none;
-                        font-family: 'Georgia', serif;
-                        letter-spacing: 6px;
-                        text-shadow: 
-                            0 2px 3px #000,
-                            0 0 8px #000,
-                            0 0 18px rgba(0,0,0,0.9);
-                        transition: all 0.5s ease;
-                    ">
-                    <div id="magic-line" style="
-                        position: absolute;
-                        bottom: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 1px;
-                        background: linear-gradient(90deg, transparent, rgba(167,139,250,0.15), transparent);
-                        transition: all 0.8s ease;
-                    "></div>
-                    <button id="hecateBtn" style="display: none;"></button>
+
+                <!-- ==============================
+                     INPUT / RESPOSTA
+                =============================== -->
+
+                <div
+                    id="hecateTestContent"
+                    style="
+                        pointer-events:auto;
+
+                        width:100%;
+
+                        max-width:300px;
+
+                        margin:
+                            5px auto 0 auto;
+
+                        position:relative;
+                    "
+                >
+
+                    <input
+                        type="password"
+                        id="hecateInput"
+
+                        placeholder="—"
+
+                        autocomplete="off"
+
+                        aria-label="Resposta para Hécate"
+
+                        style="
+                            width:100%;
+
+                            padding:8px 0;
+
+                            background:transparent;
+
+                            border:none;
+
+                            color:#f0eaff;
+
+                            text-align:center;
+
+                            font-size:
+                                clamp(
+                                    18px,
+                                    4vw,
+                                    20px
+                                );
+
+                            outline:none;
+
+                            font-family:
+                                'Georgia',
+                                serif;
+
+                            letter-spacing:6px;
+
+                            text-shadow:
+                                0 2px 3px #000,
+                                0 0 8px #000,
+                                0 0 18px
+                                rgba(0,0,0,0.9);
+
+                            transition:
+                                all 0.5s ease;
+                        "
+                    >
+
+                    <div
+                        id="magic-line"
+                        style="
+                            position:absolute;
+
+                            bottom:0;
+
+                            left:0;
+
+                            width:100%;
+
+                            height:1px;
+
+                            background:
+                                linear-gradient(
+                                    90deg,
+                                    transparent,
+                                    rgba(
+                                        167,
+                                        139,
+                                        250,
+                                        0.15
+                                    ),
+                                    transparent
+                                );
+
+                            transition:
+                                all 0.8s ease;
+                        "
+                    ></div>
+
+                    <button
+                        id="hecateBtn"
+                        type="button"
+                        style="display:none;"
+                    ></button>
+
                 </div>
+
             </div>
 
-            <!-- BOTÃO DE VOZ (QUASE INVISÍVEL) -->
-            <div id="jarvis-toggle" style="
-                position: fixed;
-                bottom: 25px;
-                right: 25px;
-                z-index: 900001;
-                width: 36px;
-                height: 36px;
-                border-radius: 50%;
-                background: rgba(20, 10, 40, 0.15);
-                backdrop-filter: blur(2px);
-                border: 1px solid rgba(167,139,250,0.05);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                transition: all 0.8s ease;
-                pointer-events: auto;
-                opacity: 0.15;
-            ">
-                <span id="jarvis-icon" style="
-                    font-size: 14px; 
-                    color: rgba(167,139,250,0.3);
-                    transition: all 0.8s ease;
-                ">◇</span>
+
+            <!-- ==================================
+                 BOTÃO DE VOZ
+            =================================== -->
+
+            <div
+                id="jarvis-toggle"
+                role="button"
+                tabindex="0"
+                aria-label="Ativar voz de Hécate"
+
+                style="
+                    position:fixed;
+
+                    bottom:25px;
+                    right:25px;
+
+                    z-index:900001;
+
+                    width:36px;
+                    height:36px;
+
+                    border-radius:50%;
+
+                    background:
+                        rgba(
+                            20,
+                            10,
+                            40,
+                            0.15
+                        );
+
+                    backdrop-filter:blur(2px);
+
+                    border:
+                        1px solid
+                        rgba(
+                            167,
+                            139,
+                            250,
+                            0.05
+                        );
+
+                    display:flex;
+
+                    align-items:center;
+                    justify-content:center;
+
+                    cursor:pointer;
+
+                    transition:
+                        all 0.8s ease;
+
+                    pointer-events:auto;
+
+                    opacity:0.15;
+                "
+            >
+
+                <span
+                    id="jarvis-icon"
+                    style="
+                        font-size:14px;
+
+                        color:
+                            rgba(
+                                167,
+                                139,
+                                250,
+                                0.3
+                            );
+
+                        transition:
+                            all 0.8s ease;
+                    "
+                >
+                    ◇
+                </span>
+
             </div>
+
+
+            <!-- ==================================
+                 CSS
+            =================================== -->
 
             <style>
+
+                /* ==============================
+                   HÉCATE
+                =============================== */
+
                 @keyframes flutuarEntidade {
-                    0%, 100% { transform: translate(-50%, -50%) scale(0.8); }
-                    50% { transform: translate(-50%, -52%) scale(0.81); }
-                }
-                @keyframes aparecerPalavra {
-                    0% { opacity: 0; transform: translateY(20px) scale(0.97); }
-                    100% { opacity: 1; transform: translateY(0) scale(1); }
-                }
-                @keyframes perguntaRespirar {
+
                     0%, 100% {
-                        text-shadow: 
+                        transform:
+                            translate(-50%, -50%)
+                            scale(0.8);
+                    }
+
+                    50% {
+                        transform:
+                            translate(-50%, -52%)
+                            scale(0.81);
+                    }
+                }
+
+
+                /* ==============================
+                   ENTRADA
+                =============================== */
+
+                @keyframes aparecerPalavra {
+
+                    0% {
+                        opacity:0;
+
+                        transform:
+                            translateY(20px)
+                            scale(0.97);
+                    }
+
+                    100% {
+                        opacity:1;
+
+                        transform:
+                            translateY(0)
+                            scale(1);
+                    }
+                }
+
+
+                /* ==============================
+                   SÍMBOLO DE TRANSIÇÃO
+                =============================== */
+
+                @keyframes aparecerSimbolo {
+
+                    0% {
+                        opacity:0;
+                        transform:scale(0.7);
+                    }
+
+                    50% {
+                        opacity:0.7;
+                        transform:scale(1.15);
+                    }
+
+                    100% {
+                        opacity:0.28;
+                        transform:scale(1);
+                    }
+                }
+
+
+                /* ==============================
+                   RESPIRAÇÃO DA PERGUNTA
+                =============================== */
+
+                @keyframes perguntaRespirar {
+
+                    0%, 100% {
+
+                        text-shadow:
                             0 2px 3px #000,
                             0 0 8px #000,
-                            0 0 18px rgba(0,0,0,0.9);
+                            0 0 18px
+                            rgba(0,0,0,0.9);
                     }
+
                     50% {
-                        text-shadow: 
+
+                        text-shadow:
                             0 2px 3px #000,
                             0 0 10px #000,
-                            0 0 25px rgba(155,48,255,0.25);
+                            0 0 25px
+                            rgba(
+                                155,
+                                48,
+                                255,
+                                0.25
+                            );
                     }
                 }
+
+
+                /* ==============================
+                   LINHA MÁGICA
+                =============================== */
+
                 @keyframes magicPulse {
-                    0%, 100% { 
-                        background: linear-gradient(90deg, transparent, rgba(167,139,250,0.15), transparent);
-                        height: 1px;
+
+                    0%, 100% {
+
+                        background:
+                            linear-gradient(
+                                90deg,
+                                transparent,
+                                rgba(
+                                    167,
+                                    139,
+                                    250,
+                                    0.15
+                                ),
+                                transparent
+                            );
+
+                        height:1px;
                     }
-                    50% { 
-                        background: linear-gradient(90deg, transparent, rgba(167,139,250,0.4), rgba(155,48,255,0.2), transparent);
-                        height: 2px;
-                        box-shadow: 0 0 30px rgba(167,139,250,0.05);
+
+                    50% {
+
+                        background:
+                            linear-gradient(
+                                90deg,
+                                transparent,
+                                rgba(
+                                    167,
+                                    139,
+                                    250,
+                                    0.4
+                                ),
+                                rgba(
+                                    155,
+                                    48,
+                                    255,
+                                    0.2
+                                ),
+                                transparent
+                            );
+
+                        height:2px;
+
+                        box-shadow:
+                            0 0 30px
+                            rgba(
+                                167,
+                                139,
+                                250,
+                                0.05
+                            );
                     }
                 }
+
+
+                /* ==============================
+                   SCROLLBAR
+                =============================== */
+
                 #hecateChatMessages::-webkit-scrollbar {
-                    width: 0px;
+                    width:0;
                 }
+
+
+                /* ==============================
+                   VOZ
+                =============================== */
+
                 #jarvis-toggle:hover {
-                    opacity: 0.6 !important;
-                    border-color: rgba(167,139,250,0.2);
-                    transform: scale(1.05);
+
+                    opacity:0.6 !important;
+
+                    border-color:
+                        rgba(
+                            167,
+                            139,
+                            250,
+                            0.2
+                        );
+
+                    transform:scale(1.05);
                 }
+
+
                 #jarvis-toggle.active {
-                    opacity: 0.8 !important;
-                    border-color: rgba(0, 255, 136, 0.2);
+
+                    opacity:0.8 !important;
+
+                    border-color:
+                        rgba(
+                            0,
+                            255,
+                            136,
+                            0.2
+                        );
                 }
+
+
                 #jarvis-toggle.active #jarvis-icon {
-                    color: rgba(0, 255, 136, 0.6);
+
+                    color:
+                        rgba(
+                            0,
+                            255,
+                            136,
+                            0.6
+                        );
                 }
+
+
+                /* ==============================
+                   INPUT
+                =============================== */
+
                 #hecateInput:focus + #magic-line {
-                    animation: magicPulse 3s ease-in-out infinite;
+
+                    animation:
+                        magicPulse
+                        3s
+                        ease-in-out
+                        infinite;
                 }
+
+
                 #hecateInput:focus {
-                    letter-spacing: 8px;
+
+                    letter-spacing:8px;
                 }
+
+
+                /* ==============================
+                   OPÇÕES DE VIRTUDE
+                =============================== */
+
                 .virtue-opt {
-                    display: block;
-                    width: 100%;
-                    margin: 5px 0;
-                    padding: 8px 12px;
-                    background: rgba(255,215,0,0.02);
-                    border: 1px solid rgba(255,215,0,0.06);
-                    border-radius: 10px;
-                    color: rgba(255,215,0,0.6);
-                    cursor: pointer;
-                    font-size: 13px;
-                    font-family: 'Georgia', serif;
-                    transition: all 0.6s ease;
-                    text-shadow: 0 2px 3px #000, 0 0 8px #000;
-                    letter-spacing: 2px;
-                    text-align: center;
+
+                    display:block;
+
+                    width:100%;
+
+                    margin:5px 0;
+
+                    padding:8px 12px;
+
+                    background:
+                        rgba(
+                            255,
+                            215,
+                            0,
+                            0.02
+                        );
+
+                    border:
+                        1px solid
+                        rgba(
+                            255,
+                            215,
+                            0,
+                            0.06
+                        );
+
+                    border-radius:10px;
+
+                    color:
+                        rgba(
+                            255,
+                            215,
+                            0,
+                            0.6
+                        );
+
+                    cursor:pointer;
+
+                    font-size:13px;
+
+                    font-family:
+                        'Georgia',
+                        serif;
+
+                    transition:
+                        all 0.6s ease;
+
+                    text-shadow:
+                        0 2px 3px #000,
+                        0 0 8px #000;
+
+                    letter-spacing:2px;
+
+                    text-align:center;
                 }
+
+
                 .virtue-opt:hover {
-                    background: rgba(255,215,0,0.04);
-                    border-color: rgba(255,215,0,0.15);
-                    transform: scale(1.01);
-                    color: rgba(255,215,0,0.8);
+
+                    background:
+                        rgba(
+                            255,
+                            215,
+                            0,
+                            0.04
+                        );
+
+                    border-color:
+                        rgba(
+                            255,
+                            215,
+                            0,
+                            0.15
+                        );
+
+                    transform:
+                        scale(1.01);
+
+                    color:
+                        rgba(
+                            255,
+                            215,
+                            0,
+                            0.8
+                        );
                 }
-                /* Mobile adjustments */
-                @media (max-width: 480px) {
+
+
+                /* ==============================
+                   MOBILE
+                =============================== */
+
+                @media (max-width:480px) {
+
                     #hecateInput:focus {
-                        letter-spacing: 4px;
+
+                        letter-spacing:4px;
                     }
+
                     #hecateInput {
-                        font-size: 18px;
+
+                        font-size:18px;
                     }
+
                     .virtue-opt {
-                        font-size: 12px;
-                        padding: 10px 8px;
+
+                        font-size:12px;
+
+                        padding:
+                            10px 8px;
+                    }
+
+                    #hecate-chat-container {
+
+                        padding:
+                            15px
+                            14px
+                            30px
+                            14px;
+                    }
+
+                    #hecateChatMessages {
+
+                        max-height:38vh !important;
+                    }
+
+                    #jarvis-toggle {
+
+                        bottom:18px;
+                        right:18px;
                     }
                 }
-                @media (max-width: 380px) {
+
+
+                @media (max-width:380px) {
+
                     #hecateInput:focus {
-                        letter-spacing: 2px;
+
+                        letter-spacing:2px;
                     }
+
                     #hecateInput {
-                        font-size: 16px;
-                        letter-spacing: 4px;
+
+                        font-size:16px;
+
+                        letter-spacing:4px;
+                    }
+
+                    #hecateChatMessages {
+
+                        max-height:40vh !important;
+                    }
+
+                    #hecate-chat-container {
+
+                        padding-bottom:25px;
                     }
                 }
+
+
+                /* ==============================
+                   TELAS MUITO ALTAS
+                =============================== */
+
+                @media (min-height:800px) {
+
+                    #hecateChatMessages {
+
+                        max-height:32vh !important;
+                    }
+                }
+
+
+                /* ==============================
+                   REDUÇÃO DE MOVIMENTO
+                =============================== */
+
+                @media (prefers-reduced-motion: reduce) {
+
+                    #hecate-entity {
+
+                        animation:none !important;
+                    }
+
+                    .question-text {
+
+                        animation:
+                            none !important;
+                    }
+
+                    * {
+
+                        scroll-behavior:auto !important;
+                    }
+                }
+
             </style>
         `;
-        
-        document.body.appendChild(overlay);
-        
-        // 🔥 BOTÃO DE VOZ
-        const toggleBtn = document.getElementById('jarvis-toggle');
-        toggleBtn.addEventListener('click', () => {
-            isVoiceEnabled = !isVoiceEnabled;
-            toggleBtn.classList.toggle('active');
-            document.getElementById('jarvis-icon').textContent = isVoiceEnabled ? '◈' : '◇';
-            if (isVoiceEnabled) {
-                speakText("Estou ouvindo.");
-                setTimeout(() => {
-                    toggleBtn.style.opacity = '0.8';
-                }, 100);
-            } else {
-                window.speechSynthesis.cancel();
-                setTimeout(() => {
-                    toggleBtn.style.opacity = '0.15';
-                }, 100);
-            }
-        });
 
-        // Input focus
+
+        document.body.appendChild(overlay);
+
+
+        // ==========================================
+        // 🔊 BOTÃO DE VOZ
+        // ==========================================
+
+        const toggleBtn =
+            document.getElementById(
+                'jarvis-toggle'
+            );
+
+        if (toggleBtn) {
+
+            const toggleVoice = () => {
+
+                isVoiceEnabled =
+                    !isVoiceEnabled;
+
+                toggleBtn.classList.toggle(
+                    'active'
+                );
+
+                const icon =
+                    document.getElementById(
+                        'jarvis-icon'
+                    );
+
+                if (icon) {
+
+                    icon.textContent =
+                        isVoiceEnabled
+                            ? '◈'
+                            : '◇';
+                }
+
+
+                if (isVoiceEnabled) {
+
+                    speakText(
+                        "Estou ouvindo."
+                    );
+
+                    setTimeout(() => {
+
+                        toggleBtn.style.opacity =
+                            '0.8';
+
+                    }, 100);
+
+                } else {
+
+                    if (
+                        'speechSynthesis'
+                        in window
+                    ) {
+                        window.speechSynthesis.cancel();
+                    }
+
+                    setTimeout(() => {
+
+                        toggleBtn.style.opacity =
+                            '0.15';
+
+                    }, 100);
+                }
+            };
+
+
+            toggleBtn.addEventListener(
+                'click',
+                toggleVoice
+            );
+
+
+            toggleBtn.addEventListener(
+                'keydown',
+                (event) => {
+
+                    if (
+                        event.key === 'Enter' ||
+                        event.key === ' '
+                    ) {
+
+                        event.preventDefault();
+
+                        toggleVoice();
+                    }
+                }
+            );
+        }
+
+
+        // ==========================================
+        // 🎯 FOCO INICIAL
+        // ==========================================
+
         setTimeout(() => {
-            const input = document.getElementById('hecateInput');
-            if (input) input.focus();
+
+            const input =
+                document.getElementById(
+                    'hecateInput'
+                );
+
+            if (input) {
+
+                input.focus();
+
+                input.placeholder = '—';
+            }
+
         }, 800);
 
-        // Configurar eventos
+
+        // ==========================================
+        // ⌨️ INPUT
+        // ==========================================
+
         setupInputHandler();
     }
-    
+
+
+    // ==========================================
+    // ⌨️ CONFIGURAR INPUT
+    // ==========================================
+
     function setupInputHandler() {
-        const btn = document.getElementById('hecateBtn');
-        const input = document.getElementById('hecateInput');
+
+        const btn =
+            document.getElementById(
+                'hecateBtn'
+            );
+
+        const input =
+            document.getElementById(
+                'hecateInput'
+            );
+
         if (!btn || !input) return;
-        
-        const newBtn = btn.cloneNode(true);
-        btn.parentNode.replaceChild(newBtn, btn);
-        
+
+
+        const newBtn =
+            btn.cloneNode(true);
+
+        btn.parentNode.replaceChild(
+            newBtn,
+            btn
+        );
+
+
         const handleSubmit = () => {
+
+            const value =
+                input.value.trim();
+
+            // Evita respostas vazias
+            if (!value) return;
+
+
+            // ======================================
+            // NÍVEL 1 — SENHA
+            // ======================================
+
             if (currentLevel === 1) {
-                if (QUESTION_BANK.senha.validar(input.value)) {
-                    addMessageToChat(input.value, true);
-                    if (isVoiceEnabled) speakText("Aprovado.");
-                    showMessage("✦ APROVADO ✦", "#a78bfa");
+
+                if (
+                    QUESTION_BANK
+                        .senha
+                        .validar(value)
+                ) {
+
+                    addMessageToChat(
+                        value,
+                        true
+                    );
+
+                    if (isVoiceEnabled) {
+                        speakText(
+                            "Aprovado."
+                        );
+                    }
+
+                    showMessage(
+                        "✦ APROVADO ✦",
+                        "#a78bfa"
+                    );
+
                     input.value = '';
-                    setTimeout(() => startLevel(2), 600);
+
+                    input.placeholder = '...';
+
+
+                    levelTransition(
+                        2,
+                        800
+                    );
+
                 } else {
-                    addMessageToChat(input.value, true);
-                    if (isVoiceEnabled) speakText("Reprovado.");
+
+                    addMessageToChat(
+                        value,
+                        true
+                    );
+
+                    if (isVoiceEnabled) {
+                        speakText(
+                            "Reprovado."
+                        );
+                    }
+
                     failTest();
                 }
-            } else if (currentLevel === 2) {
-                const q = currentQuestions[currentIndex];
-                if (q.validar(input.value)) {
-                    addMessageToChat(input.value, true);
-                    if (isVoiceEnabled) speakText("Sabedoria comprovada.");
-                    currentIndex++;
-                    input.value = '';
-                    if (currentIndex >= currentQuestions.length) {
-                        showMessage("✦ SABEDORIA ✦", "#00ffcc");
-                        setTimeout(() => startLevel(3), 600);
-                    } else {
-                        showWisdomQuestion();
+
+                return;
+            }
+
+
+            // ======================================
+            // NÍVEL 2 — SABEDORIA
+            // ======================================
+
+            if (currentLevel === 2) {
+
+                const q =
+                    currentQuestions[
+                        currentIndex
+                    ];
+
+                if (!q) return;
+
+
+                if (q.validar(value)) {
+
+                    addMessageToChat(
+                        value,
+                        true
+                    );
+
+                    if (isVoiceEnabled) {
+
+                        speakText(
+                            "Sabedoria comprovada."
+                        );
                     }
+
+
+                    currentIndex++;
+
+                    input.value = '';
+
+
+                    if (
+                        currentIndex >=
+                        currentQuestions.length
+                    ) {
+
+                        showMessage(
+                            "✦ SABEDORIA ✦",
+                            "#00ffcc"
+                        );
+
+                        input.placeholder =
+                            '✦';
+
+
+                        levelTransition(
+                            3,
+                            800
+                        );
+
+                    } else {
+
+                        setTimeout(() => {
+
+                            showWisdomQuestion();
+
+                        }, 400);
+                    }
+
                 } else {
-                    addMessageToChat(input.value, true);
-                    if (isVoiceEnabled) speakText("Resposta incorreta.");
+
+                    addMessageToChat(
+                        value,
+                        true
+                    );
+
+                    if (isVoiceEnabled) {
+
+                        speakText(
+                            "Resposta incorreta."
+                        );
+                    }
+
                     failTest();
                 }
             }
         };
-        
-        newBtn.onclick = handleSubmit;
-        input.onkeypress = (e) => { if (e.key === 'Enter') handleSubmit(); };
+
+
+        newBtn.onclick =
+            handleSubmit;
+
+
+        input.onkeypress =
+            (event) => {
+
+                if (event.key === 'Enter') {
+
+                    event.preventDefault();
+
+                    handleSubmit();
+                }
+            };
     }
-    
+
+
+    // ==========================================
+    // 🚪 INICIAR NÍVEL
+    // ==========================================
+
     function startLevel(level) {
+
         currentLevel = level;
-        const content = document.getElementById('hecateTestContent');
+
+        const content =
+            document.getElementById(
+                'hecateTestContent'
+            );
+
         if (!content) return;
-        
+
+
+        // ======================================
+        // NÍVEL 1
+        // ======================================
+
         if (level === 1) {
-            // Já está configurado
-            const input = document.getElementById('hecateInput');
+
+            const input =
+                document.getElementById(
+                    'hecateInput'
+                );
+
             if (input) {
+
                 input.type = 'password';
+
                 input.placeholder = '—';
+
                 input.value = '';
-                setTimeout(() => input.focus(), 300);
+
+                setTimeout(() => {
+
+                    input.focus();
+
+                }, 300);
             }
-        } else if (level === 2) {
-            currentQuestions = QUESTION_BANK.sabedoria.getRandomQuestions();
+
+            return;
+        }
+
+
+        // ======================================
+        // NÍVEL 2
+        // ======================================
+
+        if (level === 2) {
+
+            currentQuestions =
+                QUESTION_BANK
+                    .sabedoria
+                    .getRandomQuestions();
+
             currentIndex = 0;
+
             showWisdomQuestion();
-        } else if (level === 3) {
-            currentQuestions = QUESTION_BANK.virtude.getRandomQuestions();
+
+            return;
+        }
+
+
+        // ======================================
+        // NÍVEL 3
+        // ======================================
+
+        if (level === 3) {
+
+            currentQuestions =
+                QUESTION_BANK
+                    .virtude
+                    .getRandomQuestions();
+
             currentIndex = 0;
+
             virtueScore = 0;
+
             showVirtueQuestion();
         }
     }
-    
-    function showWisdomQuestion() {
-        const q = currentQuestions[currentIndex];
-        const chatMsg = document.getElementById('hecateChatMessages');
-        if (!chatMsg) return;
-        
-        // Limpa mensagens anteriores (exceto as primeiras)
-        const messages = chatMsg.querySelectorAll('.hecate-message, .user-message');
-        messages.forEach(msg => {
-            if (msg.style.animation !== 'aparecerPalavra 2s ease-out' && 
-                !msg.className.includes('question-text')) {
-                if (!msg.textContent.includes('GRIMÓRIO ESTÁ TRANCADO')) {
-                    msg.remove();
-                }
-            }
-        });
 
-        addMessageToChat(q.texto, false, 'question');
-        addMessageToChat("💡 " + q.dica, false, 'hint');
-        if (isVoiceEnabled) {
-            speakText(q.texto + ". " + q.dica);
-        }
-        
-        const content = document.getElementById('hecateTestContent');
-        if (content) {
-            const input = document.getElementById('hecateInput');
-            if (input) {
-                input.type = 'text';
-                input.placeholder = '—';
-                input.value = '';
-                setTimeout(() => input.focus(), 300);
+
+    // ==========================================
+    // 🧹 LIMPAR PERGUNTAS ANTIGAS
+    // ==========================================
+
+    function clearPreviousMessages() {
+
+        const chatMsg =
+            document.getElementById(
+                'hecateChatMessages'
+            );
+
+        if (!chatMsg) return;
+
+
+        const messages =
+            chatMsg.children;
+
+
+        Array.from(messages).forEach(
+            (msg) => {
+
+                if (
+                    msg.classList.contains(
+                        'initial-question'
+                    )
+                ) {
+                    return;
+                }
+
+                msg.remove();
             }
+        );
+    }
+
+
+    // ==========================================
+    // 🧠 SABEDORIA
+    // ==========================================
+
+    function showWisdomQuestion() {
+
+        const q =
+            currentQuestions[
+                currentIndex
+            ];
+
+        if (!q) return;
+
+
+        clearPreviousMessages();
+
+
+        addMessageToChat(
+            q.texto,
+            false,
+            'question'
+        );
+
+
+        addMessageToChat(
+            "💡 " + q.dica,
+            false,
+            'hint'
+        );
+
+
+        if (isVoiceEnabled) {
+
+            speakText(
+                q.texto +
+                ". " +
+                q.dica
+            );
+        }
+
+
+        const input =
+            document.getElementById(
+                'hecateInput'
+            );
+
+        if (input) {
+
+            input.type = 'text';
+
+            input.placeholder = '...';
+
+            input.value = '';
+
+            setTimeout(() => {
+
+                input.focus();
+
+            }, 300);
         }
     }
-    
-    function showVirtueQuestion() {
-        const q = currentQuestions[currentIndex];
-        const chatMsg = document.getElementById('hecateChatMessages');
-        if (!chatMsg) return;
-        
-        // Limpa mensagens anteriores (exceto as primeiras)
-        const messages = chatMsg.querySelectorAll('.hecate-message, .user-message');
-        messages.forEach(msg => {
-            if (msg.style.animation !== 'aparecerPalavra 2s ease-out' && 
-                !msg.className.includes('question-text')) {
-                if (!msg.textContent.includes('GRIMÓRIO ESTÁ TRANCADO')) {
-                    msg.remove();
-                }
-            }
-        });
 
-        addMessageToChat(q.texto, false, 'question');
+
+    // ==========================================
+    // ⚖️ VIRTUDE
+    // ==========================================
+
+    function showVirtueQuestion() {
+
+        const q =
+            currentQuestions[
+                currentIndex
+            ];
+
+        if (!q) return;
+
+
+        clearPreviousMessages();
+
+
+        addMessageToChat(
+            q.texto,
+            false,
+            'question'
+        );
+
+
         if (isVoiceEnabled) {
+
             speakText(q.texto);
         }
-        
-        const content = document.getElementById('hecateTestContent');
+
+
+        const content =
+            document.getElementById(
+                'hecateTestContent'
+            );
+
         if (!content) return;
-        
+
+
         let optionsHtml = '';
-        q.opcoes.forEach((op, idx) => {
-            optionsHtml += `<button class="virtue-opt" data-pontos="${q.pontos[idx]}">${op}</button>`;
-        });
-        
+
+
+        q.opcoes.forEach(
+            (op, idx) => {
+
+                optionsHtml += `
+
+                    <button
+                        class="virtue-opt"
+                        type="button"
+                        data-pontos="${q.pontos[idx]}"
+                    >
+                        ${op}
+                    </button>
+
+                `;
+            }
+        );
+
+
         content.innerHTML = `
-            <div id="virtueOptions" style="width:100%;">${optionsHtml}</div>
-            <div style="
-                margin-top: 12px; 
-                color: rgba(255,215,0,0.12); 
-                font-size: 10px; 
-                text-align: center;
-                letter-spacing: 6px;
-                text-shadow: 0 2px 3px #000;
-            ">✦ ${virtueScore} ✦</div>
+
+            <div
+                id="virtueOptions"
+                style="width:100%;"
+            >
+                ${optionsHtml}
+            </div>
+
+            <div
+                id="virtueScoreDisplay"
+                style="
+                    margin-top:12px;
+
+                    color:
+                        rgba(
+                            255,
+                            215,
+                            0,
+                            0.15
+                        );
+
+                    font-size:10px;
+
+                    text-align:center;
+
+                    letter-spacing:6px;
+
+                    text-shadow:
+                        0 2px 3px #000;
+
+                    transition:
+                        color 0.5s ease,
+                        text-shadow 0.5s ease;
+                "
+            >
+                ✦ ${virtueScore} ✦
+            </div>
+
         `;
-        
-        const botoes = document.querySelectorAll('.virtue-opt');
-        botoes.forEach(btn => {
-            const newBtn = btn.cloneNode(true);
-            btn.parentNode.replaceChild(newBtn, btn);
-            
-            newBtn.onclick = () => {
-                const pontos = parseInt(newBtn.dataset.pontos);
-                virtueScore += pontos;
-                addMessageToChat(newBtn.textContent, true);
-                if (isVoiceEnabled) speakText("Você escolheu " + newBtn.textContent);
-                currentIndex++;
-                
-                // Atualiza pontuação
-                const scoreDisplay = document.querySelector('#virtueOptions + div');
-                if (scoreDisplay) {
-                    scoreDisplay.textContent = `✦ ${virtueScore} ✦`;
-                }
-                
-                if (currentIndex >= currentQuestions.length) {
-                    if (virtueScore >= MIN_VIRTUE_SCORE) {
-                        showMessage(`✦ APROVADA ✦`, "#ffd700");
-                        if (isVoiceEnabled) speakText("Aprovada. O Grimório está aberto.");
-                        setTimeout(() => completeTest(true), 800);
-                    } else {
-                        showMessage(`✦ REPROVADA ✦`, "#ff3300");
-                        if (isVoiceEnabled) speakText("Reprovada.");
-                        setTimeout(() => failTest(), 800);
+
+
+        const botoes =
+            content.querySelectorAll(
+                '.virtue-opt'
+            );
+
+
+        botoes.forEach(
+            (btn) => {
+
+                btn.onclick = () => {
+
+                    const pontos =
+                        parseInt(
+                            btn.dataset.pontos,
+                            10
+                        );
+
+
+                    virtueScore += pontos;
+
+
+                    addMessageToChat(
+                        btn.textContent.trim(),
+                        true
+                    );
+
+
+                    if (isVoiceEnabled) {
+
+                        speakText(
+                            "Você escolheu " +
+                            btn.textContent.trim()
+                        );
                     }
-                } else {
-                    setTimeout(() => showVirtueQuestion(), 400);
-                }
-            };
-        });
+
+
+                    currentIndex++;
+
+
+                    const scoreDisplay =
+                        document.getElementById(
+                            'virtueScoreDisplay'
+                        );
+
+
+                    if (scoreDisplay) {
+
+                        scoreDisplay.textContent =
+                            `✦ ${virtueScore} ✦`;
+
+                        scoreDisplay.style.color =
+                            'rgba(255,215,0,0.2)';
+                    }
+
+
+                    // ==========================
+                    // FINAL
+                    // ==========================
+
+                    if (
+                        currentIndex >=
+                        currentQuestions.length
+                    ) {
+
+                        if (
+                            virtueScore >=
+                            MIN_VIRTUE_SCORE
+                        ) {
+
+                            showMessage(
+                                "✦ APROVADA ✦",
+                                "#ffd700"
+                            );
+
+
+                            if (isVoiceEnabled) {
+
+                                speakText(
+                                    "Aprovada. " +
+                                    "O Grimório está aberto."
+                                );
+                            }
+
+
+                            setTimeout(
+                                () => {
+
+                                    completeTest(
+                                        true
+                                    );
+
+                                },
+                                800
+                            );
+
+                        } else {
+
+                            showMessage(
+                                "✦ REPROVADA ✦",
+                                "#ff3300"
+                            );
+
+
+                            if (isVoiceEnabled) {
+
+                                speakText(
+                                    "Reprovada."
+                                );
+                            }
+
+
+                            setTimeout(
+                                () => {
+
+                                    failTest();
+
+                                },
+                                800
+                            );
+                        }
+
+                    } else {
+
+                        setTimeout(
+                            () => {
+
+                                showVirtueQuestion();
+
+                            },
+                            400
+                        );
+                    }
+                };
+            }
+        );
     }
-    
+
+
+    // ==========================================
+    // 🔓 CONCLUSÃO
+    // ==========================================
+
     function completeTest(success) {
+
         if (success) {
-            localStorage.setItem('hecate_auth_complete', 'true');
-            console.log('✅ Hécate: Autenticação salva!');
+
+            localStorage.setItem(
+                'hecate_auth_complete',
+                'true'
+            );
+
+            console.log(
+                '✅ Hécate: Autenticação salva!'
+            );
         }
-        
+
+
         setTimeout(() => {
-            if (overlay) {
-                overlay.style.transition = 'opacity 1.5s ease';
-                overlay.style.opacity = '0';
-                setTimeout(() => {
+
+            if (!overlay) return;
+
+
+            overlay.style.transition =
+                'opacity 1.5s ease';
+
+            overlay.style.opacity = '0';
+
+
+            setTimeout(() => {
+
+                if (overlay) {
+
                     overlay.remove();
-                    testActive = false;
-                    if (onCompleteCallback) onCompleteCallback(success);
-                }, 1500);
-            }
+                }
+
+                overlay = null;
+
+                testActive = false;
+
+
+                if (onCompleteCallback) {
+
+                    onCompleteCallback(
+                        success
+                    );
+                }
+
+            }, 1500);
+
         }, 500);
     }
-    
+
+
+    // ==========================================
+    // ❌ FALHA
+    // ==========================================
+
     function failTest() {
+
         setTimeout(() => {
-            if (overlay) {
-                overlay.style.transition = 'opacity 1s ease';
-                overlay.style.opacity = '0';
-                setTimeout(() => {
+
+            if (!overlay) return;
+
+
+            overlay.style.transition =
+                'opacity 1s ease';
+
+            overlay.style.opacity = '0';
+
+
+            setTimeout(() => {
+
+                if (overlay) {
+
                     overlay.remove();
-                    testActive = false;
-                    if (onCompleteCallback) onCompleteCallback(false);
-                }, 1000);
-            }
+                }
+
+                overlay = null;
+
+                testActive = false;
+
+
+                if (onCompleteCallback) {
+
+                    onCompleteCallback(
+                        false
+                    );
+                }
+
+            }, 1000);
+
         }, 500);
     }
-    
+
+
+    // ==========================================
+    // 🌐 API HÉCATE
+    // ==========================================
+
     window.HecateTest = {
-        show: showTestInterface,
-        isActive: () => testActive,
-        toggleVoice: () => { isVoiceEnabled = !isVoiceEnabled; }
+
+        show:
+            showTestInterface,
+
+        isActive:
+            () => testActive,
+
+        toggleVoice:
+            () => {
+
+                isVoiceEnabled =
+                    !isVoiceEnabled;
+
+                return isVoiceEnabled;
+            },
+
+        // Futuro LLM
+        getHistory:
+            () =>
+                [...conversationHistory],
+
+        clearHistory:
+            () =>
+                conversationHistory.length = 0
     };
-    
-    console.log('🗝️ Hécate: Ritual cinematográfico V3 carregado');
+
+
+    // ==========================================
+    // 🗝️ READY
+    // ==========================================
+
+    console.log(
+        '🗝️ Hécate: Ritual cinematográfico V4 carregado'
+    );
+
 })();
