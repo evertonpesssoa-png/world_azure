@@ -1003,10 +1003,8 @@ body {
    ============================================ */
 @media (min-width: 768px) and (max-width: 1023px) {
     
-    /* Ajuste do carrossel no Tablet */
+    /* Ajuste do carrossel no Tablet (APENAS POSIÇÃO) */
     .banner .slider {
-        width: 0vw;     /* Altere a largura das cartas aqui */
-        height: 0vw;    /* Altere a altura das cartas aqui */
         top: 0%;        /* 👈 MEXA AQUI! Maior = desce, Menor = sobe */
         left: 50%;
         transform: translate(-50%, -50%) rotateX(-20deg);
@@ -1022,10 +1020,8 @@ body {
         transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(0px) scale(1.25);
     }
 
-    /* Ajuste do mago no Tablet */
+    /* Ajuste do mago no Tablet (APENAS POSIÇÃO) */
     .banner .mago-center {
-        width: 0vw;             /* Altere o tamanho do mago aqui */
-        max-width: 0px;         /* Limite máximo do tamanho do mago */
         top: 0%;                /* Posição vertical do mago */
         left: 50%;
         transform: translate(-50%, -50%);
@@ -1037,10 +1033,8 @@ body {
    ============================================ */
 @media (min-width: 1024px) and (max-width: 1439px) {
     
-    /* Ajuste do carrossel no Notebook */
+    /* Ajuste do carrossel no Notebook (APENAS POSIÇÃO) */
     .banner .slider {
-        width: 0vw;     /* Altere a largura das cartas aqui */
-        height: 0vw;    /* Altere a altura das cartas aqui */
         top: 0%;        /* 👈 MEXA AQUI! Maior = desce, Menor = sobe */
         left: 50%;
         transform: translate(-50%, -50%) rotateX(-22deg);
@@ -1056,10 +1050,8 @@ body {
         transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(0px) scale(1.25);
     }
 
-    /* Ajuste do mago no Notebook */
+    /* Ajuste do mago no Notebook (APENAS POSIÇÃO) */
     .banner .mago-center {
-        width: 0vw;             /* Altere o tamanho do mago aqui */
-        max-width: 0px;         /* Limite máximo do tamanho do mago */
         top: 0%;                /* Posição vertical do mago */
         left: 50%;
         transform: translate(-50%, -50%);
@@ -1071,10 +1063,8 @@ body {
    ============================================ */
 @media (min-width: 1440px) {
     
-    /* Ajuste do carrossel no PC Grande */
+    /* Ajuste do carrossel no PC Grande (APENAS POSIÇÃO) */
     .banner .slider {
-        width: 0vw;     /* Altere a largura das cartas aqui */
-        height: 0vw;    /* Altere a altura das cartas aqui */
         top: 0%;        /* 👈 MEXA AQUI! Maior = desce, Menor = sobe */
         left: 50%;
         transform: translate(-50%, -50%) rotateX(-25deg);
@@ -1090,10 +1080,8 @@ body {
         transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(0px) scale(1.25);
     }
 
-    /* Ajuste do mago no PC Grande */
+    /* Ajuste do mago no PC Grande (APENAS POSIÇÃO) */
     .banner .mago-center {
-        width: 0vw;             /* Altere o tamanho do mago aqui */
-        max-width: 0px;         /* Limite máximo do tamanho do mago */
         top: 0%;                /* Posição vertical do mago */
         left: 50%;
         transform: translate(-50%, -50%);
