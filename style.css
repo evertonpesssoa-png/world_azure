@@ -61,7 +61,7 @@ body {
     left: 50%;
     transform: translate(-50%, -50%) scale(1);
     width: 50px;
-    height: 500px;
+    height: 50px;
     background: radial-gradient(circle, rgba(180, 80, 255, 1) 0%, rgba(180, 80, 255, 0.6) 40%, transparent 70%);
     border-radius: 50%;
     box-shadow: 0 0 40px rgba(180, 80, 255, 0.8), 0 0 80px rgba(180, 80, 255, 0.5);
