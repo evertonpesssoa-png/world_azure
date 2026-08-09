@@ -1,9 +1,11 @@
 // ============================================
 // 🗝️ HÉCATE - RITUAL DE ACESSO
-// VERSÃO CINEMATOGRÁFICA V4
+// VERSÃO CINEMATOGRÁFICA V5
+// RESPONSIVO — MOBILE / TABLET / DESKTOP
 // ============================================
 
-(function() {
+(function () {
+
     'use strict';
 
     // ==========================================
@@ -13,6 +15,7 @@
     const QUESTION_BANK = {
 
         senha: {
+
             pergunta: "O GRIMÓRIO ESTÁ TRANCADO",
 
             dica: "nome da primeira Asura",
@@ -75,18 +78,31 @@
                     validar: (r) =>
                         r.toLowerCase().includes("hestia")
                 }
+
             ],
 
-            getRandomQuestions: function() {
+            getRandomQuestions: function () {
 
                 const shuffled = [...this.perguntas];
 
-                for (let i = shuffled.length - 1; i > 0; i--) {
+                for (
+                    let i = shuffled.length - 1;
+                    i > 0;
+                    i--
+                ) {
 
-                    const j = Math.floor(Math.random() * (i + 1));
+                    const j =
+                        Math.floor(
+                            Math.random() * (i + 1)
+                        );
 
-                    [shuffled[i], shuffled[j]] =
-                    [shuffled[j], shuffled[i]];
+                    [
+                        shuffled[i],
+                        shuffled[j]
+                    ] = [
+                        shuffled[j],
+                        shuffled[i]
+                    ];
                 }
 
                 return shuffled.slice(0, 3);
@@ -99,45 +115,76 @@
 
                 {
                     texto: "O QUE FARIA COM O PODER DA HÉCATE?",
+
                     opcoes: [
                         "Proteger os fracos",
                         "Fazer justiça",
                         "Compartilhar o poder"
                     ],
-                    pontos: [10, 9, 7]
+
+                    pontos: [
+                        10,
+                        9,
+                        7
+                    ]
                 },
 
                 {
                     texto: "VIRTUDE MAIS IMPORTANTE PARA UM GUARDIÃO?",
+
                     opcoes: [
                         "Compaixão",
                         "Justiça",
                         "Sabedoria"
                     ],
-                    pontos: [10, 9, 8]
+
+                    pontos: [
+                        10,
+                        9,
+                        8
+                    ]
                 },
 
                 {
                     texto: "ACEITA A RESPONSABILIDADE DE PROTEGER?",
+
                     opcoes: [
                         "Sim, aceito",
                         "Sim, com honra",
                         "Aceito"
                     ],
-                    pontos: [10, 10, 10]
+
+                    pontos: [
+                        10,
+                        10,
+                        10
+                    ]
                 }
+
             ],
 
-            getRandomQuestions: function() {
+            getRandomQuestions: function () {
 
                 const shuffled = [...this.perguntas];
 
-                for (let i = shuffled.length - 1; i > 0; i--) {
+                for (
+                    let i = shuffled.length - 1;
+                    i > 0;
+                    i--
+                ) {
 
-                    const j = Math.floor(Math.random() * (i + 1));
+                    const j =
+                        Math.floor(
+                            Math.random() * (i + 1)
+                        );
 
-                    [shuffled[i], shuffled[j]] =
-                    [shuffled[j], shuffled[i]];
+                    [
+                        shuffled[i],
+                        shuffled[j]
+                    ] = [
+                        shuffled[j],
+                        shuffled[i]
+                    ];
                 }
 
                 return shuffled.slice(0, 3);
@@ -171,19 +218,31 @@
 
     // ==========================================
     // 🧠 HISTÓRICO
-    // Preparado para futura integração com LLM
     // ==========================================
 
     const conversationHistory = [];
 
 
-    function registerMessage(text, isUser, type) {
+    function registerMessage(
+        text,
+        isUser,
+        type
+    ) {
 
         conversationHistory.push({
-            role: isUser ? 'user' : 'assistant',
+
+            role:
+                isUser
+                    ? 'user'
+                    : 'assistant',
+
             content: text,
-            type: type || 'normal',
-            timestamp: Date.now()
+
+            type:
+                type || 'normal',
+
+            timestamp:
+                Date.now()
         });
     }
 
@@ -196,7 +255,9 @@
 
         if (!isVoiceEnabled) return;
 
-        if (!('speechSynthesis' in window)) return;
+        if (!('speechSynthesis' in window)) {
+            return;
+        }
 
         window.speechSynthesis.cancel();
 
@@ -204,11 +265,16 @@
             new SpeechSynthesisUtterance(text);
 
         utterance.lang = 'pt-BR';
+
         utterance.rate = 0.85;
+
         utterance.pitch = 0.8;
+
         utterance.volume = 0.6;
 
-        window.speechSynthesis.speak(utterance);
+        window.speechSynthesis.speak(
+            utterance
+        );
     }
 
 
@@ -223,41 +289,57 @@
     ) {
 
         const chatMsg =
-            document.getElementById('hecateChatMessages');
+            document.getElementById(
+                'hecateChatMessages'
+            );
 
         if (!chatMsg) return;
 
-        registerMessage(text, isUser, type);
+        registerMessage(
+            text,
+            isUser,
+            type
+        );
 
         const msgDiv =
             document.createElement('div');
 
+
         let color = '#a78bfa';
+
         let fontSize = '16px';
+
         let align = 'center';
+
         let letterSpacing = '2px';
+
         let opacity = '1';
+
         let marginBottom = '10px';
+
         let fontStyle = 'normal';
+
         let prefix = '';
+
         let animation =
             'aparecerPalavra 1.2s ease-out';
 
         let extraClass = '';
 
-        // ------------------------------
+
+        // ======================================
         // PERGUNTA
-        // ------------------------------
+        // ======================================
 
         if (type === 'question') {
 
             color = '#d8ceff';
 
             fontSize =
-                'clamp(17px, 5vw, 24px)';
+                'clamp(17px, 2.1vw, 28px)';
 
             letterSpacing =
-                'clamp(2px, 0.8vw, 4px)';
+                'clamp(2px, 0.35vw, 5px)';
 
             marginBottom = '20px';
 
@@ -267,37 +349,44 @@
                 'aparecerPalavra 1.5s ease-out, ' +
                 'perguntaRespirar 4s ease-in-out 1.5s infinite';
 
-            extraClass = 'question-text';
+            extraClass =
+                'question-text';
         }
 
-        // ------------------------------
+
+        // ======================================
         // DICA
-        // ------------------------------
+        // ======================================
 
         else if (type === 'hint') {
 
             color =
                 'rgba(167,139,250,0.48)';
 
-            fontSize = '13px';
+            fontSize =
+                'clamp(11px, 1.2vw, 14px)';
 
-            letterSpacing = '3px';
+            letterSpacing =
+                'clamp(2px, 0.3vw, 4px)';
 
             marginBottom = '15px';
         }
 
-        // ------------------------------
+
+        // ======================================
         // USUÁRIO
-        // ------------------------------
+        // ======================================
 
         else if (isUser) {
 
             color =
                 'rgba(167,139,250,0.68)';
 
-            fontSize = '14px';
+            fontSize =
+                'clamp(12px, 1.2vw, 15px)';
 
-            letterSpacing = '3px';
+            letterSpacing =
+                'clamp(2px, 0.25vw, 4px)';
 
             opacity = '0.75';
 
@@ -306,18 +395,21 @@
             prefix = '✦ ';
         }
 
-        // ------------------------------
+
+        // ======================================
         // SISTEMA
-        // ------------------------------
+        // ======================================
 
         else if (type === 'system') {
 
             color =
                 'rgba(255,255,255,0.28)';
 
-            fontSize = '11px';
+            fontSize =
+                'clamp(9px, 1vw, 12px)';
 
-            letterSpacing = '6px';
+            letterSpacing =
+                'clamp(3px, 0.5vw, 7px)';
 
             marginBottom = '8px';
 
@@ -327,53 +419,92 @@
                 'aparecerSimbolo 1.2s ease-out';
         }
 
+
         msgDiv.style.cssText = `
-            font-family: 'Georgia', serif;
-            font-size: ${fontSize};
-            color: ${color};
+
+            font-family:
+                'Georgia',
+                serif;
+
+            font-size:
+                ${fontSize};
+
+            color:
+                ${color};
 
             text-shadow:
                 0 2px 3px #000,
                 0 0 8px #000,
-                0 0 18px rgba(0,0,0,0.9);
+                0 0 18px
+                rgba(0,0,0,0.9);
 
-            background: transparent;
+            background:
+                transparent;
 
-            text-align: ${align};
+            text-align:
+                ${align};
 
-            width: 100%;
+            width:
+                100%;
 
-            margin-bottom: ${marginBottom};
+            max-width:
+                100%;
 
-            padding: 2px 0;
+            margin-bottom:
+                ${marginBottom};
 
-            animation: ${animation};
+            padding:
+                2px 8px;
 
-            letter-spacing: ${letterSpacing};
+            box-sizing:
+                border-box;
 
-            opacity: ${opacity};
+            animation:
+                ${animation};
 
-            font-style: ${fontStyle};
+            letter-spacing:
+                ${letterSpacing};
+
+            opacity:
+                ${opacity};
+
+            font-style:
+                ${fontStyle};
+
+            line-height:
+                1.45;
 
             transition:
                 opacity 0.5s ease,
                 transform 0.5s ease;
         `;
 
+
         if (extraClass) {
-            msgDiv.className = extraClass;
+
+            msgDiv.className =
+                extraClass;
         }
+
 
         msgDiv.textContent =
             prefix + text;
 
-        chatMsg.appendChild(msgDiv);
+
+        chatMsg.appendChild(
+            msgDiv
+        );
+
 
         requestAnimationFrame(() => {
 
             chatMsg.scrollTo({
-                top: chatMsg.scrollHeight,
-                behavior: 'smooth'
+
+                top:
+                    chatMsg.scrollHeight,
+
+                behavior:
+                    'smooth'
             });
 
         });
@@ -393,59 +524,98 @@
         const msg =
             document.createElement('div');
 
-        msg.textContent = text;
+        msg.textContent =
+            text;
+
 
         msg.style.cssText = `
-            position: fixed;
 
-            bottom: 30%;
+            position:
+                fixed;
 
-            left: 50%;
+            bottom:
+                30%;
 
-            transform: translateX(-50%);
+            left:
+                50%;
 
-            background: rgba(0,0,0,0.82);
+            transform:
+                translateX(-50%);
 
-            border: 1px solid ${color};
+            max-width:
+                calc(100vw - 40px);
 
-            color: ${color};
+            box-sizing:
+                border-box;
 
-            padding: 6px 20px;
+            text-align:
+                center;
 
-            border-radius: 20px;
+            background:
+                rgba(0,0,0,0.82);
 
-            z-index: 900001;
+            border:
+                1px solid ${color};
 
-            font-family: 'Georgia', serif;
+            color:
+                ${color};
 
-            font-size: 13px;
+            padding:
+                7px 20px;
 
-            letter-spacing: 6px;
+            border-radius:
+                20px;
+
+            z-index:
+                900001;
+
+            font-family:
+                'Georgia',
+                serif;
+
+            font-size:
+                clamp(10px, 1.5vw, 14px);
+
+            letter-spacing:
+                clamp(2px, 0.5vw, 6px);
 
             box-shadow:
-                0 0 40px rgba(155,48,255,0.05);
+                0 0 40px
+                rgba(155,48,255,0.05);
 
             text-shadow:
-                0 2px 8px rgba(0,0,0,0.95);
+                0 2px 8px
+                rgba(0,0,0,0.95);
 
-            backdrop-filter: blur(8px);
+            backdrop-filter:
+                blur(8px);
 
-            opacity: 0.85;
+            opacity:
+                0.85;
 
-            pointer-events: none;
+            pointer-events:
+                none;
 
             animation:
-                aparecerPalavra 0.7s ease-out;
+                aparecerPalavra
+                0.7s
+                ease-out;
         `;
 
-        document.body.appendChild(msg);
+
+        document.body.appendChild(
+            msg
+        );
+
 
         setTimeout(() => {
 
             msg.style.transition =
                 'opacity 1s ease';
 
-            msg.style.opacity = '0';
+            msg.style.opacity =
+                '0';
+
 
             setTimeout(() => {
 
@@ -474,23 +644,33 @@
             'system'
         );
 
+
         if (isVoiceEnabled) {
 
             const phrases = {
 
-                2: "A sabedoria será colocada à prova.",
+                2:
+                    "A sabedoria será colocada à prova.",
 
-                3: "Agora, revele sua virtude."
+                3:
+                    "Agora, revele sua virtude."
             };
 
+
             if (phrases[nextLevel]) {
-                speakText(phrases[nextLevel]);
+
+                speakText(
+                    phrases[nextLevel]
+                );
             }
         }
 
+
         setTimeout(() => {
 
-            startLevel(nextLevel);
+            startLevel(
+                nextLevel
+            );
 
         }, delay);
     }
@@ -500,284 +680,81 @@
     // 🎬 INTERFACE PRINCIPAL
     // ==========================================
 
-    function showTestInterface(callback) {
+    function showTestInterface(
+        callback
+    ) {
 
         if (testActive) return;
 
         testActive = true;
 
-        onCompleteCallback = callback;
+        onCompleteCallback =
+            callback;
 
-        // Reinicia histórico visual da sessão
-        conversationHistory.length = 0;
+
+        conversationHistory.length =
+            0;
+
 
         overlay =
             document.createElement('div');
 
+
         overlay.id =
             'hecate-test-overlay';
-
-        overlay.style.cssText = `
-            position: fixed;
-
-            top: 0;
-            left: 0;
-
-            width: 100vw;
-            height: 100dvh;
-
-            z-index: 900000;
-
-            background: #000;
-
-            display: flex;
-
-            align-items: center;
-            justify-content: center;
-
-            font-family: 'Georgia', serif;
-
-            overflow: hidden;
-
-            opacity: 1;
-        `;
 
 
         overlay.innerHTML = `
 
             <!-- ==================================
                  CAMADA 1 — VAZIO
-            =================================== -->
+            ================================== -->
 
-            <div style="
-                position:absolute;
-                inset:0;
-                z-index:0;
-                background:#000;
-            "></div>
+            <div class="hecate-layer hecate-void"></div>
 
 
             <!-- ==================================
                  CAMADA 2 — HÉCATE
-            =================================== -->
+            ================================== -->
 
             <div
                 id="hecate-entity"
-                style="
-                    position:absolute;
-
-                    top:50vh;
-                    left:50%;
-
-                    transform:
-                        translate(-50%, -50%)
-                        scale(0.8);
-
-                    width:100vw;
-                    height:100vh;
-
-                    background-image:
-                        url('/world_azure/images/hecate1_hq.png');
-
-                    background-repeat:no-repeat;
-
-                    /*
-                     * Contain é mantido para preservar
-                     * a composição completa da entidade.
-                     */
-
-                    background-position:
-                        center 60%;
-
-                    background-size:
-                        contain;
-
-                    z-index:1;
-
-                    pointer-events:none;
-
-                    animation:
-                        flutuarEntidade 10s
-                        ease-in-out infinite;
-
-                    filter:
-                        contrast(1.05)
-                        brightness(1.02);
-                "
+                class="hecate-layer hecate-entity"
             ></div>
 
 
             <!-- ==================================
                  CAMADA 3 — ATMOSFERA
-            =================================== -->
+            ================================== -->
 
             <div
                 id="hecate-dialog-atmosphere"
-                style="
-                    position:absolute;
-
-                    inset:0;
-
-                    z-index:2;
-
-                    pointer-events:none;
-
-                    background:
-                        radial-gradient(
-                            ellipse 80% 32%
-                            at 50% 86%,
-
-                            rgba(0,0,0,0.92) 0%,
-
-                            rgba(0,0,0,0.65) 30%,
-
-                            rgba(0,0,0,0.25) 55%,
-
-                            transparent 78%
-                        );
-                "
+                class="hecate-layer hecate-atmosphere"
             ></div>
 
 
             <!-- ==================================
                  CAMADA 4 — DIÁLOGO
-            =================================== -->
+            ================================== -->
 
             <div
                 id="hecate-chat-container"
-                style="
-                    position:absolute;
-
-                    bottom:0;
-                    left:0;
-
-                    width:100%;
-
-                    z-index:3;
-
-                    display:flex;
-
-                    flex-direction:column;
-
-                    justify-content:flex-end;
-
-                    padding:
-                        20px
-                        20px
-                        35px
-                        20px;
-
-                    pointer-events:auto;
-
-                    background:transparent;
-                "
+                class="hecate-chat-container"
             >
 
-                <!-- ==============================
-                     HISTÓRICO / DIÁLOGO
-                =============================== -->
+                <!-- HISTÓRICO -->
 
                 <div
                     id="hecateChatMessages"
-                    style="
-                        width:100%;
-
-                        max-height:35vh;
-
-                        overflow-y:auto;
-
-                        display:flex;
-
-                        flex-direction:column;
-
-                        align-items:center;
-
-                        justify-content:flex-end;
-
-                        gap:5px;
-
-                        padding:
-                            10px 5px 5px 5px;
-
-                        scroll-behavior:smooth;
-
-                        /*
-                         * IMPORTANTE:
-                         *
-                         * Antes havia transparent
-                         * também no final.
-                         *
-                         * Isso fazia a primeira
-                         * pergunta desaparecer.
-                         *
-                         * Agora o fade existe
-                         * apenas no topo.
-                         */
-
-                        mask-image:
-                            linear-gradient(
-                                to bottom,
-                                transparent 0%,
-                                black 12%,
-                                black 100%
-                            );
-
-                        -webkit-mask-image:
-                            linear-gradient(
-                                to bottom,
-                                transparent 0%,
-                                black 12%,
-                                black 100%
-                            );
-                    "
+                    class="hecate-chat-messages"
                 >
 
                     <!-- PERGUNTA INICIAL -->
 
                     <div
-                        class="question-text initial-question"
-                        style="
-                            font-size:
-                                clamp(
-                                    17px,
-                                    5vw,
-                                    24px
-                                );
-
-                            color:#d8ceff;
-
-                            opacity:1;
-
-                            text-shadow:
-                                0 2px 3px #000,
-                                0 0 8px #000,
-                                0 0 18px
-                                rgba(0,0,0,0.95);
-
-                            background:transparent;
-
-                            text-align:center;
-
-                            align-self:center;
-
-                            animation:
-                                aparecerPalavra 2s
-                                ease-out,
-
-                                perguntaRespirar 4s
-                                ease-in-out 2s
-                                infinite;
-
-                            letter-spacing:
-                                clamp(
-                                    2px,
-                                    0.8vw,
-                                    4px
-                                );
-
-                            font-style:italic;
-
-                            margin-bottom:15px;
+                        class="
+                            question-text
+                            initial-question
                         "
                     >
                         O GRIMÓRIO ESTÁ TRANCADO
@@ -787,32 +764,8 @@
                     <!-- DICA INICIAL -->
 
                     <div
-                        style="
-                            font-size:13px;
-
-                            color:
-                                rgba(
-                                    167,
-                                    139,
-                                    250,
-                                    0.38
-                                );
-
-                            opacity:1;
-
-                            text-shadow:
-                                0 2px 3px #000,
-                                0 0 8px #000;
-
-                            text-align:center;
-
-                            letter-spacing:3px;
-
-                            animation:
-                                aparecerPalavra 2.5s
-                                ease-out;
-
-                            margin-bottom:5px;
+                        class="
+                            initial-hint
                         "
                     >
                         nome da primeira Asura
@@ -821,105 +774,27 @@
                 </div>
 
 
-                <!-- ==============================
-                     INPUT / RESPOSTA
-                =============================== -->
+                <!-- INPUT -->
 
                 <div
                     id="hecateTestContent"
-                    style="
-                        pointer-events:auto;
-
-                        width:100%;
-
-                        max-width:300px;
-
-                        margin:
-                            5px auto 0 auto;
-
-                        position:relative;
-                    "
+                    class="hecate-test-content"
                 >
 
                     <input
                         type="password"
                         id="hecateInput"
-
                         placeholder="—"
-
                         autocomplete="off"
-
                         aria-label="Resposta para Hécate"
-
-                        style="
-                            width:100%;
-
-                            padding:8px 0;
-
-                            background:transparent;
-
-                            border:none;
-
-                            color:#f0eaff;
-
-                            text-align:center;
-
-                            font-size:
-                                clamp(
-                                    18px,
-                                    4vw,
-                                    20px
-                                );
-
-                            outline:none;
-
-                            font-family:
-                                'Georgia',
-                                serif;
-
-                            letter-spacing:6px;
-
-                            text-shadow:
-                                0 2px 3px #000,
-                                0 0 8px #000,
-                                0 0 18px
-                                rgba(0,0,0,0.9);
-
-                            transition:
-                                all 0.5s ease;
-                        "
                     >
+
 
                     <div
                         id="magic-line"
-                        style="
-                            position:absolute;
-
-                            bottom:0;
-
-                            left:0;
-
-                            width:100%;
-
-                            height:1px;
-
-                            background:
-                                linear-gradient(
-                                    90deg,
-                                    transparent,
-                                    rgba(
-                                        167,
-                                        139,
-                                        250,
-                                        0.15
-                                    ),
-                                    transparent
-                                );
-
-                            transition:
-                                all 0.8s ease;
-                        "
+                        class="magic-line"
                     ></div>
+
 
                     <button
                         id="hecateBtn"
@@ -934,26 +809,622 @@
 
             <!-- ==================================
                  BOTÃO DE VOZ
-            =================================== -->
+            ================================== -->
 
             <div
                 id="jarvis-toggle"
                 role="button"
                 tabindex="0"
                 aria-label="Ativar voz de Hécate"
+            >
 
-                style="
-                    position:fixed;
+                <span id="jarvis-icon">
+                    ◇
+                </span>
 
-                    bottom:25px;
-                    right:25px;
+            </div>
 
-                    z-index:900001;
 
-                    width:36px;
-                    height:36px;
+            <!-- ==================================
+                 CSS
+            ================================== -->
 
-                    border-radius:50%;
+            <style>
+
+                /* =================================
+                   RESET DO OVERLAY
+                ================================= */
+
+                #hecate-test-overlay {
+
+                    position:
+                        fixed;
+
+                    inset:
+                        0;
+
+                    width:
+                        100vw;
+
+                    height:
+                        100dvh;
+
+                    z-index:
+                        900000;
+
+                    background:
+                        #000;
+
+                    display:
+                        flex;
+
+                    align-items:
+                        center;
+
+                    justify-content:
+                        center;
+
+                    font-family:
+                        'Georgia',
+                        serif;
+
+                    overflow:
+                        hidden;
+
+                    opacity:
+                        1;
+
+                    isolation:
+                        isolate;
+
+                    box-sizing:
+                        border-box;
+                }
+
+
+                #hecate-test-overlay *,
+                #hecate-test-overlay *::before,
+                #hecate-test-overlay *::after {
+
+                    box-sizing:
+                        border-box;
+                }
+
+
+                /* =================================
+                   CAMADAS
+                ================================= */
+
+                .hecate-layer {
+
+                    position:
+                        absolute;
+
+                    inset:
+                        0;
+
+                    pointer-events:
+                        none;
+                }
+
+
+                /* =================================
+                   VAZIO
+                ================================= */
+
+                .hecate-void {
+
+                    background:
+                        #000;
+
+                    z-index:
+                        0;
+                }
+
+
+                /* =================================
+                   HÉCATE
+                ================================= */
+
+                .hecate-entity {
+
+                    z-index:
+                        1;
+
+                    background-image:
+                        url('/world_azure/images/hecate1_hq.png');
+
+                    background-repeat:
+                        no-repeat;
+
+                    background-position:
+                        center center;
+
+                    background-size:
+                        contain;
+
+                    transform:
+                        translate3d(0, 0, 0)
+                        scale(0.82);
+
+                    animation:
+                        flutuarEntidade
+                        10s
+                        ease-in-out
+                        infinite;
+
+                    filter:
+                        contrast(1.05)
+                        brightness(1.02);
+
+                    will-change:
+                        transform;
+                }
+
+
+                /* =================================
+                   ATMOSFERA
+                ================================= */
+
+                .hecate-atmosphere {
+
+                    z-index:
+                        2;
+
+                    background:
+
+                        radial-gradient(
+                            ellipse 80% 32%
+                            at 50% 88%,
+
+                            rgba(0,0,0,0.94)
+                            0%,
+
+                            rgba(0,0,0,0.70)
+                            30%,
+
+                            rgba(0,0,0,0.28)
+                            55%,
+
+                            transparent
+                            80%
+                        );
+
+                }
+
+
+                /* =================================
+                   CHAT
+                ================================= */
+
+                .hecate-chat-container {
+
+                    position:
+                        absolute;
+
+                    left:
+                        0;
+
+                    bottom:
+                        0;
+
+                    width:
+                        100%;
+
+                    z-index:
+                        3;
+
+                    display:
+                        flex;
+
+                    flex-direction:
+                        column;
+
+                    justify-content:
+                        flex-end;
+
+                    align-items:
+                        center;
+
+                    padding:
+                        clamp(16px, 3vw, 32px)
+                        clamp(16px, 5vw, 60px)
+                        clamp(28px, 5vh, 55px);
+
+                    pointer-events:
+                        auto;
+
+                    background:
+                        transparent;
+                }
+
+
+                /* =================================
+                   HISTÓRICO
+                ================================= */
+
+                .hecate-chat-messages {
+
+                    width:
+                        min(
+                            100%,
+                            850px
+                        );
+
+                    max-height:
+                        min(
+                            38vh,
+                            420px
+                        );
+
+                    overflow-y:
+                        auto;
+
+                    display:
+                        flex;
+
+                    flex-direction:
+                        column;
+
+                    align-items:
+                        center;
+
+                    justify-content:
+                        flex-end;
+
+                    gap:
+                        5px;
+
+                    padding:
+                        12px
+                        8px
+                        8px;
+
+                    scroll-behavior:
+                        smooth;
+
+                    mask-image:
+                        linear-gradient(
+                            to bottom,
+                            transparent 0%,
+                            black 12%,
+                            black 100%
+                        );
+
+                    -webkit-mask-image:
+                        linear-gradient(
+                            to bottom,
+                            transparent 0%,
+                            black 12%,
+                            black 100%
+                        );
+                }
+
+
+                #hecateChatMessages::-webkit-scrollbar {
+
+                    width:
+                        0;
+                }
+
+
+                /* =================================
+                   PERGUNTA INICIAL
+                ================================= */
+
+                .initial-question {
+
+                    font-size:
+                        clamp(
+                            17px,
+                            2.2vw,
+                            28px
+                        );
+
+                    color:
+                        #d8ceff;
+
+                    opacity:
+                        1;
+
+                    text-shadow:
+                        0 2px 3px #000,
+                        0 0 8px #000,
+                        0 0 18px
+                        rgba(0,0,0,0.95);
+
+                    background:
+                        transparent;
+
+                    text-align:
+                        center;
+
+                    align-self:
+                        center;
+
+                    animation:
+                        aparecerPalavra
+                        2s
+                        ease-out,
+
+                        perguntaRespirar
+                        4s
+                        ease-in-out
+                        2s
+                        infinite;
+
+                    letter-spacing:
+                        clamp(
+                            2px,
+                            0.4vw,
+                            5px
+                        );
+
+                    font-style:
+                        italic;
+
+                    line-height:
+                        1.4;
+
+                    margin-bottom:
+                        15px;
+
+                    max-width:
+                        850px;
+                }
+
+
+                /* =================================
+                   DICA INICIAL
+                ================================= */
+
+                .initial-hint {
+
+                    font-size:
+                        clamp(
+                            11px,
+                            1.1vw,
+                            14px
+                        );
+
+                    color:
+                        rgba(
+                            167,
+                            139,
+                            250,
+                            0.38
+                        );
+
+                    opacity:
+                        1;
+
+                    text-shadow:
+                        0 2px 3px #000,
+                        0 0 8px #000;
+
+                    text-align:
+                        center;
+
+                    letter-spacing:
+                        clamp(
+                            2px,
+                            0.35vw,
+                            4px
+                        );
+
+                    animation:
+                        aparecerPalavra
+                        2.5s
+                        ease-out;
+
+                    margin-bottom:
+                        5px;
+                }
+
+
+                /* =================================
+                   ÁREA DO INPUT
+                ================================= */
+
+                .hecate-test-content {
+
+                    pointer-events:
+                        auto;
+
+                    width:
+                        min(
+                            100%,
+                            420px
+                        );
+
+                    margin:
+                        8px auto 0;
+
+                    position:
+                        relative;
+                }
+
+
+                /* =================================
+                   INPUT
+                ================================= */
+
+                #hecateInput {
+
+                    width:
+                        100%;
+
+                    padding:
+                        9px 4px;
+
+                    background:
+                        transparent;
+
+                    border:
+                        none;
+
+                    color:
+                        #f0eaff;
+
+                    text-align:
+                        center;
+
+                    font-size:
+                        clamp(
+                            18px,
+                            2vw,
+                            23px
+                        );
+
+                    outline:
+                        none;
+
+                    font-family:
+                        'Georgia',
+                        serif;
+
+                    letter-spacing:
+                        clamp(
+                            4px,
+                            0.7vw,
+                            9px
+                        );
+
+                    text-shadow:
+                        0 2px 3px #000,
+                        0 0 8px #000,
+                        0 0 18px
+                        rgba(0,0,0,0.9);
+
+                    transition:
+                        all 0.5s ease;
+
+                    border-radius:
+                        0;
+
+                    appearance:
+                        none;
+                }
+
+
+                #hecateInput::placeholder {
+
+                    color:
+                        rgba(
+                            216,
+                            206,
+                            255,
+                            0.25
+                        );
+
+                    opacity:
+                        1;
+                }
+
+
+                #hecateInput:focus {
+
+                    letter-spacing:
+                        clamp(
+                            5px,
+                            0.9vw,
+                            10px
+                        );
+                }
+
+
+                /* =================================
+                   LINHA MÁGICA
+                ================================= */
+
+                .magic-line {
+
+                    position:
+                        absolute;
+
+                    bottom:
+                        0;
+
+                    left:
+                        0;
+
+                    width:
+                        100%;
+
+                    height:
+                        1px;
+
+                    background:
+                        linear-gradient(
+                            90deg,
+                            transparent,
+                            rgba(
+                                167,
+                                139,
+                                250,
+                                0.15
+                            ),
+                            transparent
+                        );
+
+                    transition:
+                        all 0.8s ease;
+                }
+
+
+                #hecateInput:focus
+                + .magic-line {
+
+                    animation:
+                        magicPulse
+                        3s
+                        ease-in-out
+                        infinite;
+                }
+
+
+                /* =================================
+                   BOTÃO DE VOZ
+                ================================= */
+
+                #jarvis-toggle {
+
+                    position:
+                        fixed;
+
+                    bottom:
+                        clamp(
+                            18px,
+                            3vh,
+                            30px
+                        );
+
+                    right:
+                        clamp(
+                            18px,
+                            3vw,
+                            30px
+                        );
+
+                    z-index:
+                        900001;
+
+                    width:
+                        clamp(
+                            34px,
+                            4vw,
+                            42px
+                        );
+
+                    height:
+                        clamp(
+                            34px,
+                            4vw,
+                            42px
+                        );
+
+                    border-radius:
+                        50%;
 
                     background:
                         rgba(
@@ -963,7 +1434,8 @@
                             0.15
                         );
 
-                    backdrop-filter:blur(2px);
+                    backdrop-filter:
+                        blur(2px);
 
                     border:
                         1px solid
@@ -974,224 +1446,58 @@
                             0.05
                         );
 
-                    display:flex;
+                    display:
+                        flex;
 
-                    align-items:center;
-                    justify-content:center;
+                    align-items:
+                        center;
 
-                    cursor:pointer;
+                    justify-content:
+                        center;
+
+                    cursor:
+                        pointer;
 
                     transition:
                         all 0.8s ease;
 
-                    pointer-events:auto;
+                    pointer-events:
+                        auto;
 
-                    opacity:0.15;
-                "
-            >
+                    opacity:
+                        0.15;
 
-                <span
-                    id="jarvis-icon"
-                    style="
-                        font-size:14px;
-
-                        color:
-                            rgba(
-                                167,
-                                139,
-                                250,
-                                0.3
-                            );
-
-                        transition:
-                            all 0.8s ease;
-                    "
-                >
-                    ◇
-                </span>
-
-            </div>
-
-
-            <!-- ==================================
-                 CSS
-            =================================== -->
-
-            <style>
-
-                /* ==============================
-                   HÉCATE
-                =============================== */
-
-                @keyframes flutuarEntidade {
-
-                    0%, 100% {
-                        transform:
-                            translate(-50%, -50%)
-                            scale(0.8);
-                    }
-
-                    50% {
-                        transform:
-                            translate(-50%, -52%)
-                            scale(0.81);
-                    }
+                    user-select:
+                        none;
                 }
 
 
-                /* ==============================
-                   ENTRADA
-                =============================== */
+                #jarvis-icon {
 
-                @keyframes aparecerPalavra {
+                    font-size:
+                        clamp(
+                            13px,
+                            1.5vw,
+                            17px
+                        );
 
-                    0% {
-                        opacity:0;
+                    color:
+                        rgba(
+                            167,
+                            139,
+                            250,
+                            0.3
+                        );
 
-                        transform:
-                            translateY(20px)
-                            scale(0.97);
-                    }
-
-                    100% {
-                        opacity:1;
-
-                        transform:
-                            translateY(0)
-                            scale(1);
-                    }
+                    transition:
+                        all 0.8s ease;
                 }
 
-
-                /* ==============================
-                   SÍMBOLO DE TRANSIÇÃO
-                =============================== */
-
-                @keyframes aparecerSimbolo {
-
-                    0% {
-                        opacity:0;
-                        transform:scale(0.7);
-                    }
-
-                    50% {
-                        opacity:0.7;
-                        transform:scale(1.15);
-                    }
-
-                    100% {
-                        opacity:0.28;
-                        transform:scale(1);
-                    }
-                }
-
-
-                /* ==============================
-                   RESPIRAÇÃO DA PERGUNTA
-                =============================== */
-
-                @keyframes perguntaRespirar {
-
-                    0%, 100% {
-
-                        text-shadow:
-                            0 2px 3px #000,
-                            0 0 8px #000,
-                            0 0 18px
-                            rgba(0,0,0,0.9);
-                    }
-
-                    50% {
-
-                        text-shadow:
-                            0 2px 3px #000,
-                            0 0 10px #000,
-                            0 0 25px
-                            rgba(
-                                155,
-                                48,
-                                255,
-                                0.25
-                            );
-                    }
-                }
-
-
-                /* ==============================
-                   LINHA MÁGICA
-                =============================== */
-
-                @keyframes magicPulse {
-
-                    0%, 100% {
-
-                        background:
-                            linear-gradient(
-                                90deg,
-                                transparent,
-                                rgba(
-                                    167,
-                                    139,
-                                    250,
-                                    0.15
-                                ),
-                                transparent
-                            );
-
-                        height:1px;
-                    }
-
-                    50% {
-
-                        background:
-                            linear-gradient(
-                                90deg,
-                                transparent,
-                                rgba(
-                                    167,
-                                    139,
-                                    250,
-                                    0.4
-                                ),
-                                rgba(
-                                    155,
-                                    48,
-                                    255,
-                                    0.2
-                                ),
-                                transparent
-                            );
-
-                        height:2px;
-
-                        box-shadow:
-                            0 0 30px
-                            rgba(
-                                167,
-                                139,
-                                250,
-                                0.05
-                            );
-                    }
-                }
-
-
-                /* ==============================
-                   SCROLLBAR
-                =============================== */
-
-                #hecateChatMessages::-webkit-scrollbar {
-                    width:0;
-                }
-
-
-                /* ==============================
-                   VOZ
-                =============================== */
 
                 #jarvis-toggle:hover {
 
-                    opacity:0.6 !important;
+                    opacity:
+                        0.6 !important;
 
                     border-color:
                         rgba(
@@ -1201,13 +1507,15 @@
                             0.2
                         );
 
-                    transform:scale(1.05);
+                    transform:
+                        scale(1.05);
                 }
 
 
                 #jarvis-toggle.active {
 
-                    opacity:0.8 !important;
+                    opacity:
+                        0.8 !important;
 
                     border-color:
                         rgba(
@@ -1219,7 +1527,8 @@
                 }
 
 
-                #jarvis-toggle.active #jarvis-icon {
+                #jarvis-toggle.active
+                #jarvis-icon {
 
                     color:
                         rgba(
@@ -1231,39 +1540,32 @@
                 }
 
 
-                /* ==============================
-                   INPUT
-                =============================== */
-
-                #hecateInput:focus + #magic-line {
-
-                    animation:
-                        magicPulse
-                        3s
-                        ease-in-out
-                        infinite;
-                }
-
-
-                #hecateInput:focus {
-
-                    letter-spacing:8px;
-                }
-
-
-                /* ==============================
-                   OPÇÕES DE VIRTUDE
-                =============================== */
+                /* =================================
+                   VIRTUDE
+                ================================= */
 
                 .virtue-opt {
 
-                    display:block;
+                    display:
+                        block;
 
-                    width:100%;
+                    width:
+                        100%;
 
-                    margin:5px 0;
+                    margin:
+                        5px 0;
 
-                    padding:8px 12px;
+                    padding:
+                        clamp(
+                            8px,
+                            1.2vh,
+                            12px
+                        )
+                        clamp(
+                            10px,
+                            1.5vw,
+                            18px
+                        );
 
                     background:
                         rgba(
@@ -1282,7 +1584,8 @@
                             0.06
                         );
 
-                    border-radius:10px;
+                    border-radius:
+                        10px;
 
                     color:
                         rgba(
@@ -1292,9 +1595,15 @@
                             0.6
                         );
 
-                    cursor:pointer;
+                    cursor:
+                        pointer;
 
-                    font-size:13px;
+                    font-size:
+                        clamp(
+                            11px,
+                            1.2vw,
+                            14px
+                        );
 
                     font-family:
                         'Georgia',
@@ -1307,9 +1616,21 @@
                         0 2px 3px #000,
                         0 0 8px #000;
 
-                    letter-spacing:2px;
+                    letter-spacing:
+                        clamp(
+                            1px,
+                            0.25vw,
+                            3px
+                        );
 
-                    text-align:center;
+                    text-align:
+                        center;
+
+                    line-height:
+                        1.4;
+
+                    touch-action:
+                        manipulation;
                 }
 
 
@@ -1344,31 +1665,163 @@
                 }
 
 
-                /* ==============================
-                   MOBILE
-                =============================== */
+                .virtue-opt:active {
 
-                @media (max-width:480px) {
+                    transform:
+                        scale(0.98);
 
-                    #hecateInput:focus {
+                    background:
+                        rgba(
+                            255,
+                            215,
+                            0,
+                            0.08
+                        );
+                }
 
-                        letter-spacing:4px;
+
+                /* =================================
+                   TABLET
+                   481px — 1024px
+                ================================= */
+
+                @media
+                (min-width:481px)
+                and
+                (max-width:1024px) {
+
+                    .hecate-entity {
+
+                        background-position:
+                            center 45%;
+
+                        background-size:
+                            contain;
+
+                        transform:
+                            translate3d(
+                                0,
+                                0,
+                                0
+                            )
+                            scale(0.78);
                     }
 
-                    #hecateInput {
 
-                        font-size:18px;
+                    .hecate-chat-container {
+
+                        padding-left:
+                            8vw;
+
+                        padding-right:
+                            8vw;
+
+                        padding-bottom:
+                            5vh;
                     }
 
-                    .virtue-opt {
 
-                        font-size:12px;
+                    .hecate-chat-messages {
 
-                        padding:
-                            10px 8px;
+                        width:
+                            min(
+                                90vw,
+                                720px
+                            );
+
+                        max-height:
+                            36vh;
                     }
 
-                    #hecate-chat-container {
+
+                    .hecate-test-content {
+
+                        width:
+                            min(
+                                80vw,
+                                390px
+                            );
+                    }
+                }
+
+
+                /* =================================
+                   DESKTOP
+                   1025px+
+                ================================= */
+
+                @media
+                (min-width:1025px) {
+
+                    .hecate-entity {
+
+                        background-position:
+                            center 43%;
+
+                        transform:
+                            translate3d(
+                                0,
+                                0,
+                                0
+                            )
+                            scale(0.86);
+                    }
+
+
+                    .hecate-chat-container {
+
+                        padding-bottom:
+                            4vh;
+                    }
+
+
+                    .hecate-chat-messages {
+
+                        max-height:
+                            34vh;
+
+                        width:
+                            min(
+                                80vw,
+                                900px
+                            );
+                    }
+
+
+                    .hecate-test-content {
+
+                        width:
+                            420px;
+                    }
+                }
+
+
+                /* =================================
+                   TELAS PEQUENAS
+                ================================= */
+
+                @media
+                (max-width:480px) {
+
+                    .hecate-entity {
+
+                        background-position:
+                            center 38%;
+
+                        background-size:
+                            contain;
+
+                        transform:
+                            translate3d(
+                                0,
+                                0,
+                                0
+                            )
+                            scale(0.82);
+                    }
+
+
+                    .hecate-chat-container {
 
                         padding:
                             15px
@@ -1377,68 +1830,290 @@
                             14px;
                     }
 
-                    #hecateChatMessages {
 
-                        max-height:38vh !important;
+                    .hecate-chat-messages {
+
+                        width:
+                            100%;
+
+                        max-height:
+                            38vh;
                     }
 
-                    #jarvis-toggle {
 
-                        bottom:18px;
-                        right:18px;
+                    .hecate-test-content {
+
+                        width:
+                            min(
+                                100%,
+                                320px
+                            );
                     }
-                }
 
-
-                @media (max-width:380px) {
-
-                    #hecateInput:focus {
-
-                        letter-spacing:2px;
-                    }
 
                     #hecateInput {
 
-                        font-size:16px;
+                        font-size:
+                            18px;
 
-                        letter-spacing:4px;
+                        letter-spacing:
+                            5px;
                     }
 
-                    #hecateChatMessages {
 
-                        max-height:40vh !important;
+                    #hecateInput:focus {
+
+                        letter-spacing:
+                            4px;
                     }
 
-                    #hecate-chat-container {
 
-                        padding-bottom:25px;
+                    .virtue-opt {
+
+                        font-size:
+                            12px;
+
+                        padding:
+                            10px 8px;
                     }
                 }
 
 
-                /* ==============================
+                /* =================================
+                   CELULAR MUITO PEQUENO
+                ================================= */
+
+                @media
+                (max-width:380px) {
+
+                    .hecate-entity {
+
+                        background-position:
+                            center 34%;
+
+                        transform:
+                            translate3d(
+                                0,
+                                0,
+                                0
+                            )
+                            scale(0.78);
+                    }
+
+
+                    #hecateInput {
+
+                        font-size:
+                            16px;
+
+                        letter-spacing:
+                            4px;
+                    }
+
+
+                    #hecateInput:focus {
+
+                        letter-spacing:
+                            2px;
+                    }
+
+
+                    .hecate-chat-messages {
+
+                        max-height:
+                            40vh;
+                    }
+
+
+                    .hecate-chat-container {
+
+                        padding-bottom:
+                            25px;
+                    }
+                }
+
+
+                /* =================================
                    TELAS MUITO ALTAS
-                =============================== */
+                ================================= */
 
-                @media (min-height:800px) {
+                @media
+                (min-height:800px) {
 
-                    #hecateChatMessages {
+                    .hecate-chat-messages {
 
-                        max-height:32vh !important;
+                        max-height:
+                            32vh;
                     }
                 }
 
 
-                /* ==============================
-                   REDUÇÃO DE MOVIMENTO
-                =============================== */
+                /* =================================
+                   TELAS MUITO LARGAS
+                ================================= */
 
-                @media (prefers-reduced-motion: reduce) {
+                @media
+                (min-width:1400px) {
+
+                    .hecate-entity {
+
+                        transform:
+                            translate3d(
+                                0,
+                                0,
+                                0
+                            )
+                            scale(0.94);
+                    }
+
+
+                    .hecate-chat-messages {
+
+                        width:
+                            min(
+                                65vw,
+                                950px
+                            );
+                    }
+                }
+
+
+                /* =================================
+                   LANDSCAPE MOBILE
+                ================================= */
+
+                @media
+                (max-height:500px)
+                and
+                (orientation:landscape) {
+
+                    .hecate-entity {
+
+                        background-position:
+                            center 35%;
+
+                        transform:
+                            translate3d(
+                                0,
+                                0,
+                                0
+                            )
+                            scale(0.72);
+                    }
+
+
+                    .hecate-chat-container {
+
+                        padding:
+                            8px
+                            12px
+                            12px;
+                    }
+
+
+                    .hecate-chat-messages {
+
+                        max-height:
+                            38vh;
+                    }
+
+
+                    .initial-question {
+
+                        font-size:
+                            clamp(
+                                14px,
+                                3vw,
+                                20px
+                            );
+
+                        margin-bottom:
+                            8px;
+                    }
+
+
+                    .initial-hint {
+
+                        font-size:
+                            10px;
+
+                        margin-bottom:
+                            2px;
+                    }
+
+
+                    #hecateInput {
+
+                        padding:
+                            5px 2px;
+
+                        font-size:
+                            16px;
+                    }
+
+
+                    #jarvis-toggle {
+
+                        bottom:
+                            10px;
+
+                        right:
+                            12px;
+                    }
+                }
+
+
+                /* =================================
+                   LANDSCAPE TABLET
+                ================================= */
+
+                @media
+                (min-width:700px)
+                and
+                (max-height:600px)
+                and
+                (orientation:landscape) {
+
+                    .hecate-entity {
+
+                        transform:
+                            translate3d(
+                                0,
+                                0,
+                                0
+                            )
+                            scale(0.76);
+                    }
+
+
+                    .hecate-chat-container {
+
+                        padding-bottom:
+                            18px;
+                    }
+
+
+                    .hecate-chat-messages {
+
+                        max-height:
+                            34vh;
+                    }
+                }
+
+
+                /* =================================
+                   REDUÇÃO DE MOVIMENTO
+                ================================= */
+
+                @media
+                (prefers-reduced-motion: reduce) {
 
                     #hecate-entity {
 
-                        animation:none !important;
+                        animation:
+                            none !important;
                     }
+
 
                     .question-text {
 
@@ -1446,9 +2121,11 @@
                             none !important;
                     }
 
+
                     * {
 
-                        scroll-behavior:auto !important;
+                        scroll-behavior:
+                            auto !important;
                     }
                 }
 
@@ -1456,7 +2133,9 @@
         `;
 
 
-        document.body.appendChild(overlay);
+        document.body.appendChild(
+            overlay
+        );
 
 
         // ==========================================
@@ -1468,6 +2147,7 @@
                 'jarvis-toggle'
             );
 
+
         if (toggleBtn) {
 
             const toggleVoice = () => {
@@ -1475,14 +2155,17 @@
                 isVoiceEnabled =
                     !isVoiceEnabled;
 
+
                 toggleBtn.classList.toggle(
                     'active'
                 );
+
 
                 const icon =
                     document.getElementById(
                         'jarvis-icon'
                     );
+
 
                 if (icon) {
 
@@ -1499,6 +2182,7 @@
                         "Estou ouvindo."
                     );
 
+
                     setTimeout(() => {
 
                         toggleBtn.style.opacity =
@@ -1512,8 +2196,10 @@
                         'speechSynthesis'
                         in window
                     ) {
+
                         window.speechSynthesis.cancel();
                     }
+
 
                     setTimeout(() => {
 
@@ -1560,11 +2246,13 @@
                     'hecateInput'
                 );
 
+
             if (input) {
 
                 input.focus();
 
-                input.placeholder = '—';
+                input.placeholder =
+                    '—';
             }
 
         }, 800);
@@ -1589,16 +2277,19 @@
                 'hecateBtn'
             );
 
+
         const input =
             document.getElementById(
                 'hecateInput'
             );
+
 
         if (!btn || !input) return;
 
 
         const newBtn =
             btn.cloneNode(true);
+
 
         btn.parentNode.replaceChild(
             newBtn,
@@ -1611,7 +2302,7 @@
             const value =
                 input.value.trim();
 
-            // Evita respostas vazias
+
             if (!value) return;
 
 
@@ -1632,20 +2323,26 @@
                         true
                     );
 
+
                     if (isVoiceEnabled) {
+
                         speakText(
                             "Aprovado."
                         );
                     }
+
 
                     showMessage(
                         "✦ APROVADO ✦",
                         "#a78bfa"
                     );
 
-                    input.value = '';
 
-                    input.placeholder = '...';
+                    input.value =
+                        '';
+
+                    input.placeholder =
+                        '...';
 
 
                     levelTransition(
@@ -1660,14 +2357,18 @@
                         true
                     );
 
+
                     if (isVoiceEnabled) {
+
                         speakText(
                             "Reprovado."
                         );
                     }
 
+
                     failTest();
                 }
+
 
                 return;
             }
@@ -1684,6 +2385,7 @@
                         currentIndex
                     ];
 
+
                 if (!q) return;
 
 
@@ -1693,6 +2395,7 @@
                         value,
                         true
                     );
+
 
                     if (isVoiceEnabled) {
 
@@ -1704,7 +2407,8 @@
 
                     currentIndex++;
 
-                    input.value = '';
+                    input.value =
+                        '';
 
 
                     if (
@@ -1716,6 +2420,7 @@
                             "✦ SABEDORIA ✦",
                             "#00ffcc"
                         );
+
 
                         input.placeholder =
                             '✦';
@@ -1742,12 +2447,14 @@
                         true
                     );
 
+
                     if (isVoiceEnabled) {
 
                         speakText(
                             "Resposta incorreta."
                         );
                     }
+
 
                     failTest();
                 }
@@ -1762,7 +2469,9 @@
         input.onkeypress =
             (event) => {
 
-                if (event.key === 'Enter') {
+                if (
+                    event.key === 'Enter'
+                ) {
 
                     event.preventDefault();
 
@@ -1778,12 +2487,15 @@
 
     function startLevel(level) {
 
-        currentLevel = level;
+        currentLevel =
+            level;
+
 
         const content =
             document.getElementById(
                 'hecateTestContent'
             );
+
 
         if (!content) return;
 
@@ -1799,13 +2511,18 @@
                     'hecateInput'
                 );
 
+
             if (input) {
 
-                input.type = 'password';
+                input.type =
+                    'password';
 
-                input.placeholder = '—';
+                input.placeholder =
+                    '—';
 
-                input.value = '';
+                input.value =
+                    '';
+
 
                 setTimeout(() => {
 
@@ -1813,6 +2530,7 @@
 
                 }, 300);
             }
+
 
             return;
         }
@@ -1829,7 +2547,10 @@
                     .sabedoria
                     .getRandomQuestions();
 
-            currentIndex = 0;
+
+            currentIndex =
+                0;
+
 
             showWisdomQuestion();
 
@@ -1848,9 +2569,14 @@
                     .virtude
                     .getRandomQuestions();
 
-            currentIndex = 0;
 
-            virtueScore = 0;
+            currentIndex =
+                0;
+
+
+            virtueScore =
+                0;
+
 
             showVirtueQuestion();
         }
@@ -1868,6 +2594,7 @@
                 'hecateChatMessages'
             );
 
+
         if (!chatMsg) return;
 
 
@@ -1883,8 +2610,10 @@
                         'initial-question'
                     )
                 ) {
+
                     return;
                 }
+
 
                 msg.remove();
             }
@@ -1902,6 +2631,7 @@
             currentQuestions[
                 currentIndex
             ];
+
 
         if (!q) return;
 
@@ -1938,13 +2668,18 @@
                 'hecateInput'
             );
 
+
         if (input) {
 
-            input.type = 'text';
+            input.type =
+                'text';
 
-            input.placeholder = '...';
+            input.placeholder =
+                '...';
 
-            input.value = '';
+            input.value =
+                '';
+
 
             setTimeout(() => {
 
@@ -1966,6 +2701,7 @@
                 currentIndex
             ];
 
+
         if (!q) return;
 
 
@@ -1981,7 +2717,9 @@
 
         if (isVoiceEnabled) {
 
-            speakText(q.texto);
+            speakText(
+                q.texto
+            );
         }
 
 
@@ -1990,10 +2728,12 @@
                 'hecateTestContent'
             );
 
+
         if (!content) return;
 
 
-        let optionsHtml = '';
+        let optionsHtml =
+            '';
 
 
         q.opcoes.forEach(
@@ -2023,6 +2763,7 @@
                 ${optionsHtml}
             </div>
 
+
             <div
                 id="virtueScoreDisplay"
                 style="
@@ -2036,11 +2777,22 @@
                             0.15
                         );
 
-                    font-size:10px;
+                    font-size:
+                        clamp(
+                            9px,
+                            1vw,
+                            11px
+                        );
 
-                    text-align:center;
+                    text-align:
+                        center;
 
-                    letter-spacing:6px;
+                    letter-spacing:
+                        clamp(
+                            3px,
+                            0.5vw,
+                            7px
+                        );
 
                     text-shadow:
                         0 2px 3px #000;
@@ -2052,7 +2804,6 @@
             >
                 ✦ ${virtueScore} ✦
             </div>
-
         `;
 
 
@@ -2074,7 +2825,8 @@
                         );
 
 
-                    virtueScore += pontos;
+                    virtueScore +=
+                        pontos;
 
 
                     addMessageToChat(
@@ -2207,6 +2959,7 @@
                 'true'
             );
 
+
             console.log(
                 '✅ Hécate: Autenticação salva!'
             );
@@ -2221,7 +2974,9 @@
             overlay.style.transition =
                 'opacity 1.5s ease';
 
-            overlay.style.opacity = '0';
+
+            overlay.style.opacity =
+                '0';
 
 
             setTimeout(() => {
@@ -2231,9 +2986,13 @@
                     overlay.remove();
                 }
 
-                overlay = null;
 
-                testActive = false;
+                overlay =
+                    null;
+
+
+                testActive =
+                    false;
 
 
                 if (onCompleteCallback) {
@@ -2263,7 +3022,9 @@
             overlay.style.transition =
                 'opacity 1s ease';
 
-            overlay.style.opacity = '0';
+
+            overlay.style.opacity =
+                '0';
 
 
             setTimeout(() => {
@@ -2273,9 +3034,13 @@
                     overlay.remove();
                 }
 
-                overlay = null;
 
-                testActive = false;
+                overlay =
+                    null;
+
+
+                testActive =
+                    false;
 
 
                 if (onCompleteCallback) {
@@ -2313,6 +3078,7 @@
             },
 
         // Futuro LLM
+
         getHistory:
             () =>
                 [...conversationHistory],
@@ -2328,7 +3094,7 @@
     // ==========================================
 
     console.log(
-        '🗝️ Hécate: Ritual cinematográfico V4 carregado'
+        '🗝️ Hécate: Ritual cinematográfico V5 carregado — Responsivo'
     );
 
 })();
