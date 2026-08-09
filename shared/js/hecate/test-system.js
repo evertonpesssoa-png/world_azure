@@ -56,23 +56,23 @@
     let virtueScore = 0;
     let onCompleteCallback = null;
     let overlay = null;
-    let isVoiceEnabled = false; // 🔥 Estado da voz (JARVIS)
+    let isVoiceEnabled = false;
 
     // 🔥 FUNÇÃO DE VOZ (JARVIS) 🔥
     function speakText(text) {
         if (!isVoiceEnabled) return;
         if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel(); // Para qualquer fala anterior
+            window.speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'pt-BR';
-            utterance.rate = 1.0; // Velocidade da fala
-            utterance.pitch = 0.9; // Tom de voz (mais grave = mais "divino")
+            utterance.rate = 1.0;
+            utterance.pitch = 0.9;
             utterance.volume = 0.8;
             window.speechSynthesis.speak(utterance);
         }
     }
 
-    // 🔥 FUNÇÃO PARA ADICIONAR TEXTO NO CHAT INVISÍVEL 🔥
+    // 🔥 FUNÇÃO PARA ADICIONAR TEXTO NO CHAT 🔥
     function addMessageToChat(text, isUser = false) {
         const chatMsg = document.getElementById('hecateChatMessages');
         if (!chatMsg) return;
@@ -83,13 +83,17 @@
             font-family: 'Georgia', serif;
             font-size: 16px;
             color: ${isUser ? '#a78bfa' : '#e0e0e0'};
-            text-shadow: 0 0 15px rgba(155, 48, 255, 0.6), 0 0 30px rgba(155, 48, 255, 0.3);
+            text-shadow: 
+                0 2px 4px rgba(0,0,0,1),
+                0 0 8px rgba(0,0,0,0.95),
+                0 0 18px rgba(155,48,255,0.65);
             background: transparent;
             text-align: ${isUser ? 'right' : 'center'};
             width: 100%;
             margin-bottom: 10px;
             padding: 5px;
             animation: aparecerPalavra 0.8s ease-out;
+            letter-spacing: 0.5px;
         `;
         msgDiv.textContent = text;
         chatMsg.appendChild(msgDiv);
@@ -114,7 +118,10 @@
             font-family: 'Georgia', serif;
             font-size: 16px;
             box-shadow: 0 0 30px rgba(155, 48, 255, 0.2);
-            text-shadow: 0 0 10px ${color};
+            text-shadow: 
+                0 2px 4px rgba(0,0,0,1),
+                0 0 8px rgba(0,0,0,0.95),
+                0 0 18px ${color};
         `;
         document.body.appendChild(msg);
         setTimeout(() => msg.remove(), duration);
@@ -146,7 +153,7 @@
             <!-- 🔥 CAMADA 1: FUNDO ESCURO COM PROFUNDIDADE (BREU) -->
             <div style="position: absolute; inset: 0; z-index: 0; background: #000000;"></div>
 
-            <!-- 🔥 CAMADA 2: A ENTIDADE (HÉCATE JULGADORA - 100% VIVA E FLUTUANTE) -->
+            <!-- 🔥 CAMADA 2: HÉCATE (100% OPACA - INTACTA) -->
             <div id="hecate-entity" style="
                 position: absolute;
                 top: 50vh;
@@ -161,9 +168,25 @@
                 z-index: 1;
                 pointer-events: none;
                 animation: flutuarEntidade 6s ease-in-out infinite;
+                filter: contrast(1.05) brightness(1.02);
             "></div>
 
-            <!-- 🔥 CAMADA 3: O DIÁLOGO (PALAVRAS NO AR - ANCORADO NO FUNDO) -->
+            <!-- 🔥 CAMADA 3: NÉVOA DE SOMBRA (SOLUÇÃO MÁGICA) -->
+            <div id="hecate-dialog-atmosphere" style="
+                position: absolute;
+                inset: 0;
+                z-index: 2;
+                pointer-events: none;
+                background: radial-gradient(
+                    ellipse 75% 35% at 50% 82%,
+                    rgba(10,0,20,0.95) 0%,
+                    rgba(20,0,40,0.75) 35%,
+                    rgba(30,0,60,0.35) 58%,
+                    transparent 78%
+                );
+            "></div>
+
+            <!-- 🔥 CAMADA 4: O DIÁLOGO (TEXTO E INPUT) -->
             <div id="hecate-chat-container" style="
                 position: absolute;
                 bottom: 0;
@@ -177,7 +200,7 @@
                 pointer-events: auto;
                 background: transparent;
             ">
-                <!-- Área das Mensagens (Onde as palavras mágicas aparecem) -->
+                <!-- Área das Mensagens -->
                 <div id="hecateChatMessages" style="
                     width: 100%;
                     max-height: 30vh;
@@ -196,7 +219,10 @@
                     <div class="hecate-message" style="
                         font-size: 18px;
                         color: #a78bfa;
-                        text-shadow: 0 0 15px rgba(155, 48, 255, 0.8), 0 0 30px rgba(155, 48, 255, 0.4);
+                        text-shadow: 
+                            0 2px 4px rgba(0,0,0,1),
+                            0 0 8px rgba(0,0,0,0.95),
+                            0 0 18px rgba(155,48,255,0.65);
                         background: transparent;
                         text-align: center;
                         align-self: center;
@@ -206,7 +232,7 @@
                     </div>
                 </div>
 
-                <!-- Área de Input (Invisível, flutuando) -->
+                <!-- Área de Input (Flutuante, quase invisível) -->
                 <div id="hecateTestContent" style="
                     pointer-events: auto; 
                     width: 100%; 
@@ -217,7 +243,7 @@
                 </div>
             </div>
 
-            <!-- 🔥 ÍCONE DE VOZ (JARVIS) NO CANTO SUPERIOR DIREITO 🔥 -->
+            <!-- 🔥 BOTÃO DE VOZ (JARVIS) -->
             <div id="jarvis-toggle" style="
                 position: fixed;
                 top: 20px;
@@ -261,6 +287,40 @@
                     border-color: #00ff88;
                     box-shadow: 0 0 40px rgba(0, 255, 136, 0.4);
                 }
+                /* Estilização do input */
+                #hecateInput {
+                    width: 100%;
+                    padding: 12px;
+                    background: transparent;
+                    border: none;
+                    border-bottom: 1px solid rgba(167,139,250,0.7);
+                    color: #f0eaff;
+                    text-align: center;
+                    font-size: 18px;
+                    outline: none;
+                    transition: border-color 0.3s, box-shadow 0.3s;
+                    font-family: 'Georgia', serif;
+                    letter-spacing: 2px;
+                    text-shadow: 
+                        0 2px 4px rgba(0,0,0,1),
+                        0 0 8px rgba(0,0,0,0.95),
+                        0 0 18px rgba(155,48,255,0.3);
+                }
+                #hecateInput:focus {
+                    border-bottom-color: #a78bfa;
+                    box-shadow: 0 8px 20px -15px rgba(167,139,250,0.8);
+                }
+                #hecateInput::placeholder {
+                    color: rgba(167,139,250,0.3);
+                    font-size: 14px;
+                    letter-spacing: 1px;
+                }
+                .virtue-opt:hover {
+                    background: rgba(255,215,0,0.15) !important;
+                    border-color: #ffd700 !important;
+                    box-shadow: 0 0 30px rgba(255,215,0,0.1);
+                    transform: scale(1.02);
+                }
             </style>
         `;
         
@@ -289,7 +349,6 @@
         if (!content) return;
         
         if (level === 1) {
-            // 🔥 MENSAGEM DA HÉCATE NO CHAT 🔥
             addMessageToChat("🔐 " + QUESTION_BANK.senha.pergunta);
             addMessageToChat("💡 " + QUESTION_BANK.senha.dica);
             if (isVoiceEnabled) {
@@ -299,26 +358,31 @@
             content.innerHTML = `
                 <div style="
                     width: 100%; 
-                    color: rgba(255,255,255,0.3); 
+                    color: rgba(167,139,250,0.3); 
                     font-size: 12px; 
                     text-align: center; 
                     margin-bottom: 10px; 
                     font-family: 'Georgia', serif;
+                    text-shadow: 0 2px 4px rgba(0,0,0,1);
                 ">✦ Escreva sua resposta e pressione Enter ✦</div>
                 
-                <input type="password" id="hecateInput" placeholder="..." style="
+                <input type="password" id="hecateInput" placeholder="senha..." style="
                     width: 100%;
                     padding: 12px;
-                    background: rgba(0,0,0,0.3);
+                    background: transparent;
                     border: none;
-                    border-bottom: 1px solid rgba(155, 48, 255, 0.5);
-                    color: #a78bfa;
+                    border-bottom: 1px solid rgba(167,139,250,0.7);
+                    color: #f0eaff;
                     text-align: center;
                     font-size: 18px;
                     outline: none;
-                    transition: border-color 0.3s;
+                    transition: border-color 0.3s, box-shadow 0.3s;
                     font-family: 'Georgia', serif;
                     letter-spacing: 2px;
+                    text-shadow: 
+                        0 2px 4px rgba(0,0,0,1),
+                        0 0 8px rgba(0,0,0,0.95),
+                        0 0 18px rgba(155,48,255,0.3);
                 ">
                 <button id="hecateBtn" style="display: none;"></button>
             `;
@@ -362,7 +426,6 @@
         const content = document.getElementById('hecateTestContent');
         if (!content) return;
 
-        // 🔥 MENSAGEM DA HÉCATE NO CHAT 🔥
         addMessageToChat("📜 " + q.texto);
         addMessageToChat("💡 " + q.dica);
         if (isVoiceEnabled) {
@@ -372,26 +435,31 @@
         content.innerHTML = `
             <div style="
                 width: 100%; 
-                color: rgba(255,255,255,0.3); 
+                color: rgba(167,139,250,0.3); 
                 font-size: 12px; 
                 text-align: center; 
                 margin-bottom: 10px; 
                 font-family: 'Georgia', serif;
+                text-shadow: 0 2px 4px rgba(0,0,0,1);
             ">✦ Escreva sua resposta e pressione Enter ✦</div>
 
-            <input type="text" id="hecateInput" placeholder="..." style="
+            <input type="text" id="hecateInput" placeholder="resposta..." style="
                 width: 100%;
                 padding: 12px;
-                background: rgba(0,0,0,0.3);
+                background: transparent;
                 border: none;
-                border-bottom: 1px solid rgba(0, 255, 204, 0.5);
-                color: #00ffcc;
+                border-bottom: 1px solid rgba(167,139,250,0.7);
+                color: #f0eaff;
                 text-align: center;
                 font-size: 18px;
                 outline: none;
-                transition: border-color 0.3s;
+                transition: border-color 0.3s, box-shadow 0.3s;
                 font-family: 'Georgia', serif;
                 letter-spacing: 2px;
+                text-shadow: 
+                    0 2px 4px rgba(0,0,0,1),
+                    0 0 8px rgba(0,0,0,0.95),
+                    0 0 18px rgba(155,48,255,0.3);
             ">
             <button id="hecateBtn" style="display: none;"></button>
         `;
@@ -429,7 +497,6 @@
         const content = document.getElementById('hecateTestContent');
         if (!content) return;
 
-        // 🔥 MENSAGEM DA HÉCATE NO CHAT 🔥
         addMessageToChat("🌟 " + q.texto);
         if (isVoiceEnabled) {
             speakText(q.texto + ". Escolha uma opção.");
@@ -450,12 +517,13 @@
                 font-size: 14px; 
                 font-family: 'Georgia', serif;
                 transition: all 0.3s ease;
+                text-shadow: 0 2px 4px rgba(0,0,0,1);
             ">${op}</button>`;
         });
         
         content.innerHTML = `
             <div id="virtueOptions">${optionsHtml}</div>
-            <div style="margin-top: 15px; color: #ffd700; font-size: 12px;">Pontuação: ${virtueScore}/${MIN_VIRTUE_SCORE}</div>
+            <div style="margin-top: 15px; color: #ffd700; font-size: 12px; text-shadow: 0 2px 4px rgba(0,0,0,1);">Pontuação: ${virtueScore}/${MIN_VIRTUE_SCORE}</div>
         `;
         
         const botoes = document.querySelectorAll('.virtue-opt');
@@ -507,8 +575,9 @@
     
     window.HecateTest = {
         show: showTestInterface,
-        isActive: () => testActive
+        isActive: () => testActive,
+        toggleVoice: () => { isVoiceEnabled = !isVoiceEnabled; }
     };
     
-    console.log('🗝️ HecateTest carregado');
+    console.log('🗝️ HecateTest carregado com névoa de sombra e Hécate 100% opaca');
 })();
