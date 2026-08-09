@@ -129,6 +129,10 @@ body {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     user-select: none;
     -webkit-user-drag: none;
+    
+    /* 🔥 QUALIDADE MÁXIMA DA IMAGEM 🔥 */
+    image-rendering: auto;
+    image-rendering: -webkit-optimize-contrast;
 }
 
 .banner .slider .item:hover img {
