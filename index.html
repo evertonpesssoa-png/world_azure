@@ -338,12 +338,29 @@
                 if (transitioning) return;
                 transitioning = true;
 
-                // 🔥 PRÉ-CARREGAMENTO INVISÍVEL DO MODELO .glb (DINÂMICO) 🔥
+                // 🔥 TABELA DE TRADUÇÃO DE NOMES DOS ARQUIVOS 🔥
+                // (Olhe na sua pasta models e ajuste os nomes certos aqui se precisar)
+                const modeloMap = {
+                    'diva': 'diva2',
+                    'siria': 'siria',
+                    'merlim': 'merlim',
+                    'astreia': 'astreia',
+                    'umbra': 'umbra',
+                    'atena': 'atena',
+                    'victoria': 'victoria2',
+                    'hestia': 'hestia2',
+                    'daedala': 'daedala'
+                };
+
+                // 🔥 PRÉ-CARREGAMENTO INVISÍVEL DO MODELO .glb 🔥
                 const link = document.createElement('link');
                 link.rel = 'preload';
                 link.as = 'fetch';
                 link.crossOrigin = 'anonymous';
-                link.href = '/world_azure/models/' + asura + '.glb';
+                
+                // Pega o nome correto da tabela. Se não achar, usa o nome padrão da carta.
+                const nomeArquivo = modeloMap[asura] || asura; 
+                link.href = '/world_azure/models/' + nomeArquivo + '.glb';
                 document.head.appendChild(link);
 
                 if (typeof PortalAuth !== 'undefined') {
