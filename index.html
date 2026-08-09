@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
     <link rel="stylesheet" href="/world_azure/style.css">
+    
+    <!-- 🔥 PRÉ-CARREGAMENTO DA IMAGEM DO MAGO PARA ACELERAR O SITE -->
+    <link rel="preload" as="image" href="/world_azure/images/mago5_hq.png" />
 
     <title>ASURAS - Grimório Dimensional | Hécate Guardiã</title>
 
@@ -236,11 +239,14 @@
             }
 
             // ============================================
-            // 💫 APLICAR PARTÍCULAS EM TODAS AS CARTAS
+            // 💫 APLICAR PARTÍCULAS EM TODAS AS CARTAS (COM DELAY)
             // ============================================
-            items.forEach(item => {
-                createCardParticles(item);
-            });
+            // 🔥 AGORA AS PARTÍCULAS SÓ COMEÇAM DEPOIS DE 2 SEGUNDOS, DEIXANDO O CARROSSEL CARREGAR PRIMEIRO
+            setTimeout(() => {
+                items.forEach(item => {
+                    createCardParticles(item);
+                });
+            }, 2000);
 
             // ============================================
             // 🔊 SOM HOVER
