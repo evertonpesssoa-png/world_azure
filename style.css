@@ -338,9 +338,11 @@ body {
     text-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
     text-transform: uppercase;
     pointer-events: none;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.7);
     padding: 2px 12px;
     border-radius: 4px;
+    backdrop-filter: blur(2px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .banner .slider .item.tarot-card .tarot-name {
