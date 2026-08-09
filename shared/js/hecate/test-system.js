@@ -146,39 +146,22 @@
             <!-- 🔥 CAMADA 1: FUNDO ESCURO COM PROFUNDIDADE (BREU) -->
             <div style="position: absolute; inset: 0; z-index: 0; background: #000000;"></div>
 
-            <!-- 🔥 CAMADA 2: A ENTIDADE (HÉCATE JULGADORA - BRILHANTE) -->
-            <div style="
+            <!-- 🔥 CAMADA 2: A ENTIDADE (HÉCATE JULGADORA - 100% VIVA E FLUTUANTE) -->
+            <div id="hecate-entity" style="
                 position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
+                top: 50vh;
+                left: 50%;
+                transform: translate(-50%, -50%) scale(0.8);
+                width: 100vw;
+                height: 100vh;
+                background-image: url('../../../images/hecate1_hq.png');
+                background-repeat: no-repeat;
+                background-position: center bottom;
+                background-size: contain;
                 z-index: 1;
                 pointer-events: none;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            ">
-                <!-- A Imagem da Deusa (sem opacity, com blend mode para brilhar) -->
-                <div id="hecate-entity" style="
-                    width: 100%;
-                    height: 100%;
-                    background-image: url('../../../images/hecate1_hq.png');
-                    background-repeat: no-repeat;
-                    background-position: center bottom;
-                    background-size: contain;
-                    mix-blend-mode: screen;
-                    animation: flutuarEntidade 6s ease-in-out infinite;
-                "></div>
-                
-                <!-- 🔥 MÁSCARA ESCURA (Vignette) para o texto aparecer sem apagar a Deusa -->
-                <div style="
-                    position: absolute;
-                    inset: 0;
-                    background: radial-gradient(circle at 50% 50%, transparent 30%, rgba(0,0,0,0.85) 100%);
-                    pointer-events: none;
-                "></div>
-            </div>
+                animation: flutuarEntidade 6s ease-in-out infinite;
+            "></div>
 
             <!-- 🔥 CAMADA 3: O DIÁLOGO (PALAVRAS NO AR - ANCORADO NO FUNDO) -->
             <div id="hecate-chat-container" style="
