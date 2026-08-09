@@ -1000,15 +1000,93 @@ body {
 
 /* CONFIGURAÇÃO 1: TABLET */
 @media (min-width: 768px) and (max-width: 1023px) {
-    /* Digite seus ajustes aqui quando chegar no trabalho */
+    /* 🔽 AQUI VOCÊ CONTROLA O CARROSSEL NO TABLET 🔽 */
+    .banner .slider {
+        width: 250px;           /* Largura das cartas no tablet */
+        height: 350px;          /* Altura das cartas no tablet */
+        top: 50%;               /* 👈 MEXA AQUI! Maior = desce, Menor = sobe */
+        left: 50%;
+        transform: translate(-50%, -50%) rotateX(-20deg);
+    }
+
+    /* 🔽 AQUI VOCÊ CONTROLA A DISTÂNCIA DAS CARTAS NO TABLET 🔽 */
+    .banner .slider .item {
+        transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(550px);
+    }
+
+    /* 🔽 AQUI VOCÊ CONTROLA A CARTA ATIVA NO TABLET 🔽 */
+    .banner .slider .item.active {
+        transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(500px) scale(1.25);
+    }
+
+    /* 🔽 AQUI VOCÊ CONTROLA O MAGO NO TABLET 🔽 */
+    .banner .mago-center {
+        width: 60vw;            /* Tamanho do mago no tablet */
+        max-width: 600px;       /* Impede de estourar */
+        top: 50%;               /* Centraliza o mago */
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
 }
 
 /* CONFIGURAÇÃO 2: NOTEBOOK */
 @media (min-width: 1024px) and (max-width: 1439px) {
-    /* Digite seus ajustes aqui quando chegar no trabalho */
+    /* 🔽 AQUI VOCÊ CONTROLA O CARROSSEL NO NOTEBOOK 🔽 */
+    .banner .slider {
+        width: 300px;           /* Largura das cartas no notebook */
+        height: 420px;          /* Altura das cartas no notebook */
+        top: 48%;               /* 👈 MEXA AQUI! Maior = desce, Menor = sobe */
+        left: 50%;
+        transform: translate(-50%, -50%) rotateX(-22deg);
+    }
+
+    /* 🔽 AQUI VOCÊ CONTROLA A DISTÂNCIA DAS CARTAS NO NOTEBOOK 🔽 */
+    .banner .slider .item {
+        transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(650px);
+    }
+
+    /* 🔽 AQUI VOCÊ CONTROLA A CARTA ATIVA NO NOTEBOOK 🔽 */
+    .banner .slider .item.active {
+        transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(600px) scale(1.25);
+    }
+
+    /* 🔽 AQUI VOCÊ CONTROLA O MAGO NO NOTEBOOK 🔽 */
+    .banner .mago-center {
+        width: 45vw;            /* Tamanho do mago no notebook */
+        max-width: 700px;       /* Impede de estourar */
+        top: 50%;               /* Centraliza o mago */
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
 }
 
 /* CONFIGURAÇÃO 3: PC GRANDE */
 @media (min-width: 1440px) {
-    /* Digite seus ajustes aqui quando chegar no trabalho */
+    /* 🔽 AQUI VOCÊ CONTROLA O CARROSSEL NO PC GRANDE 🔽 */
+    .banner .slider {
+        width: 350px;           /* Largura das cartas no PC Grande */
+        height: 480px;          /* Altura das cartas no PC Grande */
+        top: 45%;               /* 👈 MEXA AQUI! Maior = desce, Menor = sobe */
+        left: 50%;
+        transform: translate(-50%, -50%) rotateX(-25deg);
+    }
+
+    /* 🔽 AQUI VOCÊ CONTROLA A DISTÂNCIA DAS CARTAS NO PC GRANDE 🔽 */
+    .banner .slider .item {
+        transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(750px);
+    }
+
+    /* 🔽 AQUI VOCÊ CONTROLA A CARTA ATIVA NO PC GRANDE 🔽 */
+    .banner .slider .item.active {
+        transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(700px) scale(1.25);
+    }
+
+    /* 🔽 AQUI VOCÊ CONTROLA O MAGO NO PC GRANDE 🔽 */
+    .banner .mago-center {
+        width: 40vw;            /* Tamanho do mago no PC Grande */
+        max-width: 900px;       /* Impede de estourar */
+        top: 50%;               /* Centraliza o mago */
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
 }
