@@ -1,5 +1,5 @@
 // ============================================
-// 🗝️ HÉCATE - RITUAL DE ACESSO (VERSÃO CINEMATOGRÁFICA V2)
+// 🗝️ HÉCATE - RITUAL DE ACESSO (VERSÃO CINEMATOGRÁFICA V3)
 // ============================================
 
 (function() {
@@ -87,13 +87,17 @@
         let marginBottom = '10px';
         let fontStyle = 'normal';
         let prefix = '';
+        let animation = 'aparecerPalavra 1.2s ease-out';
+        let extraClass = '';
         
         if (type === 'question') {
             color = '#c4b5fd';
-            fontSize = '24px';
-            letterSpacing = '4px';
+            fontSize = 'clamp(17px, 5vw, 24px)';
+            letterSpacing = 'clamp(2px, 0.8vw, 4px)';
             marginBottom = '20px';
             fontStyle = 'italic';
+            animation = 'aparecerPalavra 1.5s ease-out, perguntaRespirar 4s ease-in-out 1.5s infinite';
+            extraClass = 'question-text';
         } else if (type === 'hint') {
             color = 'rgba(167,139,250,0.4)';
             fontSize = '13px';
@@ -128,12 +132,17 @@
             width: 100%;
             margin-bottom: ${marginBottom};
             padding: 2px 0;
-            animation: aparecerPalavra 1.2s ease-out;
+            animation: ${animation};
             letter-spacing: ${letterSpacing};
             opacity: ${opacity};
             font-style: ${fontStyle};
             transition: all 0.5s ease;
         `;
+        
+        if (extraClass) {
+            msgDiv.className = extraClass;
+        }
+        
         msgDiv.textContent = prefix + text;
         chatMsg.appendChild(msgDiv);
         chatMsg.scrollTop = chatMsg.scrollHeight;
@@ -214,14 +223,14 @@
                 filter: contrast(1.05) brightness(1.02);
             "></div>
 
-            <!-- CAMADA 3: NÉVOA DE LEITURA (RADIAL SUAVE) -->
+            <!-- CAMADA 3: NÉVOA DE LEITURA (RADIAL MAIS LARGA) -->
             <div id="hecate-dialog-atmosphere" style="
                 position: absolute;
                 inset: 0;
                 z-index: 2;
                 pointer-events: none;
                 background: radial-gradient(
-                    ellipse 70% 25% at 50% 88%,
+                    ellipse 80% 32% at 50% 86%,
                     rgba(0,0,0,0.92) 0%,
                     rgba(0,0,0,0.65) 30%,
                     rgba(0,0,0,0.25) 55%,
@@ -259,8 +268,8 @@
                     -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 85%, transparent);
                 ">
                     <!-- Mensagem Inicial -->
-                    <div style="
-                        font-size: 24px;
+                    <div class="question-text" style="
+                        font-size: clamp(17px, 5vw, 24px);
                         color: #c4b5fd;
                         text-shadow: 
                             0 2px 3px #000,
@@ -269,8 +278,8 @@
                         background: transparent;
                         text-align: center;
                         align-self: center;
-                        animation: aparecerPalavra 2s ease-out;
-                        letter-spacing: 4px;
+                        animation: aparecerPalavra 2s ease-out, perguntaRespirar 4s ease-in-out 2s infinite;
+                        letter-spacing: clamp(2px, 0.8vw, 4px);
                         font-style: italic;
                         margin-bottom: 15px;
                     ">
@@ -304,7 +313,7 @@
                         border: none;
                         color: #f0eaff;
                         text-align: center;
-                        font-size: 20px;
+                        font-size: clamp(18px, 4vw, 20px);
                         outline: none;
                         font-family: 'Georgia', serif;
                         letter-spacing: 6px;
@@ -363,6 +372,20 @@
                     0% { opacity: 0; transform: translateY(20px) scale(0.97); }
                     100% { opacity: 1; transform: translateY(0) scale(1); }
                 }
+                @keyframes perguntaRespirar {
+                    0%, 100% {
+                        text-shadow: 
+                            0 2px 3px #000,
+                            0 0 8px #000,
+                            0 0 18px rgba(0,0,0,0.9);
+                    }
+                    50% {
+                        text-shadow: 
+                            0 2px 3px #000,
+                            0 0 10px #000,
+                            0 0 25px rgba(155,48,255,0.25);
+                    }
+                }
                 @keyframes magicPulse {
                     0%, 100% { 
                         background: linear-gradient(90deg, transparent, rgba(167,139,250,0.15), transparent);
@@ -417,6 +440,28 @@
                     border-color: rgba(255,215,0,0.15);
                     transform: scale(1.01);
                     color: rgba(255,215,0,0.8);
+                }
+                /* Mobile adjustments */
+                @media (max-width: 480px) {
+                    #hecateInput:focus {
+                        letter-spacing: 4px;
+                    }
+                    #hecateInput {
+                        font-size: 18px;
+                    }
+                    .virtue-opt {
+                        font-size: 12px;
+                        padding: 10px 8px;
+                    }
+                }
+                @media (max-width: 380px) {
+                    #hecateInput:focus {
+                        letter-spacing: 2px;
+                    }
+                    #hecateInput {
+                        font-size: 16px;
+                        letter-spacing: 4px;
+                    }
                 }
             </style>
         `;
@@ -532,8 +577,8 @@
         // Limpa mensagens anteriores (exceto as primeiras)
         const messages = chatMsg.querySelectorAll('.hecate-message, .user-message');
         messages.forEach(msg => {
-            if (msg.style.animation !== 'aparecerPalavra 2s ease-out') {
-                // Mantém apenas a mensagem inicial
+            if (msg.style.animation !== 'aparecerPalavra 2s ease-out' && 
+                !msg.className.includes('question-text')) {
                 if (!msg.textContent.includes('GRIMÓRIO ESTÁ TRANCADO')) {
                     msg.remove();
                 }
@@ -566,7 +611,8 @@
         // Limpa mensagens anteriores (exceto as primeiras)
         const messages = chatMsg.querySelectorAll('.hecate-message, .user-message');
         messages.forEach(msg => {
-            if (msg.style.animation !== 'aparecerPalavra 2s ease-out') {
+            if (msg.style.animation !== 'aparecerPalavra 2s ease-out' && 
+                !msg.className.includes('question-text')) {
                 if (!msg.textContent.includes('GRIMÓRIO ESTÁ TRANCADO')) {
                     msg.remove();
                 }
@@ -590,7 +636,7 @@
             <div id="virtueOptions" style="width:100%;">${optionsHtml}</div>
             <div style="
                 margin-top: 12px; 
-                color: rgba(255,215,0,0.08); 
+                color: rgba(255,215,0,0.12); 
                 font-size: 10px; 
                 text-align: center;
                 letter-spacing: 6px;
@@ -672,5 +718,5 @@
         toggleVoice: () => { isVoiceEnabled = !isVoiceEnabled; }
     };
     
-    console.log('🗝️ Hécate: Ritual cinematográfico V2 carregado');
+    console.log('🗝️ Hécate: Ritual cinematográfico V3 carregado');
 })();
