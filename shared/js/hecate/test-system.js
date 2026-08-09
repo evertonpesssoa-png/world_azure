@@ -154,7 +154,7 @@
                 transform: translate(-50%, -50%) scale(0.8);
                 width: 100%;
                 height: 100%;
-                background-image: url('/world_azure/images/hecate_guardiã.png');
+                background-image: url('/world_azure/images/hecate1_hq.png');
                 background-repeat: no-repeat;
                 background-position: center bottom;
                 background-size: contain;
