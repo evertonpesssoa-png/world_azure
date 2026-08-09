@@ -63,7 +63,8 @@ body {
     transform: translate(-50%, -50%) rotateX(-25deg);
     animation: autoRun 24s linear infinite;
     z-index: 3;
-    will-change: transform;
+    /* 🔥 OTIMIZAÇÃO: PREPARA O NAVEGADOR PARA O 3D */
+    will-change: transform, perspective;
 }
 
 .banner .slider:hover {
@@ -90,6 +91,9 @@ body {
     transition: transform 0.8s ease, filter 0.8s ease, opacity 0.8s ease;
     transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(clamp(450px, 65vw, 900px));
     z-index: 1;
+    
+    /* 🔥 OTIMIZAÇÃO: FORÇA ACELERAÇÃO DE HARDWARE (GPU) NAS CARTAS */
+    transform: translateZ(0);
 }
 
 /* ============================================
