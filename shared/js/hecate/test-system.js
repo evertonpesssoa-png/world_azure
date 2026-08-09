@@ -175,7 +175,7 @@
                 justify-content: flex-end;
                 padding: 20px 20px 30px 20px;
                 pointer-events: auto;
-                background: linear-gradient(to top, rgba(0,0,0,0.9) 20%, transparent 100%);
+                background: transparent;
             ">
                 <!-- Área das Mensagens (Onde as palavras mágicas aparecem) -->
                 <div id="hecateChatMessages" style="
