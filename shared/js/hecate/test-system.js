@@ -146,42 +146,58 @@
             <!-- 🔥 CAMADA 1: FUNDO ESCURO COM PROFUNDIDADE (BREU) -->
             <div style="position: absolute; inset: 0; z-index: 0; background: #000000;"></div>
 
-            <!-- 🔥 CAMADA 2: A ENTIDADE (HÉCATE JULGADORA) -->
-            <div id="hecate-entity" style="
+            <!-- 🔥 CAMADA 2: A ENTIDADE (HÉCATE JULGADORA - BRILHANTE) -->
+            <div style="
                 position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%) scale(0.8);
+                top: 0;
+                left: 0;
                 width: 100%;
                 height: 100%;
-                background-image: url('../../../images/hecate1_hq.png');
-                background-repeat: no-repeat;
-                background-position: center bottom;
-                background-size: contain;
-                opacity: 0.5;
                 z-index: 1;
                 pointer-events: none;
-                animation: flutuarEntidade 6s ease-in-out infinite;
-            "></div>
-
-            <!-- 🔥 CAMADA 3: O DIÁLOGO (PALAVRAS NO AR) -->
-            <div id="hecate-chat-container" style="
-                position: relative;
-                z-index: 3;
-                max-width: 600px;
-                width: 90%;
                 display: flex;
-                flex-direction: column;
                 align-items: center;
                 justify-content: center;
-                gap: 20px;
-                padding: 30px;
+            ">
+                <!-- A Imagem da Deusa (sem opacity, com blend mode para brilhar) -->
+                <div id="hecate-entity" style="
+                    width: 100%;
+                    height: 100%;
+                    background-image: url('../../../images/hecate1_hq.png');
+                    background-repeat: no-repeat;
+                    background-position: center bottom;
+                    background-size: contain;
+                    mix-blend-mode: screen;
+                    animation: flutuarEntidade 6s ease-in-out infinite;
+                "></div>
+                
+                <!-- 🔥 MÁSCARA ESCURA (Vignette) para o texto aparecer sem apagar a Deusa -->
+                <div style="
+                    position: absolute;
+                    inset: 0;
+                    background: radial-gradient(circle at 50% 50%, transparent 30%, rgba(0,0,0,0.85) 100%);
+                    pointer-events: none;
+                "></div>
+            </div>
+
+            <!-- 🔥 CAMADA 3: O DIÁLOGO (PALAVRAS NO AR - ANCORADO NO FUNDO) -->
+            <div id="hecate-chat-container" style="
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                z-index: 3;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+                padding: 20px 20px 30px 20px;
                 pointer-events: auto;
+                background: linear-gradient(to top, rgba(0,0,0,0.9) 20%, transparent 100%);
             ">
                 <!-- Área das Mensagens (Onde as palavras mágicas aparecem) -->
                 <div id="hecateChatMessages" style="
                     width: 100%;
-                    height: 250px;
+                    max-height: 30vh;
                     overflow-y: auto;
                     display: flex;
                     flex-direction: column;
@@ -208,7 +224,12 @@
                 </div>
 
                 <!-- Área de Input (Invisível, flutuando) -->
-                <div id="hecateTestContent" style="pointer-events: auto; width: 100%; max-width: 400px;">
+                <div id="hecateTestContent" style="
+                    pointer-events: auto; 
+                    width: 100%; 
+                    max-width: 400px; 
+                    margin: 15px auto 0 auto;
+                ">
                     <!-- O input será gerado aqui -->
                 </div>
             </div>
@@ -293,6 +314,15 @@
             }
             
             content.innerHTML = `
+                <div style="
+                    width: 100%; 
+                    color: rgba(255,255,255,0.3); 
+                    font-size: 12px; 
+                    text-align: center; 
+                    margin-bottom: 10px; 
+                    font-family: 'Georgia', serif;
+                ">✦ Escreva sua resposta e pressione Enter ✦</div>
+                
                 <input type="password" id="hecateInput" placeholder="..." style="
                     width: 100%;
                     padding: 12px;
@@ -357,6 +387,15 @@
         }
         
         content.innerHTML = `
+            <div style="
+                width: 100%; 
+                color: rgba(255,255,255,0.3); 
+                font-size: 12px; 
+                text-align: center; 
+                margin-bottom: 10px; 
+                font-family: 'Georgia', serif;
+            ">✦ Escreva sua resposta e pressione Enter ✦</div>
+
             <input type="text" id="hecateInput" placeholder="..." style="
                 width: 100%;
                 padding: 12px;
