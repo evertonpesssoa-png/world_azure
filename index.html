@@ -338,6 +338,14 @@
                 if (transitioning) return;
                 transitioning = true;
 
+                // 🔥 PRÉ-CARREGAMENTO INVISÍVEL DO MODELO .glb (DINÂMICO) 🔥
+                const link = document.createElement('link');
+                link.rel = 'preload';
+                link.as = 'fetch';
+                link.crossOrigin = 'anonymous';
+                link.href = '/world_azure/models/' + asura + '.glb';
+                document.head.appendChild(link);
+
                 if (typeof PortalAuth !== 'undefined') {
                     PortalAuth.generateToken(asura);
                 }
