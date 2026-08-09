@@ -1029,7 +1029,7 @@ body {
    ============================================ */
 @media (min-width: 1440px) {
     .banner .slider {
-        top: 50%; /* 👈 MEXA AQUI! Maior = desce, Menor = sobe */
+        top: 40%; /* 👈 MEXA AQUI! Maior = desce, Menor = sobe */
     }
 
     .banner .mago-center {
