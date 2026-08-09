@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
     <link rel="stylesheet" href="/world_azure/style.css">
+    
+    <!-- 🔥 PRÉ-CARREGAMENTO DA IMAGEM DO MAGO PARA ACELERAR O SITE -->
+    <link rel="preload" as="image" href="/world_azure/images/mago5_hq.png" />
 
     <title>ASURAS - Grimório Dimensional | Hécate Guardiã</title>
 
@@ -23,31 +26,31 @@
         <div class="slider" style="--quantity: 9">
             <!-- CARTAS -->
             <div class="item" data-asura="diva" data-color="#ff4db8" style="--position: 1">
-                <img src="/world_azure/images/diva2.png" alt="Diva" draggable="false">
+                <img src="/world_azure/images/diva2_hq.png" alt="Diva" draggable="false">
             </div>
             <div class="item" data-asura="siria" data-color="#35ff9c" style="--position: 2">
-                <img src="/world_azure/images/siria2.png" alt="Siria" draggable="false">
+                <img src="/world_azure/images/siria2_hq.png" alt="Siria" draggable="false">
             </div>
             <div class="item" data-asura="merlim" data-color="#00d9ff" style="--position: 3">
-                <img src="/world_azure/images/merlim3.png" alt="Merlim" draggable="false">
+                <img src="/world_azure/images/merlim3_hq.png" alt="Merlim" draggable="false">
             </div>
             <div class="item" data-asura="astreia" data-color="#287bff" style="--position: 4">
-                <img src="/world_azure/images/astreia3.png" alt="Astreia" draggable="false">
+                <img src="/world_azure/images/astreia3_hq.png" alt="Astreia" draggable="false">
             </div>
             <div class="item" data-asura="umbra" data-color="#8b2fff" style="--position: 5">
-                <img src="/world_azure/images/umbra2.png" alt="Umbra" draggable="false">
+                <img src="/world_azure/images/umbra2_hq.png" alt="Umbra" draggable="false">
             </div>
             <div class="item" data-asura="atena" data-color="#ffd54f" style="--position: 6">
-                <img src="/world_azure/images/atena2.png" alt="Atena" draggable="false">
+                <img src="/world_azure/images/atena2_hq.png" alt="Atena" draggable="false">
             </div>
             <div class="item" data-asura="victoria" data-color="#ff4444" style="--position: 7">
-                <img src="/world_azure/images/victoria3.png" alt="Victoria" draggable="false">
+                <img src="/world_azure/images/victoria3_hq.png" alt="Victoria" draggable="false">
             </div>
             <div class="item" data-asura="hestia" data-color="#fff0b3" style="--position: 8">
-                <img src="/world_azure/images/hestia3.png" alt="Hestia" draggable="false">
+                <img src="/world_azure/images/hestia3_hq.png" alt="Hestia" draggable="false">
             </div>
             <div class="item" data-asura="daedala" data-color="#00ffd5" style="--position: 9">
-                <img src="/world_azure/images/daedala3.png" alt="Daedala" draggable="false">
+                <img src="/world_azure/images/daedala3_hq.png" alt="Daedala" draggable="false">
             </div>
         </div>
         <div class="content"></div>
@@ -236,11 +239,14 @@
             }
 
             // ============================================
-            // 💫 APLICAR PARTÍCULAS EM TODAS AS CARTAS
+            // 💫 APLICAR PARTÍCULAS EM TODAS AS CARTAS (COM DELAY)
             // ============================================
-            items.forEach(item => {
-                createCardParticles(item);
-            });
+            // 🔥 AGORA AS PARTÍCULAS SÓ COMEÇAM DEPOIS DE 2 SEGUNDOS, DEIXANDO O CARROSSEL CARREGAR PRIMEIRO
+            setTimeout(() => {
+                items.forEach(item => {
+                    createCardParticles(item);
+                });
+            }, 2000);
 
             // ============================================
             // 🔊 SOM HOVER
@@ -331,6 +337,31 @@
             function startAsuraTransition(selectedItem, asura) {
                 if (transitioning) return;
                 transitioning = true;
+
+                // 🔥 TABELA DE TRADUÇÃO DE NOMES DOS ARQUIVOS 🔥
+                // (Olhe na sua pasta models e ajuste os nomes certos aqui se precisar)
+                const modeloMap = {
+                    'diva': 'diva2',
+                    'siria': 'siria',
+                    'merlim': 'merlim',
+                    'astreia': 'astreia',
+                    'umbra': 'umbra',
+                    'atena': 'atena',
+                    'victoria': 'victoria2',
+                    'hestia': 'hestia2',
+                    'daedala': 'daedala'
+                };
+
+                // 🔥 PRÉ-CARREGAMENTO INVISÍVEL DO MODELO .glb 🔥
+                const link = document.createElement('link');
+                link.rel = 'preload';
+                link.as = 'fetch';
+                link.crossOrigin = 'anonymous';
+                
+                // Pega o nome correto da tabela. Se não achar, usa o nome padrão da carta.
+                const nomeArquivo = modeloMap[asura] || asura; 
+                link.href = '/world_azure/models/' + nomeArquivo + '.glb';
+                document.head.appendChild(link);
 
                 if (typeof PortalAuth !== 'undefined') {
                     PortalAuth.generateToken(asura);

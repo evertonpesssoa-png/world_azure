@@ -44,13 +44,43 @@ body {
     transform: translate(-50%, -50%);
     width: 120%;
     height: 120%;
-    background-image: url(images/mago5.png);
+    background-image: url(images/mago5_hq.png);
     background-repeat: no-repeat;
     background-position: center bottom;
     background-size: contain;
     opacity: 0.95;
     z-index: 2;
     pointer-events: none;
+}
+
+/* 🔥 ESFERA DE ENERGIA - 10x MENOR E 60% MAIS BAIXA 🔥 */
+.banner .mago-center::after {
+    content: '';
+    position: absolute;
+    top: 85%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    width: 50px;
+    height: 50px;
+    background: radial-gradient(circle, rgba(180, 80, 255, 1) 0%, rgba(180, 80, 255, 0.6) 40%, transparent 70%);
+    border-radius: 50%;
+    box-shadow: 0 0 40px rgba(180, 80, 255, 0.8), 0 0 80px rgba(180, 80, 255, 0.5);
+    animation: pulsarEnergia 1.8s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: 1;
+}
+
+@keyframes pulsarEnergia {
+    0% {
+        transform: translate(-50%, -50%) scale(0.7);
+        opacity: 0.6;
+        box-shadow: 0 0 20px rgba(180, 80, 255, 0.4);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1.3);
+        opacity: 1;
+        box-shadow: 0 0 60px rgba(180, 80, 255, 0.9), 0 0 100px rgba(180, 80, 255, 0.6);
+    }
 }
 
 .banner .slider {
@@ -308,9 +338,11 @@ body {
     text-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
     text-transform: uppercase;
     pointer-events: none;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.7);
     padding: 2px 12px;
     border-radius: 4px;
+    backdrop-filter: blur(2px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .banner .slider .item.tarot-card .tarot-name {
@@ -691,73 +723,7 @@ body {
 }
 
 /* ============================================
-   CONFIGURAÇÃO 1: TABLET (Telas médias, tipo iPad)
-   ============================================ */
-@media (min-width: 768px) and (max-width: 1023px) {
-    .banner .slider {
-        width: 25vw; height: 35vw;
-        top: 50%; left: 50%;
-        transform: translate(-50%, -50%) rotateX(-20deg);
-    }
-    .banner .slider .item {
-        transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(45vw);
-    }
-    .banner .slider .item.active {
-        transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(40vw) scale(1.25);
-    }
-    .banner .mago-center {
-        width: 50vw; max-width: 600px;
-        top: 50%; left: 50%;
-        transform: translate(-50%, -50%);
-    }
-}
-
-/* ============================================
-   CONFIGURAÇÃO 2: NOTEBOOK (Telas de 14" a 16", 1366x768 a 1920x1080)
-   ============================================ */
-@media (min-width: 1024px) and (max-width: 1439px) {
-    .banner .slider {
-        width: 22vw; height: 32vw;
-        top: 52%; left: 50%; /* MEXA AQUI SE PRECISAR SUBIR/DESCER */
-        transform: translate(-50%, -50%) rotateX(-22deg);
-    }
-    .banner .slider .item {
-        transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(55vw);
-    }
-    .banner .slider .item.active {
-        transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(50vw) scale(1.25);
-    }
-    .banner .mago-center {
-        width: 45vw; max-width: 650px;
-        top: 50%; left: 50%;
-        transform: translate(-50%, -50%);
-    }
-}
-
-/* ============================================
-   CONFIGURAÇÃO 3: PC GRANDE (Telas Full HD, 2K, 4K, acima de 1440px)
-   ============================================ */
-@media (min-width: 1440px) {
-    .banner .slider {
-        width: 18vw; height: 26vw;
-        top: 54%; left: 50%; /* MEXA AQUI SE PRECISAR SUBIR/DESCER */
-        transform: translate(-50%, -50%) rotateX(-25deg);
-    }
-    .banner .slider .item {
-        transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(65vw);
-    }
-    .banner .slider .item.active {
-        transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(60vw) scale(1.25);
-    }
-    .banner .mago-center {
-        width: 40vw; max-width: 800px;
-        top: 50%; left: 50%;
-        transform: translate(-50%, -50%);
-    }
-}
-
-/* ============================================
-   RESPONSIVIDADE (Mobile)
+   RESPONSIVIDADE (Mobile) - INTOCÁVEL
    ============================================ */
 
 @media (max-width: 768px) {
@@ -1026,5 +992,49 @@ body {
     
     .portal-card-fullscreen .holo-layer-full {
         inset: 6px;
+    }
+}
+
+/* ============================================
+   CONFIGURAÇÕES PARA TABLET, NOTEBOOK E PC
+   (VOCÊ MESMO VAI AJUSTAR MANUALMENTE AQUI)
+   ============================================ */
+
+/* ============================================
+   CONFIGURAÇÃO 1: TABLET
+   ============================================ */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .banner .slider {
+        top: 40%; /* 👈 MEXA AQUI! Maior = desce, Menor = sobe */
+    }
+
+    .banner .mago-center {
+        top: 50%; /* 👈 MEXA AQUI! Maior = desce, Menor = sobe */
+    }
+}
+
+/* ============================================
+   CONFIGURAÇÃO 2: NOTEBOOK
+   ============================================ */
+@media (min-width: 1024px) and (max-width: 1439px) {
+    .banner .slider {
+        top: 38%; /* 👈 MEXA AQUI! Maior = desce, Menor = sobe */
+    }
+
+    .banner .mago-center {
+        top: 50%; /* 👈 MEXA AQUI! Maior = desce, Menor = sobe */
+    }
+}
+
+/* ============================================
+   CONFIGURAÇÃO 3: PC GRANDE
+   ============================================ */
+@media (min-width: 1440px) {
+    .banner .slider {
+        top: 40%; /* 👈 MEXA AQUI! Maior = desce, Menor = sobe */
+    }
+
+    .banner .mago-center {
+        top: 30%; /* 👈 MEXA AQUI! Maior = desce, Menor = sobe */
     }
 }
