@@ -4,29 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>DIVA • Mundo Neon Arcano</title>
-    
-    <!-- 🔥 IMPORTS DO HÉCATE (OBRIGATÓRIO) 🔥 -->
+
+    <!-- ============================================
+         HÉCATE
+    ============================================ -->
     <script src="/world_azure/shared/js/hecate/core.js"></script>
     <script src="/world_azure/shared/js/hecate/block-manager.js"></script>
     <script src="/world_azure/shared/js/hecate/test-system.js"></script>
     <script src="/world_azure/shared/js/hecate/auth.js"></script>
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&display=swap" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="../shared/css/base.css">
     <link rel="stylesheet" href="../shared/css/top-icons.css">
     <link rel="stylesheet" href="../shared/css/chat.css">
     <link rel="stylesheet" href="../shared/css/profile-panel.css">
     <link rel="stylesheet" href="../shared/css/portal.css">
-    
+
     <style>
         :root {
             --asura-color: #ff4db8;
             --asura-glow: rgba(255, 77, 184, 0.8);
             --asura-gradient: linear-gradient(135deg, #ff4db8, #ff88dd);
         }
-        body { background: radial-gradient(circle at 30% 20%, #0a0512, #030108); margin: 0; overflow-x: hidden; }
-        
+
+        body {
+            background: radial-gradient(circle at 30% 20%, #0a0512, #030108);
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* ============================================
+           PORTAL PLANNER
+        ============================================ */
+
         .portal-planner-btn {
             position: fixed;
             top: 20px;
@@ -48,19 +59,19 @@
             transition: all 0.3s ease;
             cursor: pointer;
         }
-        
+
         .portal-planner-btn:hover {
             transform: scale(1.1);
             box-shadow: 0 0 35px rgba(255, 77, 184, 0.8);
             background: rgba(255, 77, 184, 0.2);
         }
-        
+
         .portal-planner-btn::before {
             content: "🗺️ Portal Planner";
             position: absolute;
             top: 70px;
             left: 0;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0, 0, 0, 0.9);
             color: #ff4db8;
             font-size: 12px;
             padding: 6px 12px;
@@ -72,18 +83,21 @@
             font-family: 'Poppins', sans-serif;
             border: 1px solid #ff4db8;
         }
-        
-        .portal-planner-btn:hover::before { opacity: 1; }
-        
+
+        .portal-planner-btn:hover::before {
+            opacity: 1;
+        }
+
         body.transition-out {
             opacity: 0;
             transform: scale(0.98);
             transition: all 0.4s ease;
         }
-        
+
         /* ============================================
-           CHAT 3 NÍVEIS - ESTILO NEON
+           CHAT 3 NÍVEIS
         ============================================ */
+
         .chat-container {
             position: fixed !important;
             bottom: 20px !important;
@@ -96,25 +110,27 @@
             overflow: hidden !important;
             transition: all 0.3s ease !important;
         }
-        
+
         .chat-container.level-0 {
             width: 320px !important;
             height: 52px !important;
         }
+
         .chat-container.level-0 .chat-body {
             display: none !important;
         }
-        
+
         .chat-container.level-1 {
             width: 380px !important;
             height: 500px !important;
         }
+
         .chat-container.level-1 .chat-body {
             display: flex !important;
             flex-direction: column !important;
             height: calc(100% - 52px) !important;
         }
-        
+
         .chat-container.level-2 {
             position: fixed !important;
             top: 0 !important;
@@ -126,19 +142,22 @@
             border-radius: 0 !important;
             z-index: 99999 !important;
         }
+
         .chat-container.level-2 .chat-body {
             display: flex !important;
             flex-direction: column !important;
             height: calc(100% - 52px) !important;
         }
+
         .chat-container.level-2 .chat-messages {
             flex: 1 !important;
             min-height: 0 !important;
         }
+
         .chat-container.level-2 .chat-input-area {
             flex-shrink: 0 !important;
         }
-        
+
         .chat-header {
             background: rgba(0, 0, 0, 0.9) !important;
             padding: 12px 15px !important;
@@ -150,29 +169,36 @@
             height: 52px !important;
             box-sizing: border-box !important;
         }
-        
+
         .chat-header-info {
             display: flex !important;
             align-items: center !important;
             gap: 10px !important;
             flex: 1 !important;
         }
-        
-        .chat-avatar { font-size: 24px !important; }
+
+        .chat-avatar {
+            font-size: 24px !important;
+        }
+
         .chat-header-info h4 {
             font-size: 14px !important;
             margin: 0 !important;
             color: #ff4db8 !important;
             font-family: 'Orbitron', monospace !important;
         }
-        .chat-status { font-size: 10px !important; color: #0f0 !important; }
-        
+
+        .chat-status {
+            font-size: 10px !important;
+            color: #0f0 !important;
+        }
+
         .chat-header-actions {
             display: flex !important;
             gap: 8px !important;
             align-items: center !important;
         }
-        
+
         .chat-header-actions button {
             background: transparent !important;
             border: none !important;
@@ -182,16 +208,17 @@
             border-radius: 8px !important;
             color: #ff4db8 !important;
         }
+
         .chat-header-actions button:hover {
             background: rgba(255, 77, 184, 0.2) !important;
         }
-        
+
         .chat-body {
             display: flex !important;
             flex-direction: column !important;
             overflow: hidden !important;
         }
-        
+
         .chat-messages {
             flex: 1 !important;
             overflow-y: auto !important;
@@ -202,17 +229,18 @@
             background: rgba(0, 0, 0, 0.5) !important;
             min-height: 0 !important;
         }
-        
+
         .message {
             display: flex !important;
             gap: 10px !important;
             max-width: 90% !important;
         }
+
         .message.user {
             align-self: flex-end !important;
             flex-direction: row-reverse !important;
         }
-        
+
         .message-avatar {
             width: 32px !important;
             height: 32px !important;
@@ -223,7 +251,7 @@
             justify-content: center !important;
             font-size: 16px !important;
         }
-        
+
         .message-content {
             background: rgba(255, 77, 184, 0.12) !important;
             border: 1px solid #ff4db8 !important;
@@ -234,17 +262,18 @@
             font-family: 'Orbitron', monospace !important;
             word-break: break-word !important;
         }
+
         .message.user .message-content {
             background: rgba(255, 77, 184, 0.2) !important;
         }
-        
+
         .message-time {
             font-size: 9px !important;
-            color: rgba(255,255,255,0.5) !important;
+            color: rgba(255, 255, 255, 0.5) !important;
             margin-top: 4px !important;
             text-align: right !important;
         }
-        
+
         .chat-image {
             max-width: 180px !important;
             max-height: 150px !important;
@@ -253,7 +282,7 @@
             border: 1px solid #ff4db8 !important;
             cursor: pointer !important;
         }
-        
+
         .chat-file {
             display: flex !important;
             align-items: center !important;
@@ -265,17 +294,29 @@
             margin-top: 5px !important;
             cursor: pointer !important;
         }
+
         .chat-file:hover {
             background: rgba(255, 77, 184, 0.25) !important;
         }
-        
-        .file-icon { font-size: 24px !important; }
-        .file-info { flex: 1 !important; }
+
+        .file-icon {
+            font-size: 24px !important;
+        }
+
+        .file-info {
+            flex: 1 !important;
+        }
+
         .file-name {
             font-size: 11px !important;
             color: #ff4db8 !important;
         }
-        .file-size { font-size: 9px !important; color: #888 !important; }
+
+        .file-size {
+            font-size: 9px !important;
+            color: #888 !important;
+        }
+
         .file-badge {
             background: rgba(255, 77, 184, 0.2) !important;
             border-radius: 4px !important;
@@ -283,7 +324,7 @@
             font-size: 9px !important;
             color: #ff4db8 !important;
         }
-        
+
         .chat-input-area {
             display: flex !important;
             gap: 8px !important;
@@ -293,7 +334,7 @@
             align-items: center !important;
             flex-shrink: 0 !important;
         }
-        
+
         .chat-input-area input[type="text"] {
             flex: 1 !important;
             background: rgba(10, 20, 40, 0.9) !important;
@@ -305,10 +346,11 @@
             font-size: 12px !important;
             outline: none !important;
         }
+
         .chat-input-area input[type="text"]:focus {
             box-shadow: 0 0 10px rgba(255, 77, 184, 0.5) !important;
         }
-        
+
         .chat-input-area button {
             background: rgba(0, 0, 0, 0.8) !important;
             border: 1px solid #ff4db8 !important;
@@ -319,10 +361,11 @@
             cursor: pointer !important;
             font-size: 16px !important;
         }
+
         .chat-input-area button:hover {
             background: rgba(255, 77, 184, 0.2) !important;
         }
-        
+
         .attach-btn {
             background: rgba(0, 0, 0, 0.8) !important;
             border: 1px solid #ff4db8 !important;
@@ -333,544 +376,2613 @@
             cursor: pointer !important;
             font-size: 16px !important;
         }
+
         .attach-btn:hover {
             background: rgba(255, 77, 184, 0.2) !important;
         }
-        
-        .chat-messages::-webkit-scrollbar { width: 5px; }
-        .chat-messages::-webkit-scrollbar-track { background: #0a0a1a; }
-        .chat-messages::-webkit-scrollbar-thumb { background: #ff4db8; border-radius: 5px; }
-        
+
+        .chat-messages::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: #0a0a1a;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #ff4db8;
+            border-radius: 5px;
+        }
+
         @media (max-width: 600px) {
-            .chat-container.level-1 { width: calc(100% - 20px) !important; }
-            .chat-container.level-0 { width: calc(100% - 20px) !important; }
-            .chat-image { max-width: 130px !important; }
+            .chat-container.level-1 {
+                width: calc(100% - 20px) !important;
+            }
+
+            .chat-container.level-0 {
+                width: calc(100% - 20px) !important;
+            }
+
+            .chat-image {
+                max-width: 130px !important;
+            }
         }
     </style>
 </head>
+
 <body>
-    <div id="canvas-container" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"></div>
-    
-    <div class="portal-planner-btn" id="portalPlannerBtn" title="Abrir Portal Planner">🗺️</div>
-    
+
+    <!-- ============================================
+         CENA 3D
+    ============================================ -->
+
+    <div
+        id="canvas-container"
+        style="
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        "
+    ></div>
+
+    <!-- ============================================
+         PORTAL PLANNER
+    ============================================ -->
+
+    <div
+        class="portal-planner-btn"
+        id="portalPlannerBtn"
+        title="Abrir Portal Planner"
+    >
+        🗺️
+    </div>
+
+    <!-- ============================================
+         TOP ICONS
+    ============================================ -->
+
     <div class="top-icons" style="z-index: 100;">
-        <div class="top-icon" id="backButton" data-tooltip="Voltar ao Grimório">←</div>
-        <div class="top-icon voice-icon" id="voiceButton" data-tooltip="Modo Jarvis (clique para ativar)">
+
+        <div
+            class="top-icon"
+            id="backButton"
+            data-tooltip="Voltar ao Grimório"
+        >
+            ←
+        </div>
+
+        <div
+            class="top-icon voice-icon"
+            id="voiceButton"
+            data-tooltip="Modo Jarvis (clique para ativar)"
+        >
             <span class="brain-icon">👩‍💼</span>
             <span class="mic-icon">🎤</span>
+
             <div class="mental-wave"></div>
-            <div class="brain-waves left"><span></span><span></span><span></span><span></span><span></span></div>
-            <div class="brain-waves right"><span></span><span></span><span></span><span></span><span></span></div>
+
+            <div class="brain-waves left">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <div class="brain-waves right">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
-        <div class="top-icon" id="profileButton" data-tooltip="Perfil da Diva">🤖</div>
+
+        <div
+            class="top-icon"
+            id="profileButton"
+            data-tooltip="Perfil da Diva"
+        >
+            🤖
+        </div>
+
     </div>
-    
+
     <div class="profile-panel" id="profilePanel"></div>
-    
-    <div class="chat-container" id="chatContainer" style="z-index: 200;">
-        <div class="chat-header" id="chatHeader">
+
+    <!-- ============================================
+         CHAT
+    ============================================ -->
+
+    <div
+        class="chat-container"
+        id="chatContainer"
+        style="z-index: 200;"
+    >
+
+        <div
+            class="chat-header"
+            id="chatHeader"
+        >
+
             <div class="chat-header-info">
-                <div class="chat-avatar">🜁</div>
-                <div>
-                    <h4>DIVA • Assistente Arcana</h4>
-                    <div class="chat-status">🟢 online | modo mentalista</div>
+
+                <div class="chat-avatar">
+                    🜁
                 </div>
+
+                <div>
+
+                    <h4>
+                        DIVA • Assistente Arcana
+                    </h4>
+
+                    <div class="chat-status">
+                        🟢 online | modo mentalista
+                    </div>
+
+                </div>
+
             </div>
-            <div class="chat-toggle" id="chatToggle">▼</div>
+
+            <div
+                class="chat-toggle"
+                id="chatToggle"
+            >
+                ▼
+            </div>
+
         </div>
-        <div class="chat-body" id="chatBody">
-            <div class="chat-messages" id="chatMessages"></div>
+
+        <div
+            class="chat-body"
+            id="chatBody"
+        >
+
+            <div
+                class="chat-messages"
+                id="chatMessages"
+            ></div>
+
             <div class="chat-input-area">
-                <input type="text" id="chatInput" placeholder="Digite sua mensagem...">
-                <button id="sendChatBtn">➤</button>
+
+                <input
+                    type="text"
+                    id="chatInput"
+                    placeholder="Digite sua mensagem..."
+                >
+
+                <button id="sendChatBtn">
+                    ➤
+                </button>
+
             </div>
+
         </div>
+
     </div>
-    
-    <div class="portal-overlay" id="portalOverlay"></div>
+
+    <div
+        class="portal-overlay"
+        id="portalOverlay"
+    ></div>
+
+    <!-- ============================================
+         THREE.JS
+    ============================================ -->
 
     <script type="importmap">
-        {
-            "imports": {
-                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
-            }
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
         }
+    }
     </script>
 
     <script type="module">
+
         import * as THREE from 'three';
-        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-        import { initUI } from '../shared/js/ui.js';
-        import { ChatSystem } from '../shared/js/chat.js';
-        import { VoiceAssistant } from '../shared/js/voice-assistant.js';
-        
-        // ============================================
-        // ENHANCED CHAT SYSTEM COM 3 NÍVEIS
-        // ============================================
+
+        import {
+            OrbitControls
+        } from 'three/addons/controls/OrbitControls.js';
+
+        import {
+            GLTFLoader
+        } from 'three/addons/loaders/GLTFLoader.js';
+
+        import {
+            initUI
+        } from '../shared/js/ui.js';
+
+        import {
+            ChatSystem
+        } from '../shared/js/chat.js';
+
+        import {
+            VoiceAssistant
+        } from '../shared/js/voice-assistant.js';
+
+
+        // ============================================================
+        // ENHANCED CHAT SYSTEM
+        // ============================================================
+
         class EnhancedChatSystem extends ChatSystem {
+
             constructor(containerId, config, onSpeak) {
-                super(containerId, config, onSpeak);
+
+                super(
+                    containerId,
+                    config,
+                    onSpeak
+                );
+
                 this.addAttachButton();
-                setTimeout(() => this.setupThreeLevels(), 100);
+
+                setTimeout(() => {
+                    this.setupThreeLevels();
+                }, 100);
             }
-            
+
+
             setupThreeLevels() {
-                const header = this.container.querySelector('.chat-header');
+
+                const header =
+                    this.container.querySelector('.chat-header');
+
                 if (!header) return;
-                
-                const oldToggle = this.container.querySelector('.chat-toggle');
-                if (oldToggle) oldToggle.style.display = 'none';
-                
-                const actionsDiv = document.createElement('div');
-                actionsDiv.className = 'chat-header-actions';
-                
-                const fsBtn = document.createElement('button');
-                fsBtn.className = 'fullscreen-toggle';
+
+
+                const oldToggle =
+                    this.container.querySelector('.chat-toggle');
+
+                if (oldToggle) {
+                    oldToggle.style.display = 'none';
+                }
+
+
+                const actionsDiv =
+                    document.createElement('div');
+
+                actionsDiv.className =
+                    'chat-header-actions';
+
+
+                const fsBtn =
+                    document.createElement('button');
+
+                fsBtn.className =
+                    'fullscreen-toggle';
+
                 fsBtn.innerHTML = '⛶';
-                fsBtn.title = 'Tela cheia';
-                
-                const toggleBtn = document.createElement('button');
-                toggleBtn.className = 'chat-toggle';
+
+                fsBtn.title =
+                    'Tela cheia';
+
+
+                const toggleBtn =
+                    document.createElement('button');
+
+                toggleBtn.className =
+                    'chat-toggle';
+
                 toggleBtn.innerHTML = '▲';
-                toggleBtn.title = 'Expandir';
-                
+
+                toggleBtn.title =
+                    'Expandir';
+
+
                 actionsDiv.appendChild(fsBtn);
                 actionsDiv.appendChild(toggleBtn);
+
                 header.appendChild(actionsDiv);
-                
+
+
                 let level = 0;
-                
+
+
                 const setLevel = (newLevel) => {
+
                     level = newLevel;
-                    this.container.classList.remove('level-0', 'level-1', 'level-2');
-                    this.container.classList.add(`level-${level}`);
-                    
-                    toggleBtn.innerHTML = level === 0 ? '▲' : '▼';
-                    toggleBtn.title = level === 0 ? 'Expandir' : 'Minimizar';
-                    fsBtn.innerHTML = level === 2 ? '✖' : '⛶';
-                    fsBtn.title = level === 2 ? 'Sair da tela cheia' : 'Tela cheia';
-                    
+
+                    this.container.classList.remove(
+                        'level-0',
+                        'level-1',
+                        'level-2'
+                    );
+
+                    this.container.classList.add(
+                        `level-${level}`
+                    );
+
+
+                    toggleBtn.innerHTML =
+                        level === 0
+                            ? '▲'
+                            : '▼';
+
+                    toggleBtn.title =
+                        level === 0
+                            ? 'Expandir'
+                            : 'Minimizar';
+
+
+                    fsBtn.innerHTML =
+                        level === 2
+                            ? '✖'
+                            : '⛶';
+
+                    fsBtn.title =
+                        level === 2
+                            ? 'Sair da tela cheia'
+                            : 'Tela cheia';
+
+
                     if (level === 2) {
+
                         if (!this._escHandler) {
-                            this._escHandler = (e) => {
-                                if (e.key === 'Escape') setLevel(1);
-                            };
-                            document.addEventListener('keydown', this._escHandler);
+
+                            this._escHandler =
+                                (e) => {
+
+                                    if (e.key === 'Escape') {
+                                        setLevel(1);
+                                    }
+
+                                };
+
+                            document.addEventListener(
+                                'keydown',
+                                this._escHandler
+                            );
                         }
+
                     } else {
+
                         if (this._escHandler) {
-                            document.removeEventListener('keydown', this._escHandler);
+
+                            document.removeEventListener(
+                                'keydown',
+                                this._escHandler
+                            );
+
                             this._escHandler = null;
                         }
                     }
                 };
-                
+
+
                 fsBtn.onclick = (e) => {
+
                     e.stopPropagation();
-                    setLevel(level === 2 ? 1 : 2);
+
+                    setLevel(
+                        level === 2
+                            ? 1
+                            : 2
+                    );
                 };
-                
+
+
                 toggleBtn.onclick = (e) => {
+
                     e.stopPropagation();
-                    setLevel(level === 0 ? 1 : 0);
+
+                    setLevel(
+                        level === 0
+                            ? 1
+                            : 0
+                    );
                 };
-                
+
+
                 header.onclick = (e) => {
-                    if (e.target.closest('button')) return;
-                    setLevel(level === 0 ? 1 : 0);
+
+                    if (e.target.closest('button')) {
+                        return;
+                    }
+
+                    setLevel(
+                        level === 0
+                            ? 1
+                            : 0
+                    );
                 };
-                
+
+
                 setLevel(0);
             }
-            
+
+
             addAttachButton() {
-                const inputArea = this.container.querySelector('.chat-input-area');
-                if (!inputArea || inputArea.querySelector('.attach-btn')) return;
-                
-                const attachBtn = document.createElement('button');
-                attachBtn.className = 'attach-btn';
-                attachBtn.innerHTML = '📎';
-                attachBtn.title = 'Enviar arquivo';
-                
-                const fileInput = document.createElement('input');
+
+                const inputArea =
+                    this.container.querySelector(
+                        '.chat-input-area'
+                    );
+
+                if (!inputArea) return;
+
+                if (
+                    inputArea.querySelector(
+                        '.attach-btn'
+                    )
+                ) {
+                    return;
+                }
+
+
+                const attachBtn =
+                    document.createElement('button');
+
+                attachBtn.className =
+                    'attach-btn';
+
+                attachBtn.innerHTML =
+                    '📎';
+
+                attachBtn.title =
+                    'Enviar arquivo';
+
+
+                const fileInput =
+                    document.createElement('input');
+
                 fileInput.type = 'file';
-                fileInput.style.display = 'none';
-                
-                attachBtn.onclick = () => fileInput.click();
-                fileInput.onchange = (e) => {
-                    const file = e.target.files[0];
-                    if (file) this.handleFileUpload(file);
-                    fileInput.value = '';
-                };
-                
-                const textInput = inputArea.querySelector('input[type="text"]');
+
+                fileInput.style.display =
+                    'none';
+
+
+                attachBtn.onclick =
+                    () => fileInput.click();
+
+
+                fileInput.onchange =
+                    (e) => {
+
+                        const file =
+                            e.target.files[0];
+
+                        if (file) {
+                            this.handleFileUpload(file);
+                        }
+
+                        fileInput.value = '';
+                    };
+
+
+                const textInput =
+                    inputArea.querySelector(
+                        'input[type="text"]'
+                    );
+
+
                 if (textInput) {
-                    inputArea.insertBefore(attachBtn, textInput);
-                    inputArea.insertBefore(fileInput, textInput);
+
+                    inputArea.insertBefore(
+                        attachBtn,
+                        textInput
+                    );
+
+                    inputArea.insertBefore(
+                        fileInput,
+                        textInput
+                    );
                 }
             }
-            
+
+
             handleFileUpload(file) {
-                const fileType = file.type;
-                const fileName = file.name;
-                const fileSize = this.formatFileSize(file.size);
-                
-                if (fileType.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = (ev) => {
-                        this.addImageMessage(ev.target.result, fileName, fileSize);
-                    };
+
+                const fileType =
+                    file.type;
+
+                const fileName =
+                    file.name;
+
+                const fileSize =
+                    this.formatFileSize(
+                        file.size
+                    );
+
+
+                if (
+                    fileType.startsWith('image/')
+                ) {
+
+                    const reader =
+                        new FileReader();
+
+                    reader.onload =
+                        (ev) => {
+
+                            this.addImageMessage(
+                                ev.target.result,
+                                fileName,
+                                fileSize
+                            );
+                        };
+
                     reader.readAsDataURL(file);
+
                 } else {
-                    const reader = new FileReader();
-                    reader.onload = (ev) => {
-                        this.addFileMessage(ev.target.result, fileName, fileSize);
-                    };
+
+                    const reader =
+                        new FileReader();
+
+                    reader.onload =
+                        (ev) => {
+
+                            this.addFileMessage(
+                                ev.target.result,
+                                fileName,
+                                fileSize
+                            );
+                        };
+
                     reader.readAsDataURL(file);
                 }
             }
-            
+
+
             formatFileSize(bytes) {
-                if (bytes === 0) return '0 Bytes';
+
+                if (bytes === 0) {
+                    return '0 Bytes';
+                }
+
                 const k = 1024;
-                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-                const i = Math.floor(Math.log(bytes) / Math.log(k));
-                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+
+                const sizes = [
+                    'Bytes',
+                    'KB',
+                    'MB',
+                    'GB'
+                ];
+
+                const i =
+                    Math.floor(
+                        Math.log(bytes) /
+                        Math.log(k)
+                    );
+
+                return (
+                    parseFloat(
+                        (
+                            bytes /
+                            Math.pow(k, i)
+                        ).toFixed(2)
+                    ) +
+                    ' ' +
+                    sizes[i]
+                );
             }
-            
-            addImageMessage(imageUrl, fileName, fileSize) {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = 'message user';
-                const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-                
+
+
+            addImageMessage(
+                imageUrl,
+                fileName,
+                fileSize
+            ) {
+
+                const messageDiv =
+                    document.createElement('div');
+
+                messageDiv.className =
+                    'message user';
+
+
+                const time =
+                    new Date().toLocaleTimeString(
+                        'pt-BR',
+                        {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        }
+                    );
+
+
                 messageDiv.innerHTML = `
                     <div class="message-avatar">👤</div>
+
                     <div class="message-content">
-                        <div>🖼️ ${fileName} <span style="font-size:9px; color:#888;">(${fileSize})</span></div>
-                        <img src="${imageUrl}" class="chat-image" onclick="window.open('${imageUrl}')">
-                        <div class="message-time">${time}</div>
-                    </div>
-                `;
-                this.messagesContainer.appendChild(messageDiv);
-                this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
-            }
-            
-            addFileMessage(fileData, fileName, fileSize) {
-                const extension = fileName.split('.').pop().toUpperCase();
-                const messageDiv = document.createElement('div');
-                messageDiv.className = 'message user';
-                const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-                
-                messageDiv.innerHTML = `
-                    <div class="message-avatar">👤</div>
-                    <div class="message-content">
-                        <div>📎 Arquivo anexado</div>
-                        <div class="chat-file" onclick="window.open('${fileData}')">
-                            <div class="file-icon">📄</div>
-                            <div class="file-info">
-                                <div class="file-name">${fileName}</div>
-                                <div class="file-size">${fileSize}</div>
-                            </div>
-                            <div class="file-badge">${extension}</div>
+
+                        <div>
+                            🖼️ ${fileName}
+                            <span
+                                style="
+                                    font-size:9px;
+                                    color:#888;
+                                "
+                            >
+                                (${fileSize})
+                            </span>
                         </div>
-                        <div class="message-time">${time}</div>
+
+                        <img
+                            src="${imageUrl}"
+                            class="chat-image"
+                            onclick="window.open('${imageUrl}')"
+                        >
+
+                        <div class="message-time">
+                            ${time}
+                        </div>
+
                     </div>
                 `;
-                this.messagesContainer.appendChild(messageDiv);
-                this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+
+
+                this.messagesContainer.appendChild(
+                    messageDiv
+                );
+
+                this.messagesContainer.scrollTop =
+                    this.messagesContainer.scrollHeight;
+            }
+
+
+            addFileMessage(
+                fileData,
+                fileName,
+                fileSize
+            ) {
+
+                const extension =
+                    fileName
+                        .split('.')
+                        .pop()
+                        .toUpperCase();
+
+
+                const messageDiv =
+                    document.createElement('div');
+
+                messageDiv.className =
+                    'message user';
+
+
+                const time =
+                    new Date().toLocaleTimeString(
+                        'pt-BR',
+                        {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        }
+                    );
+
+
+                messageDiv.innerHTML = `
+                    <div class="message-avatar">👤</div>
+
+                    <div class="message-content">
+
+                        <div>
+                            📎 Arquivo anexado
+                        </div>
+
+                        <div
+                            class="chat-file"
+                            onclick="window.open('${fileData}')"
+                        >
+
+                            <div class="file-icon">
+                                📄
+                            </div>
+
+                            <div class="file-info">
+
+                                <div class="file-name">
+                                    ${fileName}
+                                </div>
+
+                                <div class="file-size">
+                                    ${fileSize}
+                                </div>
+
+                            </div>
+
+                            <div class="file-badge">
+                                ${extension}
+                            </div>
+
+                        </div>
+
+                        <div class="message-time">
+                            ${time}
+                        </div>
+
+                    </div>
+                `;
+
+
+                this.messagesContainer.appendChild(
+                    messageDiv
+                );
+
+                this.messagesContainer.scrollTop =
+                    this.messagesContainer.scrollHeight;
             }
         }
-        
+
+
+        // ============================================================
+        // CONFIGURAÇÃO DIVA
+        // ============================================================
+
         const config = {
+
             name: 'DIVA',
-            title: '✦ AUTOMAÇÃO ARCANA • ASSISTENTE MENTALISTA ✦',
-            color: '#ff4db8',
-            icon: '🜁',
-            modelPath: '../models/diva2.glb',
-            modelScale: 0.5,
-            modelPositionY: -0.25,
-            bgColor: 0x050510,
-            cameraPosition: { x: 3, y: 2.2, z: 4.5 },
-            welcomeMessage: '✨ Olá! Sou Diva. Clique no ícone 👩‍💼 para ativar o modo Jarvis (escuta contínua) ou digite sua mensagem. Como posso ajudar?',
+
+            title:
+                '✦ AUTOMAÇÃO ARCANA • ASSISTENTE MENTALISTA ✦',
+
+            color:
+                '#ff4db8',
+
+            icon:
+                '🜁',
+
+            modelPath:
+                '../models/diva2.glb',
+
+            modelScale:
+                0.5,
+
+            modelPositionY:
+                -0.25,
+
+            bgColor:
+                0x050510,
+
+            cameraPosition: {
+                x: 3,
+                y: 2.2,
+                z: 4.5
+            },
+
+            welcomeMessage:
+                '✨ Olá! Sou Diva. Clique no ícone 👩‍💼 para ativar o modo Jarvis (escuta contínua) ou digite sua mensagem. Como posso ajudar?',
+
             skills: [
-                { name: '🤖 Automação', value: 96 },
-                { name: '🧠 Leitura Contextual', value: 94 },
-                { name: '💬 Comunicação', value: 98 },
-                { name: '🌀 Sintonia Mentalista', value: 91 }
+
+                {
+                    name: '🤖 Automação',
+                    value: 96
+                },
+
+                {
+                    name: '🧠 Leitura Contextual',
+                    value: 94
+                },
+
+                {
+                    name: '💬 Comunicação',
+                    value: 98
+                },
+
+                {
+                    name: '🌀 Sintonia Mentalista',
+                    value: 91
+                }
+
             ],
-            personalityText: '💎 "Sua assistente mentalista. Entre o código e a alma."',
+
+            personalityText:
+                '💎 "Sua assistente mentalista. Entre o código e a alma."',
+
+
             getResponse: (msg) => {
-                const lower = msg.toLowerCase();
-                if (lower.includes('olá') || lower.includes('oi')) return "✨ Olá! Sinta a energia do meu reino neon. Como posso ajudar?";
-                if (lower.includes('automação')) return "🤖 Automação é meu dom. Posso criar rotinas, lembretes, integrar sistemas...";
-                if (lower.includes('habilidades')) return "🜁 Automação, leitura contextual, comunicação estratégica e sintonia mentalista.";
-                if (lower.includes('imagem') || lower.includes('foto') || lower.includes('arquivo')) return "📎 Arquivo recebido! Processando dados... Minha mente mentalista já está analisando.";
-                if (lower.includes('obrigado')) return "💫 Por nada! Foi um prazer arcano te ajudar.";
-                return "🧠 Percebo o que você diz... Como sua assistente mentalista, posso te ajudar com automação ou apenas conversar.";
+
+                const lower =
+                    msg.toLowerCase();
+
+
+                if (
+                    lower.includes('olá') ||
+                    lower.includes('oi')
+                ) {
+                    return '✨ Olá! Sinta a energia do meu reino neon. Como posso ajudar?';
+                }
+
+
+                if (
+                    lower.includes('automação')
+                ) {
+                    return '🤖 Automação é meu dom. Posso criar rotinas, lembretes, integrar sistemas...';
+                }
+
+
+                if (
+                    lower.includes('habilidades')
+                ) {
+                    return '🜁 Automação, leitura contextual, comunicação estratégica e sintonia mentalista.';
+                }
+
+
+                if (
+                    lower.includes('imagem') ||
+                    lower.includes('foto') ||
+                    lower.includes('arquivo')
+                ) {
+                    return '📎 Arquivo recebido! Processando dados... Minha mente mentalista já está analisando.';
+                }
+
+
+                if (
+                    lower.includes('obrigado')
+                ) {
+                    return '💫 Por nada! Foi um prazer arcano te ajudar.';
+                }
+
+
+                return '🧠 Percebo o que você diz... Como sua assistente mentalista, posso te ajudar com automação ou apenas conversar.';
             }
         };
-        
-        // ============================================
+
+
+        // ============================================================
         // PORTAL PLANNER
-        // ============================================
-        const portalPlannerBtn = document.getElementById('portalPlannerBtn');
-        
+        // ============================================================
+
+        const portalPlannerBtn =
+            document.getElementById(
+                'portalPlannerBtn'
+            );
+
+
         function openPortalPlanner() {
-            localStorage.setItem('lastAsura', 'diva');
-            document.body.classList.add('transition-out');
-            const flashOverlay = document.createElement('div');
-            flashOverlay.style.cssText = `position:fixed;inset:0;background:radial-gradient(circle,#ff4db8,transparent);opacity:0;transition:opacity 0.5s;z-index:10000;pointer-events:none;`;
-            document.body.appendChild(flashOverlay);
+
+            localStorage.setItem(
+                'lastAsura',
+                'diva'
+            );
+
+
+            document.body.classList.add(
+                'transition-out'
+            );
+
+
+            const flashOverlay =
+                document.createElement('div');
+
+
+            flashOverlay.style.cssText =
+                `
+                position:fixed;
+                inset:0;
+                background:
+                    radial-gradient(
+                        circle,
+                        #ff4db8,
+                        transparent
+                    );
+                opacity:0;
+                transition:opacity 0.5s;
+                z-index:10000;
+                pointer-events:none;
+                `;
+
+
+            document.body.appendChild(
+                flashOverlay
+            );
+
+
             requestAnimationFrame(() => {
-                flashOverlay.style.opacity = '0.8';
-                setTimeout(() => window.location.href = '../shared/portals/portal-system.html?asura=diva', 400);
+
+                flashOverlay.style.opacity =
+                    '0.8';
+
+
+                setTimeout(() => {
+
+                    window.location.href =
+                        '../shared/portals/portal-system.html?asura=diva';
+
+                }, 400);
             });
         }
-        
+
+
         if (portalPlannerBtn) {
-            portalPlannerBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                openPortalPlanner();
-            });
+
+            portalPlannerBtn.addEventListener(
+                'click',
+                (e) => {
+
+                    e.preventDefault();
+
+                    openPortalPlanner();
+                }
+            );
         }
-        
-        // ============================================
+
+
+        // ============================================================
         // VOLTAR AO GRIMÓRIO
-        // ============================================
+        // ============================================================
+
         function voltarAoGrimorio() {
-            document.body.classList.add('transition-out');
-            const flash = document.createElement('div');
-            flash.style.cssText = `position:fixed;inset:0;background:radial-gradient(circle,${config.color},transparent);opacity:0;transition:opacity 0.4s;z-index:100000;pointer-events:none;`;
-            document.body.appendChild(flash);
+
+            document.body.classList.add(
+                'transition-out'
+            );
+
+
+            const flash =
+                document.createElement('div');
+
+
+            flash.style.cssText =
+                `
+                position:fixed;
+                inset:0;
+                background:
+                    radial-gradient(
+                        circle,
+                        ${config.color},
+                        transparent
+                    );
+                opacity:0;
+                transition:opacity 0.4s;
+                z-index:100000;
+                pointer-events:none;
+                `;
+
+
+            document.body.appendChild(
+                flash
+            );
+
+
             requestAnimationFrame(() => {
-                flash.style.opacity = '0.8';
-                setTimeout(() => window.location.href = '../index.html', 350);
+
+                flash.style.opacity =
+                    '0.8';
+
+
+                setTimeout(() => {
+
+                    window.location.href =
+                        '../index.html';
+
+                }, 350);
             });
         }
-        
-        window.addEventListener('popstate', (event) => {
-            event.preventDefault();
-            history.pushState(null, null, window.location.href);
-            voltarAoGrimorio();
-        });
-        history.pushState(null, null, window.location.href);
-        
-        // ============================================
-        // CENA 3D COMPLETA - DIVA
-        // ============================================
-        const container = document.getElementById('canvas-container');
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(config.bgColor);
-        scene.fog = new THREE.FogExp2(config.bgColor, 0.008);
-        
-        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(config.cameraPosition.x, config.cameraPosition.y, config.cameraPosition.z);
-        camera.lookAt(0, 0.8, 0);
-        
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.shadowMap.enabled = true;
-        container.appendChild(renderer.domElement);
-        
-        const controls = new OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.05;
-        controls.enableZoom = true;
-        controls.enablePan = true;
-        controls.target.set(0, 0.8, 0);
-        
+
+
+        window.addEventListener(
+            'popstate',
+            (event) => {
+
+                event.preventDefault();
+
+                history.pushState(
+                    null,
+                    null,
+                    window.location.href
+                );
+
+                voltarAoGrimorio();
+            }
+        );
+
+
+        history.pushState(
+            null,
+            null,
+            window.location.href
+        );
+
+
+        // ============================================================
+        // CENA 3D
+        // ============================================================
+
+        const container =
+            document.getElementById(
+                'canvas-container'
+            );
+
+
+        const scene =
+            new THREE.Scene();
+
+
+        scene.background =
+            new THREE.Color(
+                config.bgColor
+            );
+
+
+        scene.fog =
+            new THREE.FogExp2(
+                config.bgColor,
+                0.008
+            );
+
+
+        const camera =
+            new THREE.PerspectiveCamera(
+                45,
+                window.innerWidth /
+                window.innerHeight,
+                0.1,
+                1000
+            );
+
+
+        camera.position.set(
+            config.cameraPosition.x,
+            config.cameraPosition.y,
+            config.cameraPosition.z
+        );
+
+
+        camera.lookAt(
+            0,
+            0.8,
+            0
+        );
+
+
+        const renderer =
+            new THREE.WebGLRenderer({
+                antialias: true
+            });
+
+
+        renderer.setSize(
+            window.innerWidth,
+            window.innerHeight
+        );
+
+
+        renderer.setPixelRatio(
+            Math.min(
+                window.devicePixelRatio,
+                2
+            )
+        );
+
+
+        renderer.shadowMap.enabled =
+            true;
+
+
+        container.appendChild(
+            renderer.domElement
+        );
+
+
+        const controls =
+            new OrbitControls(
+                camera,
+                renderer.domElement
+            );
+
+
+        controls.enableDamping =
+            true;
+
+        controls.dampingFactor =
+            0.05;
+
+        controls.enableZoom =
+            true;
+
+        controls.enablePan =
+            true;
+
+
+        controls.target.set(
+            0,
+            0.8,
+            0
+        );
+
+
+        // ============================================================
         // LUZES NEON
-        const ambientLight = new THREE.AmbientLight(0x332233, 0.85);
-        scene.add(ambientLight);
-        const mainLight = new THREE.DirectionalLight(0xffaaff, 1.5);
-        mainLight.position.set(3, 5, 2);
-        mainLight.castShadow = true;
-        scene.add(mainLight);
-        const fillLight = new THREE.PointLight(config.color, 1.2);
-        fillLight.position.set(1, 2, 2);
-        scene.add(fillLight);
-        const bottomLight = new THREE.PointLight(0xff66cc, 0.7);
-        bottomLight.position.set(0, -1, 0);
-        scene.add(bottomLight);
-        const frontLight = new THREE.PointLight(0xffaacc, 0.5);
-        frontLight.position.set(0, 1, 2);
-        scene.add(frontLight);
-        const backLight = new THREE.PointLight(0x44aaff, 0.5);
-        backLight.position.set(-2, 1.5, -3);
-        scene.add(backLight);
-        const warmLight = new THREE.PointLight(0xffaa66, 0.4);
-        warmLight.position.set(2, 1, 1.5);
-        scene.add(warmLight);
-        
+        // ============================================================
+
+        const ambientLight =
+            new THREE.AmbientLight(
+                0x332233,
+                0.85
+            );
+
+        scene.add(
+            ambientLight
+        );
+
+
+        const mainLight =
+            new THREE.DirectionalLight(
+                0xffaaff,
+                1.5
+            );
+
+        mainLight.position.set(
+            3,
+            5,
+            2
+        );
+
+        mainLight.castShadow =
+            true;
+
+        scene.add(
+            mainLight
+        );
+
+
+        const fillLight =
+            new THREE.PointLight(
+                config.color,
+                1.2
+            );
+
+        fillLight.position.set(
+            1,
+            2,
+            2
+        );
+
+        scene.add(
+            fillLight
+        );
+
+
+        const bottomLight =
+            new THREE.PointLight(
+                0xff66cc,
+                0.7
+            );
+
+        bottomLight.position.set(
+            0,
+            -1,
+            0
+        );
+
+        scene.add(
+            bottomLight
+        );
+
+
+        const frontLight =
+            new THREE.PointLight(
+                0xffaacc,
+                0.5
+            );
+
+        frontLight.position.set(
+            0,
+            1,
+            2
+        );
+
+        scene.add(
+            frontLight
+        );
+
+
+        const backLight =
+            new THREE.PointLight(
+                0x44aaff,
+                0.5
+            );
+
+        backLight.position.set(
+            -2,
+            1.5,
+            -3
+        );
+
+        scene.add(
+            backLight
+        );
+
+
+        const warmLight =
+            new THREE.PointLight(
+                0xffaa66,
+                0.4
+            );
+
+        warmLight.position.set(
+            2,
+            1,
+            1.5
+        );
+
+        scene.add(
+            warmLight
+        );
+
+
+        // ============================================================
         // CHÃO NEON
-        const gridHelper = new THREE.GridHelper(12, 20, config.color, 0x333366);
-        gridHelper.position.y = -0.5;
-        gridHelper.material.transparent = true;
-        gridHelper.material.opacity = 0.35;
-        scene.add(gridHelper);
-        
-        const groundPlane = new THREE.Mesh(new THREE.PlaneGeometry(8, 8), new THREE.MeshStandardMaterial({ color: 0x0a0512, roughness: 0.7, metalness: 0.3, transparent: true, opacity: 0.4 }));
-        groundPlane.rotation.x = -Math.PI / 2;
-        groundPlane.position.y = -0.5;
-        groundPlane.receiveShadow = true;
-        scene.add(groundPlane);
-        
-        const circleGlow = new THREE.Mesh(new THREE.CircleGeometry(1.2, 32), new THREE.MeshStandardMaterial({ color: config.color, emissive: config.color, emissiveIntensity: 0.5, transparent: true, opacity: 0.5, side: THREE.DoubleSide }));
-        circleGlow.rotation.x = -Math.PI / 2;
-        circleGlow.position.y = -0.45;
-        scene.add(circleGlow);
-        
-        // HALO DE GLOW
-        const glowGeometry = new THREE.SphereGeometry(1.1, 16, 16);
-        const glowMaterial = new THREE.MeshBasicMaterial({ color: config.color, transparent: true, opacity: 0.1, side: THREE.BackSide });
-        const glowHalo = new THREE.Mesh(glowGeometry, glowMaterial);
-        glowHalo.position.set(0, 0.5, 0);
-        scene.add(glowHalo);
-        
-        // PARTÍCULAS ROSAS
-        const particleCount = 1200;
-        const particleGeometry = new THREE.BufferGeometry();
-        const particlePositions = new Float32Array(particleCount * 3);
-        for (let i = 0; i < particleCount; i++) {
-            particlePositions[i*3] = (Math.random() - 0.5) * 12;
-            particlePositions[i*3+1] = Math.random() * 4;
-            particlePositions[i*3+2] = (Math.random() - 0.5) * 10;
+        // ============================================================
+
+        const gridHelper =
+            new THREE.GridHelper(
+                12,
+                20,
+                config.color,
+                0x333366
+            );
+
+
+        gridHelper.position.y =
+            -0.5;
+
+
+        gridHelper.material.transparent =
+            true;
+
+
+        gridHelper.material.opacity =
+            0.35;
+
+
+        scene.add(
+            gridHelper
+        );
+
+
+        const groundPlane =
+            new THREE.Mesh(
+
+                new THREE.PlaneGeometry(
+                    8,
+                    8
+                ),
+
+                new THREE.MeshStandardMaterial({
+                    color: 0x0a0512,
+                    roughness: 0.7,
+                    metalness: 0.3,
+                    transparent: true,
+                    opacity: 0.4
+                })
+            );
+
+
+        groundPlane.rotation.x =
+            -Math.PI / 2;
+
+
+        groundPlane.position.y =
+            -0.5;
+
+
+        groundPlane.receiveShadow =
+            true;
+
+
+        scene.add(
+            groundPlane
+        );
+
+
+        const circleGlow =
+            new THREE.Mesh(
+
+                new THREE.CircleGeometry(
+                    1.2,
+                    32
+                ),
+
+                new THREE.MeshStandardMaterial({
+                    color: config.color,
+                    emissive: config.color,
+                    emissiveIntensity: 0.5,
+                    transparent: true,
+                    opacity: 0.5,
+                    side: THREE.DoubleSide
+                })
+            );
+
+
+        circleGlow.rotation.x =
+            -Math.PI / 2;
+
+
+        circleGlow.position.y =
+            -0.45;
+
+
+        scene.add(
+            circleGlow
+        );
+
+
+        // ============================================================
+        // HALO
+        // ============================================================
+
+        const glowGeometry =
+            new THREE.SphereGeometry(
+                1.1,
+                16,
+                16
+            );
+
+
+        const glowMaterial =
+            new THREE.MeshBasicMaterial({
+
+                color:
+                    config.color,
+
+                transparent:
+                    true,
+
+                opacity:
+                    0.1,
+
+                side:
+                    THREE.BackSide
+            });
+
+
+        const glowHalo =
+            new THREE.Mesh(
+                glowGeometry,
+                glowMaterial
+            );
+
+
+        glowHalo.position.set(
+            0,
+            0.5,
+            0
+        );
+
+
+        scene.add(
+            glowHalo
+        );
+
+
+        // ============================================================
+        // PARTÍCULAS
+        // ============================================================
+
+        const particleCount =
+            1200;
+
+
+        const particleGeometry =
+            new THREE.BufferGeometry();
+
+
+        const particlePositions =
+            new Float32Array(
+                particleCount * 3
+            );
+
+
+        for (
+            let i = 0;
+            i < particleCount;
+            i++
+        ) {
+
+            particlePositions[i * 3] =
+                (Math.random() - 0.5) * 12;
+
+            particlePositions[i * 3 + 1] =
+                Math.random() * 4;
+
+            particlePositions[i * 3 + 2] =
+                (Math.random() - 0.5) * 10;
         }
-        particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
-        const particleMaterial = new THREE.PointsMaterial({ color: config.color, size: 0.045, transparent: true, opacity: 0.55 });
-        const particles = new THREE.Points(particleGeometry, particleMaterial);
-        scene.add(particles);
-        
-        // ANÉIS FLUTUANTES
-        const ringGeometry1 = new THREE.TorusGeometry(1.0, 0.03, 64, 200);
-        const ringMaterial1 = new THREE.MeshStandardMaterial({ color: config.color, emissive: config.color, emissiveIntensity: 0.6 });
-        const ring1 = new THREE.Mesh(ringGeometry1, ringMaterial1);
-        ring1.position.y = 0.2;
-        ring1.rotation.x = Math.PI / 2;
-        scene.add(ring1);
-        
-        const ringGeometry2 = new THREE.TorusGeometry(1.3, 0.02, 64, 200);
-        const ring2 = new THREE.Mesh(ringGeometry2, ringMaterial1);
-        ring2.position.y = 0.1;
-        ring2.rotation.x = Math.PI / 2 + 0.3;
-        scene.add(ring2);
-        
-        // MODELO 3D
-        const loader = new GLTFLoader();
-        let model = null;
-        let mixer = null;
-        
-        loader.load(config.modelPath, (gltf) => {
-            model = gltf.scene;
-            model.position.set(0, config.modelPositionY, 0);
-            model.scale.set(config.modelScale, config.modelScale, config.modelScale);
-            model.traverse((node) => {
-                if (node.isMesh) {
-                    node.castShadow = true;
-                    const isEye = node.name && (node.name.toLowerCase().includes('eye') || node.name.toLowerCase().includes('olho'));
-                    if (isEye && node.material) {
-                        node.material.emissive = new THREE.Color(0xff66cc);
-                        node.material.emissiveIntensity = 0.6;
+
+
+        particleGeometry.setAttribute(
+            'position',
+            new THREE.BufferAttribute(
+                particlePositions,
+                3
+            )
+        );
+
+
+        const particleMaterial =
+            new THREE.PointsMaterial({
+
+                color:
+                    config.color,
+
+                size:
+                    0.045,
+
+                transparent:
+                    true,
+
+                opacity:
+                    0.55
+            });
+
+
+        const particles =
+            new THREE.Points(
+                particleGeometry,
+                particleMaterial
+            );
+
+
+        scene.add(
+            particles
+        );
+
+
+        // ============================================================
+        // ANÉIS
+        // ============================================================
+
+        const ringGeometry1 =
+            new THREE.TorusGeometry(
+                1.0,
+                0.03,
+                64,
+                200
+            );
+
+
+        const ringMaterial1 =
+            new THREE.MeshStandardMaterial({
+
+                color:
+                    config.color,
+
+                emissive:
+                    config.color,
+
+                emissiveIntensity:
+                    0.6
+            });
+
+
+        const ring1 =
+            new THREE.Mesh(
+                ringGeometry1,
+                ringMaterial1
+            );
+
+
+        ring1.position.y =
+            0.2;
+
+
+        ring1.rotation.x =
+            Math.PI / 2;
+
+
+        scene.add(
+            ring1
+        );
+
+
+        const ringGeometry2 =
+            new THREE.TorusGeometry(
+                1.3,
+                0.02,
+                64,
+                200
+            );
+
+
+        const ring2 =
+            new THREE.Mesh(
+                ringGeometry2,
+                ringMaterial1
+            );
+
+
+        ring2.position.y =
+            0.1;
+
+
+        ring2.rotation.x =
+            Math.PI / 2 + 0.3;
+
+
+        scene.add(
+            ring2
+        );
+
+
+        // ============================================================
+        // MODELO 3D + SISTEMA DE ANIMAÇÃO
+        // ============================================================
+
+        const loader =
+            new GLTFLoader();
+
+
+        let model =
+            null;
+
+
+        let mixer =
+            null;
+
+
+        /*
+         * Guarda as animações encontradas.
+         */
+        let animationClips =
+            [];
+
+
+        /*
+         * Animação corporal principal.
+         */
+        let bodyAction =
+            null;
+
+
+        /*
+         * Animações faciais.
+         */
+        const facialActions =
+            [];
+
+
+        // ============================================================
+        // FUNÇÃO: NORMALIZAR NOME
+        // ============================================================
+
+        function normalizeAnimationName(name) {
+
+            return String(name || '')
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(
+                    /[\u0300-\u036f]/g,
+                    ''
+                );
+        }
+
+
+        // ============================================================
+        // FUNÇÃO: ENCONTRAR IDLE
+        // ============================================================
+
+        function findIdleClip(clips) {
+
+            const idleKeywords = [
+
+                'idle',
+                'stand',
+                'standing',
+                'neutral',
+                'rest',
+                'resting',
+                'breath',
+                'breathing',
+                'default',
+                'base',
+                'relax',
+                'relaxed'
+            ];
+
+
+            /*
+             * Primeiro procura nomes muito explícitos.
+             */
+
+            for (
+                const keyword of idleKeywords
+            ) {
+
+                const found =
+                    clips.find(
+                        clip =>
+                            normalizeAnimationName(
+                                clip.name
+                            ).includes(keyword)
+                    );
+
+
+                if (found) {
+                    return found;
+                }
+            }
+
+
+            /*
+             * Se não encontrou Idle,
+             * procura animações que não pareçam
+             * caminhada/dança/ataque etc.
+             */
+
+            const dangerousKeywords = [
+
+                'walk',
+                'run',
+                'dance',
+                'jump',
+                'attack',
+                'kick',
+                'punch',
+                'sit',
+                'sitting',
+                'fall',
+                'death',
+                'die',
+                'fly',
+                'move'
+            ];
+
+
+            const safeCandidate =
+                clips.find(
+                    clip => {
+
+                        const name =
+                            normalizeAnimationName(
+                                clip.name
+                            );
+
+                        return !dangerousKeywords.some(
+                            keyword =>
+                                name.includes(keyword)
+                        );
+                    }
+                );
+
+
+            if (safeCandidate) {
+                return safeCandidate;
+            }
+
+
+            /*
+             * Último recurso:
+             * primeira animação.
+             */
+
+            return clips[0] || null;
+        }
+
+
+        // ============================================================
+        // FUNÇÃO: IDENTIFICAR ANIMAÇÕES DOS OLHOS
+        // ============================================================
+
+        function findFacialClips(clips) {
+
+            const facialKeywords = [
+
+                'eye',
+                'eyes',
+                'blink',
+                'blinking',
+                'look',
+                'lookat',
+                'face',
+                'facial',
+                'lid',
+                'eyelid',
+                'pupil'
+            ];
+
+
+            return clips.filter(
+                clip => {
+
+                    const name =
+                        normalizeAnimationName(
+                            clip.name
+                        );
+
+                    return facialKeywords.some(
+                        keyword =>
+                            name.includes(keyword)
+                    );
+                }
+            );
+        }
+
+
+        // ============================================================
+        // FUNÇÃO: TOCAR IDLE
+        // ============================================================
+
+        function playBodyIdle(clip) {
+
+            if (!mixer || !clip) {
+                return;
+            }
+
+
+            /*
+             * Para qualquer ação corporal anterior.
+             */
+
+            if (bodyAction) {
+
+                bodyAction.stop();
+
+                bodyAction.reset();
+            }
+
+
+            bodyAction =
+                mixer.clipAction(
+                    clip
+                );
+
+
+            bodyAction.reset();
+
+
+            bodyAction.setLoop(
+                THREE.LoopRepeat,
+                Infinity
+            );
+
+
+            bodyAction.clampWhenFinished =
+                false;
+
+
+            bodyAction.enabled =
+                true;
+
+
+            bodyAction.setEffectiveWeight(
+                1
+            );
+
+
+            bodyAction.setEffectiveTimeScale(
+                1
+            );
+
+
+            bodyAction.play();
+
+
+            console.log(
+                '🧍 IDLE CORPORAL ATIVO:',
+                clip.name
+            );
+        }
+
+
+        // ============================================================
+        // FUNÇÃO: ATIVAR ANIMAÇÕES FACIAIS
+        // ============================================================
+
+        function playFacialAnimations(clips) {
+
+            if (!mixer) {
+                return;
+            }
+
+
+            facialActions.length = 0;
+
+
+            clips.forEach(
+                clip => {
+
+                    /*
+                     * Evita tocar o mesmo clip que já está
+                     * sendo utilizado como animação corporal.
+                     */
+
+                    if (
+                        bodyAction &&
+                        bodyAction
+                            .getClip()
+                            .uuid === clip.uuid
+                    ) {
+                        return;
+                    }
+
+
+                    const action =
+                        mixer.clipAction(
+                            clip
+                        );
+
+
+                    action.reset();
+
+
+                    /*
+                     * Piscadas normalmente precisam
+                     * repetir para sempre.
+                     */
+
+                    action.setLoop(
+                        THREE.LoopRepeat,
+                        Infinity
+                    );
+
+
+                    action.setEffectiveWeight(
+                        1
+                    );
+
+
+                    action.play();
+
+
+                    facialActions.push(
+                        action
+                    );
+
+
+                    console.log(
+                        '👁️ ANIMAÇÃO FACIAL ATIVA:',
+                        clip.name
+                    );
+                }
+            );
+        }
+
+
+        // ============================================================
+        // CARREGAMENTO DO GLB
+        // ============================================================
+
+        loader.load(
+
+            config.modelPath,
+
+            (gltf) => {
+
+                console.log(
+                    '========================================'
+                );
+
+                console.log(
+                    '🤖 DIVA / ZITRA CARREGADA'
+                );
+
+                console.log(
+                    '========================================'
+                );
+
+
+                model =
+                    gltf.scene;
+
+
+                // ====================================================
+                // TRANSFORMAÇÃO DO MODELO
+                // ====================================================
+
+                model.position.set(
+                    0,
+                    config.modelPositionY,
+                    0
+                );
+
+
+                model.scale.set(
+                    config.modelScale,
+                    config.modelScale,
+                    config.modelScale
+                );
+
+
+                /*
+                 * Não forçamos rotação.
+                 *
+                 * Isso é importante porque o GLB já possui
+                 * sua orientação própria.
+                 */
+
+                model.rotation.set(
+                    0,
+                    0,
+                    0
+                );
+
+
+                // ====================================================
+                // ANALISAR MODELO
+                // ====================================================
+
+                model.traverse(
+                    (node) => {
+
+                        if (node.isMesh) {
+
+                            node.castShadow =
+                                true;
+
+                            node.receiveShadow =
+                                true;
+
+
+                            const nodeName =
+                                String(
+                                    node.name || ''
+                                ).toLowerCase();
+
+
+                            /*
+                             * Olhos recebem glow.
+                             */
+
+                            const isEye =
+                                nodeName.includes(
+                                    'eye'
+                                ) ||
+                                nodeName.includes(
+                                    'olho'
+                                ) ||
+                                nodeName.includes(
+                                    'pupil'
+                                ) ||
+                                nodeName.includes(
+                                    'pupila'
+                                );
+
+
+                            if (
+                                isEye &&
+                                node.material
+                            ) {
+
+                                const materials =
+                                    Array.isArray(
+                                        node.material
+                                    )
+                                        ? node.material
+                                        : [
+                                            node.material
+                                        ];
+
+
+                                materials.forEach(
+                                    material => {
+
+                                        if (
+                                            material
+                                        ) {
+
+                                            material.emissive =
+                                                new THREE.Color(
+                                                    0xff66cc
+                                                );
+
+                                            material.emissiveIntensity =
+                                                0.6;
+                                        }
+                                    }
+                                );
+
+
+                                console.log(
+                                    '👁️ Olho detectado:',
+                                    node.name
+                                );
+                            }
+                        }
+                    }
+                );
+
+
+                // ====================================================
+                // ADICIONAR AO MUNDO
+                // ====================================================
+
+                scene.add(
+                    model
+                );
+
+
+                // ====================================================
+                // ANALISAR ANIMAÇÕES
+                // ====================================================
+
+                animationClips =
+                    gltf.animations || [];
+
+
+                console.log(
+                    `🎬 Total de animações: ${animationClips.length}`
+                );
+
+
+                if (
+                    animationClips.length > 0
+                ) {
+
+                    animationClips.forEach(
+                        (clip, index) => {
+
+                            console.log(
+                                `🎞️ [${index}] ${clip.name || 'SEM NOME'} | ${clip.duration.toFixed(2)}s`
+                            );
+
+
+                            clip.tracks.forEach(
+                                track => {
+
+                                    console.log(
+                                        '   └─',
+                                        track.name
+                                    );
+                                }
+                            );
+                        }
+                    );
+
+
+                    // ==================================================
+                    // CRIAR MIXER
+                    // ==================================================
+
+                    mixer =
+                        new THREE.AnimationMixer(
+                            model
+                        );
+
+
+                    // ==================================================
+                    // ENCONTRAR IDLE
+                    // ==================================================
+
+                    const idleClip =
+                        findIdleClip(
+                            animationClips
+                        );
+
+
+                    if (idleClip) {
+
+                        playBodyIdle(
+                            idleClip
+                        );
+
+                    } else {
+
+                        console.warn(
+                            '⚠️ Nenhuma animação Idle encontrada.'
+                        );
+                    }
+
+
+                    // ==================================================
+                    // ENCONTRAR ANIMAÇÕES FACIAIS
+                    // ==================================================
+
+                    const facialClips =
+                        findFacialClips(
+                            animationClips
+                        );
+
+
+                    /*
+                     * Só ativa animações faciais quando
+                     * o arquivo realmente possui clips
+                     * específicos para isso.
+                     */
+
+                    if (
+                        facialClips.length > 0
+                    ) {
+
+                        playFacialAnimations(
+                            facialClips
+                        );
+
+                    } else {
+
+                        console.log(
+                            '👁️ Nenhuma animação facial separada encontrada.'
+                        );
+                    }
+
+
+                } else {
+
+                    console.warn(
+                        '⚠️ O diva2.glb não possui animações.'
+                    );
+                }
+
+
+                console.log(
+                    '========================================'
+                );
+
+                console.log(
+                    '✅ SISTEMA DE ANIMAÇÃO DA DIVA ATIVO'
+                );
+
+                console.log(
+                    '========================================'
+                );
+            },
+
+
+            // ========================================================
+            // PROGRESSO
+            // ========================================================
+
+            (xhr) => {
+
+                if (xhr.total) {
+
+                    const percent =
+                        (
+                            xhr.loaded /
+                            xhr.total
+                        ) * 100;
+
+
+                    console.log(
+                        `📦 DIVA: ${percent.toFixed(1)}%`
+                    );
+                }
+            },
+
+
+            // ========================================================
+            // ERRO
+            // ========================================================
+
+            (error) => {
+
+                console.error(
+                    '❌ Erro ao carregar modelo:',
+                    error
+                );
+
+
+                const fallback =
+                    new THREE.Mesh(
+
+                        new THREE.SphereGeometry(
+                            0.7,
+                            32,
+                            32
+                        ),
+
+                        new THREE.MeshStandardMaterial({
+
+                            color:
+                                config.color,
+
+                            emissive:
+                                config.color,
+
+                            emissiveIntensity:
+                                0.7
+                        })
+                    );
+
+
+                fallback.position.set(
+                    0,
+                    0.2,
+                    0
+                );
+
+
+                scene.add(
+                    fallback
+                );
+            }
+        );
+
+
+        // ============================================================
+        // CLOCK DO THREE.JS
+        // ============================================================
+
+        const clock =
+            new THREE.Clock();
+
+
+        // ============================================================
+        // ANIMAÇÃO PRINCIPAL
+        // ============================================================
+
+        let time = 0;
+
+
+        function animate() {
+
+            requestAnimationFrame(
+                animate
+            );
+
+
+            /*
+             * Delta correto para o AnimationMixer.
+             *
+             * Antes existiam DOIS requestAnimationFrame:
+             *
+             * updateDelta()
+             * animate()
+             *
+             * Agora existe apenas um relógio.
+             */
+
+            const delta =
+                Math.min(
+                    clock.getDelta(),
+                    0.05
+                );
+
+
+            time += delta;
+
+
+            // ========================================================
+            // ANIMAÇÕES DO GLB
+            // ========================================================
+
+            if (mixer) {
+
+                mixer.update(
+                    delta
+                );
+            }
+
+
+            // ========================================================
+            // PARTÍCULAS
+            // ========================================================
+
+            particles.rotation.y =
+                time * 0.1;
+
+
+            particles.rotation.x =
+                Math.sin(
+                    time * 0.2
+                ) * 0.1;
+
+
+            // ========================================================
+            // ANÉIS
+            // ========================================================
+
+            ring1.rotation.z =
+                time * 0.3;
+
+
+            ring2.rotation.z =
+                -time * 0.2;
+
+
+            // ========================================================
+            // LUZES
+            // ========================================================
+
+            fillLight.intensity =
+                0.9 +
+                Math.sin(
+                    time * 4
+                ) * 0.25;
+
+
+            circleGlow.material
+                .emissiveIntensity =
+                0.3 +
+                Math.sin(
+                    time * 2.5
+                ) * 0.2;
+
+
+            bottomLight.intensity =
+                0.5 +
+                Math.sin(
+                    time * 3
+                ) * 0.2;
+
+
+            frontLight.intensity =
+                0.4 +
+                Math.sin(
+                    time * 2
+                ) * 0.15;
+
+
+            // ========================================================
+            // HALO
+            // ========================================================
+
+            const haloScale =
+                1 +
+                Math.sin(
+                    time * 2
+                ) * 0.03;
+
+
+            glowHalo.scale.set(
+                haloScale,
+                haloScale,
+                haloScale
+            );
+
+
+            glowMaterial.opacity =
+                0.08 +
+                Math.sin(
+                    time * 1.5
+                ) * 0.04;
+
+
+            // ========================================================
+            // CONTROLES
+            // ========================================================
+
+            controls.update();
+
+
+            // ========================================================
+            // RENDER
+            // ========================================================
+
+            renderer.render(
+                scene,
+                camera
+            );
+        }
+
+
+        animate();
+
+
+        // ============================================================
+        // RESIZE
+        // ============================================================
+
+        window.addEventListener(
+            'resize',
+            () => {
+
+                camera.aspect =
+                    window.innerWidth /
+                    window.innerHeight;
+
+
+                camera.updateProjectionMatrix();
+
+
+                renderer.setSize(
+                    window.innerWidth,
+                    window.innerHeight
+                );
+
+
+                renderer.setPixelRatio(
+                    Math.min(
+                        window.devicePixelRatio,
+                        2
+                    )
+                );
+            }
+        );
+
+
+        // ============================================================
+        // INICIALIZAÇÃO UI
+        // ============================================================
+
+        initUI(
+            config
+        );
+
+
+        // ============================================================
+        // CHAT
+        // ============================================================
+
+        const chat =
+            new EnhancedChatSystem(
+
+                'chatContainer',
+
+                config,
+
+                (response) => {
+
+                    if (
+                        voice?.isJarvisActive?.()
+                    ) {
+
+                        voice.speak(
+                            response
+                        );
                     }
                 }
-            });
-            scene.add(model);
-            if (gltf.animations && gltf.animations.length > 0) {
-                mixer = new THREE.AnimationMixer(model);
-                gltf.animations.forEach(clip => mixer.clipAction(clip).play());
-            }
-        }, undefined, (error) => {
-            console.error('Erro ao carregar modelo:', error);
-            const fallback = new THREE.Mesh(new THREE.SphereGeometry(0.7, 32, 32), new THREE.MeshStandardMaterial({ color: config.color, emissive: config.color, emissiveIntensity: 0.7 }));
-            fallback.position.set(0, 0.2, 0);
-            scene.add(fallback);
-        });
-        
-        // ANIMAÇÃO
-        let time = 0;
-        let deltaTime = 0.016;
-        let lastTime = performance.now();
-        
-        function updateDelta() {
-            const now = performance.now();
-            deltaTime = Math.min(0.033, (now - lastTime) / 1000);
-            lastTime = now;
-            requestAnimationFrame(updateDelta);
-        }
-        updateDelta();
-        
-        function animate() {
-            requestAnimationFrame(animate);
-            time += 0.008;
-            if (mixer) mixer.update(deltaTime);
-            particles.rotation.y = time * 0.1;
-            particles.rotation.x = Math.sin(time * 0.2) * 0.1;
-            ring1.rotation.z = time * 0.3;
-            ring2.rotation.z = -time * 0.2;
-            fillLight.intensity = 0.9 + Math.sin(time * 4) * 0.25;
-            circleGlow.material.emissiveIntensity = 0.3 + Math.sin(time * 2.5) * 0.2;
-            bottomLight.intensity = 0.5 + Math.sin(time * 3) * 0.2;
-            frontLight.intensity = 0.4 + Math.sin(time * 2) * 0.15;
-            const scale = 1 + Math.sin(time * 2) * 0.03;
-            glowHalo.scale.set(scale, scale, scale);
-            glowMaterial.opacity = 0.08 + Math.sin(time * 1.5) * 0.04;
-            controls.update();
-            renderer.render(scene, camera);
-        }
-        animate();
-        
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-        
-        // ============================================
-        // INICIALIZAÇÃO UI, CHAT E VOZ
-        // ============================================
-        initUI(config);
-        
-        const chat = new EnhancedChatSystem('chatContainer', config, (response) => {
-            if (voice?.isJarvisActive?.()) voice.speak(response);
-        });
-        
-        const voiceButtonElem = document.getElementById('voiceButton');
-        let voice = null;
+            );
+
+
+        // ============================================================
+        // VOZ
+        // ============================================================
+
+        const voiceButtonElem =
+            document.getElementById(
+                'voiceButton'
+            );
+
+
+        let voice =
+            null;
+
+
         if (voiceButtonElem) {
-            voice = new VoiceAssistant(voiceButtonElem, (text) => { 
-                document.getElementById('chatInput').value = text; 
-                chat.send(); 
-            }, null, { asuraName: config.name, continuous: true });
+
+            voice =
+                new VoiceAssistant(
+
+                    voiceButtonElem,
+
+                    (text) => {
+
+                        document.getElementById(
+                            'chatInput'
+                        ).value = text;
+
+
+                        chat.send();
+                    },
+
+                    null,
+
+                    {
+                        asuraName:
+                            config.name,
+
+                        continuous:
+                            true
+                    }
+                );
         }
-        
-        setTimeout(() => {
-            chat.addMessage(config.welcomeMessage, false);
-            setTimeout(() => {
-                chat.addMessage("🎤 Dica: Clique no ícone 👩‍💼 no topo para ativar o MODO JARVIS.", false);
-                chat.addMessage("📎 Dica: Clique no ícone 📎 para enviar qualquer arquivo.", false);
-                chat.addMessage("🗺️ Dica: Clique no botão 🗺️ no TOPO ESQUERDO para acessar o PORTAL PLANNER!", false);
-                chat.addMessage("🖥️ Dica: Clique em ⛶ para tela cheia! ESC para sair.", false);
-            }, 2000);
-        }, 500);
-        
-        const portalOverlay = document.getElementById('portalOverlay');
+
+
+        // ============================================================
+        // MENSAGENS INICIAIS
+        // ============================================================
+
+        setTimeout(
+            () => {
+
+                chat.addMessage(
+                    config.welcomeMessage,
+                    false
+                );
+
+
+                setTimeout(
+                    () => {
+
+                        chat.addMessage(
+                            "🎤 Dica: Clique no ícone 👩‍💼 no topo para ativar o MODO JARVIS.",
+                            false
+                        );
+
+
+                        chat.addMessage(
+                            "📎 Dica: Clique no ícone 📎 para enviar qualquer arquivo.",
+                            false
+                        );
+
+
+                        chat.addMessage(
+                            "🗺️ Dica: Clique no botão 🗺️ no TOPO ESQUERDO para acessar o PORTAL PLANNER!",
+                            false
+                        );
+
+
+                        chat.addMessage(
+                            "🖥️ Dica: Clique em ⛶ para tela cheia! ESC para sair.",
+                            false
+                        );
+
+                    },
+                    2000
+                );
+
+            },
+            500
+        );
+
+
+        // ============================================================
+        // PORTAL OVERLAY
+        // ============================================================
+
+        const portalOverlay =
+            document.getElementById(
+                'portalOverlay'
+            );
+
+
         if (portalOverlay) {
-            portalOverlay.style.setProperty('--asura-color', config.color);
-            setTimeout(() => { 
-                portalOverlay.style.opacity = '0.6'; 
-                setTimeout(() => { 
-                    portalOverlay.style.opacity = '0'; 
-                    setTimeout(() => { 
-                        portalOverlay.style.display = 'none'; 
-                    }, 800); 
-                }, 500); 
-            }, 50);
+
+            portalOverlay.style.setProperty(
+                '--asura-color',
+                config.color
+            );
+
+
+            setTimeout(
+                () => {
+
+                    portalOverlay.style.opacity =
+                        '0.6';
+
+
+                    setTimeout(
+                        () => {
+
+                            portalOverlay.style.opacity =
+                                '0';
+
+
+                            setTimeout(
+                                () => {
+
+                                    portalOverlay.style.display =
+                                        'none';
+
+                                },
+                                800
+                            );
+
+                        },
+                        500
+                    );
+
+                },
+                50
+            );
         }
-        
-        console.log('✅ DIVA carregada com 3 NÍVEIS no chat e mundo 3D completo!');
+
+
+        // ============================================================
+        // FINAL
+        // ============================================================
+
+        console.log(
+            '✅ DIVA carregada!'
+        );
+
+        console.log(
+            '🧍 Sistema corporal: IDLE automático'
+        );
+
+        console.log(
+            '👁️ Sistema facial: detecção automática'
+        );
+
+        console.log(
+            '🎬 Sistema GLB: AnimationMixer'
+        );
+
+        console.log(
+            '🌌 Mundo 3D: ativo'
+        );
+
     </script>
+
 </body>
-</html>#
+</html>
