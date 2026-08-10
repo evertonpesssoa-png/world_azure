@@ -57,11 +57,11 @@ body {
 .banner .mago-center::after {
     content: '';
     position: absolute;
-    top: 85%;
+    top: 78%;
     left: 50%;
     transform: translate(-50%, -50%) scale(1);
-    width: 50px;
-    height: 50px;
+    width: 150px;
+    height: 150px;
     background: radial-gradient(circle, rgba(180, 80, 255, 1) 0%, rgba(180, 80, 255, 0.6) 40%, transparent 70%);
     border-radius: 50%;
     box-shadow: 0 0 40px rgba(180, 80, 255, 0.8), 0 0 80px rgba(180, 80, 255, 0.5);
