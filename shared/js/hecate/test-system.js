@@ -1,12 +1,16 @@
 // ============================================
 // 🗝️ HÉCATE - RITUAL DE ACESSO
-// VERSÃO CINEMATOGRÁFICA V5
+// VERSÃO CINEMATOGRÁFICA V6
 // RESPONSIVO — MOBILE / TABLET / DESKTOP
+//
+// ✦ HÉCATE FLUTUA DE FORMA LEVE
+// ✦ BOTÃO DE VOZ MAIS VISÍVEL
 // ============================================
 
 (function () {
 
     'use strict';
+
 
     // ==========================================
     // 🔥 BANCO DE PERGUNTAS
@@ -24,6 +28,7 @@
                 r.toLowerCase().trim() === "astreia"
         },
 
+
         sabedoria: {
 
             perguntas: [
@@ -31,59 +36,75 @@
                 {
                     texto: "O que significa WZ no nome do projeto?",
                     dica: "World _ _ _ _ _",
+
                     validar: (r) =>
                         r.toLowerCase().includes("azure") ||
                         r.toLowerCase().includes("azul")
                 },
 
+
                 {
                     texto: "Quantos Asuras existem no Grimório?",
                     dica: "Conte os cards giratórios",
+
                     validar: (r) =>
                         r.trim() === "9" ||
                         r.toLowerCase().trim() === "nove"
                 },
 
+
                 {
                     texto: "Qual Asura controla as sombras e o vazio?",
                     dica: "Começa com 'U'",
+
                     validar: (r) =>
                         r.toLowerCase().includes("umbra")
                 },
 
+
                 {
                     texto: "Qual Asura é conhecida como 'A Maga das Invenções'?",
                     dica: "Começa com 'D'",
+
                     validar: (r) =>
                         r.toLowerCase().includes("daedala")
                 },
 
+
                 {
                     texto: "Qual Asura representa a Justiça e as constelações?",
                     dica: "Começa com 'A'",
+
                     validar: (r) =>
                         r.toLowerCase().includes("astreia")
                 },
 
+
                 {
                     texto: "Qual Asura representa a Vitória?",
                     dica: "Começa com 'V'",
+
                     validar: (r) =>
                         r.toLowerCase().includes("victoria")
                 },
 
+
                 {
                     texto: "Qual Asura protege o lar e a sacralidade?",
                     dica: "Começa com 'H'",
+
                     validar: (r) =>
                         r.toLowerCase().includes("hestia")
                 }
 
             ],
 
+
             getRandomQuestions: function () {
 
-                const shuffled = [...this.perguntas];
+                const shuffled =
+                    [...this.perguntas];
+
 
                 for (
                     let i = shuffled.length - 1;
@@ -96,6 +117,7 @@
                             Math.random() * (i + 1)
                         );
 
+
                     [
                         shuffled[i],
                         shuffled[j]
@@ -105,16 +127,19 @@
                     ];
                 }
 
+
                 return shuffled.slice(0, 3);
             }
         },
+
 
         virtude: {
 
             perguntas: [
 
                 {
-                    texto: "O QUE FARIA COM O PODER DA HÉCATE?",
+                    texto:
+                        "O QUE FARIA COM O PODER DA HÉCATE?",
 
                     opcoes: [
                         "Proteger os fracos",
@@ -129,8 +154,10 @@
                     ]
                 },
 
+
                 {
-                    texto: "VIRTUDE MAIS IMPORTANTE PARA UM GUARDIÃO?",
+                    texto:
+                        "VIRTUDE MAIS IMPORTANTE PARA UM GUARDIÃO?",
 
                     opcoes: [
                         "Compaixão",
@@ -145,8 +172,10 @@
                     ]
                 },
 
+
                 {
-                    texto: "ACEITA A RESPONSABILIDADE DE PROTEGER?",
+                    texto:
+                        "ACEITA A RESPONSABILIDADE DE PROTEGER?",
 
                     opcoes: [
                         "Sim, aceito",
@@ -163,9 +192,12 @@
 
             ],
 
+
             getRandomQuestions: function () {
 
-                const shuffled = [...this.perguntas];
+                const shuffled =
+                    [...this.perguntas];
+
 
                 for (
                     let i = shuffled.length - 1;
@@ -178,6 +210,7 @@
                             Math.random() * (i + 1)
                         );
 
+
                     [
                         shuffled[i],
                         shuffled[j]
@@ -186,6 +219,7 @@
                         shuffled[i]
                     ];
                 }
+
 
                 return shuffled.slice(0, 3);
             }
@@ -198,6 +232,7 @@
     // ==========================================
 
     const MIN_VIRTUE_SCORE = 20;
+
 
     let testActive = false;
 
@@ -236,7 +271,8 @@
                     ? 'user'
                     : 'assistant',
 
-            content: text,
+            content:
+                text,
 
             type:
                 type || 'normal',
@@ -255,22 +291,36 @@
 
         if (!isVoiceEnabled) return;
 
-        if (!('speechSynthesis' in window)) {
+
+        if (
+            !('speechSynthesis' in window)
+        ) {
+
             return;
         }
 
+
         window.speechSynthesis.cancel();
 
+
         const utterance =
-            new SpeechSynthesisUtterance(text);
+            new SpeechSynthesisUtterance(
+                text
+            );
 
-        utterance.lang = 'pt-BR';
 
-        utterance.rate = 0.85;
+        utterance.lang =
+            'pt-BR';
 
-        utterance.pitch = 0.8;
+        utterance.rate =
+            0.85;
 
-        utterance.volume = 0.6;
+        utterance.pitch =
+            0.8;
+
+        utterance.volume =
+            0.6;
+
 
         window.speechSynthesis.speak(
             utterance
@@ -293,7 +343,9 @@
                 'hecateChatMessages'
             );
 
+
         if (!chatMsg) return;
+
 
         registerMessage(
             text,
@@ -301,30 +353,40 @@
             type
         );
 
+
         const msgDiv =
             document.createElement('div');
 
 
-        let color = '#a78bfa';
+        let color =
+            '#a78bfa';
 
-        let fontSize = '16px';
+        let fontSize =
+            '16px';
 
-        let align = 'center';
+        let align =
+            'center';
 
-        let letterSpacing = '2px';
+        let letterSpacing =
+            '2px';
 
-        let opacity = '1';
+        let opacity =
+            '1';
 
-        let marginBottom = '10px';
+        let marginBottom =
+            '10px';
 
-        let fontStyle = 'normal';
+        let fontStyle =
+            'normal';
 
-        let prefix = '';
+        let prefix =
+            '';
 
         let animation =
             'aparecerPalavra 1.2s ease-out';
 
-        let extraClass = '';
+        let extraClass =
+            '';
 
 
         // ======================================
@@ -333,21 +395,30 @@
 
         if (type === 'question') {
 
-            color = '#d8ceff';
+            color =
+                '#d8ceff';
+
 
             fontSize =
                 'clamp(17px, 2.1vw, 28px)';
 
+
             letterSpacing =
                 'clamp(2px, 0.35vw, 5px)';
 
-            marginBottom = '20px';
 
-            fontStyle = 'italic';
+            marginBottom =
+                '20px';
+
+
+            fontStyle =
+                'italic';
+
 
             animation =
                 'aparecerPalavra 1.5s ease-out, ' +
                 'perguntaRespirar 4s ease-in-out 1.5s infinite';
+
 
             extraClass =
                 'question-text';
@@ -363,13 +434,17 @@
             color =
                 'rgba(167,139,250,0.48)';
 
+
             fontSize =
                 'clamp(11px, 1.2vw, 14px)';
+
 
             letterSpacing =
                 'clamp(2px, 0.3vw, 4px)';
 
-            marginBottom = '15px';
+
+            marginBottom =
+                '15px';
         }
 
 
@@ -382,17 +457,25 @@
             color =
                 'rgba(167,139,250,0.68)';
 
+
             fontSize =
                 'clamp(12px, 1.2vw, 15px)';
+
 
             letterSpacing =
                 'clamp(2px, 0.25vw, 4px)';
 
-            opacity = '0.75';
 
-            marginBottom = '8px';
+            opacity =
+                '0.75';
 
-            prefix = '✦ ';
+
+            marginBottom =
+                '8px';
+
+
+            prefix =
+                '✦ ';
         }
 
 
@@ -405,15 +488,22 @@
             color =
                 'rgba(255,255,255,0.28)';
 
+
             fontSize =
                 'clamp(9px, 1vw, 12px)';
+
 
             letterSpacing =
                 'clamp(3px, 0.5vw, 7px)';
 
-            marginBottom = '8px';
 
-            opacity = '0.7';
+            marginBottom =
+                '8px';
+
+
+            opacity =
+                '0.7';
+
 
             animation =
                 'aparecerSimbolo 1.2s ease-out';
@@ -524,6 +614,7 @@
         const msg =
             document.createElement('div');
 
+
         msg.textContent =
             text;
 
@@ -567,7 +658,7 @@
                 20px;
 
             z-index:
-                900001;
+                900010;
 
             font-family:
                 'Georgia',
@@ -620,6 +711,7 @@
             setTimeout(() => {
 
                 if (msg.parentNode) {
+
                     msg.remove();
                 }
 
@@ -686,7 +778,10 @@
 
         if (testActive) return;
 
-        testActive = true;
+
+        testActive =
+            true;
+
 
         onCompleteCallback =
             callback;
@@ -710,7 +805,9 @@
                  CAMADA 1 — VAZIO
             ================================== -->
 
-            <div class="hecate-layer hecate-void"></div>
+            <div
+                class="hecate-layer hecate-void"
+            ></div>
 
 
             <!-- ==================================
@@ -742,14 +839,10 @@
                 class="hecate-chat-container"
             >
 
-                <!-- HISTÓRICO -->
-
                 <div
                     id="hecateChatMessages"
                     class="hecate-chat-messages"
                 >
-
-                    <!-- PERGUNTA INICIAL -->
 
                     <div
                         class="
@@ -761,8 +854,6 @@
                     </div>
 
 
-                    <!-- DICA INICIAL -->
-
                     <div
                         class="
                             initial-hint
@@ -773,8 +864,6 @@
 
                 </div>
 
-
-                <!-- INPUT -->
 
                 <div
                     id="hecateTestContent"
@@ -808,7 +897,7 @@
 
 
             <!-- ==================================
-                 BOTÃO DE VOZ
+                 🔊 BOTÃO DE VOZ HÉCATE
             ================================== -->
 
             <div
@@ -816,9 +905,20 @@
                 role="button"
                 tabindex="0"
                 aria-label="Ativar voz de Hécate"
+                title="Voz de Hécate"
             >
 
-                <span id="jarvis-icon">
+                <span
+                    class="jarvis-ring jarvis-ring-1"
+                ></span>
+
+                <span
+                    class="jarvis-ring jarvis-ring-2"
+                ></span>
+
+                <span
+                    id="jarvis-icon"
+                >
                     ◇
                 </span>
 
@@ -832,7 +932,7 @@
             <style>
 
                 /* =================================
-                   RESET DO OVERLAY
+                   RESET
                 ================================= */
 
                 #hecate-test-overlay {
@@ -944,12 +1044,25 @@
                         contain;
 
                     transform:
-                        translate3d(0, 0, 0)
+                        translate3d(
+                            0,
+                            0,
+                            0
+                        )
                         scale(0.82);
 
+                    /*
+                     * ✦ FLUTUAÇÃO LEVE
+                     *
+                     * Não sobe muito.
+                     * Não gira.
+                     * É uma oscilação
+                     * espiritual bem sutil.
+                     */
+
                     animation:
-                        flutuarEntidade
-                        10s
+                        hecateFlutuar
+                        9s
                         ease-in-out
                         infinite;
 
@@ -959,6 +1072,73 @@
 
                     will-change:
                         transform;
+                }
+
+
+                /* =================================
+                   ✦ FLUTUAÇÃO DE HÉCATE
+                ================================= */
+
+                @keyframes hecateFlutuar {
+
+                    0% {
+
+                        transform:
+                            translate3d(
+                                0,
+                                0,
+                                0
+                            )
+                            scale(0.82);
+                    }
+
+
+                    25% {
+
+                        transform:
+                            translate3d(
+                                0,
+                                -7px,
+                                0
+                            )
+                            scale(0.82);
+                    }
+
+
+                    50% {
+
+                        transform:
+                            translate3d(
+                                0,
+                                -12px,
+                                0
+                            )
+                            scale(0.82);
+                    }
+
+
+                    75% {
+
+                        transform:
+                            translate3d(
+                                0,
+                                -6px,
+                                0
+                            )
+                            scale(0.82);
+                    }
+
+
+                    100% {
+
+                        transform:
+                            translate3d(
+                                0,
+                                0,
+                                0
+                            )
+                            scale(0.82);
+                    }
                 }
 
 
@@ -977,19 +1157,33 @@
                             ellipse 80% 32%
                             at 50% 88%,
 
-                            rgba(0,0,0,0.94)
+                            rgba(
+                                0,
+                                0,
+                                0,
+                                0.94
+                            )
                             0%,
 
-                            rgba(0,0,0,0.70)
+                            rgba(
+                                0,
+                                0,
+                                0,
+                                0.70
+                            )
                             30%,
 
-                            rgba(0,0,0,0.28)
+                            rgba(
+                                0,
+                                0,
+                                0,
+                                0.28
+                            )
                             55%,
 
                             transparent
                             80%
                         );
-
                 }
 
 
@@ -1131,7 +1325,12 @@
                         0 2px 3px #000,
                         0 0 8px #000,
                         0 0 18px
-                        rgba(0,0,0,0.95);
+                        rgba(
+                            0,
+                            0,
+                            0,
+                            0.95
+                        );
 
                     background:
                         transparent;
@@ -1294,7 +1493,12 @@
                         0 2px 3px #000,
                         0 0 8px #000,
                         0 0 18px
-                        rgba(0,0,0,0.9);
+                        rgba(
+                            0,
+                            0,
+                            0,
+                            0.9
+                        );
 
                     transition:
                         all 0.5s ease;
@@ -1383,9 +1587,9 @@
                 }
 
 
-                /* =================================
-                   BOTÃO DE VOZ
-                ================================= */
+                /* =========================================
+                   🔊 BOTÃO DE VOZ — VISÍVEL
+                ========================================= */
 
                 #jarvis-toggle {
 
@@ -1396,46 +1600,52 @@
                         clamp(
                             18px,
                             3vh,
-                            30px
+                            32px
                         );
 
                     right:
                         clamp(
                             18px,
                             3vw,
-                            30px
+                            32px
                         );
 
                     z-index:
-                        900001;
+                        900020;
 
                     width:
-                        clamp(
-                            34px,
-                            4vw,
-                            42px
-                        );
+                        52px;
 
                     height:
-                        clamp(
-                            34px,
-                            4vw,
-                            42px
-                        );
+                        52px;
 
                     border-radius:
                         50%;
 
                     background:
-                        rgba(
-                            20,
-                            10,
-                            40,
-                            0.15
-                        );
+                        radial-gradient(
+                            circle,
+                            rgba(
+                                167,
+                                139,
+                                250,
+                                0.20
+                            ) 0%,
 
-                    backdrop-filter:
-                        blur(2px);
+                            rgba(
+                                30,
+                                10,
+                                60,
+                                0.82
+                            ) 55%,
+
+                            rgba(
+                                0,
+                                0,
+                                0,
+                                0.92
+                            ) 100%
+                        );
 
                     border:
                         1px solid
@@ -1443,7 +1653,32 @@
                             167,
                             139,
                             250,
-                            0.05
+                            0.55
+                        );
+
+                    box-shadow:
+                        0 0 10px
+                        rgba(
+                            167,
+                            139,
+                            250,
+                            0.25
+                        ),
+
+                        0 0 25px
+                        rgba(
+                            167,
+                            139,
+                            250,
+                            0.12
+                        ),
+
+                        inset 0 0 12px
+                        rgba(
+                            167,
+                            139,
+                            250,
+                            0.12
                         );
 
                     display:
@@ -1459,70 +1694,269 @@
                         pointer;
 
                     transition:
-                        all 0.8s ease;
+                        transform 0.35s ease,
+                        opacity 0.35s ease,
+                        border-color 0.35s ease,
+                        box-shadow 0.35s ease;
 
                     pointer-events:
                         auto;
 
                     opacity:
-                        0.15;
+                        0.82;
 
                     user-select:
+                        none;
+
+                    touch-action:
+                        manipulation;
+
+                    overflow:
+                        visible;
+                }
+
+
+                /* =================================
+                   ANÉIS DO BOTÃO
+                ================================= */
+
+                .jarvis-ring {
+
+                    position:
+                        absolute;
+
+                    left:
+                        50%;
+
+                    top:
+                        50%;
+
+                    width:
+                        100%;
+
+                    height:
+                        100%;
+
+                    border-radius:
+                        50%;
+
+                    transform:
+                        translate(
+                            -50%,
+                            -50%
+                        );
+
+                    pointer-events:
                         none;
                 }
 
 
-                #jarvis-icon {
+                .jarvis-ring-1 {
 
-                    font-size:
-                        clamp(
-                            13px,
-                            1.5vw,
-                            17px
-                        );
-
-                    color:
+                    border:
+                        1px solid
                         rgba(
                             167,
                             139,
                             250,
-                            0.3
+                            0.20
                         );
 
-                    transition:
-                        all 0.8s ease;
+                    animation:
+                        jarvisPulse
+                        3.5s
+                        ease-in-out
+                        infinite;
                 }
 
+
+                .jarvis-ring-2 {
+
+                    width:
+                        125%;
+
+                    height:
+                        125%;
+
+                    border:
+                        1px solid
+                        rgba(
+                            167,
+                            139,
+                            250,
+                            0.08
+                        );
+
+                    animation:
+                        jarvisRing
+                        4s
+                        ease-in-out
+                        infinite;
+                }
+
+
+                /* =================================
+                   ÍCONE
+                ================================= */
+
+                #jarvis-icon {
+
+                    position:
+                        relative;
+
+                    z-index:
+                        5;
+
+                    font-size:
+                        24px;
+
+                    color:
+                        #c7b5ff;
+
+                    line-height:
+                        1;
+
+                    transition:
+                        all 0.35s ease;
+
+                    text-shadow:
+                        0 0 8px
+                        rgba(
+                            167,
+                            139,
+                            250,
+                            0.8
+                        ),
+
+                        0 0 18px
+                        rgba(
+                            167,
+                            139,
+                            250,
+                            0.45
+                        );
+                }
+
+
+                /* =================================
+                   HOVER / TOQUE
+                ================================= */
 
                 #jarvis-toggle:hover {
 
                     opacity:
-                        0.6 !important;
+                        1;
+
+                    transform:
+                        scale(1.08);
 
                     border-color:
+                        rgba(
+                            200,
+                            180,
+                            255,
+                            0.9
+                        );
+
+                    box-shadow:
+                        0 0 15px
                         rgba(
                             167,
                             139,
                             250,
-                            0.2
-                        );
+                            0.45
+                        ),
 
-                    transform:
-                        scale(1.05);
+                        0 0 35px
+                        rgba(
+                            167,
+                            139,
+                            250,
+                            0.25
+                        ),
+
+                        inset 0 0 15px
+                        rgba(
+                            167,
+                            139,
+                            250,
+                            0.18
+                        );
                 }
 
+
+                #jarvis-toggle:active {
+
+                    transform:
+                        scale(0.94);
+                }
+
+
+                /* =================================
+                   VOZ ATIVA
+                ================================= */
 
                 #jarvis-toggle.active {
 
                     opacity:
-                        0.8 !important;
+                        1;
 
                     border-color:
                         rgba(
                             0,
                             255,
                             136,
-                            0.2
+                            0.8
+                        );
+
+                    background:
+                        radial-gradient(
+                            circle,
+                            rgba(
+                                0,
+                                255,
+                                136,
+                                0.18
+                            ) 0%,
+
+                            rgba(
+                                10,
+                                50,
+                                35,
+                                0.85
+                            ) 55%,
+
+                            rgba(
+                                0,
+                                0,
+                                0,
+                                0.95
+                            ) 100%
+                        );
+
+                    box-shadow:
+                        0 0 15px
+                        rgba(
+                            0,
+                            255,
+                            136,
+                            0.35
+                        ),
+
+                        0 0 35px
+                        rgba(
+                            0,
+                            255,
+                            136,
+                            0.20
+                        ),
+
+                        inset 0 0 15px
+                        rgba(
+                            0,
+                            255,
+                            136,
+                            0.15
                         );
                 }
 
@@ -1531,11 +1965,55 @@
                 #jarvis-icon {
 
                     color:
+                        #5dffae;
+
+                    text-shadow:
+                        0 0 8px
                         rgba(
                             0,
                             255,
                             136,
-                            0.6
+                            0.9
+                        ),
+
+                        0 0 20px
+                        rgba(
+                            0,
+                            255,
+                            136,
+                            0.5
+                        );
+
+                    animation:
+                        vozAtiva
+                        2s
+                        ease-in-out
+                        infinite;
+                }
+
+
+                #jarvis-toggle.active
+                .jarvis-ring-1 {
+
+                    border-color:
+                        rgba(
+                            0,
+                            255,
+                            136,
+                            0.25
+                        );
+                }
+
+
+                #jarvis-toggle.active
+                .jarvis-ring-2 {
+
+                    border-color:
+                        rgba(
+                            0,
+                            255,
+                            136,
+                            0.12
                         );
                 }
 
@@ -1681,6 +2159,193 @@
 
 
                 /* =================================
+                   ANIMAÇÕES
+                ================================= */
+
+                @keyframes aparecerPalavra {
+
+                    from {
+
+                        opacity:
+                            0;
+
+                        transform:
+                            translateY(
+                                12px
+                            );
+                    }
+
+                    to {
+
+                        opacity:
+                            1;
+
+                        transform:
+                            translateY(
+                                0
+                            );
+                    }
+                }
+
+
+                @keyframes aparecerSimbolo {
+
+                    from {
+
+                        opacity:
+                            0;
+
+                        transform:
+                            scale(
+                                0.7
+                            );
+                    }
+
+                    to {
+
+                        opacity:
+                            0.7;
+
+                        transform:
+                            scale(
+                                1
+                            );
+                    }
+                }
+
+
+                @keyframes perguntaRespirar {
+
+                    0%,
+                    100% {
+
+                        opacity:
+                            1;
+                    }
+
+                    50% {
+
+                        opacity:
+                            0.72;
+                    }
+                }
+
+
+                @keyframes magicPulse {
+
+                    0%,
+                    100% {
+
+                        opacity:
+                            0.35;
+
+                        box-shadow:
+                            0 0 4px
+                            rgba(
+                                167,
+                                139,
+                                250,
+                                0.1
+                            );
+                    }
+
+                    50% {
+
+                        opacity:
+                            1;
+
+                        box-shadow:
+                            0 0 12px
+                            rgba(
+                                167,
+                                139,
+                                250,
+                                0.35
+                            );
+                    }
+                }
+
+
+                @keyframes jarvisPulse {
+
+                    0%,
+                    100% {
+
+                        transform:
+                            translate(
+                                -50%,
+                                -50%
+                            )
+                            scale(1);
+
+                        opacity:
+                            0.55;
+                    }
+
+                    50% {
+
+                        transform:
+                            translate(
+                                -50%,
+                                -50%
+                            )
+                            scale(1.08);
+
+                        opacity:
+                            1;
+                    }
+                }
+
+
+                @keyframes jarvisRing {
+
+                    0%,
+                    100% {
+
+                        transform:
+                            translate(
+                                -50%,
+                                -50%
+                            )
+                            scale(0.92);
+
+                        opacity:
+                            0.15;
+                    }
+
+                    50% {
+
+                        transform:
+                            translate(
+                                -50%,
+                                -50%
+                            )
+                            scale(1.08);
+
+                        opacity:
+                            0.45;
+                    }
+                }
+
+
+                @keyframes vozAtiva {
+
+                    0%,
+                    100% {
+
+                        transform:
+                            scale(1);
+                    }
+
+                    50% {
+
+                        transform:
+                            scale(1.12);
+                    }
+                }
+
+
+                /* =================================
                    TABLET
                    481px — 1024px
                 ================================= */
@@ -1698,13 +2363,38 @@
                         background-size:
                             contain;
 
-                        transform:
-                            translate3d(
-                                0,
-                                0,
-                                0
-                            )
-                            scale(0.78);
+                        animation:
+                            hecateFlutuarTablet
+                            9s
+                            ease-in-out
+                            infinite;
+                    }
+
+
+                    @keyframes hecateFlutuarTablet {
+
+                        0%,
+                        100% {
+
+                            transform:
+                                translate3d(
+                                    0,
+                                    0,
+                                    0
+                                )
+                                scale(0.78);
+                        }
+
+                        50% {
+
+                            transform:
+                                translate3d(
+                                    0,
+                                    -10px,
+                                    0
+                                )
+                                scale(0.78);
+                        }
                     }
 
 
@@ -1758,13 +2448,38 @@
                         background-position:
                             center 43%;
 
-                        transform:
-                            translate3d(
-                                0,
-                                0,
-                                0
-                            )
-                            scale(0.86);
+                        animation:
+                            hecateFlutuarDesktop
+                            10s
+                            ease-in-out
+                            infinite;
+                    }
+
+
+                    @keyframes hecateFlutuarDesktop {
+
+                        0%,
+                        100% {
+
+                            transform:
+                                translate3d(
+                                    0,
+                                    0,
+                                    0
+                                )
+                                scale(0.86);
+                        }
+
+                        50% {
+
+                            transform:
+                                translate3d(
+                                    0,
+                                    -13px,
+                                    0
+                                )
+                                scale(0.86);
+                        }
                     }
 
 
@@ -1811,13 +2526,38 @@
                         background-size:
                             contain;
 
-                        transform:
-                            translate3d(
-                                0,
-                                0,
-                                0
-                            )
-                            scale(0.82);
+                        animation:
+                            hecateFlutuarMobile
+                            9s
+                            ease-in-out
+                            infinite;
+                    }
+
+
+                    @keyframes hecateFlutuarMobile {
+
+                        0%,
+                        100% {
+
+                            transform:
+                                translate3d(
+                                    0,
+                                    0,
+                                    0
+                                )
+                                scale(0.82);
+                        }
+
+                        50% {
+
+                            transform:
+                                translate3d(
+                                    0,
+                                    -8px,
+                                    0
+                                )
+                                scale(0.82);
+                        }
                     }
 
 
@@ -1876,6 +2616,31 @@
                         padding:
                             10px 8px;
                     }
+
+
+                    /* botão ligeiramente menor no celular */
+
+                    #jarvis-toggle {
+
+                        width:
+                            50px;
+
+                        height:
+                            50px;
+
+                        right:
+                            16px;
+
+                        bottom:
+                            16px;
+                    }
+
+
+                    #jarvis-icon {
+
+                        font-size:
+                            22px;
+                    }
                 }
 
 
@@ -1891,13 +2656,38 @@
                         background-position:
                             center 34%;
 
-                        transform:
-                            translate3d(
-                                0,
-                                0,
-                                0
-                            )
-                            scale(0.78);
+                        animation:
+                            hecateFlutuarSmall
+                            9s
+                            ease-in-out
+                            infinite;
+                    }
+
+
+                    @keyframes hecateFlutuarSmall {
+
+                        0%,
+                        100% {
+
+                            transform:
+                                translate3d(
+                                    0,
+                                    0,
+                                    0
+                                )
+                                scale(0.78);
+                        }
+
+                        50% {
+
+                            transform:
+                                translate3d(
+                                    0,
+                                    -6px,
+                                    0
+                                )
+                                scale(0.78);
+                        }
                     }
 
 
@@ -1930,6 +2720,29 @@
                         padding-bottom:
                             25px;
                     }
+
+
+                    #jarvis-toggle {
+
+                        width:
+                            48px;
+
+                        height:
+                            48px;
+
+                        right:
+                            13px;
+
+                        bottom:
+                            13px;
+                    }
+
+
+                    #jarvis-icon {
+
+                        font-size:
+                            21px;
+                    }
                 }
 
 
@@ -1957,13 +2770,38 @@
 
                     .hecate-entity {
 
-                        transform:
-                            translate3d(
-                                0,
-                                0,
-                                0
-                            )
-                            scale(0.94);
+                        animation:
+                            hecateFlutuarLarge
+                            11s
+                            ease-in-out
+                            infinite;
+                    }
+
+
+                    @keyframes hecateFlutuarLarge {
+
+                        0%,
+                        100% {
+
+                            transform:
+                                translate3d(
+                                    0,
+                                    0,
+                                    0
+                                )
+                                scale(0.94);
+                        }
+
+                        50% {
+
+                            transform:
+                                translate3d(
+                                    0,
+                                    -15px,
+                                    0
+                                )
+                                scale(0.94);
+                        }
                     }
 
 
@@ -1992,13 +2830,38 @@
                         background-position:
                             center 35%;
 
-                        transform:
-                            translate3d(
-                                0,
-                                0,
-                                0
-                            )
-                            scale(0.72);
+                        animation:
+                            hecateFlutuarLandscape
+                            8s
+                            ease-in-out
+                            infinite;
+                    }
+
+
+                    @keyframes hecateFlutuarLandscape {
+
+                        0%,
+                        100% {
+
+                            transform:
+                                translate3d(
+                                    0,
+                                    0,
+                                    0
+                                )
+                                scale(0.72);
+                        }
+
+                        50% {
+
+                            transform:
+                                translate3d(
+                                    0,
+                                    -6px,
+                                    0
+                                )
+                                scale(0.72);
+                        }
                     }
 
 
@@ -2059,6 +2922,12 @@
 
                         right:
                             12px;
+
+                        width:
+                            46px;
+
+                        height:
+                            46px;
                     }
                 }
 
@@ -2076,13 +2945,38 @@
 
                     .hecate-entity {
 
-                        transform:
-                            translate3d(
-                                0,
-                                0,
-                                0
-                            )
-                            scale(0.76);
+                        animation:
+                            hecateFlutuarLandscapeTablet
+                            9s
+                            ease-in-out
+                            infinite;
+                    }
+
+
+                    @keyframes hecateFlutuarLandscapeTablet {
+
+                        0%,
+                        100% {
+
+                            transform:
+                                translate3d(
+                                    0,
+                                    0,
+                                    0
+                                )
+                                scale(0.76);
+                        }
+
+                        50% {
+
+                            transform:
+                                translate3d(
+                                    0,
+                                    -9px,
+                                    0
+                                )
+                                scale(0.76);
+                        }
                     }
 
 
@@ -2116,6 +3010,20 @@
 
 
                     .question-text {
+
+                        animation:
+                            none !important;
+                    }
+
+
+                    .jarvis-ring {
+
+                        animation:
+                            none !important;
+                    }
+
+
+                    #jarvis-icon {
 
                         animation:
                             none !important;
@@ -2157,7 +3065,8 @@
 
 
                 toggleBtn.classList.toggle(
-                    'active'
+                    'active',
+                    isVoiceEnabled
                 );
 
 
@@ -2183,12 +3092,8 @@
                     );
 
 
-                    setTimeout(() => {
-
-                        toggleBtn.style.opacity =
-                            '0.8';
-
-                    }, 100);
+                    toggleBtn.style.opacity =
+                        '1';
 
                 } else {
 
@@ -2201,12 +3106,8 @@
                     }
 
 
-                    setTimeout(() => {
-
-                        toggleBtn.style.opacity =
-                            '0.15';
-
-                    }, 100);
+                    toggleBtn.style.opacity =
+                        '0.82';
                 }
             };
 
@@ -2406,6 +3307,7 @@
 
 
                     currentIndex++;
+
 
                     input.value =
                         '';
@@ -3065,8 +3967,10 @@
         show:
             showTestInterface,
 
+
         isActive:
             () => testActive,
+
 
         toggleVoice:
             () => {
@@ -3074,14 +3978,15 @@
                 isVoiceEnabled =
                     !isVoiceEnabled;
 
+
                 return isVoiceEnabled;
             },
 
-        // Futuro LLM
 
         getHistory:
             () =>
                 [...conversationHistory],
+
 
         clearHistory:
             () =>
@@ -3094,7 +3999,7 @@
     // ==========================================
 
     console.log(
-        '🗝️ Hécate: Ritual cinematográfico V5 carregado — Responsivo'
+        '🗝️ Hécate: Ritual cinematográfico V6 carregado — Flutuação + Voz'
     );
 
 })();
