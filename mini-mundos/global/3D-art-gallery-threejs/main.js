@@ -42,7 +42,8 @@ import {
 } from "/world_azure/mini-mundos/global/3D-art-gallery-threejs/modules/sceneHelpers.js";
 
 import {
-  setupAudio
+  setupAudio,
+  startAudio
 } from "/world_azure/mini-mundos/global/3D-art-gallery-threejs/modules/audioGuide.js";
 
 import {
@@ -94,12 +95,6 @@ const {
 // ==============================================
 // 📱 TOUCH CONTROLS
 // ==============================================
-//
-// Ativa o olhar por arrastar 1 dedo
-// somente em dispositivos móveis.
-//
-// O próprio módulo verifica se é mobile.
-// ==============================================
 
 setupTouchControls(
   camera,
@@ -124,6 +119,7 @@ function onWindowResize() {
     width,
     height
   );
+
 }
 
 
@@ -140,10 +136,6 @@ window.addEventListener(
 // ==============================================
 // AJUSTE INICIAL
 // ==============================================
-//
-// Dá um pequeno tempo para o navegador
-// terminar de montar a interface.
-// ==============================================
 
 setTimeout(() => {
 
@@ -154,6 +146,11 @@ setTimeout(() => {
 
 // ==============================================
 // 🔊 ÁUDIO
+// ==============================================
+//
+// O áudio começa a carregar imediatamente.
+// O startAudio será chamado quando o usuário
+// clicar em EXPLORAR.
 // ==============================================
 
 setupAudio(camera);
@@ -182,7 +179,9 @@ const walls =
 // 🟫 CHÃO
 // ==============================================
 
-setupFloor(scene);
+setupFloor(
+  scene
+);
 
 
 // ==============================================
@@ -312,9 +311,20 @@ setupVR(
 // ==============================================
 // 🎛️ MENU E BOTÕES
 // ==============================================
+//
+// Passamos startAudio para o menu.
+// Quando EXPLORAR for clicado:
+//
+// 1. Menu desaparece
+// 2. Experiência começa
+// 3. startAudio() é chamado
+// 4. Se o MP3 já carregou → toca imediatamente
+// 5. Se ainda estiver carregando → toca quando terminar
+// ==============================================
 
 setupPlayButton(
-  controls
+  controls,
+  startAudio
 );
 
 setupOverlayClose();
@@ -351,6 +361,10 @@ window.entrarGaleria =
 
 console.log(
   "📱 TouchControls integrado"
+);
+
+console.log(
+  "🔊 Sistema de áudio integrado"
 );
 
 console.log(
