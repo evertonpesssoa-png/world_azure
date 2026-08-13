@@ -58,9 +58,9 @@ export const startExperience = (controls) => {
   hideMenu();
 
 
-  // ==========================================
-  // 📱 CELULAR
-  // ==========================================
+  // ============================================
+  // CELULAR
+  // ============================================
 
   if (isMobile) {
 
@@ -72,9 +72,9 @@ export const startExperience = (controls) => {
   }
 
 
-  // ==========================================
-  // 🖥️ DESKTOP
-  // ==========================================
+  // ============================================
+  // DESKTOP
+  // ============================================
 
   try {
 
@@ -142,24 +142,8 @@ export const exitExperience = (controls) => {
 // ==============================================
 // CONFIGURAR BOTÕES
 // ==============================================
-//
-// startAudio é recebido do audioGuide.js.
-//
-// Quando o usuário clica em EXPLORAR:
-//
-// 1. O áudio é solicitado.
-// 2. O menu desaparece.
-// 3. A experiência começa.
-//
-// Se o MP3 ainda estiver carregando,
-// o audioGuide.js continuará aguardando
-// e iniciará automaticamente quando terminar.
-// ==============================================
 
-export const setupPlayButton = (
-  controls,
-  startAudio
-) => {
+export const setupPlayButton = (controls) => {
 
   const playButton =
     document.getElementById("play_button");
@@ -174,9 +158,9 @@ export const setupPlayButton = (
     document.getElementById("close-about");
 
 
-  // ==========================================
-  // PLAY / EXPLORAR
-  // ==========================================
+  // ============================================
+  // EXPLORAR ARTE
+  // ============================================
 
   if (playButton) {
 
@@ -185,40 +169,16 @@ export const setupPlayButton = (
       e.preventDefault();
       e.stopPropagation();
 
-
-      // ========================================
-      // 🔊 INICIA / AGENDA O ÁUDIO
-      // ========================================
-
-      if (typeof startAudio === "function") {
-
-        startAudio();
-
-      } else {
-
-        console.warn(
-          "🔊 startAudio não foi fornecido ao menu."
-        );
-
-      }
-
-
-      // ========================================
-      // 🎮 ENTRA NA GALERIA
-      // ========================================
-
-      startExperience(
-        controls
-      );
+      startExperience(controls);
 
     };
 
   }
 
 
-  // ==========================================
-  // ABOUT
-  // ==========================================
+  // ============================================
+  // SOBRE
+  // ============================================
 
   if (aboutButton) {
 
@@ -234,9 +194,9 @@ export const setupPlayButton = (
   }
 
 
-  // ==========================================
-  // FECHAR ABOUT
-  // ==========================================
+  // ============================================
+  // FECHAR SOBRE
+  // ============================================
 
   if (closeAbout) {
 
@@ -252,9 +212,9 @@ export const setupPlayButton = (
   }
 
 
-  // ==========================================
-  // FECHAR CLICANDO FORA
-  // ==========================================
+  // ============================================
+  // CLICAR FORA
+  // ============================================
 
   if (overlay) {
 
@@ -279,7 +239,7 @@ export const setupPlayButton = (
 
 export const setupOverlayClose = () => {
 
-  // Mantido apenas para compatibilidade.
+  // Mantido para compatibilidade
 
 };
 
@@ -294,7 +254,6 @@ export const isMenuVisible = () => {
     document.getElementById("menu");
 
   if (!menu) return false;
-
 
   return menu.style.display !== "none";
 
