@@ -1,4 +1,7 @@
-import * as THREE from "three";
+// ==============================================
+// CORREÇÃO: Importando THREE direto da CDN
+// ==============================================
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.module.js";
 
 // Detecta celular
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -58,7 +61,7 @@ export const setupLighting = (scene, paintings) => {
 
 // Função separada para GUI (apenas desktop)
 function addDesktopGUI(ambientLight, frontSpot, backSpot, leftSpot, rightSpot, statueSpot) {
-  import("lil-gui").then(({ GUI }) => {
+  import("https://cdn.jsdelivr.net/npm/lil-gui@0.16.0/dist/lil-gui.esm.min.js").then(({ GUI }) => {
     const gui = new GUI();
     gui.close(); // Começa fechado para não poluir a tela
     
