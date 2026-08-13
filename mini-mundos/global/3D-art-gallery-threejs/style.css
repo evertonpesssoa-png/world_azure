@@ -59,14 +59,14 @@ button[style*="VRButton"] {
   pointer-events: none;
 }
 
-/* 3. CONTROLES DE ÁUDIO - CANTO INFERIOR DIREITO (VOLTARAM!) */
+/* 3. CONTROLES DE ÁUDIO - CANTO INFERIOR DIREITO */
 #audio_controls {
   position: fixed !important;
   bottom: 25px !important;
   right: 20px !important;
   display: flex !important;
   gap: 8px !important;
-  z-index: 9999 !important; /* Z-index alto pra garantir que apareça */
+  z-index: 9999 !important;
 }
 
 #start_audio, #stop_audio {
@@ -79,7 +79,7 @@ button[style*="VRButton"] {
   cursor: pointer !important;
 }
 
-/* 4. CAIXA DE INFORMAÇÃO DA PINTURA (Sem linha preta) */
+/* 4. CAIXA DE INFORMAÇÃO DA PINTURA */
 #painting-info {
   position: fixed !important;
   bottom: 90px !important;
@@ -94,7 +94,7 @@ button[style*="VRButton"] {
   color: #ffdd88 !important;
   font-weight: bold !important;
   text-align: center !important;
-  white-space: normal !important; /* Evita linha preta */
+  white-space: normal !important;
   min-width: 150px !important;
   min-height: 30px !important;
   display: block !important;
@@ -116,13 +116,59 @@ canvas {
   z-index: 1 !important;
 }
 
+/* ============================================
+   CORREÇÃO DO MENU CONTROLES E TEXTO NO VERTICAL
+   ============================================ */
+
 @media (max-width: 768px) {
+  /* Garante que o menu "Controles" apareça */
+  #info-panel {
+    display: block !important;
+    visibility: visible !important;
+    position: fixed !important;
+    top: 70px !important;
+    right: 15px !important;
+    z-index: 9999 !important;
+    background: rgba(0, 0, 0, 0.9) !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 12px !important;
+    padding: 10px 14px !important;
+    min-width: 150px !important;
+  }
+
+  /* Ajuste do botão Esconder/Mostrar */
+  #toggle-info {
+    font-size: 0.65rem !important;
+    padding: 2px 8px !important;
+  }
+
+  /* Ajuste do texto dentro do menu */
+  #info-content p {
+    font-size: 0.65rem !important;
+    margin: 3px 0 !important;
+  }
+
+  /* Garante que a caixa de texto da pintura funcione no vertical */
+  #painting-info {
+    bottom: 95px !important;
+    width: 80% !important;
+    min-height: 40px !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    font-size: 0.8rem !important;
+    padding: 10px 16px !important;
+  }
+
+  /* Ajuste fino do joystick */
   .touch-joypad {
     grid-template-columns: repeat(3, 45px) !important;
     grid-template-rows: repeat(3, 45px) !important;
     gap: 3px !important;
     padding: 8px !important;
   }
+  
   .joy-btn {
     font-size: 20px !important;
   }
