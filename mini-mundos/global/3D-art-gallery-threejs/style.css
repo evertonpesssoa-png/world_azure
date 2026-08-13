@@ -1,3 +1,587 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: "Montserrat", "Segoe UI", sans-serif;
+  background: black;
+  touch-action: auto;
+}
+
+/* =========================================================
+   MENU INICIAL
+   ========================================================= */
+
+#menu {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+
+  background: radial-gradient(
+    circle at center,
+    #0a0a2a,
+    #000000
+  );
+
+  z-index: 999999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition:
+    opacity 0.5s ease,
+    visibility 0.5s ease;
+}
+
+#img_container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+#starry_night_bg {
+  width: 100%;
+  height: 100%;
+
+  background-image: url("https://raw.githubusercontent.com/evertonpesssoa-png/world_azure/main/mini-mundos/global/3D-art-gallery-threejs/public/img/starrynight.jpg");
+
+  background-size: cover;
+  background-position: center;
+
+  opacity: 0.3;
+  filter: blur(5px);
+}
+
+#content_container {
+  position: relative;
+
+  width: 500px;
+  max-width: 90%;
+
+  padding: 30px 40px;
+
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(10px);
+
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  text-align: center;
+
+  z-index: 1000000;
+
+  animation: fadeIn 1s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.title h1 {
+  font-size: 2rem;
+
+  background: linear-gradient(
+    135deg,
+    #4da3ff,
+    #c7e9fb
+  );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  color: transparent;
+
+  margin-bottom: 15px;
+}
+
+.title-info p {
+  color: #ccc;
+  line-height: 1.6;
+  margin-bottom: 15px;
+  font-size: 0.9rem;
+}
+
+/* =========================================================
+   BOTÕES DO MENU — AZUL
+   ========================================================= */
+
+#play_button,
+#about_button {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 120, 255, 0.9),
+    rgba(0, 70, 200, 0.8)
+  );
+
+  border: 1px solid rgba(80, 170, 255, 0.5);
+
+  padding: 12px 30px;
+
+  border-radius: 40px;
+
+  color: white;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  margin: 10px;
+
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease,
+    box-shadow 0.3s ease;
+
+  font-size: 1rem;
+
+  display: inline-block;
+
+  position: relative;
+
+  z-index: 1000000;
+
+  pointer-events: auto;
+
+  touch-action: manipulation;
+
+  -webkit-tap-highlight-color: transparent;
+
+  box-shadow:
+    0 0 10px rgba(0, 120, 255, 0.25);
+}
+
+#play_button:hover,
+#about_button:hover {
+  transform: scale(1.05);
+
+  background: linear-gradient(
+    135deg,
+    rgba(0, 160, 255, 1),
+    rgba(0, 90, 230, 1)
+  );
+
+  box-shadow:
+    0 0 20px rgba(0, 130, 255, 0.65);
+}
+
+#play_button:active,
+#about_button:active {
+  transform: scale(0.98);
+
+  background: linear-gradient(
+    135deg,
+    rgba(0, 100, 230, 1),
+    rgba(0, 60, 180, 1)
+  );
+}
+
+/* =========================================================
+   ABOUT OVERLAY
+   ========================================================= */
+
+#about-overlay {
+  position: fixed;
+
+  top: 50%;
+  left: 50%;
+
+  transform:
+    translate(-50%, -50%)
+    scale(0.9);
+
+  width: 80%;
+  max-width: 600px;
+  max-height: 80%;
+
+  background: rgba(0, 0, 0, 0.95);
+
+  backdrop-filter: blur(20px);
+
+  border-radius: 20px;
+
+  padding: 30px;
+
+  z-index: 9999999;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition: all 0.3s ease;
+
+  border: 1px solid rgba(0, 130, 255, 0.4);
+
+  overflow-y: auto;
+
+  color: white;
+}
+
+#about-overlay.active {
+  opacity: 1;
+  visibility: visible;
+
+  transform:
+    translate(-50%, -50%)
+    scale(1);
+
+  pointer-events: auto;
+}
+
+#close-about {
+  position: absolute;
+
+  top: 15px;
+  right: 20px;
+
+  width: 30px;
+  height: 30px;
+
+  background: rgba(0, 100, 255, 0.6);
+
+  border: 1px solid rgba(80, 170, 255, 0.5);
+
+  color: white;
+
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  font-size: 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: all 0.2s;
+}
+
+#close-about:hover {
+  background: rgba(0, 140, 255, 0.9);
+
+  box-shadow:
+    0 0 12px rgba(0, 130, 255, 0.5);
+
+  transform: scale(1.05);
+}
+
+#close-about:active {
+  transform: scale(0.95);
+}
+
+#about-overlay h1 {
+  color: #4da3ff;
+
+  margin-bottom: 20px;
+
+  font-size: 1.5rem;
+
+  text-shadow:
+    0 0 10px rgba(0, 130, 255, 0.4);
+}
+
+#about-overlay p {
+  line-height: 1.6;
+
+  margin-bottom: 15px;
+
+  color: #ddd;
+}
+
+/* =========================================================
+   INFO PANEL
+   ========================================================= */
+
+#info-panel {
+  position: fixed;
+
+  top: 20px;
+  right: 20px;
+
+  background: rgba(0, 0, 0, 0.8);
+
+  backdrop-filter: blur(10px);
+
+  border-radius: 12px;
+
+  padding: 12px 18px;
+
+  z-index: 1000;
+
+  border: 1px solid rgba(80, 160, 255, 0.3);
+
+  min-width: 180px;
+
+  transition: all 0.3s;
+}
+
+#info-header {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 8px;
+
+  color: #4da3ff;
+}
+
+#info-header h3 {
+  font-size: 0.9rem;
+}
+
+#toggle-info {
+  background: rgba(255, 255, 255, 0.2);
+
+  border: none;
+
+  color: white;
+
+  padding: 4px 10px;
+
+  border-radius: 20px;
+
+  cursor: pointer;
+
+  font-size: 0.7rem;
+
+  transition: all 0.2s;
+}
+
+#toggle-info:hover {
+  background: rgba(0, 120, 255, 0.4);
+}
+
+#info-content p {
+  font-size: 0.7rem;
+
+  margin: 5px 0;
+
+  color: #ccc;
+}
+
+#info-panel.collapsed #info-content {
+  display: none;
+}
+
+/* =========================================================
+   INFORMAÇÃO DO QUADRO
+   ========================================================= */
+
+#painting-info {
+  position: fixed !important;
+
+  top: 62px !important;
+
+  left: 25% !important;
+
+  right: auto !important;
+  bottom: auto !important;
+
+  transform: none !important;
+
+  width: max-content;
+
+  max-width: 30vw;
+
+  min-width: 0;
+  min-height: 0;
+
+  display: block;
+
+  padding: 8px 14px;
+
+  background: rgba(0, 0, 0, 0.88);
+
+  backdrop-filter: blur(15px);
+
+  border-radius: 10px;
+
+  text-align: left;
+
+  z-index: 3000;
+
+  border: 1px solid rgba(0, 150, 255, 0.5);
+
+  color: #88c9ff;
+
+  font-weight: bold;
+
+  pointer-events: none;
+
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+
+  white-space: normal;
+
+  overflow-wrap: anywhere;
+
+  font-size: 0.8rem;
+
+  line-height: 1.3;
+
+  opacity: 0;
+
+  visibility: hidden;
+}
+
+#painting-info.show {
+  opacity: 1;
+
+  visibility: visible;
+
+  transform: none !important;
+}
+
+/* =========================================================
+   ÁUDIO
+   ========================================================= */
+
+#audio_controls {
+  position: fixed;
+
+  right: 20px;
+
+  bottom: calc(
+    20px + env(safe-area-inset-bottom, 0px)
+  );
+
+  z-index: 3000;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  max-width: calc(100vw - 40px);
+}
+
+#start_audio,
+#stop_audio {
+  background: rgba(0, 0, 0, 0.78);
+
+  backdrop-filter: blur(10px);
+
+  border: 1px solid rgba(0, 255, 255, 0.5);
+
+  color: #0ff;
+
+  padding: 8px 16px;
+
+  border-radius: 30px;
+
+  cursor: pointer;
+
+  font-size: 0.7rem;
+
+  line-height: 1.2;
+
+  white-space: nowrap;
+
+  min-height: 34px;
+
+  transition: all 0.2s;
+}
+
+#start_audio:hover,
+#stop_audio:hover {
+  background: rgba(0, 255, 255, 0.2);
+
+  transform: scale(1.05);
+}
+
+#start_audio:active,
+#stop_audio:active {
+  transform: scale(0.95);
+}
+
+/* =========================================================
+   CONTROLES MÓVEIS
+   ========================================================= */
+
+.mobile-controls-panel {
+  position: fixed;
+
+  bottom: calc(
+    20px + env(safe-area-inset-bottom, 0px)
+  );
+
+  right: 20px;
+
+  z-index: 2500;
+
+  display: none;
+
+  flex-direction: column;
+
+  gap: 10px;
+
+  max-width: calc(100vw - 40px);
+}
+
+.mobile-btn {
+  background: rgba(0, 0, 0, 0.85);
+
+  backdrop-filter: blur(10px);
+
+  border: 1px solid rgba(80, 160, 255, 0.4);
+
+  border-radius: 50px;
+
+  padding: 12px 20px;
+
+  color: white;
+
+  font-size: 14px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: all 0.2s;
+
+  font-family: monospace;
+
+  touch-action: manipulation;
+
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.3);
+
+  white-space: nowrap;
+}
+
+.mobile-btn:active {
+  transform: scale(0.95);
+
+  background: rgba(0, 100, 255, 0.9);
+
+  border-color: #007bff;
+}
+
 /* =========================================================
    JOYPAD
    ========================================================= */
@@ -13,32 +597,25 @@
 
   z-index: 2500;
 
-  background: rgba(0, 0, 0, 0.65);
+  background: rgba(0, 0, 0, 0.6);
 
   backdrop-filter: blur(12px);
 
   border-radius: 100px;
 
-  padding: 10px;
+  padding: 12px;
 
   display: none;
 
   grid-template-columns:
-    repeat(3, 55px);
+    repeat(3, 60px);
 
   grid-template-rows:
-    repeat(3, 55px);
+    repeat(3, 60px);
 
-  gap: 5px;
+  gap: 6px;
 
-  border: 1px solid rgba(80, 160, 255, 0.4);
-
-  box-shadow:
-    0 0 20px rgba(0, 100, 255, 0.15);
-
-  user-select: none;
-
-  touch-action: none;
+  border: 1px solid rgba(80, 160, 255, 0.35);
 }
 
 .joy-btn {
@@ -46,14 +623,14 @@
 
   border: 1px solid rgba(255, 255, 255, 0.3);
 
-  border-radius: 50%;
+  border-radius: 50px;
 
   display: flex;
 
   align-items: center;
   justify-content: center;
 
-  font-size: 25px;
+  font-size: 26px;
 
   color: white;
 
@@ -61,14 +638,10 @@
 
   user-select: none;
 
-  touch-action: none;
-
-  -webkit-user-select: none;
-  -webkit-touch-callout: none;
+  touch-action: manipulation;
 
   transition:
-    transform 0.05s linear,
-    background 0.05s linear;
+    all 0.05s linear;
 
   font-weight: bold;
 
@@ -77,14 +650,14 @@
 }
 
 .joy-btn:active {
-  background: rgba(0, 110, 255, 0.95);
+  background: rgba(0, 100, 255, 0.9);
 
-  transform: scale(0.86);
+  transform: scale(0.88);
 
-  border-color: #4da3ff;
+  border-color: #007bff;
 
   box-shadow:
-    0 0 15px rgba(0, 120, 255, 0.7);
+    0 0 12px rgba(0, 120, 255, 0.5);
 }
 
 .joy-empty {
@@ -96,44 +669,133 @@
 }
 
 /* =========================================================
-   CELULAR
+   MOBILE
    ========================================================= */
 
 @media (max-width: 768px) {
+
+  .mobile-controls-panel {
+    display: flex;
+  }
 
   .touch-joypad {
     display: grid;
 
     grid-template-columns:
-      repeat(3, 52px);
+      repeat(3, 50px);
 
     grid-template-rows:
-      repeat(3, 52px);
+      repeat(3, 50px);
 
     gap: 4px;
 
-    padding: 9px;
-
-    left: 12px;
-
-    bottom: calc(
-      12px + env(safe-area-inset-bottom, 0px)
-    );
+    padding: 10px;
   }
 
   .joy-btn {
-    font-size: 23px;
+    font-size: 22px;
+  }
+
+  .mobile-btn {
+    padding: 8px 14px;
+
+    font-size: 12px;
+  }
+
+  #painting-info {
+    top: 52px !important;
+
+    left: 20% !important;
+
+    right: auto !important;
+
+    transform: none !important;
+
+    max-width: 30vw;
+
+    padding: 6px 10px;
+
+    font-size: 0.65rem;
+
+    line-height: 1.25;
+
+    border-radius: 9px;
+  }
+
+  #audio_controls {
+    right: 10px;
+
+    bottom: calc(
+      10px + env(safe-area-inset-bottom, 0px)
+    );
+
+    gap: 5px;
+
+    max-width: 42vw;
+
+    flex-wrap: nowrap;
+  }
+
+  #start_audio,
+  #stop_audio {
+    padding: 6px 10px;
+
+    min-height: 32px;
+
+    max-width: 100%;
+
+    font-size: 0.58rem;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+  }
+
+  #info-panel {
+    top: 10px;
+
+    right: 10px;
+
+    padding: 8px 12px;
+
+    min-width: 140px;
+
+    max-width: calc(100vw - 20px);
+  }
+
+  #content_container {
+    padding: 20px 25px;
+
+    width: 85%;
+  }
+
+  .title h1 {
+    font-size: 1.5rem;
+  }
+
+  .title-info p {
+    font-size: 0.8rem;
+  }
+
+  #play_button,
+  #about_button {
+    padding: 10px 20px;
+
+    font-size: 0.9rem;
+  }
+
+  .mobile-only {
+    display: block !important;
   }
 }
 
 /* =========================================================
-   CELULAR PEQUENO
+   CELULARES PEQUENOS
    ========================================================= */
 
 @media (max-width: 480px) {
 
   .touch-joypad {
-
     left: 8px;
 
     bottom: calc(
@@ -141,10 +803,10 @@
     );
 
     grid-template-columns:
-      repeat(3, 46px);
+      repeat(3, 45px);
 
     grid-template-rows:
-      repeat(3, 46px);
+      repeat(3, 45px);
 
     gap: 3px;
 
@@ -154,15 +816,324 @@
   .joy-btn {
     font-size: 20px;
   }
+
+  .mobile-btn {
+    padding: 6px 12px;
+
+    font-size: 10px;
+  }
+
+  #painting-info {
+    top: 48px !important;
+
+    left: 15% !important;
+
+    right: auto !important;
+
+    transform: none !important;
+
+    max-width: 30vw;
+
+    padding: 6px 9px;
+
+    font-size: 0.6rem;
+  }
+
+  #audio_controls {
+    right: 8px;
+
+    bottom: calc(
+      8px + env(safe-area-inset-bottom, 0px)
+    );
+
+    max-width: 38vw;
+  }
+
+  #start_audio,
+  #stop_audio {
+    padding: 5px 8px;
+
+    font-size: 0.52rem;
+  }
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+
+  .touch-joypad {
+    display: grid;
+
+    transform: scale(0.8);
+
+    transform-origin: bottom left;
+
+    bottom: 20px;
+
+    left: 20px;
+  }
+
+  .mobile-controls-panel {
+    display: flex;
+
+    transform: scale(0.8);
+
+    transform-origin: bottom right;
+
+    bottom: 20px;
+
+    right: 20px;
+  }
+
+  #painting-info {
+    top: 62px !important;
+
+    left: 25% !important;
+
+    right: auto !important;
+
+    transform: none !important;
+
+    max-width: 30vw;
+  }
+
+  .mobile-only {
+    display: block !important;
+  }
 }
 
 /* =========================================================
    DESKTOP
    ========================================================= */
 
-@media (min-width: 769px) {
+@media (min-width: 1025px) {
 
-  .touch-joypad {
+  .touch-joypad,
+  .mobile-controls-panel {
     display: none !important;
   }
+
+  .mobile-only {
+    display: none !important;
+  }
+
+  #painting-info {
+    top: 62px !important;
+
+    left: 25% !important;
+
+    right: auto !important;
+
+    transform: none !important;
+
+    max-width: 30vw;
+  }
+}
+
+/* =========================================================
+   MOBILE-ONLY
+   ========================================================= */
+
+.mobile-only {
+  display: none;
+
+  color: #4da3ff;
+
+  font-size: 0.65rem;
+
+  margin-top: 5px;
+}
+
+/* =========================================================
+   CANVAS 3D
+   ========================================================= */
+
+canvas {
+  display: block;
+
+  position: fixed;
+
+  top: 0;
+  left: 0;
+
+  width: 100vw !important;
+  height: 100vh !important;
+
+  width: 100dvw !important;
+  height: 100dvh !important;
+
+  margin: 0;
+  padding: 0;
+
+  z-index: 1;
+}
+
+/* =========================================================
+   INTERFACE ACIMA DO CANVAS
+   ========================================================= */
+
+#info-panel,
+#painting-info,
+#audio_controls,
+.touch-joypad,
+.mobile-controls-panel {
+  pointer-events: auto;
+}
+
+#painting-info {
+  pointer-events: none;
+}
+
+/* =========================================================
+   VR
+   ========================================================= */
+
+#VRButton {
+  position: fixed !important;
+
+  top: 20px !important;
+
+  left: 20px !important;
+
+  right: auto !important;
+  bottom: auto !important;
+
+  z-index: 9999 !important;
+
+  font-size: 12px !important;
+
+  padding: 6px 12px !important;
+
+  margin: 0 !important;
+
+  touch-action: manipulation !important;
+
+  pointer-events: auto !important;
+}
+
+button#VRButton {
+  position: fixed !important;
+
+  top: 20px !important;
+
+  left: 20px !important;
+
+  right: auto !important;
+
+  bottom: auto !important;
+
+  z-index: 9999 !important;
+}
+
+/* =========================================================
+   VR — CELULAR
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  #VRButton,
+  button#VRButton {
+    top: 15px !important;
+
+    left: 15px !important;
+
+    right: auto !important;
+
+    bottom: auto !important;
+
+    z-index: 9999 !important;
+
+    font-size: 11px !important;
+
+    padding: 6px 10px !important;
+  }
+}
+
+/* =========================================================
+   VR — TABLET
+   ========================================================= */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+
+  #VRButton,
+  button#VRButton {
+    top: 20px !important;
+
+    left: 20px !important;
+
+    right: auto !important;
+
+    bottom: auto !important;
+  }
+}
+
+/* =========================================================
+   VR — DESKTOP
+   ========================================================= */
+
+@media (min-width: 1025px) {
+
+  #VRButton,
+  button#VRButton {
+    top: 20px !important;
+
+    left: 20px !important;
+
+    right: auto !important;
+
+    bottom: auto !important;
+  }
+}
+
+/* =========================================================
+   ANIMAÇÃO
+   ========================================================= */
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+/* =========================================================
+   MENU ESCONDIDO
+   ========================================================= */
+
+#menu.hidden {
+  opacity: 0;
+
+  visibility: hidden;
+
+  pointer-events: none;
+}
+
+/* =========================================================
+   SCROLLBAR — AZUL
+   ========================================================= */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 120, 255, 0.5);
+
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 150, 255, 0.8);
 }
