@@ -10,12 +10,13 @@ const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/
 export const loadStatueModel = (scene) => {
   const loader = new GLTFLoader();
   
-  // Caminhos alternativos para tentar
+  // ==============================================
+  // CAMINHOS 100% ABSOLUTOS (SEM RELATIVOS)
+  // ==============================================
   const paths = [
     "/world_azure/mini-mundos/global/3D-art-gallery-threejs/public/models/statue/scene.gltf",
-    "./public/models/statue/scene.gltf",
-    "../public/models/statue/scene.gltf",
-    "./models/statue/scene.gltf"
+    "/world_azure/mini-mundos/global/3D-art-gallery-threejs/public/models/statue/scene.gltf",
+    "/world_azure/mini-mundos/global/3D-art-gallery-threejs/public/models/statue/scene.gltf"
   ];
   
   let currentPathIndex = 0;
