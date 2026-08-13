@@ -1,8 +1,9 @@
 /* =========================================================
    SISTEMA SOLAR - STYLE.CSS
    RESPONSIVO VERTICAL + HORIZONTAL
-   LUA CORRIGIDA
+   LUA
    HIERARQUIA VISUAL DAS ÓRBITAS
+   COMETAS / METEOROS EVENTUAIS
 ========================================================= */
 
 
@@ -104,7 +105,7 @@ body {
 
 
 /* =========================================================
-   ÓRBITAS DOS PLANETAS
+   ÓRBITAS
 ========================================================= */
 
 .mercury,
@@ -131,36 +132,10 @@ body {
 
 /* =========================================================
    HIERARQUIA VISUAL DAS ÓRBITAS
-=========================================================
-
-   As órbitas não possuem mais todas a mesma força visual.
-
-   INTERIORES
-   ─────────────────────────────────────────────
-   Mercúrio / Vênus
-   → quase invisíveis
-
-   Terra / Marte
-   → discretas
-
-   CENTRAIS
-   ─────────────────────────────────────────────
-   Júpiter / Saturno
-   → mais perceptíveis
-
-   EXTERNAS
-   ─────────────────────────────────────────────
-   Urano / Netuno / Plutão
-   → muito suaves
-
-   A ideia é criar profundidade sem transformar
-   o sistema em um diagrama técnico.
 ========================================================= */
-
 
 /* ---------------------------------------------------------
    MERCÚRIO
-   Quase invisível
 --------------------------------------------------------- */
 
 .mercury {
@@ -181,7 +156,6 @@ body {
 
 /* ---------------------------------------------------------
    VÊNUS
-   Quase invisível
 --------------------------------------------------------- */
 
 .venus {
@@ -202,7 +176,6 @@ body {
 
 /* ---------------------------------------------------------
    TERRA
-   Discreta, mas claramente perceptível
 --------------------------------------------------------- */
 
 .earth {
@@ -223,7 +196,6 @@ body {
 
 /* ---------------------------------------------------------
    MARTE
-   Discreta
 --------------------------------------------------------- */
 
 .mars {
@@ -244,7 +216,6 @@ body {
 
 /* ---------------------------------------------------------
    JÚPITER
-   Mais visível
 --------------------------------------------------------- */
 
 .jupiter {
@@ -265,7 +236,6 @@ body {
 
 /* ---------------------------------------------------------
    SATURNO
-   Mais visível
 --------------------------------------------------------- */
 
 .saturn {
@@ -286,7 +256,6 @@ body {
 
 /* ---------------------------------------------------------
    URANO
-   Muito suave
 --------------------------------------------------------- */
 
 .uranus {
@@ -307,7 +276,6 @@ body {
 
 /* ---------------------------------------------------------
    NETUNO
-   Muito suave
 --------------------------------------------------------- */
 
 .neptune {
@@ -328,7 +296,6 @@ body {
 
 /* ---------------------------------------------------------
    PLUTÃO
-   Extremamente suave
 --------------------------------------------------------- */
 
 .pluto {
@@ -594,6 +561,199 @@ body {
 
 
 /* =========================================================
+   COMETAS / METEOROS
+=========================================================
+
+   Eles NÃO ficam permanentemente na tela.
+
+   O JavaScript cria um elemento somente quando
+   um evento acontece.
+
+   Depois da animação ele é removido.
+
+   Resultado:
+   → espaço continua limpo
+   → aparições ocasionais
+   → sensação de vida
+========================================================= */
+
+.comet {
+
+    position: fixed;
+
+    width: 3px;
+    height: 3px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255, 255, 255, 0.95);
+
+    box-shadow:
+        0 0 5px rgba(255, 255, 255, 0.9),
+        0 0 12px rgba(180, 220, 255, 0.65);
+
+    pointer-events: none;
+
+    z-index: 30;
+
+    opacity: 0;
+
+    transform:
+        rotate(var(--comet-angle));
+}
+
+
+/* ---------------------------------------------------------
+   CAUDA DO COMETA
+--------------------------------------------------------- */
+
+.comet::after {
+
+    content: '';
+
+    position: absolute;
+
+    width: 70px;
+    height: 1px;
+
+    top: 50%;
+    right: 2px;
+
+    transform:
+        translateY(-50%);
+
+    transform-origin:
+        right center;
+
+    background:
+        linear-gradient(
+            to left,
+            rgba(255, 255, 255, 0.7),
+            rgba(180, 220, 255, 0.25),
+            transparent
+        );
+
+    filter:
+        blur(0.5px);
+}
+
+
+/* ---------------------------------------------------------
+   METEORO RÁPIDO
+--------------------------------------------------------- */
+
+.meteor {
+
+    position: fixed;
+
+    width: 2px;
+    height: 2px;
+
+    border-radius: 50%;
+
+    background:
+        white;
+
+    box-shadow:
+        0 0 5px white,
+        0 0 10px rgba(150, 200, 255, 0.8);
+
+    pointer-events: none;
+
+    z-index: 30;
+
+    opacity: 0;
+}
+
+
+/* =========================================================
+   ANIMAÇÃO DO COMETA
+========================================================= */
+
+@keyframes cometFly {
+
+    0% {
+
+        opacity: 0;
+
+        transform:
+            translate(
+                var(--start-x),
+                var(--start-y)
+            )
+            rotate(var(--comet-angle))
+            scale(0.6);
+    }
+
+    10% {
+
+        opacity: 1;
+    }
+
+    75% {
+
+        opacity: 0.9;
+    }
+
+    100% {
+
+        opacity: 0;
+
+        transform:
+            translate(
+                var(--end-x),
+                var(--end-y)
+            )
+            rotate(var(--comet-angle))
+            scale(1);
+    }
+}
+
+
+/* =========================================================
+   ANIMAÇÃO DO METEORO
+========================================================= */
+
+@keyframes meteorFly {
+
+    0% {
+
+        opacity: 0;
+
+        transform:
+            translate(
+                var(--start-x),
+                var(--start-y)
+            )
+            scale(0.5);
+    }
+
+    10% {
+
+        opacity: 1;
+    }
+
+    70% {
+
+        opacity: 0.8;
+    }
+
+    100% {
+
+        opacity: 0;
+
+        transform:
+            translate(
+                var(--end-x),
+                var(--end-y)
+            )
+            scale(1);
+    }
+}
+
+
+/* =========================================================
    ÓRBITA DOS PLANETAS
 ========================================================= */
 
@@ -855,7 +1015,7 @@ body {
 
 
     /* -----------------------------------------------------
-       LUA - MOBILE
+       LUA
     ----------------------------------------------------- */
 
     .moon {
@@ -877,7 +1037,7 @@ body {
 
 
     /* -----------------------------------------------------
-       ANEL DE SATURNO
+       SATURNO
     ----------------------------------------------------- */
 
     .saturn::after {
@@ -886,6 +1046,16 @@ body {
         height: 13px;
 
         top: -6px;
+    }
+
+
+    /* -----------------------------------------------------
+       COMETA MOBILE
+    ----------------------------------------------------- */
+
+    .comet::after {
+
+        width: 50px;
     }
 }
 
@@ -913,10 +1083,6 @@ body {
     }
 
 
-    /* -----------------------------------------------------
-       LUA
-    ----------------------------------------------------- */
-
     .moon {
 
         width: 42px;
@@ -940,6 +1106,12 @@ body {
         height: 12px;
 
         top: -5px;
+    }
+
+
+    .comet::after {
+
+        width: 40px;
     }
 }
 
