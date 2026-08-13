@@ -1,11 +1,14 @@
-import * as THREE from "three";
+// ==============================================
+// IMPORTS CORRIGIDOS COM CAMINHOS ABSOLUTOS DA CDN
+// ==============================================
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.module.js";
 
 // Detecta celular
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
 export const createCeiling = (scene, textureLoader) => {
   
-  // Caminhos alternativos para as texturas
+  // Caminhos alternativos para as texturas (todos absolutos para evitar erro 404)
   const texturesBasePath = isMobile ? 
     "/world_azure/mini-mundos/global/3D-art-gallery-threejs/public/OfficeCeiling005_4K-JPG/" :
     "/world_azure/mini-mundos/global/3D-art-gallery-threejs/public/OfficeCeiling005_4K-JPG/";
