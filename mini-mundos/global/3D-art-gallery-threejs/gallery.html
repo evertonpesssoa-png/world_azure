@@ -9,12 +9,12 @@
     <script type="importmap">
       {
         "imports": {
-          "three": "https://unpkg.com/three@0.163.0/build/three.module.js",
-          "three/addons/": "https://unpkg.com/three@0.163.0/examples/jsm/",
-          "three-stdlib": "https://unpkg.com/three-stdlib@2.30.3/index.js",
-          "potpack": "https://unpkg.com/potpack@1.0.2/index.js",
-          "fflate": "https://unpkg.com/fflate@0.8.2/lib/index.js",
-          "zstddec": "https://unpkg.com/zstddec@0.1.0/dist/zstddec.js"
+          "three": "https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.163.0/examples/jsm/",
+          "three-stdlib": "https://cdn.jsdelivr.net/npm/three-stdlib@2.30.3/index.js",
+          "potpack": "https://cdn.jsdelivr.net/npm/potpack@1.0.2/index.js",
+          "fflate": "https://cdn.jsdelivr.net/npm/fflate@0.8.2/lib/index.js",
+          "zstddec": "https://cdn.jsdelivr.net/npm/zstddec@0.1.0/dist/zstddec.js"
         }
       }
     </script>
@@ -24,7 +24,8 @@
     <script src="/world_azure/shared/js/hecate/test-system.js"></script>
     <script src="/world_azure/shared/js/hecate/auth.js"></script>
     
-    <link rel="stylesheet" href="./style.css" />
+    <!-- CAMINHO ABSOLUTO DO CSS -->
+    <link rel="stylesheet" href="/world_azure/mini-mundos/global/3D-art-gallery-threesjs/style.css" />
   </head>
 
   <body>
@@ -222,10 +223,11 @@
           } else {
             log('⚠️ Three.js NÃO carregado', '#ffaa00');
           }
-        }, 4000); // Aumentei o tempo para esperar baixar os arquivos da internet
+        }, 4000);
       });
     </script>
 
-    <script type="module" src="./main.js"></script>
+    <!-- CAMINHO ABSOLUTO DO MAIN.JS -->
+    <script type="module" src="/world_azure/mini-mundos/global/3D-art-gallery-threesjs/main.js"></script>
   </body>
 </html>
