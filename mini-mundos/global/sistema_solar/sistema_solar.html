@@ -1,37 +1,147 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no"
+    >
+
     <title>Sistema Solar - 3D</title>
-    
-    <!-- 🔥 IMPORTS DO HÉCATE (OBRIGATÓRIO) 🔥 -->
+
+
+    <!-- =====================================================
+         HÉCATE
+         IMPORTS OBRIGATÓRIOS
+    ====================================================== -->
+
     <script src="/world_azure/shared/js/hecate/core.js"></script>
+
     <script src="/world_azure/shared/js/hecate/block-manager.js"></script>
+
     <script src="/world_azure/shared/js/hecate/test-system.js"></script>
+
     <script src="/world_azure/shared/js/hecate/auth.js"></script>
-    
+
+
+    <!-- =====================================================
+         CSS
+    ====================================================== -->
+
     <link rel="stylesheet" href="style.css">
+
 </head>
+
+
 <body>
-    <div class="container">
+
+
+    <!-- =====================================================
+         SISTEMA SOLAR
+         
+         O touch-action impede o navegador de assumir
+         o gesto de dois dedos e deixa o nosso JS
+         controlar o zoom.
+    ====================================================== -->
+
+    <div
+        class="container"
+        style="touch-action: none;"
+    >
+
+
+        <!-- =================================================
+             SOL
+        ================================================== -->
+
         <div class="sun">
-            <img src="./images/sun.png" alt="Sol">
+
+            <img
+                src="./images/sun.png"
+                alt="Sol"
+            >
+
         </div>
-        
-        <div class="mercury" data-name="Mercúrio"></div>
-        <div class="venus" data-name="Vênus"></div>
-        <div class="earth" data-name="Terra">
-            <div class="moon" data-name="Lua"></div>
+
+
+        <!-- =================================================
+             PLANETAS
+        ================================================== -->
+
+        <div
+            class="mercury"
+            data-name="Mercúrio"
+        ></div>
+
+
+        <div
+            class="venus"
+            data-name="Vênus"
+        ></div>
+
+
+        <div
+            class="earth"
+            data-name="Terra"
+        >
+
+            <div
+                class="moon"
+                data-name="Lua"
+            ></div>
+
         </div>
-        <div class="mars" data-name="Marte"></div>
-        <div class="jupiter" data-name="Júpiter"></div>
-        <div class="saturn" data-name="Saturno"></div>
-        <div class="uranus" data-name="Urano"></div>
-        <div class="neptune" data-name="Netuno"></div>
-        <div class="pluto" data-name="Plutão"></div>
+
+
+        <div
+            class="mars"
+            data-name="Marte"
+        ></div>
+
+
+        <div
+            class="jupiter"
+            data-name="Júpiter"
+        ></div>
+
+
+        <div
+            class="saturn"
+            data-name="Saturno"
+        ></div>
+
+
+        <div
+            class="uranus"
+            data-name="Urano"
+        ></div>
+
+
+        <div
+            class="neptune"
+            data-name="Netuno"
+        ></div>
+
+
+        <div
+            class="pluto"
+            data-name="Plutão"
+        ></div>
+
+
     </div>
-    
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
     <script src="script.js"></script>
+
+
 </body>
+
 </html>
