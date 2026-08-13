@@ -42,8 +42,9 @@
     <!-- =====================================================
          SISTEMA SOLAR
          
-         O container recebe o zoom por pinça através
-         do script.js.
+         O touch-action impede o navegador de assumir
+         o gesto de dois dedos e deixa o nosso JS
+         controlar o zoom.
     ====================================================== -->
 
     <div
@@ -67,69 +68,25 @@
 
 
         <!-- =================================================
-             MERCÚRIO
-             
-             .mercury
-             → órbita ao redor do Sol
-
-             .planet
-             → rotação própria
+             PLANETAS
         ================================================== -->
 
         <div
             class="mercury"
             data-name="Mercúrio"
-        >
+        ></div>
 
-            <div
-                class="planet mercury-planet"
-            ></div>
-
-        </div>
-
-
-        <!-- =================================================
-             VÊNUS
-        ================================================== -->
 
         <div
             class="venus"
             data-name="Vênus"
-        >
+        ></div>
 
-            <div
-                class="planet venus-planet"
-            ></div>
-
-        </div>
-
-
-        <!-- =================================================
-             TERRA
-             
-             .earth
-             → órbita ao redor do Sol
-
-             .earth-planet
-             → rotação própria da Terra
-
-             .moon
-             → órbita ao redor da Terra
-        ================================================== -->
 
         <div
             class="earth"
             data-name="Terra"
         >
-
-            <div
-                class="planet earth-planet"
-            ></div>
-
-
-            <!-- =============================================
-                 LUA
-            ============================================== -->
 
             <div
                 class="moon"
@@ -139,100 +96,40 @@
         </div>
 
 
-        <!-- =================================================
-             MARTE
-        ================================================== -->
-
         <div
             class="mars"
             data-name="Marte"
-        >
+        ></div>
 
-            <div
-                class="planet mars-planet"
-            ></div>
-
-        </div>
-
-
-        <!-- =================================================
-             JÚPITER
-        ================================================== -->
 
         <div
             class="jupiter"
             data-name="Júpiter"
-        >
+        ></div>
 
-            <div
-                class="planet jupiter-planet"
-            ></div>
-
-        </div>
-
-
-        <!-- =================================================
-             SATURNO
-        ================================================== -->
 
         <div
             class="saturn"
             data-name="Saturno"
-        >
+        ></div>
 
-            <div
-                class="planet saturn-planet"
-            ></div>
-
-        </div>
-
-
-        <!-- =================================================
-             URANO
-        ================================================== -->
 
         <div
             class="uranus"
             data-name="Urano"
-        >
+        ></div>
 
-            <div
-                class="planet uranus-planet"
-            ></div>
-
-        </div>
-
-
-        <!-- =================================================
-             NETUNO
-        ================================================== -->
 
         <div
             class="neptune"
             data-name="Netuno"
-        >
+        ></div>
 
-            <div
-                class="planet neptune-planet"
-            ></div>
-
-        </div>
-
-
-        <!-- =================================================
-             PLUTÃO
-        ================================================== -->
 
         <div
             class="pluto"
             data-name="Plutão"
-        >
-
-            <div
-                class="planet pluto-planet"
-            ></div>
-
-        </div>
+        ></div>
 
 
     </div>
@@ -240,10 +137,6 @@
 
     <!-- =====================================================
          JAVASCRIPT
-         
-         Mantido igual.
-         Zoom + estrelas + Lua continuam sendo
-         controlados pelo script.js.
     ====================================================== -->
 
     <script src="script.js"></script>
