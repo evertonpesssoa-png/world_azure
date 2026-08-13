@@ -1,4 +1,4 @@
-import * as THREE from "three";
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
 import { scene, setupScene } from "./modules/scene.js";
 import { createPaintings } from "./modules/paintings.js";
 import { createWalls } from "./modules/walls.js";
