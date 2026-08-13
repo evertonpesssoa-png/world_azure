@@ -1,4 +1,8 @@
-import { VRButton } from "three/examples/jsm/webxr/VRButton.js";
+// ==============================================
+// CORREÇÃO DE CAMINHO ABSOLUTO PARA O GITHUB PAGES
+// ==============================================
+// Importando o VRButton direto da CDN (mesma versão que você está usando)
+import { VRButton } from "https://cdn.jsdelivr.net/npm/three@0.163.0/examples/jsm/webxr/VRButton.js";
 
 // Detecta se é celular
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
