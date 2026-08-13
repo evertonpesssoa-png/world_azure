@@ -57,7 +57,7 @@ body {
 .banner .mago-center::after {
     content: '';
     position: absolute;
-    top: 40%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) scale(1);
     width: 80px;
