@@ -365,35 +365,31 @@ body {
 /* =========================================================
    INFORMAÇÃO DO QUADRO
    =========================================================
+   
+   POSIÇÃO CONTROLADA DIRETAMENTE.
 
-   Fica abaixo do botão VR.
+   NÃO USA translateX.
 
-   POSIÇÃO HORIZONTAL:
+   25% = esquerda
+   30% = mais para o centro
+   40% = centro-direita
+   50% = metade da tela
 
-   38% = puxado para a ESQUERDA
-   45% = um pouco mais para a direita
-   50% = centro
-   55% = mais para a direita
-
-   VALOR ATUAL: 38%
-
-   Se precisar mover ainda mais para a esquerda,
-   diminua para 35%, 32%, etc.
+   VALOR ATUAL: 25%
 
    ========================================================= */
 
 #painting-info {
-  position: fixed;
+  position: fixed !important;
 
-  top: 62px;
+  top: 62px !important;
 
-  /* ===== POSIÇÃO HORIZONTAL ===== */
-  left: 38%;
+  left: 25% !important;
 
-  right: auto;
-  bottom: auto;
+  right: auto !important;
+  bottom: auto !important;
 
-  transform: translateX(-50%) scale(1);
+  transform: none !important;
 
   width: max-content;
 
@@ -443,7 +439,10 @@ body {
 
 #painting-info.show {
   opacity: 1;
+
   visibility: visible;
+
+  transform: none !important;
 }
 
 /* =========================================================
@@ -501,6 +500,7 @@ body {
 #start_audio:hover,
 #stop_audio:hover {
   background: rgba(0, 255, 255, 0.2);
+
   transform: scale(1.05);
 }
 
@@ -685,19 +685,22 @@ body {
 
   .mobile-btn {
     padding: 8px 14px;
+
     font-size: 12px;
   }
 
   /* =====================================================
-     QUADRO — ABAIXO DO VR
+     QUADRO — MOBILE
      ===================================================== */
 
   #painting-info {
-    top: 52px;
+    top: 52px !important;
 
-    left: 38%;
+    left: 20% !important;
 
-    right: auto;
+    right: auto !important;
+
+    transform: none !important;
 
     max-width: 30vw;
 
@@ -744,7 +747,7 @@ body {
   }
 
   /* =====================================================
-     INFO PANEL ORIGINAL
+     INFO PANEL
      ===================================================== */
 
   #info-panel {
@@ -824,15 +827,17 @@ body {
   }
 
   /* =====================================================
-     QUADRO — ABAIXO DO VR
+     QUADRO — CELULAR PEQUENO
      ===================================================== */
 
   #painting-info {
-    top: 48px;
+    top: 48px !important;
 
-    left: 38%;
+    left: 15% !important;
 
-    right: auto;
+    right: auto !important;
+
+    transform: none !important;
 
     max-width: 30vw;
 
@@ -873,6 +878,7 @@ body {
     transform-origin: bottom left;
 
     bottom: 20px;
+
     left: 20px;
   }
 
@@ -884,15 +890,18 @@ body {
     transform-origin: bottom right;
 
     bottom: 20px;
+
     right: 20px;
   }
 
   #painting-info {
-    top: 62px;
+    top: 62px !important;
 
-    left: 38%;
+    left: 25% !important;
 
-    right: auto;
+    right: auto !important;
+
+    transform: none !important;
 
     max-width: 30vw;
   }
@@ -918,11 +927,13 @@ body {
   }
 
   #painting-info {
-    top: 62px;
+    top: 62px !important;
 
-    left: 38%;
+    left: 25% !important;
 
-    right: auto;
+    right: auto !important;
+
+    transform: none !important;
 
     max-width: 30vw;
   }
@@ -990,6 +1001,7 @@ canvas {
   position: fixed !important;
 
   top: 20px !important;
+
   left: 20px !important;
 
   right: auto !important;
@@ -1012,6 +1024,7 @@ button#VRButton {
   position: fixed !important;
 
   top: 20px !important;
+
   left: 20px !important;
 
   right: auto !important;
