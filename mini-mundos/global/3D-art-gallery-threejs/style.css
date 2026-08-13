@@ -38,6 +38,7 @@ body {
 #starry_night_bg {
   width: 100%;
   height: 100%;
+  /* CAMINHO ABSOLUTO PARA A IMAGEM DE FUNDO (Mantido da sua forma original) */
   background-image: url("https://raw.githubusercontent.com/evertonpesssoa-png/world_azure/main/mini-mundos/global/3D-art-gallery-threejs/public/img/starrynight.jpg");
   background-size: cover;
   background-position: center;
@@ -91,6 +92,11 @@ body {
   transition: all 0.3s;
   font-size: 1rem;
   display: inline-block;
+  position: relative;
+  z-index: 1000000;
+  pointer-events: auto;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 #play_button:hover,
@@ -103,6 +109,11 @@ body {
 #play_button:active,
 #about_button:active {
   transform: scale(0.98);
+}
+
+#content_container {
+  position: relative;
+  z-index: 1000000;
 }
 
 /* ========== ABOUT OVERLAY ========== */
@@ -523,18 +534,4 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 100, 0, 0.8);
-}
-
-#play_button,
-#about_button {
-  position: relative;
-  z-index: 1000000;
-  pointer-events: auto;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-}
-
-#content_container {
-  position: relative;
-  z-index: 1000000;
 }
