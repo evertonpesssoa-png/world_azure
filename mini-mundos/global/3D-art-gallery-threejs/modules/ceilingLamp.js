@@ -10,12 +10,13 @@ const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/
 export const loadCeilingLampModel = (scene) => {
   const loader = new GLTFLoader();
   
-  // Caminhos alternativos para tentar
+  // ==============================================
+  // CAMINHOS 100% ABSOLUTOS (SEM RELATIVOS)
+  // ==============================================
   const paths = [
     "/world_azure/mini-mundos/global/3D-art-gallery-threejs/public/models/ceiling-lamp/scene.gltf",
-    "./public/models/ceiling-lamp/scene.gltf",
-    "../public/models/ceiling-lamp/scene.gltf",
-    "./models/ceiling-lamp/scene.gltf"
+    "/world_azure/mini-mundos/global/3D-art-gallery-threejs/public/models/ceiling-lamp/scene.gltf",
+    "/world_azure/mini-mundos/global/3D-art-gallery-threejs/public/models/ceiling-lamp/scene.gltf"
   ];
   
   let currentPathIndex = 0;
