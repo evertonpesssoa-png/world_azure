@@ -538,3 +538,44 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 100, 0, 0.8);
 }
+
+/* ============================================
+   CANVAS 3D — RESPONSIVIDADE DA GALERIA
+   ============================================ */
+
+canvas {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  width: 100dvw !important;
+  height: 100dvh !important;
+  margin: 0;
+  padding: 0;
+  z-index: 1;
+}
+
+/* A interface fica acima da galeria 3D */
+#info-panel,
+#painting-info,
+#audio_controls,
+.mobile-controls-panel,
+.touch-joypad {
+  z-index: 1000;
+}
+
+@media (max-width: 768px) {
+  canvas {
+    width: 100dvw !important;
+    height: 100dvh !important;
+  }
+}
+
+@media (orientation: landscape) and (max-width: 1024px) {
+  canvas {
+    width: 100dvw !important;
+    height: 100dvh !important;
+  }
+}
