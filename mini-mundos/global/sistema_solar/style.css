@@ -1,20 +1,7 @@
 /* =========================================================
    SISTEMA SOLAR - STYLE.CSS
    RESPONSIVO VERTICAL + HORIZONTAL
-
-   SISTEMA DE MOVIMENTO:
-
-   .planet
-      ├── órbita ao redor do Sol
-      │
-      └── .planet-body
-             └── rotação própria
-
-   .earth
-      ├── órbita ao redor do Sol
-      ├── .planet-body → rotação da Terra
-      │
-      └── .moon → órbita ao redor da Terra
+   LUA CORRIGIDA
 ========================================================= */
 
 
@@ -35,7 +22,6 @@ body {
 }
 
 body {
-
     min-height: 100vh;
 
     display: flex;
@@ -251,61 +237,43 @@ body {
 
 
 /* =========================================================
-   CORPO INTERNO DOS PLANETAS
-=========================================================
-
-   IMPORTANTE:
-
-   A órbita está no elemento externo.
-
-   A textura está no .planet-body.
-
-   Portanto podemos aplicar:
-
-       .earth
-          → orbit
-
-       .planet-body
-          → planetRotation
-
-   Sem uma animação brigar com a outra.
+   PLANETAS
 ========================================================= */
 
-.planet-body {
+.mercury::before,
+.venus::before,
+.earth::before,
+.mars::before,
+.jupiter::before,
+.saturn::before,
+.uranus::before,
+.neptune::before,
+.pluto::before {
+
+    content: '';
 
     position: absolute;
-
-    top: 50%;
-    left: 50%;
-
-    transform:
-        translate(-50%, -50%);
 
     border-radius: 50%;
 
     background-size: cover;
     background-position: center;
 
-    background-repeat: no-repeat;
+    top: -15px;
+    left: 50%;
+
+    transform:
+        translateX(-50%);
 
     z-index: 5;
-
-    pointer-events: none;
-
-    transform-origin: center center;
 }
 
 
 /* =========================================================
-   TAMANHO E TEXTURA DOS PLANETAS
+   TAMANHO DOS PLANETAS
 ========================================================= */
 
-
-/* ---------------------------------------------------------
-   MERCÚRIO
---------------------------------------------------------- */
-
-.mercury .planet-body {
+.mercury::before {
 
     width: 12px;
     height: 12px;
@@ -314,12 +282,7 @@ body {
         url('./images/mercury.png');
 }
 
-
-/* ---------------------------------------------------------
-   VÊNUS
---------------------------------------------------------- */
-
-.venus .planet-body {
+.venus::before {
 
     width: 16px;
     height: 16px;
@@ -328,26 +291,18 @@ body {
         url('./images/venus.png');
 }
 
-
-/* ---------------------------------------------------------
-   TERRA
---------------------------------------------------------- */
-
-.earth .planet-body {
+.earth::before {
 
     width: 18px;
     height: 18px;
 
     background-image:
         url('./images/earth.png');
+
+    top: -9px;
 }
 
-
-/* ---------------------------------------------------------
-   MARTE
---------------------------------------------------------- */
-
-.mars .planet-body {
+.mars::before {
 
     width: 14px;
     height: 14px;
@@ -356,68 +311,51 @@ body {
         url('./images/mars.png');
 }
 
-
-/* ---------------------------------------------------------
-   JÚPITER
---------------------------------------------------------- */
-
-.jupiter .planet-body {
+.jupiter::before {
 
     width: 40px;
     height: 40px;
+
+    top: -20px;
 
     background-image:
         url('./images/jupiter.png');
 }
 
-
-/* ---------------------------------------------------------
-   SATURNO
---------------------------------------------------------- */
-
-.saturn .planet-body {
+.saturn::before {
 
     width: 36px;
     height: 36px;
+
+    top: -18px;
 
     background-image:
         url('./images/saturn.png');
 }
 
-
-/* ---------------------------------------------------------
-   URANO
---------------------------------------------------------- */
-
-.uranus .planet-body {
+.uranus::before {
 
     width: 28px;
     height: 28px;
+
+    top: -14px;
 
     background-image:
         url('./images/uranus.png');
 }
 
-
-/* ---------------------------------------------------------
-   NETUNO
---------------------------------------------------------- */
-
-.neptune .planet-body {
+.neptune::before {
 
     width: 28px;
     height: 28px;
+
+    top: -14px;
 
     background-image:
         url('./images/neptune.png');
 }
 
-
-/* ---------------------------------------------------------
-   PLUTÃO
---------------------------------------------------------- */
-
-.pluto .planet-body {
+.pluto::before {
 
     width: 10px;
     height: 10px;
@@ -428,58 +366,56 @@ body {
 
 
 /* =========================================================
-   ROTAÇÃO PRÓPRIA DOS PLANETAS
-=========================================================
-
-   A animação é aplicada pelo JavaScript.
-
-   Não colocamos "orbit" aqui.
-
-   Isso é proposital.
-
-   .planet
-       = órbita
-
-   .planet-body
-       = rotação própria
-========================================================= */
-
-.planet-body {
-
-    transform-origin:
-        center center;
-}
-
-
-/* =========================================================
    LUA
-   ÓRBITA REAL AO REDOR DA TERRA
-=========================================================
+   =========================================================
 
-   A .moon é uma pequena órbita.
+   IMPORTANTE:
 
-   O CENTRO dela fica exatamente no centro da Terra.
+   A Terra está no topo da órbita .earth.
 
-   A imagem da Lua fica na extremidade superior.
+   Portanto a Lua precisa ter seu CENTRO exatamente
+   nessa posição.
 
-   Quando .moon gira:
+   A .moon agora funciona como uma pequena órbita
+   independente centrada na Terra.
 
-             🌙
-             |
-             |
-          🌍
+                   🌙
+                ↗     ↖
+             🌍  ← Lua →
 
-   ela percorre toda a volta da Terra.
+
+   A .earth continua orbitando o Sol normalmente.
+
+   Como .moon é filha de .earth, toda a órbita da Lua
+   acompanha automaticamente o movimento da Terra.
 ========================================================= */
 
 .moon {
 
     position: absolute;
 
+    /*
+       Diâmetro da órbita da Lua.
+
+       O centro da .moon fica exatamente no centro
+       da Terra.
+    */
+
     width: 52px;
     height: 52px;
 
-    top: 50%;
+    /*
+       A Terra está no topo da órbita .earth.
+
+       Portanto o centro da Lua deve ficar em:
+
+       left: 50%
+       top: 0
+
+       e não no centro da .earth.
+    */
+
+    top: 0;
     left: 50%;
 
     transform:
@@ -492,10 +428,12 @@ body {
 
     pointer-events: none;
 
-    z-index: 8;
+    /*
+       Fica acima da órbita, mas permite
+       que a Lua apareça claramente.
+    */
 
-    transform-origin:
-        center center;
+    z-index: 8;
 }
 
 
@@ -520,15 +458,12 @@ body {
     background-size: cover;
     background-position: center;
 
-    background-repeat: no-repeat;
-
     /*
-       A Lua fica acima do centro
-       da pequena órbita.
+       A Lua fica na extremidade superior
+       da sua própria órbita.
     */
 
     top: -3.5px;
-
     left: 50%;
 
     transform:
@@ -569,8 +504,6 @@ body {
         blur(1px);
 
     pointer-events: none;
-
-    z-index: 7;
 }
 
 
@@ -595,8 +528,6 @@ body {
         twinkle 3s ease-in-out infinite;
 
     pointer-events: none;
-
-    z-index: 0;
 }
 
 
@@ -605,28 +536,6 @@ body {
 ========================================================= */
 
 @keyframes orbit {
-
-    from {
-
-        transform:
-            translate(-50%, -50%)
-            rotate(0deg);
-    }
-
-    to {
-
-        transform:
-            translate(-50%, -50%)
-            rotate(360deg);
-    }
-}
-
-
-/* =========================================================
-   ROTAÇÃO PRÓPRIA DOS PLANETAS
-========================================================= */
-
-@keyframes planetRotation {
 
     from {
 
@@ -711,12 +620,10 @@ body {
 
     0%,
     100% {
-
         opacity: 0.3;
     }
 
     50% {
-
         opacity: 1;
     }
 }
@@ -856,26 +763,32 @@ body {
 
 
     /* -----------------------------------------------------
-       TAMANHO DOS PLANETAS
+       PLANETAS GRANDES
     ----------------------------------------------------- */
 
-    .jupiter .planet-body {
+    .jupiter::before {
 
         width: 28px;
         height: 28px;
+
+        top: -14px;
     }
 
-    .saturn .planet-body {
+    .saturn::before {
 
         width: 24px;
         height: 24px;
+
+        top: -12px;
     }
 
-    .uranus .planet-body,
-    .neptune .planet-body {
+    .uranus::before,
+    .neptune::before {
 
         width: 20px;
         height: 20px;
+
+        top: -10px;
     }
 
 
@@ -887,6 +800,9 @@ body {
 
         width: 46px;
         height: 46px;
+
+        top: 0;
+        left: 50%;
     }
 
     .moon::before {
@@ -943,6 +859,8 @@ body {
 
         width: 42px;
         height: 42px;
+
+        top: 0;
     }
 
     .moon::before {
@@ -953,10 +871,6 @@ body {
         top: -2.5px;
     }
 
-
-    /* -----------------------------------------------------
-       ANEL DE SATURNO
-    ----------------------------------------------------- */
 
     .saturn::after {
 
