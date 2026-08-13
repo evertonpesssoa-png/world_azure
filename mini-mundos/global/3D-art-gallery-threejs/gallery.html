@@ -55,7 +55,7 @@
       </div>
     </div>
 
-    <!-- SOBRE -->
+    <!-- SOBRE (Controlado APENAS pelo menu.js via classe .active) -->
     <div id="about-overlay">
       <button id="close-about">X</button>
       <h1>Sobre a Galeria 3D</h1>
@@ -178,10 +178,7 @@
         if (btn) {
           log('✅ Botão EXPLORAR encontrado');
           
-          // ==========================================
-          // CORREÇÃO DEFINITIVA: USAMOS addEventListener
-          // PARA NÃO SUBSTITUIR O ONCLICK DO MENU.JS
-          // ==========================================
+          // APENAS REGISTRA O CLIQUE. QUEM EXECUTA É O MENU.JS
           btn.addEventListener('click', function() {
             log('🔵 CLICOU em EXPLORAR');
           });
@@ -189,16 +186,10 @@
           log('❌ Botão EXPLORAR NÃO encontrado!', '#ff4444');
         }
 
-        const aboutBtn = document.getElementById('about_button');
-        if (aboutBtn) {
-          aboutBtn.onclick = function() {
-            document.getElementById('about-overlay').style.display = 'flex';
-          };
-        }
-
-        document.getElementById('close-about').onclick = function() {
-          document.getElementById('about-overlay').style.display = 'none';
-        };
+        // ==========================================
+        // REMOVIDO TODO O CONTROLE MANUAL DO SOBRE
+        // O menu.js agora é o único responsável.
+        // ==========================================
 
         setTimeout(() => {
           const canvas = document.querySelector('canvas');
