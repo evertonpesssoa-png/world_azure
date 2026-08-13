@@ -22,16 +22,14 @@ export const displayPaintingInfo = (info) => {
     🎨 ${info.artist || "Artista desconhecido"} • 📅 ${info.year || "—"}
   `;
 
-  // Cancela qualquer estado anterior de ocultação
+  // Mostra o elemento
   infoElement.style.display = "block";
   infoElement.style.visibility = "visible";
   infoElement.style.opacity = "1";
 
-  // Mantém o elemento centralizado
-  infoElement.style.transform =
-    "translateX(-50%) scale(1)";
+  // NÃO definir transform aqui.
+  // A posição horizontal fica totalmente por conta do CSS.
 
-  // Classe visual
   infoElement.classList.add("show");
 
   console.log(
@@ -52,8 +50,6 @@ export const hidePaintingInfo = () => {
   // Inicia animação de saída
   infoElement.style.opacity = "0";
   infoElement.style.visibility = "hidden";
-  infoElement.style.transform =
-    "translateX(-50%) scale(0.9)";
 
   infoElement.classList.remove("show");
 
@@ -83,15 +79,16 @@ export const displaySimpleInfo = (title) => {
   }
 
   // Define o conteúdo
-  infoElement.innerHTML = `🖼️ ${title || "Obra de Arte"}`;
+  infoElement.innerHTML =
+    `🖼️ ${title || "Obra de Arte"}`;
 
-  // Força o elemento a aparecer novamente
+  // Mostra o elemento
   infoElement.style.display = "block";
   infoElement.style.visibility = "visible";
   infoElement.style.opacity = "1";
 
-  infoElement.style.transform =
-    "translateX(-50%) scale(1)";
+  // NÃO definir transform aqui.
+  // O CSS controla completamente a posição.
 
   infoElement.classList.add("show");
 
