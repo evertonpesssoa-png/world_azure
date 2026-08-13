@@ -23,6 +23,27 @@ import {
 
 const { camera, controls, renderer } = setupScene();
 
+// ==============================================
+// CORREÇÃO DE RESPONSIVIDADE DA TELA
+// ==============================================
+function onWindowResize() {
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+
+  camera.aspect = width / height;
+  camera.updateProjectionMatrix();
+  renderer.setSize(width, height);
+}
+
+window.addEventListener('resize', onWindowResize);
+
+// Força um ajuste imediato ao entrar na galeria
+setTimeout(() => {
+  onWindowResize();
+}, 300);
+
+// ==============================================
+
 setupAudio(camera);
 
 const textureLoader = new THREE.TextureLoader();
