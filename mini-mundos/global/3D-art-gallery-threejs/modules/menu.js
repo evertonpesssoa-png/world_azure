@@ -1,335 +1,301 @@
-// ==============================================
-// ÁUDIO DA GALERIA
-// ==============================================
+// =========================
+// MENU.JS
+// SIMPLES E ESTÁVEL
+// =========================
 
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.module.js";
-
-let sound = null;
-let bufferLoaded = false;
-let isPlaying = false;
-
-// Quando true, significa que o usuário já clicou
-// em EXPLORAR e o áudio deve começar assim que carregar.
-let playWhenLoaded = false;
+const isMobile =
+  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  );
 
 
 // ==============================================
-// SETUP DO ÁUDIO
+// ESCONDER MENU
 // ==============================================
 
-export const setupAudio = (camera) => {
+export const hideMenu = () => {
 
-  console.log("🔊 Inicializando áudio...");
+  const menu = document.getElementById("menu");
 
-  const listener = new THREE.AudioListener();
+  if (!menu) return;
 
-  camera.add(listener);
+  menu.style.display = "none";
+  menu.style.visibility = "hidden";
+  menu.style.opacity = "0";
+  menu.style.pointerEvents = "none";
+  menu.style.zIndex = "-9999";
 
-  sound = new THREE.Audio(listener);
-
-  const audioLoader = new THREE.AudioLoader();
-
-  // CAMINHO ABSOLUTO
-  const audioPath =
-    "/world_azure/mini-mundos/global/3D-art-gallery-threejs/public/sounds/tiersen.mp3";
-
-
-  audioLoader.load(
-
-    audioPath,
-
-    // ==========================================
-    // ÁUDIO CARREGADO
-    // ==========================================
-
-    function (buffer) {
-
-      sound.setBuffer(buffer);
-
-      sound.setLoop(true);
-
-      sound.setVolume(0.5);
-
-      bufferLoaded = true;
-
-      console.log(
-        "✅ Áudio carregado com sucesso!"
-      );
+  menu.classList.remove("hidden");
+};
 
 
-      // ========================================
-      // O USUÁRIO JÁ CLICOU EM EXPLORAR
-      // ========================================
+// ==============================================
+// MOSTRAR MENU
+// ==============================================
 
-      if (playWhenLoaded) {
+export const showMenu = () => {
 
-        startAudio();
+  const menu = document.getElementById("menu");
 
-      }
+  if (!menu) return;
 
-    },
+  menu.style.display = "";
+  menu.style.visibility = "";
+  menu.style.opacity = "";
+  menu.style.pointerEvents = "";
+  menu.style.zIndex = "";
 
-
-    // ==========================================
-    // PROGRESSO
-    // ==========================================
-
-    function (xhr) {
-
-      if (xhr.total) {
-
-        console.log(
-          `🎵 Carregando áudio: ${Math.floor(
-            (xhr.loaded / xhr.total
-          ) * 100)}%`
-        );
-
-      }
-
-    },
+  menu.classList.remove("hidden");
+};
 
 
-    // ==========================================
-    // ERRO
-    // ==========================================
+// ==============================================
+// INICIAR EXPERIÊNCIA
+// ==============================================
 
-    function (error) {
+export const startExperience = (controls) => {
 
-      console.error(
-        "❌ Erro ao carregar áudio:",
-        error
-      );
+  hideMenu();
+
+
+  // ==========================================
+  // 📱 CELULAR
+  // ==========================================
+
+  if (isMobile) {
+
+    document.dispatchEvent(
+      new CustomEvent("experienceStarted")
+    );
+
+    return;
+  }
+
+
+  // ==========================================
+  // 🖥️ DESKTOP
+  // ==========================================
+
+  try {
+
+    if (controls?.lock) {
+
+      controls.lock();
 
     }
 
+  } catch (err) {
+
+    console.warn(
+      "Erro ao ativar PointerLock:",
+      err
+    );
+
+  }
+
+
+  document.dispatchEvent(
+    new CustomEvent("experienceStarted")
   );
 
 };
 
 
 // ==============================================
-// INICIAR ÁUDIO
+// SAIR DA EXPERIÊNCIA
 // ==============================================
 
-export const startAudio = async () => {
+export const exitExperience = (controls) => {
 
-  // ==========================================
-  // O USUÁRIO PEDIU PARA TOCAR
-  // ==========================================
-
-  playWhenLoaded = true;
+  showMenu();
 
 
-  // ==========================================
-  // ÁUDIO AINDA NÃO FOI INICIALIZADO
-  // ==========================================
-
-  if (!sound) {
-
-    console.warn(
-      "🔊 Áudio ainda não foi inicializado"
-    );
-
-    return;
-
-  }
-
-
-  // ==========================================
-  // ÁUDIO AINDA ESTÁ CARREGANDO
-  // ==========================================
-
-  if (!bufferLoaded) {
-
-    console.log(
-      "🔊 Áudio carregando..."
-    );
-
-    console.log(
-      "🎵 Tocará automaticamente quando terminar."
-    );
-
-    return;
-
-  }
-
-
-  // ==========================================
-  // JÁ ESTÁ TOCANDO
-  // ==========================================
-
-  if (isPlaying) {
-
-    console.log(
-      "🔊 Áudio já está tocando"
-    );
-
-    return;
-
-  }
-
-
-  // ==========================================
-  // INICIAR
-  // ==========================================
-
-  try {
-
-    // ========================================
-    // DESBLOQUEIA O AUDIOCONTEXT
-    // ========================================
-
-    if (
-      sound.context &&
-      sound.context.state === "suspended"
-    ) {
-
-      console.log(
-        "🔓 Retomando AudioContext..."
-      );
-
-      await sound.context.resume();
-
-    }
-
-
-    // ========================================
-    // TOCA A MÚSICA
-    // ========================================
-
-    sound.play();
-
-    isPlaying = true;
-
-    console.log(
-      "🎵 Áudio iniciado!"
-    );
-
-  } catch (error) {
-
-    console.error(
-      "❌ Erro ao tocar áudio:",
-      error
-    );
-
-  }
-
-};
-
-
-// ==============================================
-// PARAR ÁUDIO
-// ==============================================
-
-export const stopAudio = () => {
-
-  // Cancela também o início automático
-  // caso o áudio ainda esteja carregando.
-
-  playWhenLoaded = false;
-
-
-  if (
-    sound &&
-    isPlaying
-  ) {
+  if (!isMobile) {
 
     try {
 
-      sound.pause();
+      if (controls?.unlock) {
 
-      isPlaying = false;
+        controls.unlock();
 
-      console.log(
-        "🔇 Áudio pausado"
-      );
+      }
 
-    } catch (error) {
+    } catch (err) {
 
-      console.error(
-        "❌ Erro ao pausar áudio:",
-        error
-      );
-
-    }
-
-  }
-
-};
-
-
-// ==============================================
-// TOGGLE
-// ==============================================
-
-export const toggleAudio = () => {
-
-  if (isPlaying) {
-
-    stopAudio();
-
-  } else {
-
-    startAudio();
-
-  }
-
-};
-
-
-// ==============================================
-// STATUS
-// ==============================================
-
-export const isAudioPlaying = () => {
-
-  return isPlaying;
-
-};
-
-
-// ==============================================
-// DESBLOQUEIO DO ÁUDIO
-// ==============================================
-
-export const unlockAudioOnTouch = async () => {
-
-  if (!sound) {
-
-    return;
-
-  }
-
-
-  try {
-
-    const context = sound.context;
-
-
-    // ========================================
-    // CONTEXTO SUSPENSO
-    // ========================================
-
-    if (
-      context &&
-      context.state === "suspended"
-    ) {
-
-      await context.resume();
-
-      console.log(
-        "🔓 Contexto de áudio desbloqueado!"
+      console.warn(
+        "Erro ao sair:",
+        err
       );
 
     }
 
-  } catch (error) {
+  }
 
-    console.warn(
-      "⚠️ Não foi possível desbloquear áudio:",
-      error
-    );
+
+  document.dispatchEvent(
+    new CustomEvent("experienceExited")
+  );
+
+};
+
+
+// ==============================================
+// CONFIGURAR BOTÕES
+// ==============================================
+//
+// startAudio é recebido do audioGuide.js.
+//
+// Quando o usuário clica em EXPLORAR:
+//
+// 1. O áudio é solicitado.
+// 2. O menu desaparece.
+// 3. A experiência começa.
+//
+// Se o MP3 ainda estiver carregando,
+// o audioGuide.js continuará aguardando
+// e iniciará automaticamente quando terminar.
+// ==============================================
+
+export const setupPlayButton = (
+  controls,
+  startAudio
+) => {
+
+  const playButton =
+    document.getElementById("play_button");
+
+  const aboutButton =
+    document.getElementById("about_button");
+
+  const overlay =
+    document.getElementById("about-overlay");
+
+  const closeAbout =
+    document.getElementById("close-about");
+
+
+  // ==========================================
+  // PLAY / EXPLORAR
+  // ==========================================
+
+  if (playButton) {
+
+    playButton.onclick = (e) => {
+
+      e.preventDefault();
+      e.stopPropagation();
+
+
+      // ========================================
+      // 🔊 INICIA / AGENDA O ÁUDIO
+      // ========================================
+
+      if (typeof startAudio === "function") {
+
+        startAudio();
+
+      } else {
+
+        console.warn(
+          "🔊 startAudio não foi fornecido ao menu."
+        );
+
+      }
+
+
+      // ========================================
+      // 🎮 ENTRA NA GALERIA
+      // ========================================
+
+      startExperience(
+        controls
+      );
+
+    };
 
   }
+
+
+  // ==========================================
+  // ABOUT
+  // ==========================================
+
+  if (aboutButton) {
+
+    aboutButton.onclick = (e) => {
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      overlay?.classList.add("active");
+
+    };
+
+  }
+
+
+  // ==========================================
+  // FECHAR ABOUT
+  // ==========================================
+
+  if (closeAbout) {
+
+    closeAbout.onclick = (e) => {
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      overlay?.classList.remove("active");
+
+    };
+
+  }
+
+
+  // ==========================================
+  // FECHAR CLICANDO FORA
+  // ==========================================
+
+  if (overlay) {
+
+    overlay.onclick = (e) => {
+
+      if (e.target === overlay) {
+
+        overlay.classList.remove("active");
+
+      }
+
+    };
+
+  }
+
+};
+
+
+// ==============================================
+// COMPATIBILIDADE
+// ==============================================
+
+export const setupOverlayClose = () => {
+
+  // Mantido apenas para compatibilidade.
+
+};
+
+
+// ==============================================
+// VERIFICAR MENU
+// ==============================================
+
+export const isMenuVisible = () => {
+
+  const menu =
+    document.getElementById("menu");
+
+  if (!menu) return false;
+
+
+  return menu.style.display !== "none";
 
 };
