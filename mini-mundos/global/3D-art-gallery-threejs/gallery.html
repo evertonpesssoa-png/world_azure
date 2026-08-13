@@ -181,7 +181,7 @@
       log('🔵 Clique em EXPLORAR ARTE');
 
       // ==============================================
-      // BOTÃO EXPLORAR
+      // BOTÃO EXPLORAR (AQUI EU REMOVI O LOOP DE RECARREGAR)
       // ==============================================
       document.addEventListener('DOMContentLoaded', function() {
         const btn = document.getElementById('play_button');
@@ -210,21 +210,11 @@
               }
             }
             
+            // AQUI EU APAGUEI O TRECHO QUE FICAVA RECARREGANDO O MAIN.JS
+            // E CAUSAVA O LOOP INFINITO DE ERROS.
             if (!achou) {
               log('❌ Nenhuma função de entrada encontrada!', '#ff4444');
-              
-              // Recarrega o main.js
-              log('🔄 Recarregando main.js...');
-              const script = document.createElement('script');
-              script.type = 'module';
-              script.src = './main.js?' + Date.now();
-              script.onload = function() {
-                log('✅ main.js recarregado! Tente de novo.', '#00ff88');
-              };
-              script.onerror = function() {
-                log('❌ ERRO ao recarregar main.js!', '#ff4444');
-              };
-              document.body.appendChild(script);
+              log('⚠️ Pressione F5 para recarregar a página e tentar novamente.', '#ffaa00');
             }
           };
         } else {
