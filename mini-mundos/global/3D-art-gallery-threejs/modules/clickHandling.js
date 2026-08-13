@@ -5,18 +5,73 @@
 
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.module.js";
 
+import {
+  displayPaintingInfo
+} from "./paintingInfo.js";
+
+
+// ==============================================
+// RAYCASTER
+// ==============================================
+
 const mouse = new THREE.Vector2();
+
 const raycaster = new THREE.Raycaster();
 
-function clickHandling(renderer, camera, paintings) {
+
+// ==============================================
+// CONTROLE DE TOQUE
+// Evita clique duplicado no celular
+// ==============================================
+
+let lastTouchTime = 0;
+
+
+// ==============================================
+// CLICK HANDLING
+// ==============================================
+
+function clickHandling(
+  renderer,
+  camera,
+  paintings
+) {
+
+  if (!renderer?.domElement) {
+    console.warn(
+      "⚠️ Renderer não possui DOM element."
+    );
+
+    return;
+  }
+
 
   const handleInteraction = (event) => {
+
+    // ==========================================
+    // EVITA DUPLICAÇÃO DE EVENTOS TOUCH
+    // ==========================================
+
+    if (event.pointerType === "touch") {
+      lastTouchTime = Date.now();
+    }
+
+    // Se for mouse logo depois de um toque,
+    // ignora o evento fantasma.
+    if (
+      event.pointerType === "mouse" &&
+      Date.now() - lastTouchTime < 500
+    ) {
+      return;
+    }
+
 
     // ==========================================
     // IGNORA ELEMENTOS DA INTERFACE
     // ==========================================
 
-    const menu = document.getElementById("menu");
+    const menu =
+      document.getElementById("menu");
 
     if (
       menu &&
@@ -26,28 +81,45 @@ function clickHandling(renderer, camera, paintings) {
       return;
     }
 
-    // Não processa clique em controles da interface
+
+    // ==========================================
+    // IGNORA CONTROLES
+    // ==========================================
+
     if (
-      event.target.closest?.(
-        "#info-panel, #audio_controls, #painting-info, #VRButton, .touch-joypad, .mobile-controls-panel"
-      )
+      event.target?.closest?.(`
+        #info-panel,
+        #audio_controls,
+        #painting-info,
+        #VRButton,
+        .touch-joypad,
+        .mobile-controls-panel,
+        button
+      `)
     ) {
       return;
     }
 
+
     // ==========================================
-    // COORDENADAS
+    // COORDENADAS DO POINTER
     // ==========================================
 
     const clientX = event.clientX;
     const clientY = event.clientY;
 
+
     if (
-      clientX === undefined ||
-      clientY === undefined
+      typeof clientX !== "number" ||
+      typeof clientY !== "number"
     ) {
       return;
     }
+
+
+    // ==========================================
+    // CONVERTE PARA NDC
+    // ==========================================
 
     mouse.x =
       (clientX / window.innerWidth) * 2 - 1;
@@ -55,17 +127,35 @@ function clickHandling(renderer, camera, paintings) {
     mouse.y =
       -(clientY / window.innerHeight) * 2 + 1;
 
+
     // ==========================================
     // VERIFICA A OBRA
     // ==========================================
 
-    onClick(camera, paintings);
+    onClick(
+      camera,
+      paintings
+    );
   };
+
+
+  // ==========================================
+  // POINTER DOWN
+  // Funciona:
+  // - Mouse
+  // - Touch
+  // - Caneta
+  // ==========================================
 
   renderer.domElement.addEventListener(
     "pointerdown",
     handleInteraction,
     false
+  );
+
+
+  console.log(
+    "🖼️ ClickHandling ativado."
   );
 }
 
@@ -74,19 +164,41 @@ function clickHandling(renderer, camera, paintings) {
 // RAYCAST DA OBRA
 // ==============================================
 
-function onClick(camera, paintings) {
+function onClick(
+  camera,
+  paintings
+) {
 
-  raycaster.setFromCamera(mouse, camera);
+  raycaster.setFromCamera(
+    mouse,
+    camera
+  );
+
+
+  // ==========================================
+  // NORMALIZA ARRAY DE PINTURAS
+  // ==========================================
 
   const paintingsArray =
     Array.isArray(paintings)
       ? paintings
       : paintings?.children || [];
 
+
   if (!paintingsArray.length) {
-    console.warn("⚠️ Nenhuma pintura encontrada.");
+
+    console.warn(
+      "⚠️ Nenhuma pintura encontrada."
+    );
+
     return;
   }
+
+
+  // ==========================================
+  // RAYCAST
+  // recursive = true
+  // ==========================================
 
   const intersects =
     raycaster.intersectObjects(
@@ -94,39 +206,62 @@ function onClick(camera, paintings) {
       true
     );
 
+
   if (!intersects.length) {
     return;
   }
 
+
   // ==========================================
-  // ENCONTRA O OBJETO PAI DA OBRA
+  // ENCONTRA A OBRA REAL
   // ==========================================
 
-  let painting = intersects[0].object;
+  let painting =
+    intersects[0].object;
+
 
   while (
     painting &&
     !painting.userData?.info?.title
   ) {
-    painting = painting.parent;
+
+    painting =
+      painting.parent;
   }
 
-  if (!painting?.userData?.info) {
+
+  // ==========================================
+  // VERIFICA INFORMAÇÃO
+  // ==========================================
+
+  if (
+    !painting?.userData?.info
+  ) {
+
     console.warn(
       "⚠️ Objeto clicado não possui informações."
     );
+
     return;
   }
 
-  const info = painting.userData.info;
+
+  // ==========================================
+  // INFORMAÇÕES DA OBRA
+  // ==========================================
+
+  const info =
+    painting.userData.info;
+
 
   console.log(
     "🖼️ Obra selecionada:",
     info.title
   );
 
+
   // ==========================================
-  // MOSTRA INFORMAÇÕES
+  // ENVIA PARA O SISTEMA DE INFORMAÇÃO
   // ==========================================
 
   displayPaintingInfo(info);
@@ -134,65 +269,9 @@ function onClick(camera, paintings) {
 
 
 // ==============================================
-// MOSTRAR INFORMAÇÃO DA OBRA
+// EXPORT
 // ==============================================
 
-function displayPaintingInfo(info) {
-
-  const infoDiv =
-    document.getElementById("painting-info");
-
-  if (!infoDiv) {
-    console.warn(
-      "⚠️ #painting-info não encontrado."
-    );
-    return;
-  }
-
-  infoDiv.innerHTML = `
-    <strong>🖼️ ${info.title || "Obra de Arte"}</strong>
-    ${
-      info.artist || info.year
-        ? `<br>🎨 ${info.artist || ""}${
-            info.year
-              ? ` • 📅 ${info.year}`
-              : ""
-          }`
-        : ""
-    }
-  `;
-
-  // ==========================================
-  // MOSTRA
-  // ==========================================
-
-  infoDiv.style.opacity = "1";
-  infoDiv.style.visibility = "visible";
-  infoDiv.style.transform =
-    "translateX(-50%) scale(1)";
-
-  infoDiv.classList.add("show");
-
-  // ==========================================
-  // ESCONDE DEPOIS DE 3 SEGUNDOS
-  // ==========================================
-
-  clearTimeout(
-    infoDiv._hideTimer
-  );
-
-  infoDiv._hideTimer = setTimeout(() => {
-
-    infoDiv.style.opacity = "0";
-    infoDiv.style.visibility = "hidden";
-
-    infoDiv.style.transform =
-      "translateX(-50%) scale(0.9)";
-
-    infoDiv.classList.remove("show");
-
-  }, 3000);
-}
-
-
-export { clickHandling };
+export {
+  clickHandling
+};
