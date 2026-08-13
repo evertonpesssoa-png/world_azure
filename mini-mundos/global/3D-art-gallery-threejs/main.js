@@ -1,25 +1,25 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.module.js";
-import { scene, setupScene } from "./modules/scene.js";
-import { createPaintings } from "./modules/paintings.js";
-import { createWalls } from "./modules/walls.js";
-import { setupLighting } from "./modules/lighting.js";
-import { setupFloor } from "./modules/floor.js";
-import { createCeiling } from "./modules/ceiling.js";
-import { createBoundingBoxes } from "./modules/boundingBox.js";
-import { setupRendering } from "./modules/rendering.js";
-import { setupEventListeners } from "./modules/eventListeners.js";
-import { addObjectsToScene } from "./modules/sceneHelpers.js";
-import { setupAudio } from "./modules/audioGuide.js";
-import { clickHandling } from "./modules/clickHandling.js";
-import { setupVR } from "./modules/VRSupport.js";
-import { loadStatueModel } from "./modules/statue.js";
-import { loadBenchModel } from "./modules/bench.js";
-import { loadCeilingLampModel } from "./modules/ceilingLamp.js";
+import { scene, setupScene } from "/world_azure/mini-mundos/global/3D-art-gallery-threesjs/modules/scene.js";
+import { createPaintings } from "/world_azure/mini-mundos/global/3D-art-gallery-threesjs/modules/paintings.js";
+import { createWalls } from "/world_azure/mini-mundos/global/3D-art-gallery-threesjs/modules/walls.js";
+import { setupLighting } from "/world_azure/mini-mundos/global/3D-art-gallery-threesjs/modules/lighting.js";
+import { setupFloor } from "/world_azure/mini-mundos/global/3D-art-gallery-threesjs/modules/floor.js";
+import { createCeiling } from "/world_azure/mini-mundos/global/3D-art-gallery-threesjs/modules/ceiling.js";
+import { createBoundingBoxes } from "/world_azure/mini-mundos/global/3D-art-gallery-threesjs/modules/boundingBox.js";
+import { setupRendering } from "/world_azure/mini-mundos/global/3D-art-gallery-threesjs/modules/rendering.js";
+import { setupEventListeners } from "/world_azure/mini-mundos/global/3D-art-gallery-threesjs/modules/eventListeners.js";
+import { addObjectsToScene } from "/world_azure/mini-mundos/global/3D-art-gallery-threesjs/modules/sceneHelpers.js";
+import { setupAudio } from "/world_azure/mini-mundos/global/3D-art-gallery-threesjs/modules/audioGuide.js";
+import { clickHandling } from "/world_azure/mini-mundos/global/3D-art-gallery-threesjs/modules/clickHandling.js";
+import { setupVR } from "/world_azure/mini-mundos/global/3D-art-gallery-threesjs/modules/VRSupport.js";
+import { loadStatueModel } from "/world_azure/mini-mundos/global/3D-art-gallery-threesjs/modules/statue.js";
+import { loadBenchModel } from "/world_azure/mini-mundos/global/3D-art-gallery-threesjs/modules/bench.js";
+import { loadCeilingLampModel } from "/world_azure/mini-mundos/global/3D-art-gallery-threesjs/modules/ceilingLamp.js";
 
 import {
   setupPlayButton,
   setupOverlayClose
-} from "./modules/menu.js";
+} from "/world_azure/mini-mundos/global/3D-art-gallery-threesjs/modules/menu.js";
 
 const { camera, controls, renderer } = setupScene();
 
@@ -78,8 +78,6 @@ console.log("✅ main.js carregado");
 // CORREÇÃO FINAL: AVISANDO O BOTÃO HTML
 // ==============================================
 
-// Essa função existe APENAS para o botão HTML encontrar.
-// O seu código 3D já roda automaticamente quando a página abre.
 window.startGallery = function() {
   console.log("✅ startGallery executada com sucesso!");
 };
