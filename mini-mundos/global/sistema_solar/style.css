@@ -25,7 +25,10 @@ body {
     margin: 20px auto;
 }
 
-/* SOL */
+/* =========================================================
+   SOL
+========================================================= */
+
 .sun {
     position: absolute;
     top: 50%;
@@ -35,7 +38,9 @@ body {
     margin-left: -40px;
     margin-top: -40px;
     border-radius: 50%;
-    box-shadow: 0 0 40px rgba(255, 100, 0, 0.8), 0 0 80px rgba(255, 50, 0, 0.4);
+    box-shadow:
+        0 0 40px rgba(255, 100, 0, 0.8),
+        0 0 80px rgba(255, 50, 0, 0.4);
     animation: pulse 2s ease-in-out infinite;
     z-index: 10;
 }
@@ -47,8 +52,19 @@ body {
     object-fit: cover;
 }
 
-/* ÓRBITAS E PLANETAS */
-.mercury, .venus, .earth, .mars, .jupiter, .saturn, .uranus, .neptune, .pluto {
+/* =========================================================
+   ÓRBITAS E PLANETAS
+========================================================= */
+
+.mercury,
+.venus,
+.earth,
+.mars,
+.jupiter,
+.saturn,
+.uranus,
+.neptune,
+.pluto {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -57,21 +73,87 @@ body {
     transform: translate(-50%, -50%);
 }
 
-/* TAMANHO DAS ÓRBITAS */
-.mercury { width: 110px; height: 110px; animation: orbit 8s linear infinite; }
-.venus   { width: 150px; height: 150px; animation: orbit 12s linear infinite; }
-.earth   { width: 200px; height: 200px; animation: orbit 16s linear infinite; }
-.mars    { width: 250px; height: 250px; animation: orbit 20s linear infinite; }
-.jupiter { width: 320px; height: 320px; animation: orbit 28s linear infinite; }
-.saturn  { width: 390px; height: 390px; animation: orbit 34s linear infinite; }
-.uranus  { width: 460px; height: 460px; animation: orbit 40s linear infinite; }
-.neptune { width: 520px; height: 520px; animation: orbit 46s linear infinite; }
-.pluto   { width: 580px; height: 580px; animation: orbit 52s linear infinite; }
+/* =========================================================
+   TAMANHO DAS ÓRBITAS
+   + POSIÇÕES INICIAIS DIFERENTES
+========================================================= */
 
-/* ESTILO BASE DOS PLANETAS */
-.mercury::before, .venus::before, .earth::before, 
-.mars::before, .jupiter::before, .saturn::before, 
-.uranus::before, .neptune::before, .pluto::before {
+.mercury {
+    width: 110px;
+    height: 110px;
+    animation: orbit 8s linear infinite;
+    animation-delay: -1.5s;
+}
+
+.venus {
+    width: 150px;
+    height: 150px;
+    animation: orbit 12s linear infinite;
+    animation-delay: -7s;
+}
+
+.earth {
+    width: 200px;
+    height: 200px;
+    animation: orbit 16s linear infinite;
+    animation-delay: -11s;
+}
+
+.mars {
+    width: 250px;
+    height: 250px;
+    animation: orbit 20s linear infinite;
+    animation-delay: -4s;
+}
+
+.jupiter {
+    width: 320px;
+    height: 320px;
+    animation: orbit 28s linear infinite;
+    animation-delay: -20s;
+}
+
+.saturn {
+    width: 390px;
+    height: 390px;
+    animation: orbit 34s linear infinite;
+    animation-delay: -9s;
+}
+
+.uranus {
+    width: 460px;
+    height: 460px;
+    animation: orbit 40s linear infinite;
+    animation-delay: -31s;
+}
+
+.neptune {
+    width: 520px;
+    height: 520px;
+    animation: orbit 46s linear infinite;
+    animation-delay: -18s;
+}
+
+.pluto {
+    width: 580px;
+    height: 580px;
+    animation: orbit 52s linear infinite;
+    animation-delay: -43s;
+}
+
+/* =========================================================
+   ESTILO BASE DOS PLANETAS
+========================================================= */
+
+.mercury::before,
+.venus::before,
+.earth::before,
+.mars::before,
+.jupiter::before,
+.saturn::before,
+.uranus::before,
+.neptune::before,
+.pluto::before {
     content: '';
     position: absolute;
     border-radius: 50%;
@@ -82,18 +164,72 @@ body {
     transform: translateX(-50%);
 }
 
-/* TAMANHO DOS PLANETAS */
-.mercury::before { width: 12px; height: 12px; background-image: url('./images/mercury.png'); }
-.venus::before   { width: 16px; height: 16px; background-image: url('./images/venus.png'); }
-.earth::before   { width: 18px; height: 18px; background-image: url('./images/earth.png'); }
-.mars::before    { width: 14px; height: 14px; background-image: url('./images/mars.png'); }
-.jupiter::before { width: 40px; height: 40px; top: -20px; background-image: url('./images/jupiter.png'); }
-.saturn::before  { width: 36px; height: 36px; top: -18px; background-image: url('./images/saturn.png'); }
-.uranus::before  { width: 28px; height: 28px; top: -14px; background-image: url('./images/uranus.png'); }
-.neptune::before { width: 28px; height: 28px; top: -14px; background-image: url('./images/neptune.png'); }
-.pluto::before   { width: 10px; height: 10px; background-image: url('./images/pluto.png'); }
+/* =========================================================
+   TAMANHO DOS PLANETAS
+========================================================= */
 
-/* LUA - ESPECIAL (órbita separada) */
+.mercury::before {
+    width: 12px;
+    height: 12px;
+    background-image: url('./images/mercury.png');
+}
+
+.venus::before {
+    width: 16px;
+    height: 16px;
+    background-image: url('./images/venus.png');
+}
+
+.earth::before {
+    width: 18px;
+    height: 18px;
+    background-image: url('./images/earth.png');
+}
+
+.mars::before {
+    width: 14px;
+    height: 14px;
+    background-image: url('./images/mars.png');
+}
+
+.jupiter::before {
+    width: 40px;
+    height: 40px;
+    top: -20px;
+    background-image: url('./images/jupiter.png');
+}
+
+.saturn::before {
+    width: 36px;
+    height: 36px;
+    top: -18px;
+    background-image: url('./images/saturn.png');
+}
+
+.uranus::before {
+    width: 28px;
+    height: 28px;
+    top: -14px;
+    background-image: url('./images/uranus.png');
+}
+
+.neptune::before {
+    width: 28px;
+    height: 28px;
+    top: -14px;
+    background-image: url('./images/neptune.png');
+}
+
+.pluto::before {
+    width: 10px;
+    height: 10px;
+    background-image: url('./images/pluto.png');
+}
+
+/* =========================================================
+   LUA - ÓRBITA SEPARADA DA TERRA
+========================================================= */
+
 .moon {
     position: absolute;
     width: 30px;
@@ -117,10 +253,9 @@ body {
     transform: translateX(-50%);
 }
 
-/* SATURNO - ANEL ESPECIAL */
-.saturn {
-    position: relative;
-}
+/* =========================================================
+   SATURNO - ANEL ESPECIAL
+========================================================= */
 
 .saturn::after {
     content: '';
@@ -135,7 +270,10 @@ body {
     filter: blur(1px);
 }
 
-/* ESTRELAS DE FUNDO */
+/* =========================================================
+   ESTRELAS DE FUNDO
+========================================================= */
+
 .star {
     position: fixed;
     background-color: white;
@@ -146,31 +284,71 @@ body {
     animation: twinkle 3s ease-in-out infinite;
 }
 
-/* ANIMAÇÕES */
+/* =========================================================
+   ANIMAÇÕES
+========================================================= */
+
 @keyframes orbit {
-    from { transform: translate(-50%, -50%) rotate(0deg); }
-    to { transform: translate(-50%, -50%) rotate(360deg); }
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
 }
 
 @keyframes moonOrbit {
-    from { transform: translate(-50%, -50%) rotate(0deg); }
-    to { transform: translate(-50%, -50%) rotate(360deg); }
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
 }
 
 @keyframes pulse {
-    0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(255, 100, 0, 0.8); }
-    50% { transform: scale(1.05); box-shadow: 0 0 60px rgba(255, 100, 0, 1); }
+    0%,
+    100% {
+        transform: scale(1);
+        box-shadow:
+            0 0 40px rgba(255, 100, 0, 0.8),
+            0 0 80px rgba(255, 50, 0, 0.4);
+    }
+
+    50% {
+        transform: scale(1.05);
+        box-shadow:
+            0 0 60px rgba(255, 100, 0, 1),
+            0 0 100px rgba(255, 50, 0, 0.5);
+    }
 }
 
 @keyframes twinkle {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 1; }
+    0%,
+    100% {
+        opacity: 0.3;
+    }
+
+    50% {
+        opacity: 1;
+    }
 }
 
-/* TOOLTIPS - NOMES DOS PLANETAS AO PASSAR MOUSE */
-.mercury:hover::after, .venus:hover::after, .earth:hover::after,
-.mars:hover::after, .jupiter:hover::after, .saturn:hover::after,
-.uranus:hover::after, .neptune:hover::after, .pluto:hover::after {
+/* =========================================================
+   TOOLTIPS - NOMES DOS PLANETAS
+========================================================= */
+
+.mercury:hover::after,
+.venus:hover::after,
+.earth:hover::after,
+.mars:hover::after,
+.jupiter:hover::after,
+.saturn:hover::after,
+.uranus:hover::after,
+.neptune:hover::after,
+.pluto:hover::after {
     content: attr(data-name);
     position: absolute;
     bottom: -25px;
@@ -178,39 +356,92 @@ body {
     transform: translateX(-50%);
     color: white;
     font-size: 10px;
-    background: rgba(0,0,0,0.7);
+    background: rgba(0, 0, 0, 0.7);
     padding: 2px 6px;
     border-radius: 4px;
     white-space: nowrap;
     pointer-events: none;
 }
 
-/* RESPONSIVIDADE PARA CELULAR */
+/* =========================================================
+   RESPONSIVIDADE PARA CELULAR
+========================================================= */
+
 @media (max-width: 768px) {
+
     .container {
         width: 95vw;
         height: 95vw;
     }
-    
+
     .sun {
         width: 50px;
         height: 50px;
         margin-left: -25px;
         margin-top: -25px;
     }
-    
-    .mercury { width: 80px; height: 80px; }
-    .venus   { width: 110px; height: 110px; }
-    .earth   { width: 140px; height: 140px; }
-    .mars    { width: 170px; height: 170px; }
-    .jupiter { width: 210px; height: 210px; }
-    .saturn  { width: 250px; height: 250px; }
-    .uranus  { width: 290px; height: 290px; }
-    .neptune { width: 320px; height: 320px; }
-    .pluto   { width: 350px; height: 350px; }
-    
-    .jupiter::before { width: 28px; height: 28px; }
-    .saturn::before  { width: 24px; height: 24px; }
+
+    .mercury {
+        width: 80px;
+        height: 80px;
+    }
+
+    .venus {
+        width: 110px;
+        height: 110px;
+    }
+
+    .earth {
+        width: 140px;
+        height: 140px;
+    }
+
+    .mars {
+        width: 170px;
+        height: 170px;
+    }
+
+    .jupiter {
+        width: 210px;
+        height: 210px;
+    }
+
+    .saturn {
+        width: 250px;
+        height: 250px;
+    }
+
+    .uranus {
+        width: 290px;
+        height: 290px;
+    }
+
+    .neptune {
+        width: 320px;
+        height: 320px;
+    }
+
+    .pluto {
+        width: 350px;
+        height: 350px;
+    }
+
+    .jupiter::before {
+        width: 28px;
+        height: 28px;
+        top: -14px;
+    }
+
+    .saturn::before {
+        width: 24px;
+        height: 24px;
+        top: -12px;
+    }
+
     .uranus::before,
-    .neptune::before { width: 20px; height: 20px; }
+    .neptune::before {
+        width: 20px;
+        height: 20px;
+        top: -10px;
+    }
 }
