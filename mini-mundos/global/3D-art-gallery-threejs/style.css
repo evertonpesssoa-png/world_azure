@@ -365,20 +365,21 @@ body {
 /* =========================================================
    INFORMAÇÃO DO QUADRO
    =========================================================
-   
+
    Fica abaixo do botão VR.
-   
+
    POSIÇÃO HORIZONTAL:
-   
+
+   38% = puxado para a ESQUERDA
+   45% = um pouco mais para a direita
    50% = centro
-   55% = um pouco à direita do centro
-   60% = mais à direita
-   65% = ainda mais à direita
-   
-   Portanto, para puxar para a ESQUERDA:
-   diminua o valor.
-   
-   Valor escolhido: 55%
+   55% = mais para a direita
+
+   VALOR ATUAL: 38%
+
+   Se precisar mover ainda mais para a esquerda,
+   diminua para 35%, 32%, etc.
+
    ========================================================= */
 
 #painting-info {
@@ -387,7 +388,7 @@ body {
   top: 62px;
 
   /* ===== POSIÇÃO HORIZONTAL ===== */
-  left: 45%;
+  left: 38%;
 
   right: auto;
   bottom: auto;
@@ -694,7 +695,7 @@ body {
   #painting-info {
     top: 52px;
 
-    left: 55%;
+    left: 38%;
 
     right: auto;
 
@@ -829,7 +830,7 @@ body {
   #painting-info {
     top: 48px;
 
-    left: 55%;
+    left: 38%;
 
     right: auto;
 
@@ -889,7 +890,7 @@ body {
   #painting-info {
     top: 62px;
 
-    left: 55%;
+    left: 38%;
 
     right: auto;
 
@@ -919,7 +920,7 @@ body {
   #painting-info {
     top: 62px;
 
-    left: 55%;
+    left: 38%;
 
     right: auto;
 
@@ -1014,6 +1015,7 @@ button#VRButton {
   left: 20px !important;
 
   right: auto !important;
+
   bottom: auto !important;
 
   z-index: 9999 !important;
