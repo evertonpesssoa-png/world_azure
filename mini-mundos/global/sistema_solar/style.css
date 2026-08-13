@@ -15,7 +15,10 @@ body {
     font-family: 'Arial', sans-serif;
 }
 
-/* CONTAINER PRINCIPAL */
+/* =========================================================
+   CONTAINER PRINCIPAL
+========================================================= */
+
 .container {
     width: 90vw;
     height: 90vw;
@@ -38,9 +41,11 @@ body {
     margin-left: -40px;
     margin-top: -40px;
     border-radius: 50%;
+
     box-shadow:
         0 0 40px rgba(255, 100, 0, 0.8),
         0 0 80px rgba(255, 50, 0, 0.4);
+
     animation: pulse 2s ease-in-out infinite;
     z-index: 10;
 }
@@ -70,6 +75,7 @@ body {
     left: 50%;
     border-radius: 50%;
     border: 1px solid rgba(255, 255, 255, 0.2);
+
     transform: translate(-50%, -50%);
 }
 
@@ -156,11 +162,15 @@ body {
 .pluto::before {
     content: '';
     position: absolute;
+
     border-radius: 50%;
+
     background-size: cover;
     background-position: center;
+
     top: -15px;
     left: 50%;
+
     transform: translateX(-50%);
 }
 
@@ -227,47 +237,71 @@ body {
 }
 
 /* =========================================================
-   LUA - ÓRBITA SEPARADA DA TERRA
+   LUA - ÓRBITA SEPARADA
 ========================================================= */
 
 .moon {
     position: absolute;
+
     width: 30px;
     height: 30px;
+
     top: 50%;
     left: 50%;
+
     transform: translate(-50%, -50%);
+
     animation: moonOrbit 3s linear infinite;
 }
 
 .moon::before {
     content: '';
+
     position: absolute;
+
     width: 6px;
     height: 6px;
+
     border-radius: 50%;
+
     background-image: url('./images/moon.png');
     background-size: cover;
+
     top: -25px;
     left: 50%;
+
     transform: translateX(-50%);
 }
 
 /* =========================================================
-   SATURNO - ANEL ESPECIAL
+   SATURNO - ANEL
+   IMPORTANTE:
+   NÃO alteramos o position do .saturn.
+   Ele continua absolute para manter a órbita.
 ========================================================= */
 
 .saturn::after {
     content: '';
+
     position: absolute;
+
     width: 50px;
     height: 15px;
+
     background: rgba(200, 180, 100, 0.4);
+
     border-radius: 50%;
+
     top: -7px;
     left: 50%;
-    transform: translateX(-50%) rotate(-20deg);
+
+    transform:
+        translateX(-50%)
+        rotate(-20deg);
+
     filter: blur(1px);
+
+    pointer-events: none;
 }
 
 /* =========================================================
@@ -276,11 +310,16 @@ body {
 
 .star {
     position: fixed;
+
     background-color: white;
+
     border-radius: 50%;
+
     width: 2px;
     height: 2px;
+
     opacity: 0.8;
+
     animation: twinkle 3s ease-in-out infinite;
 }
 
@@ -289,29 +328,41 @@ body {
 ========================================================= */
 
 @keyframes orbit {
+
     from {
-        transform: translate(-50%, -50%) rotate(0deg);
+        transform:
+            translate(-50%, -50%)
+            rotate(0deg);
     }
 
     to {
-        transform: translate(-50%, -50%) rotate(360deg);
+        transform:
+            translate(-50%, -50%)
+            rotate(360deg);
     }
 }
 
 @keyframes moonOrbit {
+
     from {
-        transform: translate(-50%, -50%) rotate(0deg);
+        transform:
+            translate(-50%, -50%)
+            rotate(0deg);
     }
 
     to {
-        transform: translate(-50%, -50%) rotate(360deg);
+        transform:
+            translate(-50%, -50%)
+            rotate(360deg);
     }
 }
 
 @keyframes pulse {
+
     0%,
     100% {
         transform: scale(1);
+
         box-shadow:
             0 0 40px rgba(255, 100, 0, 0.8),
             0 0 80px rgba(255, 50, 0, 0.4);
@@ -319,6 +370,7 @@ body {
 
     50% {
         transform: scale(1.05);
+
         box-shadow:
             0 0 60px rgba(255, 100, 0, 1),
             0 0 100px rgba(255, 50, 0, 0.5);
@@ -326,6 +378,7 @@ body {
 }
 
 @keyframes twinkle {
+
     0%,
     100% {
         opacity: 0.3;
@@ -349,17 +402,28 @@ body {
 .uranus:hover::after,
 .neptune:hover::after,
 .pluto:hover::after {
+
     content: attr(data-name);
+
     position: absolute;
+
     bottom: -25px;
     left: 50%;
+
     transform: translateX(-50%);
+
     color: white;
+
     font-size: 10px;
+
     background: rgba(0, 0, 0, 0.7);
+
     padding: 2px 6px;
+
     border-radius: 4px;
+
     white-space: nowrap;
+
     pointer-events: none;
 }
 
@@ -377,6 +441,7 @@ body {
     .sun {
         width: 50px;
         height: 50px;
+
         margin-left: -25px;
         margin-top: -25px;
     }
