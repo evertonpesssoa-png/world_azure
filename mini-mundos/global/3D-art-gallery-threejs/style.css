@@ -287,7 +287,7 @@ body {
 }
 
 /* =========================================================
-   INFO PANEL — TOPO DIREITO
+   INFO PANEL
    ========================================================= */
 
 #info-panel {
@@ -363,40 +363,51 @@ body {
 }
 
 /* =========================================================
-   NOME DO QUADRO
+   INFORMAÇÃO DO QUADRO
+   =========================================================
+   
+   FICA ABAIXO DO VR.
+   
+   NÃO É CENTRALIZADO.
+   NÃO É NO RODAPÉ.
+   NÃO É JUNTO DOS CONTROLES.
+   
+   Ordem visual:
+   
+   [ VR ]
+   [ NOME DO QUADRO ]
+   
    ========================================================= */
 
 #painting-info {
   position: fixed;
 
-  left: 50%;
-  bottom: calc(
-    20px + env(safe-area-inset-bottom, 0px)
-  );
+  top: 62px;
+  left: 20px;
 
-  transform: translateX(-50%);
+  right: auto;
+  bottom: auto;
 
-  width: auto;
-  max-width: min(
-    70vw,
-    500px
-  );
+  transform: translateY(0) scale(1);
 
-  min-height: 42px;
+  width: max-content;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  max-width: calc(100vw - 40px);
 
-  padding: 10px 20px;
+  min-width: 0;
+  min-height: 0;
+
+  display: block;
+
+  padding: 8px 14px;
 
   background: rgba(0, 0, 0, 0.88);
 
   backdrop-filter: blur(15px);
 
-  border-radius: 12px;
+  border-radius: 10px;
 
-  text-align: center;
+  text-align: left;
 
   z-index: 3000;
 
@@ -414,13 +425,22 @@ body {
 
   white-space: normal;
 
-  overflow: hidden;
+  overflow-wrap: anywhere;
 
-  font-size: 0.9rem;
+  font-size: 0.8rem;
 
   line-height: 1.3;
 
   opacity: 0;
+
+  visibility: hidden;
+}
+
+/* Quando JS adiciona .show */
+
+#painting-info.show {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* =========================================================
@@ -665,39 +685,35 @@ body {
     font-size: 12px;
   }
 
-  /* -----------------------------------------
-     QUADRO
-     ----------------------------------------- */
+  /* =====================================================
+     QUADRO NO CELULAR
+     
+     Continua abaixo do VR.
+     Não vai para o centro nem para o rodapé.
+     ===================================================== */
 
   #painting-info {
-    bottom: calc(
-      10px + env(safe-area-inset-bottom, 0px)
-    );
+    top: 52px;
 
-    width: auto;
+    left: 15px;
 
-    max-width: calc(100vw - 180px);
+    right: auto;
+    bottom: auto;
 
-    min-width: 100px;
+    max-width: calc(100vw - 30px);
 
-    min-height: 38px;
+    padding: 6px 10px;
 
-    padding: 7px 12px;
-
-    font-size: 0.68rem;
+    font-size: 0.65rem;
 
     line-height: 1.25;
 
-    white-space: normal;
-
-    overflow-wrap: anywhere;
-
-    border-radius: 10px;
+    border-radius: 9px;
   }
 
-  /* -----------------------------------------
+  /* =====================================================
      ÁUDIO
-     ----------------------------------------- */
+     ===================================================== */
 
   #audio_controls {
     right: 10px;
@@ -728,9 +744,12 @@ body {
     text-overflow: ellipsis;
   }
 
-  /* -----------------------------------------
-     INFO
-     ----------------------------------------- */
+  /* =====================================================
+     INFO PANEL ORIGINAL
+     
+     Mantido no canto superior direito caso exista.
+     Não interfere no painting-info.
+     ===================================================== */
 
   #info-panel {
     top: 10px;
@@ -744,9 +763,9 @@ body {
     max-width: calc(100vw - 20px);
   }
 
-  /* -----------------------------------------
+  /* =====================================================
      MENU
-     ----------------------------------------- */
+     ===================================================== */
 
   #content_container {
     padding: 20px 25px;
@@ -809,13 +828,17 @@ body {
   }
 
   #painting-info {
-    max-width: calc(100vw - 160px);
+    top: 48px;
 
-    min-width: 90px;
+    left: 8px;
 
-    padding: 6px 10px;
+    right: auto;
 
-    font-size: 0.62rem;
+    max-width: calc(100vw - 16px);
+
+    padding: 6px 9px;
+
+    font-size: 0.6rem;
   }
 
   #audio_controls {
@@ -864,6 +887,14 @@ body {
     right: 20px;
   }
 
+  #painting-info {
+    top: 62px;
+    left: 20px;
+
+    right: auto;
+    bottom: auto;
+  }
+
   .mobile-only {
     display: block !important;
   }
@@ -882,6 +913,14 @@ body {
 
   .mobile-only {
     display: none !important;
+  }
+
+  #painting-info {
+    top: 62px;
+    left: 20px;
+
+    right: auto;
+    bottom: auto;
   }
 }
 
@@ -923,10 +962,7 @@ canvas {
   z-index: 1;
 }
 
-/*
-   Os elementos da interface ficam acima
-   do canvas.
-*/
+/* Interface acima do canvas */
 
 #info-panel,
 #painting-info,
@@ -943,15 +979,6 @@ canvas {
 /* =========================================================
    VR
    ========================================================= */
-
-/*
-   IMPORTANTE:
-   O JS deve colocar id="VRButton"
-   no botão criado pelo Three.js.
-
-   Assim não dependemos de:
-   button[style*="VRButton"]
-*/
 
 #VRButton {
   position: fixed !important;
@@ -974,10 +1001,6 @@ canvas {
 
   pointer-events: auto !important;
 }
-
-/* Caso o botão VR ainda não tenha ID,
-   preserva uma regra genérica para botão
-   criado pelo WebXR. */
 
 button#VRButton {
   position: fixed !important;
