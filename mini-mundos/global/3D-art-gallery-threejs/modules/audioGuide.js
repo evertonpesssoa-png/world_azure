@@ -1,143 +1,335 @@
 // ==============================================
-// CORREÇÃO: Importando THREE direto da CDN
+// ÁUDIO DA GALERIA
 // ==============================================
+
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.module.js";
 
-let sound;
+let sound = null;
 let bufferLoaded = false;
 let isPlaying = false;
 
-// Detecta celular
-const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+// Quando true, significa que o usuário já clicou
+// em EXPLORAR e o áudio deve começar assim que carregar.
+let playWhenLoaded = false;
 
-// setup audio for the scene
+
+// ==============================================
+// SETUP DO ÁUDIO
+// ==============================================
+
 export const setupAudio = (camera) => {
+
   console.log("🔊 Inicializando áudio...");
-  
-  // create an audio listener and add it to the camera
+
   const listener = new THREE.AudioListener();
+
   camera.add(listener);
 
   sound = new THREE.Audio(listener);
 
   const audioLoader = new THREE.AudioLoader();
-  
-  // Tentar carregar o áudio (caminho correto para o GitHub)
-  const audioPath = "/world_azure/mini-mundos/global/3D-art-gallery-threejs/public/sounds/tiersen.mp3";
-  
-  audioLoader.load(audioPath, 
+
+  // CAMINHO ABSOLUTO
+  const audioPath =
+    "/world_azure/mini-mundos/global/3D-art-gallery-threejs/public/sounds/tiersen.mp3";
+
+
+  audioLoader.load(
+
+    audioPath,
+
+    // ==========================================
+    // ÁUDIO CARREGADO
+    // ==========================================
+
     function (buffer) {
+
       sound.setBuffer(buffer);
+
       sound.setLoop(true);
+
       sound.setVolume(0.5);
+
       bufferLoaded = true;
-      console.log("✅ Áudio carregado com sucesso!");
+
+      console.log(
+        "✅ Áudio carregado com sucesso!"
+      );
+
+
+      // ========================================
+      // O USUÁRIO JÁ CLICOU EM EXPLORAR
+      // ========================================
+
+      if (playWhenLoaded) {
+
+        startAudio();
+
+      }
+
     },
+
+
+    // ==========================================
+    // PROGRESSO
+    // ==========================================
+
     function (xhr) {
-      // Progresso do carregamento
-      console.log(`🎵 Carregando áudio: ${Math.floor((xhr.loaded / xhr.total) * 100)}%`);
+
+      if (xhr.total) {
+
+        console.log(
+          `🎵 Carregando áudio: ${Math.floor(
+            (xhr.loaded / xhr.total
+          ) * 100)}%`
+        );
+
+      }
+
     },
+
+
+    // ==========================================
+    // ERRO
+    // ==========================================
+
     function (error) {
-      console.error("❌ Erro ao carregar áudio:", error);
-      console.log("⚠️ Tentando caminho alternativo...");
-      
-      // Tentativa com caminho relativo (fallback)
-      const fallbackPath = "./sounds/tiersen.mp3";
-      audioLoader.load(fallbackPath, function (buffer) {
-        sound.setBuffer(buffer);
-        sound.setLoop(true);
-        sound.setVolume(0.5);
-        bufferLoaded = true;
-        console.log("✅ Áudio carregado via fallback!");
-      });
+
+      console.error(
+        "❌ Erro ao carregar áudio:",
+        error
+      );
+
     }
+
   );
+
 };
 
-// play audio (com desbloqueio para celular)
-export const startAudio = () => {
+
+// ==============================================
+// INICIAR ÁUDIO
+// ==============================================
+
+export const startAudio = async () => {
+
+  // ==========================================
+  // O USUÁRIO PEDIU PARA TOCAR
+  // ==========================================
+
+  playWhenLoaded = true;
+
+
+  // ==========================================
+  // ÁUDIO AINDA NÃO FOI INICIALIZADO
+  // ==========================================
+
   if (!sound) {
-    console.warn("🔊 Áudio não inicializado");
+
+    console.warn(
+      "🔊 Áudio ainda não foi inicializado"
+    );
+
     return;
+
   }
-  
+
+
+  // ==========================================
+  // ÁUDIO AINDA ESTÁ CARREGANDO
+  // ==========================================
+
   if (!bufferLoaded) {
-    console.warn("🔊 Áudio ainda carregando, tente novamente em alguns segundos");
+
+    console.log(
+      "🔊 Áudio carregando..."
+    );
+
+    console.log(
+      "🎵 Tocará automaticamente quando terminar."
+    );
+
     return;
+
   }
-  
+
+
+  // ==========================================
+  // JÁ ESTÁ TOCANDO
+  // ==========================================
+
   if (isPlaying) {
-    console.log("🔊 Áudio já está tocando");
+
+    console.log(
+      "🔊 Áudio já está tocando"
+    );
+
     return;
+
   }
-  
+
+
+  // ==========================================
+  // INICIAR
+  // ==========================================
+
   try {
-    sound.play();
-    isPlaying = true;
-    console.log("🎵 Áudio iniciado");
-  } catch (error) {
-    console.error("❌ Erro ao tocar áudio:", error);
-    // No celular, pode precisar de interação do usuário
-    console.log("📱 Pode ser necessário tocar na tela primeiro para desbloquear o áudio");
-  }
-};
 
-// pause audio
-export const stopAudio = () => {
-  if (sound && isPlaying) {
-    try {
-      sound.pause();
-      isPlaying = false;
-      console.log("🔇 Áudio pausado");
-    } catch (error) {
-      console.error("❌ Erro ao pausar áudio:", error);
+    // ========================================
+    // DESBLOQUEIA O AUDIOCONTEXT
+    // ========================================
+
+    if (
+      sound.context &&
+      sound.context.state === "suspended"
+    ) {
+
+      console.log(
+        "🔓 Retomando AudioContext..."
+      );
+
+      await sound.context.resume();
+
     }
+
+
+    // ========================================
+    // TOCA A MÚSICA
+    // ========================================
+
+    sound.play();
+
+    isPlaying = true;
+
+    console.log(
+      "🎵 Áudio iniciado!"
+    );
+
+  } catch (error) {
+
+    console.error(
+      "❌ Erro ao tocar áudio:",
+      error
+    );
+
   }
+
 };
 
-// Alternar play/pause
+
+// ==============================================
+// PARAR ÁUDIO
+// ==============================================
+
+export const stopAudio = () => {
+
+  // Cancela também o início automático
+  // caso o áudio ainda esteja carregando.
+
+  playWhenLoaded = false;
+
+
+  if (
+    sound &&
+    isPlaying
+  ) {
+
+    try {
+
+      sound.pause();
+
+      isPlaying = false;
+
+      console.log(
+        "🔇 Áudio pausado"
+      );
+
+    } catch (error) {
+
+      console.error(
+        "❌ Erro ao pausar áudio:",
+        error
+      );
+
+    }
+
+  }
+
+};
+
+
+// ==============================================
+// TOGGLE
+// ==============================================
+
 export const toggleAudio = () => {
+
   if (isPlaying) {
+
     stopAudio();
+
   } else {
+
     startAudio();
+
   }
+
 };
 
-// Verificar se o áudio está tocando
+
+// ==============================================
+// STATUS
+// ==============================================
+
 export const isAudioPlaying = () => {
+
   return isPlaying;
+
 };
 
-// Desbloquear áudio no celular (chamar no primeiro toque do usuário)
-export const unlockAudioOnTouch = () => {
-  if (!bufferLoaded) {
-    console.log("🔓 Aguardando carregamento do áudio para desbloquear...");
+
+// ==============================================
+// DESBLOQUEIO DO ÁUDIO
+// ==============================================
+
+export const unlockAudioOnTouch = async () => {
+
+  if (!sound) {
+
     return;
-  }
-  
-  // Criar um contexto de áudio vazio e descartar (técnica de desbloqueio)
-  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  const gainNode = audioContext.createGain();
-  gainNode.gain.value = 0;
-  gainNode.connect(audioContext.destination);
-  
-  const oscillator = audioContext.createOscillator();
-  oscillator.connect(gainNode);
-  oscillator.start(0);
-  oscillator.stop(0.001);
-  
-  audioContext.close().then(() => {
-    console.log("🔓 Áudio desbloqueado para celular!");
-  }).catch(() => {});
-  
-  // Remover o listener depois de desbloquear
-  document.removeEventListener('touchstart', unlockAudioOnTouch);
-  document.removeEventListener('click', unlockAudioOnTouch);
-};
 
-// Configurar desbloqueio automático para celular
-if (isMobile) {
-  document.addEventListener('touchstart', unlockAudioOnTouch, { once: true });
-  document.addEventListener('click', unlockAudioOnTouch, { once: true });
-}
+  }
+
+
+  try {
+
+    const context = sound.context;
+
+
+    // ========================================
+    // CONTEXTO SUSPENSO
+    // ========================================
+
+    if (
+      context &&
+      context.state === "suspended"
+    ) {
+
+      await context.resume();
+
+      console.log(
+        "🔓 Contexto de áudio desbloqueado!"
+      );
+
+    }
+
+  } catch (error) {
+
+    console.warn(
+      "⚠️ Não foi possível desbloquear áudio:",
+      error
+    );
+
+  }
+
+};
