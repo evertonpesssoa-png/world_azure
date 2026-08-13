@@ -29,11 +29,13 @@ export const setupAudio = (camera) => {
 
   const audioLoader = new THREE.AudioLoader();
 
+  // CAMINHO ABSOLUTO
   const audioPath =
     "/world_azure/mini-mundos/global/3D-art-gallery-threejs/public/sounds/tiersen.mp3";
 
 
   audioLoader.load(
+
     audioPath,
 
     // ==========================================
@@ -56,7 +58,7 @@ export const setupAudio = (camera) => {
 
 
       // ========================================
-      // O USUÁRIO JÁ TINHA CLICADO EM EXPLORAR
+      // O USUÁRIO JÁ CLICOU EM EXPLORAR
       // ========================================
 
       if (playWhenLoaded) {
@@ -99,7 +101,9 @@ export const setupAudio = (camera) => {
       );
 
     }
+
   );
+
 };
 
 
@@ -107,14 +111,18 @@ export const setupAudio = (camera) => {
 // INICIAR ÁUDIO
 // ==============================================
 
-export const startAudio = () => {
+export const startAudio = async () => {
 
-  // O usuário pediu para tocar.
-  // Se ainda estiver carregando, toca assim
-  // que terminar.
+  // ==========================================
+  // O USUÁRIO PEDIU PARA TOCAR
+  // ==========================================
 
   playWhenLoaded = true;
 
+
+  // ==========================================
+  // ÁUDIO AINDA NÃO FOI INICIALIZADO
+  // ==========================================
 
   if (!sound) {
 
@@ -127,16 +135,28 @@ export const startAudio = () => {
   }
 
 
+  // ==========================================
+  // ÁUDIO AINDA ESTÁ CARREGANDO
+  // ==========================================
+
   if (!bufferLoaded) {
 
     console.log(
-      "🔊 Áudio carregando... tocará automaticamente quando terminar."
+      "🔊 Áudio carregando..."
+    );
+
+    console.log(
+      "🎵 Tocará automaticamente quando terminar."
     );
 
     return;
 
   }
 
+
+  // ==========================================
+  // JÁ ESTÁ TOCANDO
+  // ==========================================
 
   if (isPlaying) {
 
@@ -149,20 +169,33 @@ export const startAudio = () => {
   }
 
 
+  // ==========================================
+  // INICIAR
+  // ==========================================
+
   try {
 
-    // Retoma o contexto caso o navegador
-    // tenha suspendido o áudio.
+    // ========================================
+    // DESBLOQUEIA O AUDIOCONTEXT
+    // ========================================
 
     if (
       sound.context &&
       sound.context.state === "suspended"
     ) {
 
-      sound.context.resume();
+      console.log(
+        "🔓 Retomando AudioContext..."
+      );
+
+      await sound.context.resume();
 
     }
 
+
+    // ========================================
+    // TOCA A MÚSICA
+    // ========================================
 
     sound.play();
 
@@ -190,10 +223,16 @@ export const startAudio = () => {
 
 export const stopAudio = () => {
 
+  // Cancela também o início automático
+  // caso o áudio ainda esteja carregando.
+
   playWhenLoaded = false;
 
 
-  if (sound && isPlaying) {
+  if (
+    sound &&
+    isPlaying
+  ) {
 
     try {
 
@@ -250,10 +289,10 @@ export const isAudioPlaying = () => {
 
 
 // ==============================================
-// DESBLOQUEIO
+// DESBLOQUEIO DO ÁUDIO
 // ==============================================
 
-export const unlockAudioOnTouch = () => {
+export const unlockAudioOnTouch = async () => {
 
   if (!sound) {
 
@@ -267,9 +306,16 @@ export const unlockAudioOnTouch = () => {
     const context = sound.context;
 
 
-    if (context.state === "suspended") {
+    // ========================================
+    // CONTEXTO SUSPENSO
+    // ========================================
 
-      context.resume();
+    if (
+      context &&
+      context.state === "suspended"
+    ) {
+
+      await context.resume();
 
       console.log(
         "🔓 Contexto de áudio desbloqueado!"
