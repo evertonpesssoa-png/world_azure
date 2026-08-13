@@ -13,18 +13,17 @@ export const hideMenu = () => {
 
   if (!menu) return;
 
-  // Adiciona a classe hidden para ativar a transição do CSS
-  menu.classList.add("hidden");
+  // ==============================================
+  // FORÇA BRUTA: ESCONDE O MENU IMEDIATAMENTE
+  // ==============================================
+  menu.style.display = "none";
+  menu.style.visibility = "hidden";
+  menu.style.opacity = "0";
+  menu.style.pointerEvents = "none";
+  menu.style.zIndex = "-9999";
   
-  // Remove o display: none forçado para permitir a transição
-  menu.style.display = "";
-  
-  // Após 600ms (tempo suficiente para a transição de 0.5s do CSS), remove o elemento do DOM
-  setTimeout(() => {
-    if (menu && menu.classList.contains("hidden")) {
-      menu.style.display = "none";
-    }
-  }, 600);
+  // Remove a classe hidden para garantir que não haja conflito
+  menu.classList.remove("hidden");
 };
 
 export const showMenu = () => {
@@ -32,11 +31,16 @@ export const showMenu = () => {
 
   if (!menu) return;
 
-  // Remove a classe hidden e reseta o display para aparecer de novo
+  // ==============================================
+  // RESETA O MENU PARA APARECER DE NOVO
+  // ==============================================
+  menu.style.display = "";
+  menu.style.visibility = "";
+  menu.style.opacity = "";
+  menu.style.pointerEvents = "";
+  menu.style.zIndex = "";
+  
   menu.classList.remove("hidden");
-  menu.style.display = "flex";
-  menu.style.visibility = "visible";
-  menu.style.pointerEvents = "auto";
 };
 
 export const startExperience = (controls) => {
@@ -130,5 +134,6 @@ export const isMenuVisible = () => {
 
   if (!menu) return false;
 
+  // Verifica se não está com display: none
   return menu.style.display !== "none";
 };
