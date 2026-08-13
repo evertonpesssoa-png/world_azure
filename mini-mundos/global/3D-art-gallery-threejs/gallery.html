@@ -178,23 +178,13 @@
         if (btn) {
           log('✅ Botão EXPLORAR encontrado');
           
-          btn.onclick = function() {
+          // ==========================================
+          // CORREÇÃO DEFINITIVA: USAMOS addEventListener
+          // PARA NÃO SUBSTITUIR O ONCLICK DO MENU.JS
+          // ==========================================
+          btn.addEventListener('click', function() {
             log('🔵 CLICOU em EXPLORAR');
-            
-            // Verifica se a função existe
-            if (typeof window.startGallery === 'function') {
-              log('▶️ Chamando startGallery()');
-              try {
-                window.startGallery();
-                log('✅ startGallery() executou!', '#00ff88');
-              } catch(e) {
-                log(`❌ ERRO: ${e.message}`, '#ff4444');
-              }
-            } else {
-              log('❌ Nenhuma função de entrada encontrada!', '#ff4444');
-              log('⚠️ Recarregue a página (F5) para tentar novamente.', '#ffaa00');
-            }
-          };
+          });
         } else {
           log('❌ Botão EXPLORAR NÃO encontrado!', '#ff4444');
         }
