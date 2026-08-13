@@ -1,99 +1,129 @@
 /* ============================================
-   CANVAS 3D — CORREÇÃO DE CORTE E SOBREPOSIÇÃO
+   CORREÇÃO FINAL DOS CONTROLES E VR
    ============================================ */
 
+/* 1. BOTÃO VR - CANTO SUPERIOR ESQUERDO */
+button[style*="VRButton"] {
+  position: fixed !important;
+  top: 20px !important;
+  left: 20px !important;
+  right: auto !important;
+  bottom: auto !important;
+  z-index: 9999 !important;
+  font-size: 12px !important;
+  padding: 6px 12px !important;
+}
+
+/* 2. JOYSTICK - CANTO INFERIOR ESQUERDO */
+.touch-joypad {
+  position: fixed !important;
+  bottom: 25px !important;
+  left: 20px !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, 50px) !important;
+  grid-template-rows: repeat(3, 50px) !important;
+  gap: 4px !important;
+  padding: 10px !important;
+  background: rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: blur(12px) !important;
+  border-radius: 100px !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  z-index: 9999 !important;
+}
+
+.joy-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: white;
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  transition: all 0.05s linear;
+  font-weight: bold;
+}
+
+.joy-btn:active {
+  background: rgba(255, 100, 0, 0.9);
+  transform: scale(0.88);
+  border-color: #ffaa00;
+}
+
+.joy-empty {
+  background: transparent;
+  border: none;
+  pointer-events: none;
+}
+
+/* 3. CONTROLES DE ÁUDIO - CANTO INFERIOR DIREITO (VOLTARAM!) */
+#audio_controls {
+  position: fixed !important;
+  bottom: 25px !important;
+  right: 20px !important;
+  display: flex !important;
+  gap: 8px !important;
+  z-index: 9999 !important; /* Z-index alto pra garantir que apareça */
+}
+
+#start_audio, #stop_audio {
+  padding: 8px 14px !important;
+  font-size: 0.75rem !important;
+  background: rgba(0, 0, 0, 0.7) !important;
+  border: 1px solid rgba(0, 255, 255, 0.5) !important;
+  color: #0ff !important;
+  border-radius: 30px !important;
+  cursor: pointer !important;
+}
+
+/* 4. CAIXA DE INFORMAÇÃO DA PINTURA (Sem linha preta) */
+#painting-info {
+  position: fixed !important;
+  bottom: 90px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 100 !important;
+  background: rgba(0, 0, 0, 0.85) !important;
+  backdrop-filter: blur(15px) !important;
+  border-radius: 12px !important;
+  padding: 12px 24px !important;
+  border: 1px solid rgba(255, 215, 0, 0.5) !important;
+  color: #ffdd88 !important;
+  font-weight: bold !important;
+  text-align: center !important;
+  white-space: normal !important; /* Evita linha preta */
+  min-width: 150px !important;
+  min-height: 30px !important;
+  display: block !important;
+  pointer-events: none !important;
+}
+
+/* 5. O CANVAS (A tela do jogo) */
 canvas {
-  display: block;
-  position: fixed;
-  top: 0;
-  left: 0;
+  display: block !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
   width: 100vw !important;
   height: 100vh !important;
   width: 100dvw !important;
   height: 100dvh !important;
-  margin: 0;
-  padding: 0;
-  z-index: 1;
+  margin: 0 !important;
+  padding: 0 !important;
+  z-index: 1 !important;
 }
 
-/* A interface fica acima da galeria 3D */
-#info-panel,
-#painting-info,
-#audio_controls,
-.mobile-controls-panel,
-.touch-joypad {
-  z-index: 1000;
-}
-
-@media (max-width: 768px) {
-  canvas {
-    width: 100dvw !important;
-    height: 100dvh !important;
-  }
-}
-
-@media (orientation: landscape) and (max-width: 1024px) {
-  canvas {
-    width: 100dvw !important;
-    height: 100dvh !important;
-  }
-}
-
-/* ============================================
-   CORREÇÃO DOS CONTROLES (CORTE E SOBREPOSIÇÃO)
-   ============================================ */
-
-/* 1. Ocultar o painel de setas (já tem o joystick) */
-.mobile-controls-panel {
-  display: none !important;
-}
-
-/* 2. JOYSTICK - Lado esquerdo, GRANDE e visível */
-.touch-joypad {
-  bottom: 35px !important;
-  left: 20px !important;
-  transform: scale(0.9) !important; /* Aumenta o tamanho das setas */
-  transform-origin: bottom left !important;
-}
-
-/* Garante que o Joystick apareça no celular */
 @media (max-width: 768px) {
   .touch-joypad {
-    display: grid !important;
     grid-template-columns: repeat(3, 45px) !important;
     grid-template-rows: repeat(3, 45px) !important;
     gap: 3px !important;
     padding: 8px !important;
   }
   .joy-btn {
-    font-size: 24px !important;
+    font-size: 20px !important;
   }
-}
-
-/* 3. CONTROLES DE ÁUDIO - Lado direito, sem cortes e com espaço */
-#audio_controls {
-  bottom: 35px !important;
-  right: 20px !important;
-  display: flex !important;
-  gap: 8px !important;
-}
-
-#start_audio,
-#stop_audio {
-  padding: 8px 16px !important;
-  font-size: 0.8rem !important;
-  border-radius: 30px !important;
-}
-
-/* 4. CAIXA DE INFORMAÇÃO - Levantada para não encostar nos botões */
-#painting-info {
-  bottom: 150px !important;
-}
-
-/* 5. BOTÃO VR (Topo Esquerdo) - Ajuste de posição */
-button[style*="VRButton"] {
-  position: fixed !important;
-  top: 80px !important;
-  left: 20px !important;
-  z-index: 9999 !important;
 }
