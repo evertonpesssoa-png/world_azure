@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
     <title>3D Art Gallery</title>
     
-    <!-- ============================================== -->
-    <!-- IMPORT MAP COMPLETO E DEFINITIVO               -->
-    <!-- ============================================== -->
+    <!-- IMPORT MAP COMPLETO E DEFINITIVO -->
     <script type="importmap">
       {
         "imports": {
@@ -91,9 +89,7 @@
 
     <div id="painting-info"></div>
 
-    <!-- ========================================== -->
-    <!-- MOSTRA O ERRO NA TELA                     -->
-    <!-- ========================================== -->
+    <!-- LOG DE DIAGNÓSTICO -->
     <div id="log" style="
       position: fixed;
       bottom: 10px;
@@ -133,7 +129,6 @@
       const logDiv = document.getElementById('log');
       const logBtn = document.getElementById('btn-log');
       
-      // Mostra o log quando clicar no botão
       logBtn.onclick = function() {
         if (logDiv.style.display === 'none') {
           logDiv.style.display = 'block';
@@ -157,15 +152,8 @@
         console.log(msg);
       }
 
-      // ==============================================
-      // CAPTURA TODOS OS ERROS
-      // ==============================================
       window.onerror = function(msg, url, line, col, error) {
-        log(`🔥 ERRO: ${msg} (${url}:${line})`, '#ff4444');
-        if (error && error.stack) {
-          log(`📋 ${error.stack}`, '#ff4444');
-        }
-        // Mostra o log automaticamente quando der erro
+        log(`🔥 ERRO: ${msg}`, '#ff4444');
         logDiv.style.display = 'block';
         logBtn.textContent = '✕';
         return false;
@@ -181,7 +169,7 @@
       log('🔵 Clique em EXPLORAR ARTE');
 
       // ==============================================
-      // BOTÃO EXPLORAR (AQUI EU REMOVI O LOOP DE RECARREGAR)
+      // VERIFICAR O CARREGAMENTO DO MAIN.JS
       // ==============================================
       document.addEventListener('DOMContentLoaded', function() {
         const btn = document.getElementById('play_button');
@@ -192,38 +180,24 @@
           btn.onclick = function() {
             log('🔵 CLICOU em EXPLORAR');
             
-            // Tenta achar a função da galeria
-            const funcs = ['entrarGaleria', 'startGallery', 'initGallery', 'loadGallery', 'init', 'start'];
-            let achou = false;
-            
-            for (const f of funcs) {
-              if (typeof window[f] === 'function') {
-                log(`▶️ Chamando ${f}()`);
-                try {
-                  window[f]();
-                  log(`✅ ${f}() executou!`, '#00ff88');
-                  achou = true;
-                  break;
-                } catch(e) {
-                  log(`❌ ERRO em ${f}: ${e.message}`, '#ff4444');
-                }
+            // Verifica se a função existe
+            if (typeof window.startGallery === 'function') {
+              log('▶️ Chamando startGallery()');
+              try {
+                window.startGallery();
+                log('✅ startGallery() executou!', '#00ff88');
+              } catch(e) {
+                log(`❌ ERRO: ${e.message}`, '#ff4444');
               }
-            }
-            
-            // AQUI EU APAGUEI O TRECHO QUE FICAVA RECARREGANDO O MAIN.JS
-            // E CAUSAVA O LOOP INFINITO DE ERROS.
-            if (!achou) {
+            } else {
               log('❌ Nenhuma função de entrada encontrada!', '#ff4444');
-              log('⚠️ Pressione F5 para recarregar a página e tentar novamente.', '#ffaa00');
+              log('⚠️ Recarregue a página (F5) para tentar novamente.', '#ffaa00');
             }
           };
         } else {
           log('❌ Botão EXPLORAR NÃO encontrado!', '#ff4444');
         }
 
-        // ==============================================
-        // BOTÃO SOBRE
-        // ==============================================
         const aboutBtn = document.getElementById('about_button');
         if (aboutBtn) {
           aboutBtn.onclick = function() {
@@ -235,9 +209,6 @@
           document.getElementById('about-overlay').style.display = 'none';
         };
 
-        // ==============================================
-        // VERIFICA SE O 3D CARREGOU
-        // ==============================================
         setTimeout(() => {
           const canvas = document.querySelector('canvas');
           if (canvas) {
@@ -251,7 +222,7 @@
           } else {
             log('⚠️ Three.js NÃO carregado', '#ffaa00');
           }
-        }, 3000);
+        }, 4000); // Aumentei o tempo para esperar baixar os arquivos da internet
       });
     </script>
 
