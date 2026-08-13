@@ -2,495 +2,2391 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <meta
+        name="viewport"
+        content="width=device-width,
+                 initial-scale=1.0,
+                 maximum-scale=1.0,
+                 user-scalable=no,
+                 viewport-fit=cover"
+    >
+
+    <meta name="theme-color" content="#000000">
+
     <title>Túnel Dimensional - Portal Astral</title>
-    
+
     <!-- 🔥 IMPORTS DO HÉCATE (OBRIGATÓRIO) 🔥 -->
     <script src="/world_azure/shared/js/hecate/core.js"></script>
     <script src="/world_azure/shared/js/hecate/block-manager.js"></script>
     <script src="/world_azure/shared/js/hecate/test-system.js"></script>
     <script src="/world_azure/shared/js/hecate/auth.js"></script>
- 
-    
+
+
     <style>
-        html,body{
-            margin:0;
-            width:100%;
-            height:100%;
-            overflow:hidden;
-            background:#000;
-            font-family:'Courier New',monospace;
-        }
-        
-        #loading{
-            position:fixed;
-            inset:0;
-            display:flex;
-            flex-direction:column;
-            align-items:center;
-            justify-content:center;
-            color:#00ffff;
-            font-size:20px;
-            letter-spacing:3px;
-            z-index:100;
-            background:#000;
-            text-shadow:0 0 10px #00ffff;
-            animation:pulse 1.5s ease-in-out infinite;
-        }
-        
-        @keyframes pulse{
-            0%,100%{opacity:1;}
-            50%{opacity:0.5;}
-        }
-        
-        #progress-bar{
-            width:300px;
-            height:2px;
-            background:rgba(0,255,255,0.2);
-            margin-top:20px;
-            overflow:hidden;
-        }
-        
-        #progress-fill{
-            width:0%;
-            height:100%;
-            background:#00ffff;
-            box-shadow:0 0 10px #00ffff;
-            transition:width 0.3s ease;
-        }
-        
-        #instructions{
-            position:fixed;
-            bottom:20px;
-            left:0;
-            right:0;
-            text-align:center;
-            color:rgba(0,255,255,0.6);
-            font-size:12px;
-            font-family:monospace;
-            z-index:10;
-            pointer-events:none;
-            letter-spacing:2px;
-        }
-        
-        #fps-counter{
-            position:fixed;
-            top:20px;
-            right:20px;
-            color:rgba(0,255,255,0.6);
-            font-size:10px;
-            font-family:monospace;
-            z-index:10;
-            background:rgba(0,0,0,0.5);
-            padding:4px 8px;
-            border-radius:4px;
-        }
-        
-        #audio-control{
-            position:fixed;
-            bottom:20px;
-            right:20px;
-            background:rgba(0,0,0,0.7);
-            color:#00ffff;
-            border:1px solid #00ffff;
-            padding:8px 12px;
-            border-radius:20px;
-            font-size:12px;
-            cursor:pointer;
-            z-index:10;
-            font-family:monospace;
-            transition:all 0.3s;
-        }
-        
-        #audio-control:hover{
-            background:#00ffff;
-            color:#000;
-            box-shadow:0 0 15px #00ffff;
-        }
-        
-        #music-info{
-            position:fixed;
-            bottom:20px;
-            left:20px;
-            background:rgba(0,0,0,0.7);
-            color:rgba(0,255,255,0.6);
-            border:1px solid rgba(0,255,255,0.3);
-            padding:4px 8px;
-            border-radius:4px;
-            font-size:10px;
-            font-family:monospace;
-            z-index:10;
-        }
-        
-        /* Ajustar posição do botão de áudio */
-		#audio-control {
-			bottom: 80px;  /* Mude de 20px para 80px */
-    		right: 20px;
-		}
 
-		/* Ajustar posição da mensagem de instrução */
-		#instructions {
-			bottom: 30px;  /* Mude de 20px para 30px */
-		}
+        /* =========================================================
+           🌌 BASE
+           ========================================================= */
 
-		/* Ajustar posição da info da música */
-		#music-info {
-			bottom: 80px;  /* Mude de 20px para 80px */
-			left: 20px;
-		}
+        :root {
+            --safe-top: env(safe-area-inset-top, 0px);
+            --safe-right: env(safe-area-inset-right, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --safe-left: env(safe-area-inset-left, 0px);
+
+            --cyan: #00ffff;
+
+            --ui-side: clamp(
+                10px,
+                3vw,
+                20px
+            );
+        }
+
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+
+            width: 100%;
+            height: 100%;
+
+            min-width: 100%;
+            min-height: 100%;
+
+            overflow: hidden;
+
+            background: #000;
+
+            font-family: 'Courier New', monospace;
+
+            touch-action: none;
+
+            overscroll-behavior: none;
+
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+
+        body {
+            position: fixed;
+
+            inset: 0;
+
+            width: 100vw;
+            height: 100dvh;
+        }
+
+
+        canvas {
+            position: fixed;
+
+            inset: 0;
+
+            display: block;
+
+            width: 100% !important;
+            height: 100% !important;
+
+            outline: none;
+
+            touch-action: none;
+        }
+
+
+        /* =========================================================
+           ✦ LOADING
+           ========================================================= */
+
+        #loading {
+
+            position: fixed;
+
+            inset: 0;
+
+            width: 100vw;
+            height: 100dvh;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding:
+                calc(20px + var(--safe-top))
+                calc(20px + var(--safe-right))
+                calc(20px + var(--safe-bottom))
+                calc(20px + var(--safe-left));
+
+            color: var(--cyan);
+
+            background: #000;
+
+            font-size:
+                clamp(
+                    14px,
+                    4vw,
+                    20px
+                );
+
+            letter-spacing:
+                clamp(
+                    1px,
+                    0.8vw,
+                    3px
+                );
+
+            line-height: 1.35;
+
+            text-align: center;
+
+            text-shadow:
+                0 0 10px var(--cyan);
+
+            z-index: 100;
+
+            animation:
+                pulse 1.5s
+                ease-in-out
+                infinite;
+
+            transition:
+                opacity 0.5s ease;
+        }
+
+
+        #loading > div:first-child {
+
+            width: min(
+                90vw,
+                600px
+            );
+
+            max-width: 100%;
+
+            overflow-wrap: break-word;
+        }
+
+
+        #loading > div:nth-child(3) {
+
+            max-width: 85vw;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+
+            white-space: nowrap;
+
+            font-size:
+                clamp(
+                    10px,
+                    2.8vw,
+                    12px
+                );
+        }
+
+
+        #loading > div:nth-child(4) {
+
+            font-size:
+                clamp(
+                    8px,
+                    2.3vw,
+                    10px
+                );
+
+            margin-top: 5px;
+
+            max-width: 90vw;
+
+            white-space: normal;
+        }
+
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+
+        /* =========================================================
+           ⚡ BARRA DE PROGRESSO
+           ========================================================= */
+
+        #progress-bar {
+
+            width:
+                min(
+                    300px,
+                    70vw
+                );
+
+            max-width: 80vw;
+
+            height:
+                clamp(
+                    2px,
+                    0.5vw,
+                    3px
+                );
+
+            margin-top:
+                clamp(
+                    14px,
+                    4vh,
+                    20px
+                );
+
+            background:
+                rgba(
+                    0,
+                    255,
+                    255,
+                    0.2
+                );
+
+            overflow: hidden;
+
+            border-radius: 2px;
+        }
+
+
+        #progress-fill {
+
+            width: 0%;
+
+            height: 100%;
+
+            background: var(--cyan);
+
+            box-shadow:
+                0 0 10px var(--cyan);
+
+            transition:
+                width 0.3s ease;
+        }
+
+
+        /* =========================================================
+           ⚡ INSTRUÇÕES
+           ========================================================= */
+
+        #instructions {
+
+            position: fixed;
+
+            left: 50%;
+
+            bottom:
+                calc(
+                    clamp(
+                        10px,
+                        3vh,
+                        30px
+                    )
+                    + var(--safe-bottom)
+                );
+
+            transform:
+                translateX(-50%);
+
+            width:
+                min(
+                    90vw,
+                    700px
+                );
+
+            max-width: 90vw;
+
+            padding:
+                4px 8px;
+
+            color:
+                rgba(
+                    0,
+                    255,
+                    255,
+                    0.6
+                );
+
+            font-family: monospace;
+
+            font-size:
+                clamp(
+                    8px,
+                    2.5vw,
+                    12px
+                );
+
+            line-height: 1.4;
+
+            letter-spacing:
+                clamp(
+                    0.5px,
+                    0.5vw,
+                    2px
+                );
+
+            text-align: center;
+
+            overflow-wrap: break-word;
+
+            z-index: 10;
+
+            pointer-events: none;
+        }
+
+
+        /* =========================================================
+           📊 FPS
+           ========================================================= */
+
+        #fps-counter {
+
+            position: fixed;
+
+            top:
+                calc(
+                    clamp(
+                        8px,
+                        2vh,
+                        20px
+                    )
+                    + var(--safe-top)
+                );
+
+            right:
+                calc(
+                    var(--ui-side)
+                    + var(--safe-right)
+                );
+
+            color:
+                rgba(
+                    0,
+                    255,
+                    255,
+                    0.6
+                );
+
+            font-size:
+                clamp(
+                    8px,
+                    2vw,
+                    10px
+                );
+
+            font-family: monospace;
+
+            background:
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.5
+                );
+
+            padding:
+                clamp(
+                    3px,
+                    1vw,
+                    4px
+                )
+                clamp(
+                    5px,
+                    1.5vw,
+                    8px
+                );
+
+            border-radius: 4px;
+
+            z-index: 10;
+
+            pointer-events: none;
+        }
+
+
+        /* =========================================================
+           🎵 CONTROLE DE ÁUDIO
+           ========================================================= */
+
+        #audio-control {
+
+            position: fixed;
+
+            right:
+                calc(
+                    var(--ui-side)
+                    + var(--safe-right)
+                );
+
+            bottom:
+                calc(
+                    clamp(
+                        55px,
+                        10vh,
+                        80px
+                    )
+                    + var(--safe-bottom)
+                );
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            min-height:
+                clamp(
+                    34px,
+                    8vw,
+                    42px
+                );
+
+            max-width:
+                calc(
+                    55vw
+                    - var(--safe-right)
+                );
+
+            padding:
+                clamp(
+                    6px,
+                    1.5vw,
+                    8px
+                )
+                clamp(
+                    8px,
+                    2vw,
+                    12px
+                );
+
+            background:
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.7
+                );
+
+            color: var(--cyan);
+
+            border:
+                1px solid var(--cyan);
+
+            border-radius: 20px;
+
+            font-size:
+                clamp(
+                    9px,
+                    2.5vw,
+                    12px
+                );
+
+            font-family: monospace;
+
+            white-space: nowrap;
+
+            cursor: pointer;
+
+            z-index: 10;
+
+            transition:
+                background 0.3s,
+                color 0.3s,
+                box-shadow 0.3s,
+                transform 0.2s;
+        }
+
+
+        #audio-control:hover {
+
+            background: var(--cyan);
+
+            color: #000;
+
+            box-shadow:
+                0 0 15px var(--cyan);
+        }
+
+
+        #audio-control:active {
+
+            transform: scale(0.95);
+        }
+
+
+        /* =========================================================
+           🎵 INFORMAÇÃO DA MÚSICA
+           ========================================================= */
+
+        #music-info {
+
+            position: fixed;
+
+            left:
+                calc(
+                    var(--ui-side)
+                    + var(--safe-left)
+                );
+
+            bottom:
+                calc(
+                    clamp(
+                        55px,
+                        10vh,
+                        80px
+                    )
+                    + var(--safe-bottom)
+                );
+
+            width:
+                min(
+                    40vw,
+                    350px
+                );
+
+            max-width:
+                calc(
+                    42vw
+                    - var(--safe-left)
+                );
+
+            padding:
+                clamp(
+                    3px,
+                    1vw,
+                    4px
+                )
+                clamp(
+                    5px,
+                    1.5vw,
+                    8px
+                );
+
+            background:
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.7
+                );
+
+            color:
+                rgba(
+                    0,
+                    255,
+                    255,
+                    0.6
+                );
+
+            border:
+                1px solid
+                rgba(
+                    0,
+                    255,
+                    255,
+                    0.3
+                );
+
+            border-radius: 4px;
+
+            font-size:
+                clamp(
+                    7px,
+                    2vw,
+                    10px
+                );
+
+            font-family: monospace;
+
+            white-space: nowrap;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+
+            z-index: 10;
+
+            pointer-events: none;
+        }
+
+
+        /* =========================================================
+           📱 CELULARES PEQUENOS
+           ========================================================= */
+
+        @media (max-width: 400px) {
+
+            #music-info {
+
+                width: 38vw;
+
+                max-width: 38vw;
+            }
+
+
+            #audio-control {
+
+                max-width: 52vw;
+            }
+
+
+            #instructions {
+
+                width: 95vw;
+
+                font-size: 8px;
+
+                letter-spacing: 0.5px;
+            }
+        }
+
+
+        /* =========================================================
+           📱 CELULAR EM PAISAGEM
+           ========================================================= */
+
+        @media (max-height: 500px) {
+
+            #loading {
+
+                transform: scale(0.82);
+            }
+
+
+            #progress-bar {
+
+                margin-top: 10px;
+            }
+
+
+            #audio-control,
+            #music-info {
+
+                bottom:
+                    calc(
+                        42px
+                        + var(--safe-bottom)
+                    );
+            }
+
+
+            #instructions {
+
+                bottom:
+                    calc(
+                        8px
+                        + var(--safe-bottom)
+                    );
+            }
+
+
+            #fps-counter {
+
+                top:
+                    calc(
+                        6px
+                        + var(--safe-top)
+                    );
+            }
+        }
+
+
+        /* =========================================================
+           📱 TELAS MUITO ALTAS / ESTREITAS
+           ========================================================= */
+
+        @media (max-aspect-ratio: 3/4) {
+
+            #audio-control {
+
+                max-width: 50vw;
+            }
+
+
+            #music-info {
+
+                max-width: 36vw;
+            }
+        }
+
+
+        /* =========================================================
+           🖥️ TELAS GRANDES
+           ========================================================= */
+
+        @media (min-width: 1200px) {
+
+            #instructions {
+
+                font-size: 12px;
+            }
+
+
+            #audio-control {
+
+                font-size: 12px;
+            }
+
+
+            #music-info {
+
+                font-size: 10px;
+            }
+        }
+
+
+        /* =========================================================
+           📱 MODO TOUCH
+           ========================================================= */
+
+        @media (hover: none) and (pointer: coarse) {
+
+            #audio-control:hover {
+
+                background:
+                    rgba(
+                        0,
+                        0,
+                        0,
+                        0.7
+                    );
+
+                color: var(--cyan);
+
+                box-shadow: none;
+            }
+        }
+
     </style>
 </head>
+
+
 <body>
 
-<div id="loading">
-    <div>✦ CONECTANDO À DIMENSÃO ✦</div>
-    <div id="progress-bar"><div id="progress-fill"></div></div>
-    <div style="font-size:12px; margin-top:10px;">asura: <span id="asura-name"></span></div>
-    <div style="font-size:10px; margin-top:5px;">carregando áudio...</div>
-</div>
-<div id="instructions">⚡ VIAGEM DIMENSIONAL EM PROGRESSO ⚡</div>
-<div id="fps-counter">FPS: --</div>
-<div id="audio-control" draggable="false" unselectable="on" oncontextmenu="return false" style="user-select: none;">🎵 INICIAR VIAGEM</div>
-<div id="music-info">🎵 aguardando música...</div>
+    <!-- =========================================================
+         ✦ LOADING
+         ========================================================= -->
 
-<script type="importmap">
-{
-  "imports": {
-    "three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
-  }
-}
-</script>
+    <div id="loading">
 
-<script type="module">
+        <div>
+            ✦ CONECTANDO À DIMENSÃO ✦
+        </div>
 
-import * as THREE from "three";
+        <div id="progress-bar">
+            <div id="progress-fill"></div>
+        </div>
 
-// ============================================
-// ⚡ CONFIGURAÇÃO DA MÚSICA ⚡
-// ============================================
-const MUSIC_FILE = "/world_azure/sounds/feitico.mp3";
+        <div style="margin-top:10px;">
+            asura:
+            <span id="asura-name"></span>
+        </div>
 
-const params = new URLSearchParams(window.location.search);
-const asura = params.get("asura") || "astreia";
+        <div>
+            carregando áudio...
+        </div>
 
-document.getElementById("asura-name").textContent = asura;
-document.getElementById("music-info").innerHTML = `🎵 ${MUSIC_FILE.split('/').pop()}`;
+    </div>
 
-// ÁUDIO SEM POPUP DO GOOGLE
-let audioElement = null;
-let isAudioPlaying = false;
-let musicDuration = 15000;
-let startTime = null;
-let transitionProgress = 0;
 
-function initAudio() {
-    audioElement = new Audio(MUSIC_FILE);
-    audioElement.volume = 0.3;
-    audioElement.loop = false;
-    
-    audioElement.addEventListener('canplaythrough', () => {
-        musicDuration = audioElement.duration * 1000;
-        document.getElementById("music-info").innerHTML = `🎵 ${MUSIC_FILE.split('/').pop()} | ${audioElement.duration.toFixed(1)}s`;
-    });
-}
+    <!-- =========================================================
+         ⚡ HUD
+         ========================================================= -->
 
-function playMusic() {
-    if(!audioElement) return;
-    
-    // Garantir volume inicial
-    audioElement.volume = 0.3;
-    
-    // Tocar música
-    audioElement.play().catch(e => console.log('Áudio:', e));
-    startTime = performance.now();
-    isAudioPlaying = true;
-    
-    // ESPERAR a música carregar para saber a duração real
-    const onCanPlay = () => {
-        musicDuration = audioElement.duration * 1000;
-        
-        // Fade out apenas nos ÚLTIMOS 2 segundos
-        const fadeOutStart = musicDuration - 2000;
-        
-        if(fadeOutStart > 0) {
-            setTimeout(() => {
-                if(audioElement && isAudioPlaying) {
-                    // Fade out suave
-                    const fadeInterval = setInterval(() => {
-                        if(audioElement.volume > 0.05) {
-                            audioElement.volume -= 0.05;
-                        } else {
-                            audioElement.volume = 0;
-                            audioElement.pause();
-                            clearInterval(fadeInterval);
+    <div id="instructions">
+        ⚡ VIAGEM DIMENSIONAL EM PROGRESSO ⚡
+    </div>
+
+
+    <div id="fps-counter">
+        FPS: --
+    </div>
+
+
+    <div
+        id="audio-control"
+        draggable="false"
+        unselectable="on"
+        oncontextmenu="return false"
+    >
+        🎵 INICIAR VIAGEM
+    </div>
+
+
+    <div id="music-info">
+        🎵 aguardando música...
+    </div>
+
+
+    <!-- =========================================================
+         THREE.JS
+         ========================================================= -->
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three":
+                "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+        }
+    }
+    </script>
+
+
+    <script type="module">
+
+        import * as THREE from "three";
+
+
+        // ========================================================
+        // ⚡ CONFIGURAÇÃO
+        // ========================================================
+
+        const MUSIC_FILE =
+            "/world_azure/sounds/feitico.mp3";
+
+
+        const params =
+            new URLSearchParams(
+                window.location.search
+            );
+
+
+        const asura =
+            params.get("asura") ||
+            "astreia";
+
+
+        document
+            .getElementById("asura-name")
+            .textContent = asura;
+
+
+        document
+            .getElementById("music-info")
+            .textContent =
+                `🎵 ${MUSIC_FILE.split('/').pop()}`;
+
+
+        // ========================================================
+        // 📱 DETECÇÃO DO DISPOSITIVO
+        // ========================================================
+
+        const isTouchDevice =
+            window.matchMedia(
+                "(pointer: coarse)"
+            ).matches;
+
+
+        const screenWidth =
+            window.innerWidth;
+
+
+        const screenHeight =
+            window.innerHeight;
+
+
+        const pixelRatio =
+            Math.min(
+                window.devicePixelRatio || 1,
+                isTouchDevice ? 1.5 : 2
+            );
+
+
+        /*
+         * O túnel agora se adapta ao dispositivo.
+         *
+         * Desktop potente:
+         * mais partículas e anéis.
+         *
+         * Celular:
+         * menos objetos para preservar FPS.
+         */
+
+        let ringCount;
+        let particleCount;
+
+
+        if (isTouchDevice) {
+
+            if (screenWidth <= 400) {
+
+                ringCount = 100;
+                particleCount = 3000;
+
+            } else {
+
+                ringCount = 130;
+                particleCount = 4500;
+            }
+
+        } else {
+
+            ringCount = 180;
+            particleCount = 8000;
+        }
+
+
+        // ========================================================
+        // 🎵 ÁUDIO
+        // ========================================================
+
+        let audioElement = null;
+
+        let isAudioPlaying = false;
+
+        let musicDuration = 15000;
+
+        let startTime = null;
+
+        let transitionProgress = 0;
+
+
+        function initAudio() {
+
+            audioElement =
+                new Audio(MUSIC_FILE);
+
+
+            audioElement.volume = 0.3;
+
+            audioElement.loop = false;
+
+
+            audioElement.addEventListener(
+                "canplaythrough",
+                () => {
+
+                    if (
+                        Number.isFinite(
+                            audioElement.duration
+                        )
+                    ) {
+
+                        musicDuration =
+                            audioElement.duration *
+                            1000;
+
+
+                        document
+                            .getElementById(
+                                "music-info"
+                            )
+                            .textContent =
+                            `🎵 ${MUSIC_FILE.split('/').pop()} | ${audioElement.duration.toFixed(1)}s`;
+                    }
+                }
+            );
+        }
+
+
+        function playMusic() {
+
+            if (!audioElement)
+                return;
+
+
+            audioElement.volume = 0.3;
+
+
+            audioElement
+                .play()
+                .catch(
+                    e =>
+                        console.log(
+                            "Áudio:",
+                            e
+                        )
+                );
+
+
+            startTime =
+                performance.now();
+
+
+            isAudioPlaying = true;
+
+
+            const onCanPlay = () => {
+
+                if (
+                    Number.isFinite(
+                        audioElement.duration
+                    )
+                ) {
+
+                    musicDuration =
+                        audioElement.duration *
+                        1000;
+                }
+
+
+                const fadeOutStart =
+                    musicDuration - 2000;
+
+
+                if (fadeOutStart > 0) {
+
+                    setTimeout(() => {
+
+                        if (
+                            audioElement &&
+                            isAudioPlaying
+                        ) {
+
+                            const fadeInterval =
+                                setInterval(() => {
+
+                                    if (
+                                        audioElement.volume >
+                                        0.05
+                                    ) {
+
+                                        audioElement.volume -=
+                                            0.05;
+
+                                    } else {
+
+                                        audioElement.volume =
+                                            0;
+
+                                        audioElement.pause();
+
+                                        isAudioPlaying =
+                                            false;
+
+                                        clearInterval(
+                                            fadeInterval
+                                        );
+                                    }
+
+                                }, 100);
                         }
+
+                    }, fadeOutStart);
+                }
+
+
+                audioElement
+                    .removeEventListener(
+                        "canplaythrough",
+                        onCanPlay
+                    );
+            };
+
+
+            audioElement.addEventListener(
+                "canplaythrough",
+                onCanPlay
+            );
+
+
+            setTimeout(() => {
+
+                if (
+                    musicDuration === 15000
+                ) {
+
+                    musicDuration =
+                        audioElement.duration *
+                            1000 ||
+                        15000;
+                }
+
+            }, 2000);
+        }
+
+
+        document
+            .getElementById("audio-control")
+            .addEventListener(
+                "click",
+                () => {
+
+                    if (!audioElement) {
+
+                        initAudio();
+
+                        playMusic();
+
+                        document
+                            .getElementById(
+                                "audio-control"
+                            )
+                            .textContent =
+                            "🎧 VIAGEM ATIVA";
+
+                    }
+
+                    else if (
+                        audioElement.paused
+                    ) {
+
+                        playMusic();
+
+                        document
+                            .getElementById(
+                                "audio-control"
+                            )
+                            .textContent =
+                            "🎧 VIAGEM ATIVA";
+                    }
+                }
+            );
+
+
+        // ========================================================
+        // 🌌 THREE.JS
+        // ========================================================
+
+        const scene =
+            new THREE.Scene();
+
+
+        scene.background =
+            new THREE.Color(0x000000);
+
+
+        scene.fog =
+            new THREE.FogExp2(
+                0x000000,
+                isTouchDevice
+                    ? 0.0035
+                    : 0.003
+            );
+
+
+        /*
+         * FOV adaptativo.
+         *
+         * Em telas estreitas aumentamos
+         * um pouco o campo de visão para
+         * o túnel continuar preenchendo
+         * a tela.
+         */
+
+        function getResponsiveFOV() {
+
+            const aspect =
+                window.innerWidth /
+                window.innerHeight;
+
+
+            if (aspect < 0.6)
+                return 88;
+
+
+            if (aspect < 0.8)
+                return 84;
+
+
+            if (aspect > 2)
+                return 76;
+
+
+            return 80;
+        }
+
+
+        const camera =
+            new THREE.PerspectiveCamera(
+                getResponsiveFOV(),
+                window.innerWidth /
+                    window.innerHeight,
+                0.1,
+                2000
+            );
+
+
+        camera.position.z = 4;
+
+
+        const renderer =
+            new THREE.WebGLRenderer({
+                antialias:
+                    !isTouchDevice,
+                alpha: false,
+                powerPreference:
+                    "high-performance"
+            });
+
+
+        renderer.setSize(
+            window.innerWidth,
+            window.innerHeight
+        );
+
+
+        renderer.setPixelRatio(
+            pixelRatio
+        );
+
+
+        renderer.outputColorSpace =
+            THREE.SRGBColorSpace;
+
+
+        document
+            .body
+            .appendChild(
+                renderer.domElement
+            );
+
+
+        // ========================================================
+        // 🌌 ESCALA DIMENSIONAL
+        // ========================================================
+
+        function getWorldScale() {
+
+            const width =
+                window.innerWidth;
+
+
+            const height =
+                window.innerHeight;
+
+
+            const minDimension =
+                Math.min(
+                    width,
+                    height
+                );
+
+
+            /*
+             * Mantém o túnel visualmente
+             * consistente em telas diferentes.
+             */
+
+            if (minDimension <= 360)
+                return 0.78;
+
+
+            if (minDimension <= 480)
+                return 0.88;
+
+
+            if (minDimension <= 768)
+                return 0.95;
+
+
+            return 1;
+        }
+
+
+        let worldScale =
+            getWorldScale();
+
+
+        // ========================================================
+        // 🔮 TÚNEL
+        // ========================================================
+
+        const tunnelRings = [];
+
+        const ringSpacing = 6;
+
+        const colors = [
+            0x00ffff,
+            0xff00ff,
+            0xff6600,
+            0x00ff88
+        ];
+
+
+        for (
+            let i = 0;
+            i < ringCount;
+            i++
+        ) {
+
+            const outerRadius =
+                2.8 *
+                worldScale;
+
+
+            const innerRadius =
+                2.2 *
+                worldScale;
+
+
+            const geometry =
+                new THREE.TorusGeometry(
+                    outerRadius,
+                    0.08,
+                    32,
+                    isTouchDevice
+                        ? 64
+                        : 120
+                );
+
+
+            const color =
+                colors[
+                    i % colors.length
+                ];
+
+
+            const material =
+                new THREE.MeshStandardMaterial({
+
+                    color: color,
+
+                    emissive: color,
+
+                    emissiveIntensity: 0.5,
+
+                    metalness: 0.8,
+
+                    roughness: 0.2
+                });
+
+
+            const ring =
+                new THREE.Mesh(
+                    geometry,
+                    material
+                );
+
+
+            ring.position.z =
+                -i * ringSpacing;
+
+
+            ring.rotation.x =
+                Math.PI / 2;
+
+
+            const innerRingGeo =
+                new THREE.TorusGeometry(
+                    innerRadius,
+                    0.05,
+                    32,
+                    isTouchDevice
+                        ? 64
+                        : 120
+                );
+
+
+            const innerRing =
+                new THREE.Mesh(
+                    innerRingGeo,
+                    material
+                );
+
+
+            innerRing.position.z =
+                -i * ringSpacing;
+
+
+            innerRing.rotation.x =
+                Math.PI / 2;
+
+
+            tunnelRings.push({
+                outer: ring,
+                inner: innerRing
+            });
+
+
+            scene.add(ring);
+
+            scene.add(innerRing);
+        }
+
+
+        // ========================================================
+        // ✨ PARTÍCULAS
+        // ========================================================
+
+        const particleGeometry =
+            new THREE.BufferGeometry();
+
+
+        const positions =
+            new Float32Array(
+                particleCount * 3
+            );
+
+
+        const colorsArray =
+            new Float32Array(
+                particleCount * 3
+            );
+
+
+        const particleDepth = 1200;
+
+
+        for (
+            let i = 0;
+            i < particleCount;
+            i++
+        ) {
+
+            const radius =
+                Math.random() *
+                4 *
+                worldScale;
+
+
+            const angle =
+                Math.random() *
+                Math.PI *
+                2;
+
+
+            positions[i * 3] =
+                Math.cos(angle) *
+                radius;
+
+
+            positions[i * 3 + 1] =
+                Math.sin(angle) *
+                radius;
+
+
+            positions[i * 3 + 2] =
+                -Math.random() *
+                particleDepth;
+
+
+            const colorChoice =
+                colors[
+                    Math.floor(
+                        Math.random() *
+                        colors.length
+                    )
+                ];
+
+
+            colorsArray[i * 3] =
+                ((colorChoice >> 16) & 255) /
+                255;
+
+
+            colorsArray[i * 3 + 1] =
+                ((colorChoice >> 8) & 255) /
+                255;
+
+
+            colorsArray[i * 3 + 2] =
+                (colorChoice & 255) /
+                255;
+        }
+
+
+        particleGeometry.setAttribute(
+            "position",
+            new THREE.BufferAttribute(
+                positions,
+                3
+            )
+        );
+
+
+        particleGeometry.setAttribute(
+            "color",
+            new THREE.BufferAttribute(
+                colorsArray,
+                3
+            )
+        );
+
+
+        const particleMaterial =
+            new THREE.PointsMaterial({
+
+                size:
+                    isTouchDevice
+                        ? 0.07
+                        : 0.08,
+
+                vertexColors: true,
+
+                transparent: true,
+
+                blending:
+                    THREE.AdditiveBlending,
+
+                depthWrite: false
+            });
+
+
+        const stars =
+            new THREE.Points(
+                particleGeometry,
+                particleMaterial
+            );
+
+
+        scene.add(stars);
+
+
+        // ========================================================
+        // 💡 LUZES
+        // ========================================================
+
+        const ambientLight =
+            new THREE.AmbientLight(
+                0x111111
+            );
+
+
+        scene.add(ambientLight);
+
+
+        const backLight =
+            new THREE.PointLight(
+                0x00ffff,
+                1,
+                50
+            );
+
+
+        backLight.position.set(
+            0,
+            0,
+            -10
+        );
+
+
+        scene.add(backLight);
+
+
+        const colorLight =
+            new THREE.PointLight(
+                0xff00ff,
+                0.5
+            );
+
+
+        colorLight.position.set(
+            2,
+            2,
+            -5
+        );
+
+
+        scene.add(colorLight);
+
+
+        // ========================================================
+        // 🌀 PORTAL
+        // ========================================================
+
+        const portalGroup =
+            new THREE.Group();
+
+
+        const portalGeometry =
+            new THREE.SphereGeometry(
+                1.5 * worldScale,
+                isTouchDevice
+                    ? 40
+                    : 64,
+                isTouchDevice
+                    ? 40
+                    : 64
+            );
+
+
+        const portalMaterial =
+            new THREE.MeshStandardMaterial({
+
+                color: 0xffffff,
+
+                emissive: 0x44aaff,
+
+                emissiveIntensity: 1,
+
+                transparent: true,
+
+                opacity: 0.8,
+
+                metalness: 0.9,
+
+                roughness: 0.1
+            });
+
+
+        const portalCore =
+            new THREE.Mesh(
+                portalGeometry,
+                portalMaterial
+            );
+
+
+        portalGroup.add(
+            portalCore
+        );
+
+
+        const energyRingGeo =
+            new THREE.TorusGeometry(
+                1.8 * worldScale,
+                0.05,
+                48,
+                isTouchDevice
+                    ? 100
+                    : 200
+            );
+
+
+        const energyRingMat =
+            new THREE.MeshStandardMaterial({
+
+                color: 0x00ffff,
+
+                emissive: 0x00ffff,
+
+                emissiveIntensity: 1
+            });
+
+
+        const energyRing =
+            new THREE.Mesh(
+                energyRingGeo,
+                energyRingMat
+            );
+
+
+        portalGroup.add(
+            energyRing
+        );
+
+
+        portalGroup.position.z =
+            -950;
+
+
+        scene.add(
+            portalGroup
+        );
+
+
+        // ========================================================
+        // ⚡ ANIMAÇÃO
+        // ========================================================
+
+        let speed =
+            isTouchDevice
+                ? 3.0
+                : 3.5;
+
+
+        let frameCount_fps = 0;
+
+        let lastTime =
+            performance.now();
+
+
+        let hasTransitioned =
+            false;
+
+
+        function animate() {
+
+            requestAnimationFrame(
+                animate
+            );
+
+
+            frameCount_fps++;
+
+
+            const now =
+                performance.now();
+
+
+            // ====================================================
+            // 📊 FPS
+            // ====================================================
+
+            if (
+                now - lastTime >= 1000
+            ) {
+
+                document
+                    .getElementById(
+                        "fps-counter"
+                    )
+                    .textContent =
+                    `FPS: ${frameCount_fps}`;
+
+
+                frameCount_fps = 0;
+
+                lastTime = now;
+            }
+
+
+            // ====================================================
+            // 🎵 PROGRESSO DA VIAGEM
+            // ====================================================
+
+            if (
+                isAudioPlaying &&
+                startTime
+            ) {
+
+                const elapsed =
+                    now - startTime;
+
+
+                transitionProgress =
+                    Math.min(
+                        elapsed /
+                            musicDuration,
+                        1.2
+                    );
+
+
+                const fillPercent =
+                    Math.min(
+                        (
+                            elapsed /
+                            musicDuration
+                        ) * 100,
+                        100
+                    );
+
+
+                document
+                    .getElementById(
+                        "progress-fill"
+                    )
+                    .style.width =
+                    fillPercent + "%";
+
+
+                // ================================================
+                // 🔥 ACELERAÇÃO FINAL
+                // ================================================
+
+                if (
+                    transitionProgress >
+                    0.7
+                ) {
+
+                    const intensity =
+                        (
+                            transitionProgress -
+                            0.7
+                        ) * 3;
+
+
+                    portalMaterial
+                        .emissiveIntensity =
+                        1 + intensity;
+
+
+                    portalMaterial.opacity =
+                        Math.min(
+                            0.8 +
+                            intensity *
+                            0.2,
+                            1
+                        );
+
+
+                    const scale =
+                        1 +
+                        Math.min(
+                            (
+                                transitionProgress -
+                                0.7
+                            ) * 5,
+                            3
+                        );
+
+
+                    portalGroup
+                        .scale
+                        .setScalar(
+                            scale
+                        );
+
+
+                    speed =
+                        (
+                            isTouchDevice
+                                ? 3.0
+                                : 3.5
+                        ) +
+                        (
+                            transitionProgress -
+                            0.7
+                        ) * 12;
+
+
+                    backLight.intensity =
+                        1 +
+                        Math.sin(
+                            now * 0.02
+                        ) * 0.5;
+
+
+                    colorLight.intensity =
+                        0.5 +
+                        Math.sin(
+                            now * 0.03
+                        ) * 0.3;
+                }
+
+
+                // ================================================
+                // 🌌 TRANSIÇÃO
+                // ================================================
+
+                if (
+                    transitionProgress >= 1 &&
+                    !hasTransitioned
+                ) {
+
+                    hasTransitioned =
+                        true;
+
+
+                    const flashOverlay =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    flashOverlay.style.position =
+                        "fixed";
+
+
+                    flashOverlay.style.inset =
+                        "0";
+
+
+                    flashOverlay.style.width =
+                        "100vw";
+
+
+                    flashOverlay.style.height =
+                        "100dvh";
+
+
+                    flashOverlay.style.background =
+                        "white";
+
+
+                    flashOverlay.style.zIndex =
+                        "1000";
+
+
+                    flashOverlay.style.opacity =
+                        "0";
+
+
+                    flashOverlay.style.transition =
+                        "opacity 0.3s";
+
+
+                    document.body.appendChild(
+                        flashOverlay
+                    );
+
+
+                    setTimeout(() => {
+
+                        flashOverlay.style.opacity =
+                            "1";
+
+
+                        setTimeout(() => {
+
+                            window.location.href =
+                                `worlds/${asura}.html`;
+
+                        }, 300);
+
                     }, 100);
                 }
-            }, fadeOutStart);
+            }
+
+
+            // ====================================================
+            // 🔮 ANÉIS
+            // ====================================================
+
+            tunnelRings.forEach(
+                (item) => {
+
+                    item.outer.position.z +=
+                        speed;
+
+
+                    item.inner.position.z +=
+                        speed;
+
+
+                    item.outer.rotation.z +=
+                        0.01;
+
+
+                    item.inner.rotation.z -=
+                        0.008;
+
+
+                    item.outer.rotation.y +=
+                        0.005;
+
+
+                    item.inner.rotation.y -=
+                        0.003;
+
+
+                    if (
+                        item.outer.position.z >
+                        8
+                    ) {
+
+                        item.outer.position.z =
+                            -ringCount *
+                            ringSpacing;
+
+
+                        item.inner.position.z =
+                            -ringCount *
+                            ringSpacing;
+                    }
+                }
+            );
+
+
+            // ====================================================
+            // ✨ PARTÍCULAS
+            // ====================================================
+
+            const particlePositions =
+                particleGeometry
+                    .attributes
+                    .position
+                    .array;
+
+
+            for (
+                let i = 0;
+                i < particleCount;
+                i++
+            ) {
+
+                particlePositions[
+                    i * 3 + 2
+                ] +=
+                    speed * 1.5;
+
+
+                if (
+                    particlePositions[
+                        i * 3 + 2
+                    ] > 5
+                ) {
+
+                    particlePositions[
+                        i * 3 + 2
+                    ] =
+                        -particleDepth;
+
+
+                    const radius =
+                        Math.random() *
+                        4 *
+                        worldScale;
+
+
+                    const angle =
+                        Math.random() *
+                        Math.PI *
+                        2;
+
+
+                    particlePositions[
+                        i * 3
+                    ] =
+                        Math.cos(angle) *
+                        radius;
+
+
+                    particlePositions[
+                        i * 3 + 1
+                    ] =
+                        Math.sin(angle) *
+                        radius;
+                }
+            }
+
+
+            particleGeometry
+                .attributes
+                .position
+                .needsUpdate = true;
+
+
+            // ====================================================
+            // 🌀 PORTAL
+            // ====================================================
+
+            energyRing.rotation.z +=
+                0.02;
+
+
+            energyRing.rotation.x +=
+                0.01;
+
+
+            energyRing.rotation.y +=
+                0.015;
+
+
+            renderer.render(
+                scene,
+                camera
+            );
         }
-        
-        audioElement.removeEventListener('canplaythrough', onCanPlay);
-    };
-    
-    audioElement.addEventListener('canplaythrough', onCanPlay);
-    
-    // Fallback: se não carregar em 2 segundos, usa duração padrão
-    setTimeout(() => {
-        if(musicDuration === 15000) {
-            musicDuration = audioElement.duration * 1000 || 15000;
+
+
+        animate();
+
+
+        // ========================================================
+        // 🖱️ / 📱 CONTROLE DE CÂMERA
+        // ========================================================
+
+        let targetCameraX = 0;
+
+        let targetCameraY = 0;
+
+
+        function updateCameraTarget(
+            clientX,
+            clientY
+        ) {
+
+            const x =
+                (
+                    clientX /
+                    window.innerWidth -
+                    0.5
+                ) * 0.5;
+
+
+            const y =
+                (
+                    clientY /
+                    window.innerHeight -
+                    0.5
+                ) * 0.3;
+
+
+            targetCameraX =
+                x * 0.5;
+
+
+            targetCameraY =
+                -y * 0.3;
         }
-    }, 2000);
-}
 
-document.getElementById("audio-control").addEventListener("click", () => {
-    if(!audioElement) {
-        initAudio();
-        playMusic();
-        document.getElementById("audio-control").innerHTML = "🎧 VIAGEM ATIVA";
-    } else if(audioElement.paused) {
-        playMusic();
-        document.getElementById("audio-control").innerHTML = "🎧 VIAGEM ATIVA";
-    }
-});
 
-// Inicializar Three.js
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x000000);
-scene.fog = new THREE.FogExp2(0x000000, 0.003);
+        /*
+         * Pointer funciona com:
+         *
+         * mouse
+         * caneta
+         * touch/trackpad dependendo do navegador
+         */
 
-const camera = new THREE.PerspectiveCamera(80, window.innerWidth/window.innerHeight, 0.1, 2000);
-camera.position.z = 4;
+        document.addEventListener(
+            "pointermove",
+            (event) => {
 
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(window.devicePixelRatio);
-document.body.appendChild(renderer.domElement);
+                updateCameraTarget(
+                    event.clientX,
+                    event.clientY
+                );
+            },
+            {
+                passive: true
+            }
+        );
 
-// Túnel com anéis
-const tunnelRings = [];
-const ringCount = 180;
-const ringSpacing = 6;
-const colors = [0x00ffff, 0xff00ff, 0xff6600, 0x00ff88];
 
-for(let i = 0; i < ringCount; i++) {
-    const geometry = new THREE.TorusGeometry(2.8, 0.08, 32, 120);
-    const color = colors[i % colors.length];
-    const material = new THREE.MeshStandardMaterial({
-        color: color,
-        emissive: color,
-        emissiveIntensity: 0.5,
-        metalness: 0.8,
-        roughness: 0.2
-    });
-    
-    const ring = new THREE.Mesh(geometry, material);
-    ring.position.z = -i * ringSpacing;
-    ring.rotation.x = Math.PI / 2;
-    
-    const innerRingGeo = new THREE.TorusGeometry(2.2, 0.05, 32, 120);
-    const innerRing = new THREE.Mesh(innerRingGeo, material);
-    innerRing.position.z = -i * ringSpacing;
-    innerRing.rotation.x = Math.PI / 2;
-    
-    tunnelRings.push({ outer: ring, inner: innerRing });
-    scene.add(ring);
-    scene.add(innerRing);
-}
+        // ========================================================
+        // 🎥 SUAVIZAÇÃO DA CÂMERA
+        // ========================================================
 
-// Partículas
-const particleCount = 8000;
-const particleGeometry = new THREE.BufferGeometry();
-const positions = new Float32Array(particleCount * 3);
-const colorsArray = new Float32Array(particleCount * 3);
+        function updateCamera() {
 
-for(let i = 0; i < particleCount; i++) {
-    const radius = Math.random() * 4;
-    const angle = Math.random() * Math.PI * 2;
-    positions[i*3] = Math.cos(angle) * radius;
-    positions[i*3+1] = Math.sin(angle) * radius;
-    positions[i*3+2] = -Math.random() * 1200;
-    
-    const colorChoice = colors[Math.floor(Math.random() * colors.length)];
-    const r = ((colorChoice >> 16) & 255) / 255;
-    const g = ((colorChoice >> 8) & 255) / 255;
-    const b = (colorChoice & 255) / 255;
-    colorsArray[i*3] = r;
-    colorsArray[i*3+1] = g;
-    colorsArray[i*3+2] = b;
-}
+            camera.position.x +=
+                (
+                    targetCameraX -
+                    camera.position.x
+                ) * 0.05;
 
-particleGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-particleGeometry.setAttribute("color", new THREE.BufferAttribute(colorsArray, 3));
 
-const particleMaterial = new THREE.PointsMaterial({
-    size: 0.08,
-    vertexColors: true,
-    transparent: true,
-    blending: THREE.AdditiveBlending
-});
-
-const stars = new THREE.Points(particleGeometry, particleMaterial);
-scene.add(stars);
-
-// Luzes
-const ambientLight = new THREE.AmbientLight(0x111111);
-scene.add(ambientLight);
-
-const backLight = new THREE.PointLight(0x00ffff, 1, 50);
-backLight.position.set(0, 0, -10);
-scene.add(backLight);
-
-const colorLight = new THREE.PointLight(0xff00ff, 0.5);
-colorLight.position.set(2, 2, -5);
-scene.add(colorLight);
-
-// Portal
-const portalGroup = new THREE.Group();
-const portalGeometry = new THREE.SphereGeometry(1.5, 64, 64);
-const portalMaterial = new THREE.MeshStandardMaterial({
-    color: 0xffffff,
-    emissive: 0x44aaff,
-    emissiveIntensity: 1,
-    transparent: true,
-    opacity: 0.8,
-    metalness: 0.9,
-    roughness: 0.1
-});
-
-const portalCore = new THREE.Mesh(portalGeometry, portalMaterial);
-portalGroup.add(portalCore);
-
-const energyRingGeo = new THREE.TorusGeometry(1.8, 0.05, 64, 200);
-const energyRingMat = new THREE.MeshStandardMaterial({
-    color: 0x00ffff,
-    emissive: 0x00ffff,
-    emissiveIntensity: 1
-});
-const energyRing = new THREE.Mesh(energyRingGeo, energyRingMat);
-portalGroup.add(energyRing);
-
-portalGroup.position.z = -950;
-scene.add(portalGroup);
-
-// Animação
-let speed = 3.5;
-let frameCount_fps = 0;
-let lastTime = performance.now();
-let hasTransitioned = false;
-
-function animate() {
-    requestAnimationFrame(animate);
-    
-    frameCount_fps++;
-    const now = performance.now();
-    if(now - lastTime >= 1000) {
-        document.getElementById("fps-counter").textContent = `FPS: ${frameCount_fps}`;
-        frameCount_fps = 0;
-        lastTime = now;
-    }
-    
-    if(isAudioPlaying && startTime) {
-        const elapsed = now - startTime;
-        transitionProgress = Math.min(elapsed / musicDuration, 1.2);
-        
-        const fillPercent = Math.min((elapsed / musicDuration) * 100, 100);
-        document.getElementById("progress-fill").style.width = fillPercent + "%";
-        
-        if(transitionProgress > 0.7) {
-            const intensity = (transitionProgress - 0.7) * 3;
-            portalMaterial.emissiveIntensity = 1 + intensity;
-            portalMaterial.opacity = 0.8 + intensity * 0.2;
-            
-            const scale = 1 + Math.min((transitionProgress - 0.7) * 5, 3);
-            portalGroup.scale.setScalar(scale);
-            
-            speed = 3.5 + (transitionProgress - 0.7) * 12;
-            
-            backLight.intensity = 1 + Math.sin(now * 0.02) * 0.5;
-            colorLight.intensity = 0.5 + Math.sin(now * 0.03) * 0.3;
+            camera.position.y +=
+                (
+                    targetCameraY -
+                    camera.position.y
+                ) * 0.05;
         }
-        
-        if(transitionProgress >= 1 && !hasTransitioned) {
-            hasTransitioned = true;
-            
-            const flashOverlay = document.createElement('div');
-            flashOverlay.style.position = 'fixed';
-            flashOverlay.style.inset = '0';
-            flashOverlay.style.background = 'white';
-            flashOverlay.style.zIndex = '1000';
-            flashOverlay.style.opacity = '0';
-            flashOverlay.style.transition = 'opacity 0.3s';
-            document.body.appendChild(flashOverlay);
-            
-            setTimeout(() => {
-                flashOverlay.style.opacity = '1';
+
+
+        /*
+         * Atualização independente da
+         * animação visual.
+         */
+
+        const originalAnimate =
+            animate;
+
+
+        // ========================================================
+        // 📐 RESIZE RESPONSIVO
+        // ========================================================
+
+        let resizeTimeout;
+
+
+        window.addEventListener(
+            "resize",
+            () => {
+
+                clearTimeout(
+                    resizeTimeout
+                );
+
+
+                resizeTimeout =
+                    setTimeout(() => {
+
+                        const width =
+                            window.innerWidth;
+
+
+                        const height =
+                            window.innerHeight;
+
+
+                        camera.aspect =
+                            width /
+                            height;
+
+
+                        camera.fov =
+                            getResponsiveFOV();
+
+
+                        camera.updateProjectionMatrix();
+
+
+                        renderer.setSize(
+                            width,
+                            height
+                        );
+
+
+                        /*
+                         * Limita o pixel ratio
+                         * para evitar que celulares
+                         * tentem renderizar uma quantidade
+                         * absurda de pixels.
+                         */
+
+                        renderer.setPixelRatio(
+                            Math.min(
+                                window.devicePixelRatio ||
+                                1,
+                                isTouchDevice
+                                    ? 1.5
+                                    : 2
+                            )
+                        );
+
+
+                    }, 100);
+            },
+            {
+                passive: true
+            }
+        );
+
+
+        // ========================================================
+        // 🔄 LOOP SUAVE DA CÂMERA
+        // ========================================================
+
+        function cameraLoop() {
+
+            updateCamera();
+
+            requestAnimationFrame(
+                cameraLoop
+            );
+        }
+
+
+        cameraLoop();
+
+
+        // ========================================================
+        // 📱 ORIENTAÇÃO
+        // ========================================================
+
+        window.addEventListener(
+            "orientationchange",
+            () => {
+
                 setTimeout(() => {
-                    window.location.href = `worlds/${asura}.html`;
-                }, 300);
-            }, 100);
-        }
-    }
-    
-    tunnelRings.forEach((item) => {
-        item.outer.position.z += speed;
-        item.inner.position.z += speed;
-        
-        item.outer.rotation.z += 0.01;
-        item.inner.rotation.z -= 0.008;
-        item.outer.rotation.y += 0.005;
-        item.inner.rotation.y -= 0.003;
-        
-        if(item.outer.position.z > 8) {
-            item.outer.position.z = -ringCount * ringSpacing;
-            item.inner.position.z = -ringCount * ringSpacing;
-        }
-    });
-    
-    const particlePositions = particleGeometry.attributes.position.array;
-    for(let i = 0; i < particleCount; i++) {
-        particlePositions[i*3+2] += speed * 1.5;
-        
-        if(particlePositions[i*3+2] > 5) {
-            particlePositions[i*3+2] = -1200;
-            const radius = Math.random() * 4;
-            const angle = Math.random() * Math.PI * 2;
-            particlePositions[i*3] = Math.cos(angle) * radius;
-            particlePositions[i*3+1] = Math.sin(angle) * radius;
-        }
-    }
-    particleGeometry.attributes.position.needsUpdate = true;
-    
-    energyRing.rotation.z += 0.02;
-    energyRing.rotation.x += 0.01;
-    energyRing.rotation.y += 0.015;
-    
-    renderer.render(scene, camera);
-}
 
-animate();
+                    const width =
+                        window.innerWidth;
 
-document.addEventListener('mousemove', (event) => {
-    const x = (event.clientX / window.innerWidth - 0.5) * 0.5;
-    const y = (event.clientY / window.innerHeight - 0.5) * 0.3;
-    camera.position.x += (x * 0.5 - camera.position.x) * 0.05;
-    camera.position.y += (-y * 0.3 - camera.position.y) * 0.05;
-});
 
-window.addEventListener("resize", () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-});
+                    const height =
+                        window.innerHeight;
 
-setTimeout(() => {
-    document.getElementById("loading").style.opacity = "0";
-    setTimeout(() => {
-        document.getElementById("loading").style.display = "none";
-    }, 500);
-}, 1500);
 
-console.log(`✨ Portal dimensional ativado para: ${asura}`);
+                    camera.aspect =
+                        width /
+                        height;
 
-</script>
+
+                    camera.fov =
+                        getResponsiveFOV();
+
+
+                    camera.updateProjectionMatrix();
+
+
+                    renderer.setSize(
+                        width,
+                        height
+                    );
+
+                }, 250);
+            }
+        );
+
+
+        // ========================================================
+        // ✦ REMOVER LOADING
+        // ========================================================
+
+        setTimeout(() => {
+
+            const loading =
+                document.getElementById(
+                    "loading"
+                );
+
+
+            loading.style.opacity =
+                "0";
+
+
+            setTimeout(() => {
+
+                loading.style.display =
+                    "none";
+
+            }, 500);
+
+        }, 1500);
+
+
+        // ========================================================
+        // 🧹 VISIBILIDADE DA PÁGINA
+        // ========================================================
+
+        document.addEventListener(
+            "visibilitychange",
+            () => {
+
+                if (
+                    document.hidden
+                ) {
+
+                    /*
+                     * Não destruímos a cena.
+                     * Apenas deixamos o navegador
+                     * controlar a suspensão do RAF.
+                     */
+
+                    return;
+                }
+            }
+        );
+
+
+        // ========================================================
+        // ✨ DEBUG
+        // ========================================================
+
+        console.log(
+            "✨ Portal dimensional ativado para:",
+            asura
+        );
+
+
+        console.log(
+            "📱 Dispositivo touch:",
+            isTouchDevice
+        );
+
+
+        console.log(
+            "📐 Resolução:",
+            window.innerWidth,
+            "x",
+            window.innerHeight
+        );
+
+
+        console.log(
+            "🌌 Anéis:",
+            ringCount
+        );
+
+
+        console.log(
+            "✨ Partículas:",
+            particleCount
+        );
+
+
+        console.log(
+            "🎮 Pixel Ratio:",
+            pixelRatio
+        );
+
+    </script>
+
 </body>
 </html>
