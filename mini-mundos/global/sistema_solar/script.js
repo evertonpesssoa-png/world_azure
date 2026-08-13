@@ -4,13 +4,15 @@
 
 
 /* =========================================================
-   ESTRELAS
+   ESTRELAS DE FUNDO
 ========================================================= */
 
 function createStars() {
-    const container = document.body;
+
+    const container = document.querySelector("body");
 
     if (!container) return;
+
 
     for (let i = 0; i < 1000; i++) {
 
@@ -18,23 +20,48 @@ function createStars() {
 
         star.className = "star";
 
-        // Tamanho aleatório: 1px até 3px
-        const size = Math.random() * 2 + 1;
 
-        star.style.width = size + "px";
-        star.style.height = size + "px";
+        /* -------------------------------------------------
+           Tamanho variado
+           1px até 3px
+        ------------------------------------------------- */
 
-        // Posição aleatória
-        star.style.top = Math.random() * 100 + "%";
-        star.style.left = Math.random() * 100 + "%";
+        const size =
+            Math.random() * 2 + 1;
 
-        // Brilho aleatório
+        star.style.width =
+            size + "px";
+
+        star.style.height =
+            size + "px";
+
+
+        /* -------------------------------------------------
+           Posição aleatória
+        ------------------------------------------------- */
+
+        star.style.top =
+            Math.random() * 100 + "%";
+
+        star.style.left =
+            Math.random() * 100 + "%";
+
+
+        /* -------------------------------------------------
+           Opacidade variada
+        ------------------------------------------------- */
+
         star.style.opacity =
             Math.random() * 0.7 + 0.3;
 
-        // Atraso aleatório da animação
+
+        /* -------------------------------------------------
+           Delay aleatório
+        ------------------------------------------------- */
+
         star.style.animationDelay =
             Math.random() * 5 + "s";
+
 
         container.appendChild(star);
     }
@@ -47,23 +74,34 @@ function createStars() {
 
 function createSaturnRingParticles() {
 
-    const saturn = document.querySelector(".saturn");
+    const saturn =
+        document.querySelector(".saturn");
+
+
+    /* -------------------------------------------------
+       Segurança
+    ------------------------------------------------- */
 
     if (!saturn) return;
 
 
-    /*
-     * Evita criar partículas duplicadas
-     * caso a função seja chamada novamente.
-     */
-    if (saturn.querySelector(".saturn-particles")) {
+    /* -------------------------------------------------
+       Evita duplicação
+    ------------------------------------------------- */
+
+    if (
+        saturn.querySelector(
+            ".saturn-particles"
+        )
+    ) {
         return;
     }
 
 
-    /*
-     * Container das partículas.
-     */
+    /* -------------------------------------------------
+       Container das partículas
+    ------------------------------------------------- */
+
     const particleContainer =
         document.createElement("div");
 
@@ -71,15 +109,31 @@ function createSaturnRingParticles() {
         "saturn-particles";
 
 
-    /*
-     * Quantidade pequena para manter
-     * boa performance principalmente no mobile.
-     */
+    /* -------------------------------------------------
+       Quantidade responsiva
+
+       Mobile:
+       18 partículas
+
+       PC:
+       30 partículas
+    ------------------------------------------------- */
+
     const particleCount =
-        window.innerWidth <= 768 ? 18 : 30;
+        window.innerWidth <= 768
+            ? 18
+            : 30;
 
 
-    for (let i = 0; i < particleCount; i++) {
+    /* =================================================
+       CRIAÇÃO DAS PARTÍCULAS
+    ================================================= */
+
+    for (
+        let i = 0;
+        i < particleCount;
+        i++
+    ) {
 
         const particle =
             document.createElement("span");
@@ -88,46 +142,68 @@ function createSaturnRingParticles() {
             "saturn-particle";
 
 
-        /*
-         * Posição ao redor do anel.
-         *
-         * Usamos uma distribuição circular
-         * para evitar que todas fiquem juntas.
-         */
+        /* -------------------------------------------------
+           Ângulo aleatório
+        ------------------------------------------------- */
+
         const angle =
-            Math.random() * Math.PI * 2;
+            Math.random() *
+            Math.PI *
+            2;
 
 
-        /*
-         * Distância aleatória do centro.
-         *
-         * Isso cria diferentes "faixas"
-         * de partículas no anel.
-         */
+        /* -------------------------------------------------
+           Distância do centro
+
+           Cria diferentes posições
+           dentro dos anéis.
+        ------------------------------------------------- */
+
         const radius =
-            25 + Math.random() * 18;
+            25 +
+            Math.random() * 18;
 
+
+        /* -------------------------------------------------
+           Coordenadas
+        ------------------------------------------------- */
 
         const x =
-            Math.cos(angle) * radius;
+            Math.cos(angle) *
+            radius;
 
         const y =
-            Math.sin(angle) * radius * 0.32;
+            Math.sin(angle) *
+            radius *
+            0.32;
 
 
-        /*
-         * Tamanho pequeno e variado.
-         */
+        /* -------------------------------------------------
+           Tamanho
+
+           Pequeno para parecer poeira
+           espacial.
+        ------------------------------------------------- */
+
         const size =
-            Math.random() * 1.8 + 0.7;
+            Math.random() *
+            1.8 +
+            0.7;
 
 
-        /*
-         * Brilho variado.
-         */
+        /* -------------------------------------------------
+           Opacidade
+        ------------------------------------------------- */
+
         const opacity =
-            Math.random() * 0.55 + 0.25;
+            Math.random() *
+            0.55 +
+            0.25;
 
+
+        /* -------------------------------------------------
+           Aplicação das propriedades
+        ------------------------------------------------- */
 
         particle.style.width =
             size + "px";
@@ -135,25 +211,32 @@ function createSaturnRingParticles() {
         particle.style.height =
             size + "px";
 
+
         particle.style.left =
             `calc(50% + ${x}px)`;
 
         particle.style.top =
             `calc(50% + ${y}px)`;
 
+
         particle.style.opacity =
             opacity;
 
 
-        /*
-         * Cada partícula possui uma
-         * velocidade ligeiramente diferente.
-         */
+        /* -------------------------------------------------
+           Animação individual
+
+           Cada partícula recebe um
+           comportamento ligeiramente diferente.
+        ------------------------------------------------- */
+
         particle.style.animationDelay =
             Math.random() * 4 + "s";
 
         particle.style.animationDuration =
-            2.5 + Math.random() * 3 + "s";
+            2.5 +
+            Math.random() * 3 +
+            "s";
 
 
         particleContainer.appendChild(
@@ -161,6 +244,10 @@ function createSaturnRingParticles() {
         );
     }
 
+
+    /* -------------------------------------------------
+       Adiciona o conjunto ao Saturno
+    ------------------------------------------------- */
 
     saturn.appendChild(
         particleContainer
@@ -176,8 +263,11 @@ window.addEventListener(
     "DOMContentLoaded",
     () => {
 
+        /* Criar estrelas */
         createStars();
 
+
+        /* Criar partículas de Saturno */
         createSaturnRingParticles();
 
     }
