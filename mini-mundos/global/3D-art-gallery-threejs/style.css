@@ -366,17 +366,19 @@ body {
    INFORMAÇÃO DO QUADRO
    =========================================================
    
+   Fica abaixo do botão VR.
+   
    POSIÇÃO HORIZONTAL:
    
-   65% = aproximadamente 65% da largura da tela.
+   50% = centro
+   55% = um pouco à direita do centro
+   60% = mais à direita
+   65% = ainda mais à direita
    
-   Para ajustar depois:
+   Portanto, para puxar para a ESQUERDA:
+   diminua o valor.
    
-   left: 60%;  -> mais para a esquerda
-   left: 65%;  -> posição atual
-   left: 70%;  -> mais para a direita
-   left: 75%;  -> ainda mais para a direita
-   
+   Valor escolhido: 55%
    ========================================================= */
 
 #painting-info {
@@ -384,8 +386,8 @@ body {
 
   top: 62px;
 
-  /* ===== POSIÇÃO PRINCIPAL ===== */
-  left: 65%;
+  /* ===== POSIÇÃO HORIZONTAL ===== */
+  left: 55%;
 
   right: auto;
   bottom: auto;
@@ -394,10 +396,6 @@ body {
 
   width: max-content;
 
-  /*
-   * Impede o quadro de ultrapassar
-   * os limites da tela.
-   */
   max-width: 30vw;
 
   min-width: 0;
@@ -441,8 +439,6 @@ body {
 
   visibility: hidden;
 }
-
-/* Quando JS adiciona .show */
 
 #painting-info.show {
   opacity: 1;
@@ -692,13 +688,13 @@ body {
   }
 
   /* =====================================================
-     QUADRO — 65%
+     QUADRO — ABAIXO DO VR
      ===================================================== */
 
   #painting-info {
     top: 52px;
 
-    left: 65%;
+    left: 55%;
 
     right: auto;
 
@@ -827,13 +823,13 @@ body {
   }
 
   /* =====================================================
-     QUADRO — 65%
+     QUADRO — ABAIXO DO VR
      ===================================================== */
 
   #painting-info {
     top: 48px;
 
-    left: 65%;
+    left: 55%;
 
     right: auto;
 
@@ -893,7 +889,7 @@ body {
   #painting-info {
     top: 62px;
 
-    left: 65%;
+    left: 55%;
 
     right: auto;
 
@@ -923,7 +919,7 @@ body {
   #painting-info {
     top: 62px;
 
-    left: 65%;
+    left: 55%;
 
     right: auto;
 
@@ -969,7 +965,9 @@ canvas {
   z-index: 1;
 }
 
-/* Interface acima do canvas */
+/* =========================================================
+   INTERFACE ACIMA DO CANVAS
+   ========================================================= */
 
 #info-panel,
 #painting-info,
@@ -1016,7 +1014,6 @@ button#VRButton {
   left: 20px !important;
 
   right: auto !important;
-
   bottom: auto !important;
 
   z-index: 9999 !important;
