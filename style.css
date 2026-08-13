@@ -1,5 +1,13 @@
-@import url('https://fonts.cdnfonts.com/css/ica-rubrik-black');
-@import url('https://fonts.cdnfonts.com/css/poppins');
+/* =========================================================
+   SISTEMA SOLAR - STYLE.CSS
+   RESPONSIVO VERTICAL + HORIZONTAL
+   LUA CORRIGIDA
+========================================================= */
+
+
+/* =========================================================
+   RESET E BODY
+========================================================= */
 
 * {
     margin: 0;
@@ -7,1034 +15,910 @@
     box-sizing: border-box;
 }
 
+html,
 body {
-    background: #000000;
-    overflow: hidden;
-    font-family: 'Poppins', sans-serif;
-    min-height: 100vh;
-    color: white;
-}
-
-.banner {
-    width: 100%;
-    height: 100vh;
-    position: relative;
-    overflow: hidden;
-    perspective: 1400px;
-    background: #000000;
-}
-
-#particles {
-    position: absolute;
-    inset: 0;
     width: 100%;
     height: 100%;
-    z-index: 0;
-    pointer-events: none;
 }
 
-/* ============================================
-   MAGO - FORA DO SLIDER (POSIÇÃO INDEPENDENTE)
-   ============================================ */
+body {
+    min-height: 100vh;
 
-.banner .mago-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            #0a0a2a 0%,
+            #000000 100%
+        );
+
+    overflow: hidden;
+
+    font-family: Arial, sans-serif;
+
+    touch-action: none;
+}
+
+
+/* =========================================================
+   CONTAINER PRINCIPAL
+========================================================= */
+
+.container {
+
+    width: min(90vmin, 900px);
+    height: min(90vmin, 900px);
+
+    position: relative;
+
+    margin: 0 auto;
+
+    flex-shrink: 0;
+
+    touch-action: none;
+}
+
+
+/* =========================================================
+   SOL
+========================================================= */
+
+.sun {
+
     position: absolute;
+
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    width: 120%;
-    height: 120%;
-    background-image: url(images/mago5_hq.png);
-    background-repeat: no-repeat;
-    background-position: center bottom;
-    background-size: contain;
-    opacity: 0.95;
-    z-index: 2;
-    pointer-events: none;
-}
 
-/* 🔥 ESFERA DE ENERGIA - 10x MENOR E 60% MAIS BAIXA 🔥 */
-.banner .mago-center::after {
-    content: '';
-    position: absolute;
-    top: 78%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(1);
     width: 80px;
     height: 80px;
-    background: radial-gradient(circle, rgba(180, 80, 255, 1) 0%, rgba(180, 80, 255, 0.6) 40%, transparent 70%);
+
+    margin-left: -40px;
+    margin-top: -40px;
+
     border-radius: 50%;
-    box-shadow: 0 0 40px rgba(180, 80, 255, 0.8), 0 0 80px rgba(180, 80, 255, 0.5);
-    animation: pulsarEnergia 1.8s ease-in-out infinite alternate;
-    pointer-events: none;
-    z-index: 1;
+
+    box-shadow:
+        0 0 40px rgba(255, 100, 0, 0.8),
+        0 0 80px rgba(255, 50, 0, 0.4);
+
+    animation:
+        pulse 2s ease-in-out infinite;
+
+    z-index: 10;
 }
 
-@keyframes pulsarEnergia {
-    0% {
-        transform: translate(-50%, -50%) scale(0.7);
-        opacity: 0.6;
-        box-shadow: 0 0 20px rgba(180, 80, 255, 0.4);
-    }
-    100% {
-        transform: translate(-50%, -50%) scale(1.3);
-        opacity: 1;
-        box-shadow: 0 0 60px rgba(180, 80, 255, 0.9), 0 0 100px rgba(180, 80, 255, 0.6);
-    }
-}
+.sun img {
 
-.banner .slider {
-    position: absolute;
-    width: clamp(180px, 30vw, 300px);
-    height: clamp(240px, 40vw, 380px);
-    top: 25%;
-    left: 50%;
-    transform-style: preserve-3d;
-    transform: translate(-50%, -50%) rotateX(-25deg);
-    animation: autoRun 24s linear infinite;
-    z-index: 3;
-    will-change: transform;
-}
-
-.banner .slider:hover {
-    animation-play-state: paused;
-}
-
-@keyframes autoRun {
-    from {
-        transform: translate(-50%, -50%) rotateX(-25deg) rotateY(0deg);
-    }
-    to {
-        transform: translate(-50%, -50%) rotateX(-25deg) rotateY(360deg);
-    }
-}
-
-.banner .slider .item {
-    position: absolute;
-    inset: 0;
-    cursor: pointer;
-    transform-style: preserve-3d;
-    backface-visibility: visible;
-    -webkit-backface-visibility: visible;
-    will-change: transform, filter, opacity;
-    transition: transform 0.8s ease, filter 0.8s ease, opacity 0.8s ease;
-    transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(clamp(450px, 65vw, 900px));
-    z-index: 1;
-}
-
-/* ============================================
-   GLOW DA CARTA - CADA UMA COM SUA COR (CORRIGIDO)
-   ============================================ */
-
-.banner .slider .item::before {
-    content: "";
-    position: absolute;
-    inset: -25px;
-    border-radius: 20px;
-    background: radial-gradient(circle, var(--glow-color), transparent 70%);
-    filter: blur(40px);
-    opacity: 0;
-    transition: opacity 0.6s ease;
-    z-index: 0;
-}
-
-.banner .slider .item:hover::before {
-    opacity: 1;
-}
-
-.banner .slider .item.active::before {
-    opacity: 1;
-}
-
-.banner .slider .item img {
-    position: relative;
-    z-index: 1;
     width: 100%;
     height: 100%;
+
+    border-radius: 50%;
+
     object-fit: cover;
-    border-radius: 14px;
-    backface-visibility: visible;
-    -webkit-backface-visibility: visible;
-    transition: transform 0.5s ease, filter 0.5s ease, box-shadow 0.5s ease;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    user-select: none;
-    -webkit-user-drag: none;
-    
-    /* 🔥 QUALIDADE MÁXIMA DA IMAGEM 🔥 */
-    image-rendering: auto;
-    image-rendering: -webkit-optimize-contrast;
 }
 
-.banner .slider .item:hover img {
-    transform: scale(1.05) translateY(-5px);
-    filter: brightness(1.15) saturate(1.2);
-    box-shadow: 0 0 30px var(--glow-color), 0 0 60px var(--glow-color), 0 10px 30px rgba(0, 0, 0, 0.5);
-}
 
-.banner .slider:hover .item:not(:hover) {
-    filter: brightness(0.4) saturate(0.3);
-    opacity: 0.5;
-}
+/* =========================================================
+   ÓRBITAS DOS PLANETAS
+========================================================= */
 
-.banner .content {
+.mercury,
+.venus,
+.earth,
+.mars,
+.jupiter,
+.saturn,
+.uranus,
+.neptune,
+.pluto {
+
     position: absolute;
-    inset: 0;
-    z-index: 2;
-    pointer-events: none;
-}
 
-.banner .content h1 {
-    font-family: 'ICA Rubrik';
-    font-size: clamp(4rem, 15vw, 16rem);
-    line-height: 1em;
-    color: #f3f3f3;
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-    z-index: 4;
-}
-
-.banner .content h1::after {
-    position: absolute;
-    inset: 0;
-    content: attr(data-content);
-    -webkit-text-stroke: 2px rgba(255, 255, 255, 0.05);
-    color: transparent;
-}
-
-.banner .content .author {
-    position: absolute;
-    right: 30px;
-    bottom: 40px;
-    text-align: right;
-    max-width: 240px;
-    color: #ffffffd7;
-    z-index: 4;
-}
-
-#portalTransition {
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(circle, rgba(160, 80, 255, 0.15), rgba(0, 0, 0, 0.98));
-    backdrop-filter: blur(10px);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 1.4s ease;
-    z-index: 99999;
-}
-
-#portalTransition.active {
-    opacity: 1;
-}
-
-.banner .slider .item.active {
-    z-index: 999;
-    filter: brightness(1.3) saturate(1.2) drop-shadow(0 0 30px var(--glow-color)) drop-shadow(0 0 60px var(--glow-color));
-    transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(clamp(400px, 60vw, 850px)) scale(1.25);
-}
-
-.banner .slider.fade-all .item:not(.active) {
-    opacity: 0.05;
-    filter: blur(3px) brightness(0.1);
-}
-
-#asuraWorld {
-    position: fixed;
-    inset: 0;
-    z-index: 9990;
-    opacity: 0;
-    pointer-events: none;
-    background: radial-gradient(circle at center, #0a0a15, #000000);
-    transition: opacity 2s ease, transform 2s ease, filter 2s ease;
-    transform: scale(1.08);
-    filter: blur(10px);
-}
-
-#asuraWorld.active {
-    opacity: 1;
-    transform: scale(1);
-    filter: blur(0px);
-    pointer-events: auto;
-}
-
-.portal-flash {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    pointer-events: none;
-    opacity: 0;
-    background: radial-gradient(circle, var(--flash-color), transparent 70%);
-    transition: opacity 1s ease;
-}
-
-.portal-flash.show {
-    opacity: 1;
-}
-
-.banner,
-.slider,
-.item {
-    transform-style: preserve-3d;
-}
-
-/* ============================================
-   🎴 ESTILO CARTA DE TAROT
-   ============================================ */
-
-.banner .slider .item.tarot-card {
-    background: linear-gradient(145deg, rgba(20, 15, 30, 0.95), rgba(10, 8, 15, 0.98));
-    border: 2px solid rgba(255, 255, 255, 0.08);
-    border-radius: 16px;
-    padding: 8px;
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.9);
-    transform-style: preserve-3d;
-    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-.banner .slider .item.tarot-card::before {
-    content: '';
-    position: absolute;
-    inset: 4px;
-    border: 1.5px solid rgba(255, 255, 255, 0.06);
-    border-radius: 12px;
-    pointer-events: none;
-    z-index: 1;
-    transition: border-color 0.5s ease;
-}
-
-.banner .slider .item.tarot-card::after {
-    content: '';
-    position: absolute;
-    inset: -2px;
-    border-radius: 18px;
-    background: radial-gradient(circle at 30% 20%, var(--glow-color, rgba(255, 255, 255, 0.05)), transparent 60%);
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.1;
-}
-
-.banner .slider .item.tarot-card img {
-    position: relative;
-    z-index: 2;
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    filter: brightness(0.95) contrast(1.05);
-    transition: all 0.5s ease;
-}
-
-.banner .slider .item.tarot-card .tarot-number {
-    position: absolute;
-    top: 8px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-    font-family: 'Georgia', 'Times New Roman', serif;
-    font-size: 14px;
-    font-weight: bold;
-    color: rgba(255, 255, 255, 0.3);
-    letter-spacing: 2px;
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
-    text-transform: uppercase;
-    pointer-events: none;
-    background: rgba(0, 0, 0, 0.7);
-    padding: 2px 12px;
-    border-radius: 4px;
-    backdrop-filter: blur(2px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.banner .slider .item.tarot-card .tarot-name {
-    position: absolute;
-    bottom: 8px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-    font-family: 'Georgia', 'Times New Roman', serif;
-    font-size: 12px;
-    font-weight: bold;
-    color: rgba(255, 255, 255, 0.6);
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
-    pointer-events: none;
-    background: rgba(0, 0, 0, 0.4);
-    padding: 3px 14px;
-    border-radius: 4px;
-    white-space: nowrap;
-    backdrop-filter: blur(2px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.banner .slider .item.tarot-card .tarot-symbol {
-    position: absolute;
-    z-index: 10;
-    font-size: 18px;
-    color: rgba(255, 255, 255, 0.08);
-    pointer-events: none;
-    font-family: 'Georgia', serif;
-    transition: all 0.4s ease;
-}
-
-.banner .slider .item.tarot-card .tarot-symbol.tl {
-    top: 8px;
-    left: 10px;
-}
-.banner .slider .item.tarot-card .tarot-symbol.tr {
-    top: 8px;
-    right: 10px;
-}
-.banner .slider .item.tarot-card .tarot-symbol.bl {
-    bottom: 8px;
-    left: 10px;
-}
-.banner .slider .item.tarot-card .tarot-symbol.br {
-    bottom: 8px;
-    right: 10px;
-}
-
-.banner .slider .item.tarot-card .rune {
-    position: absolute;
-    z-index: 10;
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.1);
-    pointer-events: none;
-    font-family: 'Georgia', serif;
-    transition: all 0.4s ease;
-}
-
-.banner .slider .item.tarot-card .rune.top {
-    top: 2px;
-    left: 50%;
-    transform: translateX(-50%);
-}
-.banner .slider .item.tarot-card .rune.bottom {
-    bottom: 2px;
-    left: 50%;
-    transform: translateX(-50%);
-}
-.banner .slider .item.tarot-card .rune.left {
     top: 50%;
-    left: 2px;
-    transform: translateY(-50%);
-}
-.banner .slider .item.tarot-card .rune.right {
-    top: 50%;
-    right: 2px;
-    transform: translateY(-50%);
+    left: 50%;
+
+    border-radius: 50%;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.2);
+
+    transform:
+        translate(-50%, -50%);
 }
 
-.banner .slider .item.tarot-card .rune.corner-tl {
-    top: -2px;
-    left: -2px;
-}
-.banner .slider .item.tarot-card .rune.corner-tr {
-    top: -2px;
-    right: -2px;
-}
-.banner .slider .item.tarot-card .rune.corner-bl {
-    bottom: -2px;
-    left: -2px;
-}
-.banner .slider .item.tarot-card .rune.corner-br {
-    bottom: -2px;
-    right: -2px;
+
+/* =========================================================
+   TAMANHO DAS ÓRBITAS
+========================================================= */
+
+.mercury {
+
+    width: 110px;
+    height: 110px;
+
+    animation:
+        orbit 8s linear infinite;
+
+    animation-delay: -1.5s;
 }
 
-.banner .slider .item.tarot-card .holo-layer {
+.venus {
+
+    width: 150px;
+    height: 150px;
+
+    animation:
+        orbit 12s linear infinite;
+
+    animation-delay: -7s;
+}
+
+.earth {
+
+    width: 200px;
+    height: 200px;
+
+    animation:
+        orbit 16s linear infinite;
+
+    animation-delay: -11s;
+}
+
+.mars {
+
+    width: 250px;
+    height: 250px;
+
+    animation:
+        orbit 20s linear infinite;
+
+    animation-delay: -4s;
+}
+
+.jupiter {
+
+    width: 320px;
+    height: 320px;
+
+    animation:
+        orbit 28s linear infinite;
+
+    animation-delay: -20s;
+}
+
+.saturn {
+
+    width: 390px;
+    height: 390px;
+
+    animation:
+        orbit 34s linear infinite;
+
+    animation-delay: -9s;
+}
+
+.uranus {
+
+    width: 460px;
+    height: 460px;
+
+    animation:
+        orbit 40s linear infinite;
+
+    animation-delay: -31s;
+}
+
+.neptune {
+
+    width: 520px;
+    height: 520px;
+
+    animation:
+        orbit 46s linear infinite;
+
+    animation-delay: -18s;
+}
+
+.pluto {
+
+    width: 580px;
+    height: 580px;
+
+    animation:
+        orbit 52s linear infinite;
+
+    animation-delay: -43s;
+}
+
+
+/* =========================================================
+   PLANETAS
+========================================================= */
+
+.mercury::before,
+.venus::before,
+.earth::before,
+.mars::before,
+.jupiter::before,
+.saturn::before,
+.uranus::before,
+.neptune::before,
+.pluto::before {
+
+    content: '';
+
     position: absolute;
-    inset: 8px;
-    z-index: 3;
-    border-radius: 10px;
-    pointer-events: none;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.02) 25%, rgba(255, 255, 255, 0.04) 50%, rgba(255, 255, 255, 0.02) 75%, rgba(255, 255, 255, 0) 100%);
-    mix-blend-mode: overlay;
-    opacity: 0.3;
-}
 
-/* ============================================
-   💫 PARTÍCULAS DA CARTA - COR DA ASURA
-   ============================================ */
+    border-radius: 50%;
 
-.banner .slider .item.tarot-card .particle-container {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
+    background-size: cover;
+    background-position: center;
+
+    top: -15px;
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
     z-index: 5;
-    overflow: visible;
 }
 
-.banner .slider .item.tarot-card .particle {
+
+/* =========================================================
+   TAMANHO DOS PLANETAS
+========================================================= */
+
+.mercury::before {
+
+    width: 12px;
+    height: 12px;
+
+    background-image:
+        url('./images/mercury.png');
+}
+
+.venus::before {
+
+    width: 16px;
+    height: 16px;
+
+    background-image:
+        url('./images/venus.png');
+}
+
+.earth::before {
+
+    width: 18px;
+    height: 18px;
+
+    background-image:
+        url('./images/earth.png');
+
+    top: -9px;
+}
+
+.mars::before {
+
+    width: 14px;
+    height: 14px;
+
+    background-image:
+        url('./images/mars.png');
+}
+
+.jupiter::before {
+
+    width: 40px;
+    height: 40px;
+
+    top: -20px;
+
+    background-image:
+        url('./images/jupiter.png');
+}
+
+.saturn::before {
+
+    width: 36px;
+    height: 36px;
+
+    top: -18px;
+
+    background-image:
+        url('./images/saturn.png');
+}
+
+.uranus::before {
+
+    width: 28px;
+    height: 28px;
+
+    top: -14px;
+
+    background-image:
+        url('./images/uranus.png');
+}
+
+.neptune::before {
+
+    width: 28px;
+    height: 28px;
+
+    top: -14px;
+
+    background-image:
+        url('./images/neptune.png');
+}
+
+.pluto::before {
+
+    width: 10px;
+    height: 10px;
+
+    background-image:
+        url('./images/pluto.png');
+}
+
+
+/* =========================================================
+   LUA
+   =========================================================
+
+   IMPORTANTE:
+
+   A Terra está no topo da órbita .earth.
+
+   Portanto a Lua precisa ter seu CENTRO exatamente
+   nessa posição.
+
+   A .moon agora funciona como uma pequena órbita
+   independente centrada na Terra.
+
+                   🌙
+                ↗     ↖
+             🌍  ← Lua →
+
+
+   A .earth continua orbitando o Sol normalmente.
+
+   Como .moon é filha de .earth, toda a órbita da Lua
+   acompanha automaticamente o movimento da Terra.
+========================================================= */
+
+.moon {
+
     position: absolute;
+
+    /*
+       Diâmetro da órbita da Lua.
+
+       O centro da .moon fica exatamente no centro
+       da Terra.
+    */
+
+    width: 52px;
+    height: 52px;
+
+    /*
+       A Terra está no topo da órbita .earth.
+
+       Portanto o centro da Lua deve ficar em:
+
+       left: 50%
+       top: 0
+
+       e não no centro da .earth.
+    */
+
+    top: 0;
+    left: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
     border-radius: 50%;
-    opacity: 0;
+
+    animation:
+        moonOrbit 3s linear infinite;
+
     pointer-events: none;
-    animation: particleFloat 2s ease-out forwards;
+
+    /*
+       Fica acima da órbita, mas permite
+       que a Lua apareça claramente.
+    */
+
+    z-index: 8;
 }
 
-@keyframes particleFloat {
-    0% {
-        opacity: 0.9;
-        transform: translate(0, 0) scale(1);
-    }
-    100% {
-        opacity: 0;
-        transform: translate(var(--tx), var(--ty)) scale(0);
-    }
-}
 
-/* ============================================
-   HOVER - EFEITOS COM COR DA ASURA
-   ============================================ */
+/* =========================================================
+   LUA - IMAGEM
+========================================================= */
 
-.banner .slider .item.tarot-card:hover {
-    border-color: var(--glow-color);
-    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.95), 0 0 100px var(--glow-color);
-}
+.moon::before {
 
-.banner .slider .item.tarot-card:hover::before {
-    border-color: var(--glow-color);
-}
-
-.banner .slider .item.tarot-card:hover img {
-    filter: brightness(1.1) contrast(1.1);
-    transform: scale(1.02);
-}
-
-.banner .slider .item.tarot-card:hover .tarot-symbol {
-    color: var(--glow-color);
-    transform: scale(1.2);
-}
-
-.banner .slider .item.tarot-card:hover .rune {
-    color: var(--glow-color);
-}
-
-.banner .slider .item.tarot-card:hover .holo-layer {
-    opacity: 0.6;
-}
-
-/* ============================================
-   🔒 HÉCATE - BLOQUEIO
-   ============================================ */
-
-.item[style*="pointer-events: none"] {
-    pointer-events: none !important;
-    opacity: 0.3 !important;
-    filter: blur(2px) !important;
-    transition: none !important;
-}
-
-.item[style*="pointer-events: none"] * {
-    pointer-events: none !important;
-    opacity: inherit !important;
-    filter: inherit !important;
-}
-
-.item[style*="pointer-events:"]:not([style*="pointer-events: none"]) {
-    pointer-events: auto !important;
-    opacity: 1 !important;
-    filter: none !important;
-}
-
-.item[style*="pointer-events:"]:not([style*="pointer-events: none"]) * {
-    pointer-events: auto !important;
-    opacity: 1 !important;
-    filter: none !important;
-}
-
-/* ============================================
-   🚀 EFEITO TELA CHEIA
-   ============================================ */
-
-.portal-card-fullscreen {
-    position: fixed !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) scale(1) !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    height: 100dvh !important;
-    z-index: 99998 !important;
-    border-radius: 0 !important;
-    padding: 20px !important;
-    background: linear-gradient(145deg, rgba(20, 15, 30, 0.98), rgba(10, 8, 15, 0.99)) !important;
-    border: 3px solid var(--glow-color) !important;
-    box-shadow: 0 0 100px var(--glow-color), 0 0 200px var(--glow-color), 0 0 400px var(--glow-color) !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-    animation: fullscreenAppear 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important;
-    transform-style: flat !important;
-    overflow: hidden !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-}
-
-@keyframes fullscreenAppear {
-    0% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.7);
-        border-radius: 30%;
-    }
-    100% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-        border-radius: 0;
-    }
-}
-
-.portal-card-fullscreen img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: contain !important;
-    border-radius: 12px !important;
-    border: 2px solid rgba(255, 255, 255, 0.05) !important;
-}
-
-.portal-card-fullscreen .tarot-number-full {
-    position: absolute;
-    top: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-    font-family: 'Georgia', serif;
-    font-size: clamp(24px, 4vw, 48px);
-    font-weight: bold;
-    color: rgba(255, 255, 255, 0.3);
-    letter-spacing: 4px;
-    text-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
-    text-transform: uppercase;
-    background: rgba(0, 0, 0, 0.3);
-    padding: 8px 24px;
-    border-radius: 8px;
-    backdrop-filter: blur(4px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.portal-card-fullscreen .tarot-name-full {
-    position: absolute;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-    font-family: 'Georgia', serif;
-    font-size: clamp(18px, 3vw, 36px);
-    font-weight: bold;
-    color: rgba(255, 255, 255, 0.7);
-    letter-spacing: 6px;
-    text-transform: uppercase;
-    text-shadow: 0 0 20px rgba(0, 0, 0, 0.9);
-    background: rgba(0, 0, 0, 0.4);
-    padding: 8px 24px;
-    border-radius: 8px;
-    backdrop-filter: blur(4px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.portal-card-fullscreen .tarot-symbol-full {
-    position: absolute;
-    z-index: 10;
-    font-size: clamp(24px, 4vw, 48px);
-    color: rgba(255, 255, 255, 0.08);
-    pointer-events: none;
-    font-family: 'Georgia', serif;
-}
-
-.portal-card-fullscreen .tarot-symbol-full.tl { top: 20px; left: 30px; }
-.portal-card-fullscreen .tarot-symbol-full.tr { top: 20px; right: 30px; }
-.portal-card-fullscreen .tarot-symbol-full.bl { bottom: 20px; left: 30px; }
-.portal-card-fullscreen .tarot-symbol-full.br { bottom: 20px; right: 30px; }
-
-.portal-card-fullscreen .rune-full {
-    position: absolute;
-    z-index: 10;
-    font-size: clamp(18px, 2.5vw, 32px);
-    color: rgba(255, 255, 255, 0.08);
-    pointer-events: none;
-    font-family: 'Georgia', serif;
-}
-
-.portal-card-fullscreen .rune-full.top { top: 10px; left: 50%; transform: translateX(-50%); }
-.portal-card-fullscreen .rune-full.bottom { bottom: 10px; left: 50%; transform: translateX(-50%); }
-.portal-card-fullscreen .rune-full.left { top: 50%; left: 10px; transform: translateY(-50%); }
-.portal-card-fullscreen .rune-full.right { top: 50%; right: 10px; transform: translateY(-50%); }
-
-.portal-card-fullscreen .holo-layer-full {
-    position: absolute;
-    inset: 20px;
-    z-index: 3;
-    border-radius: 12px;
-    pointer-events: none;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.02) 25%, rgba(255, 255, 255, 0.04) 50%, rgba(255, 255, 255, 0.02) 75%, rgba(255, 255, 255, 0) 100%);
-    mix-blend-mode: overlay;
-    opacity: 0.3;
-}
-
-.portal-card-fullscreen::after {
     content: '';
+
     position: absolute;
-    inset: -10px;
-    border-radius: 20px;
-    background: radial-gradient(circle at 30% 20%, var(--glow-color, rgba(255, 255, 255, 0.05)), transparent 60%);
-    pointer-events: none;
-    z-index: 0;
-    animation: fullscreenGlow 2s ease-in-out infinite;
-    opacity: 0.3;
-}
 
-@keyframes fullscreenGlow {
-    0%, 100% { opacity: 0.2; }
-    50% { opacity: 0.5; }
-}
+    width: 7px;
+    height: 7px;
 
-.portal-spark {
-    position: fixed;
     border-radius: 50%;
+
+    background-image:
+        url('./images/moon.png');
+
+    background-size: cover;
+    background-position: center;
+
+    /*
+       A Lua fica na extremidade superior
+       da sua própria órbita.
+    */
+
+    top: -3.5px;
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
     pointer-events: none;
-    z-index: 99999;
-    animation: sparkFly 2.5s ease-out forwards;
+
+    z-index: 9;
 }
 
-@keyframes sparkFly {
-    0% {
-        opacity: 1;
-        transform: translate(0, 0) scale(1);
-    }
-    100% {
-        opacity: 0;
-        transform: translate(var(--tx), var(--ty)) scale(0);
-    }
+
+/* =========================================================
+   SATURNO - ANEL
+========================================================= */
+
+.saturn::after {
+
+    content: '';
+
+    position: absolute;
+
+    width: 50px;
+    height: 15px;
+
+    background:
+        rgba(200, 180, 100, 0.4);
+
+    border-radius: 50%;
+
+    top: -7px;
+    left: 50%;
+
+    transform:
+        translateX(-50%)
+        rotate(-20deg);
+
+    filter:
+        blur(1px);
+
+    pointer-events: none;
 }
 
-.portal-overlay {
+
+/* =========================================================
+   ESTRELAS
+========================================================= */
+
+.star {
+
     position: fixed;
-    inset: 0;
-    z-index: 99997;
-    background: radial-gradient(circle at center, rgba(255,255,255,0.1), rgba(0,0,0,0.98));
-    opacity: 0;
+
+    background-color: white;
+
+    border-radius: 50%;
+
+    width: 2px;
+    height: 2px;
+
+    opacity: 0.8;
+
+    animation:
+        twinkle 3s ease-in-out infinite;
+
     pointer-events: none;
-    transition: opacity 1.5s ease;
 }
 
-.portal-overlay.active {
-    opacity: 1;
+
+/* =========================================================
+   ÓRBITA DOS PLANETAS
+========================================================= */
+
+@keyframes orbit {
+
+    from {
+
+        transform:
+            translate(-50%, -50%)
+            rotate(0deg);
+    }
+
+    to {
+
+        transform:
+            translate(-50%, -50%)
+            rotate(360deg);
+    }
 }
 
-/* ============================================
-   RESPONSIVIDADE (Mobile) - INTOCÁVEL
-   ============================================ */
+
+/* =========================================================
+   ÓRBITA DA LUA
+========================================================= */
+
+@keyframes moonOrbit {
+
+    from {
+
+        transform:
+            translate(-50%, -50%)
+            rotate(0deg);
+    }
+
+    to {
+
+        transform:
+            translate(-50%, -50%)
+            rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   PULSAÇÃO DO SOL
+========================================================= */
+
+@keyframes pulse {
+
+    0%,
+    100% {
+
+        transform:
+            scale(1);
+
+        box-shadow:
+
+            0 0 40px
+            rgba(255, 100, 0, 0.8),
+
+            0 0 80px
+            rgba(255, 50, 0, 0.4);
+    }
+
+    50% {
+
+        transform:
+            scale(1.05);
+
+        box-shadow:
+
+            0 0 60px
+            rgba(255, 100, 0, 1),
+
+            0 0 100px
+            rgba(255, 50, 0, 0.5);
+    }
+}
+
+
+/* =========================================================
+   ESTRELAS PISCANDO
+========================================================= */
+
+@keyframes twinkle {
+
+    0%,
+    100% {
+        opacity: 0.3;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+
+/* =========================================================
+   TOOLTIPS
+========================================================= */
+
+.mercury:hover::after,
+.venus:hover::after,
+.earth:hover::after,
+.mars:hover::after,
+.jupiter:hover::after,
+.saturn:hover::after,
+.uranus:hover::after,
+.neptune:hover::after,
+.pluto:hover::after {
+
+    content: attr(data-name);
+
+    position: absolute;
+
+    bottom: -25px;
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    color: white;
+
+    font-size: 10px;
+
+    background:
+        rgba(0, 0, 0, 0.7);
+
+    padding:
+        2px 6px;
+
+    border-radius: 4px;
+
+    white-space: nowrap;
+
+    pointer-events: none;
+
+    z-index: 20;
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE - MOBILE
+========================================================= */
 
 @media (max-width: 768px) {
-    .banner .slider {
-        width: 180px;
-        height: 240px;
-        top: 35% !important;
+
+    .container {
+
+        width: 95vmin;
+        height: 95vmin;
+
+        max-width: none;
+        max-height: none;
     }
 
-    .banner .mago-center {
-        top: 55% !important;
+
+    /* -----------------------------------------------------
+       SOL
+    ----------------------------------------------------- */
+
+    .sun {
+
+        width: 50px;
+        height: 50px;
+
+        margin-left: -25px;
+        margin-top: -25px;
     }
 
-    .banner .slider .item {
-        transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(380px);
+
+    /* -----------------------------------------------------
+       ÓRBITAS
+    ----------------------------------------------------- */
+
+    .mercury {
+
+        width: 22.9%;
+        height: 22.9%;
     }
 
-    .banner .slider .item.active {
-        transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(420px) scale(1.2);
+    .venus {
+
+        width: 31.4%;
+        height: 31.4%;
     }
 
-    .banner .slider .item.tarot-card {
-        padding: 6px;
-        border-radius: 12px;
+    .earth {
+
+        width: 40%;
+        height: 40%;
     }
 
-    .banner .slider .item.tarot-card::before {
-        inset: 3px;
-        border-radius: 9px;
-        border-width: 1px;
+    .mars {
+
+        width: 48.6%;
+        height: 48.6%;
     }
 
-    .banner .slider .item.tarot-card img {
-        border-radius: 7px;
+    .jupiter {
+
+        width: 60%;
+        height: 60%;
     }
 
-    .banner .slider .item.tarot-card .holo-layer {
-        inset: 5px;
-        border-radius: 7px;
+    .saturn {
+
+        width: 71.4%;
+        height: 71.4%;
     }
 
-    .banner .slider .item.tarot-card .tarot-number {
-        font-size: 11px;
-        top: 5px;
-        padding: 2px 10px;
+    .uranus {
+
+        width: 82.9%;
+        height: 82.9%;
     }
 
-    .banner .slider .item.tarot-card .tarot-name {
-        font-size: 10px;
-        bottom: 5px;
-        padding: 2px 10px;
-        letter-spacing: 3px;
+    .neptune {
+
+        width: 91.4%;
+        height: 91.4%;
     }
 
-    .banner .slider .item.tarot-card .tarot-symbol {
-        font-size: 13px;
+    .pluto {
+
+        width: 96%;
+        height: 96%;
     }
 
-    .banner .slider .item.tarot-card .tarot-symbol.tl {
-        top: 4px;
-        left: 6px;
-    }
-    .banner .slider .item.tarot-card .tarot-symbol.tr {
-        top: 4px;
-        right: 6px;
-    }
-    .banner .slider .item.tarot-card .tarot-symbol.bl {
-        bottom: 4px;
-        left: 6px;
-    }
-    .banner .slider .item.tarot-card .tarot-symbol.br {
-        bottom: 4px;
-        right: 6px;
+
+    /* -----------------------------------------------------
+       PLANETAS GRANDES
+    ----------------------------------------------------- */
+
+    .jupiter::before {
+
+        width: 28px;
+        height: 28px;
+
+        top: -14px;
     }
 
-    .banner .slider .item.tarot-card .rune {
-        font-size: 10px;
+    .saturn::before {
+
+        width: 24px;
+        height: 24px;
+
+        top: -12px;
     }
 
-    .banner .slider .item.tarot-card .rune.corner-tl,
-    .banner .slider .item.tarot-card .rune.corner-tr,
-    .banner .slider .item.tarot-card .rune.corner-bl,
-    .banner .slider .item.tarot-card .rune.corner-br {
-        font-size: 8px;
+    .uranus::before,
+    .neptune::before {
+
+        width: 20px;
+        height: 20px;
+
+        top: -10px;
     }
 
-    /* 🔥 PARTÍCULAS NO CELULAR - ESCALAM COM A CARTA 🔥 */
-    .banner .slider .item.tarot-card .particle-container {
-        width: 100%;
-        height: 100%;
-    }
-    .banner .slider .item.tarot-card .particle {
-        width: 1em !important;  
-        height: 1em !important;  
-        border-radius: 50%;
+
+    /* -----------------------------------------------------
+       LUA - MOBILE
+    ----------------------------------------------------- */
+
+    .moon {
+
+        width: 46px;
+        height: 46px;
+
+        top: 0;
+        left: 50%;
     }
 
-    .banner .slider .item.tarot-card::after {
-        inset: -1px;
-        border-radius: 13px;
+    .moon::before {
+
+        width: 6px;
+        height: 6px;
+
+        top: -3px;
     }
 
-    #portalTransition {
-        backdrop-filter: blur(4px);
-    }
 
-    .portal-card-fullscreen {
-        padding: 10px !important;
-        border-width: 2px !important;
-    }
-    
-    .portal-card-fullscreen .tarot-number-full {
-        top: 15px;
-        padding: 4px 16px;
-        font-size: clamp(18px, 4vw, 28px);
-    }
-    
-    .portal-card-fullscreen .tarot-name-full {
-        bottom: 15px;
-        padding: 4px 16px;
-        font-size: clamp(14px, 3vw, 22px);
-        letter-spacing: 4px;
-    }
-    
-    .portal-card-fullscreen .tarot-symbol-full {
-        font-size: clamp(16px, 4vw, 28px);
-    }
-    
-    .portal-card-fullscreen .tarot-symbol-full.tl { top: 12px; left: 16px; }
-    .portal-card-fullscreen .tarot-symbol-full.tr { top: 12px; right: 16px; }
-    .portal-card-fullscreen .tarot-symbol-full.bl { bottom: 12px; left: 16px; }
-    .portal-card-fullscreen .tarot-symbol-full.br { bottom: 12px; right: 16px; }
-    
-    .portal-card-fullscreen .rune-full {
-        font-size: clamp(12px, 2.5vw, 20px);
-    }
-    
-    .portal-card-fullscreen .holo-layer-full {
-        inset: 10px;
+    /* -----------------------------------------------------
+       ANEL DE SATURNO
+    ----------------------------------------------------- */
+
+    .saturn::after {
+
+        width: 42px;
+        height: 13px;
+
+        top: -6px;
     }
 }
 
-@media (max-width: 480px) {
-    .banner .slider {
-        width: 150px;
-        height: 200px;
-        top: 40%;
+
+/* =========================================================
+   CELULARES MUITO PEQUENOS
+========================================================= */
+
+@media (max-width: 400px) {
+
+    .container {
+
+        width: 96vmin;
+        height: 96vmin;
     }
 
-    .banner .slider .item {
-        transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(300px);
+
+    .sun {
+
+        width: 46px;
+        height: 46px;
+
+        margin-left: -23px;
+        margin-top: -23px;
     }
 
-    .banner .slider .item.active {
-        transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity)))) translateZ(340px) scale(1.15);
+
+    /* -----------------------------------------------------
+       LUA
+    ----------------------------------------------------- */
+
+    .moon {
+
+        width: 42px;
+        height: 42px;
+
+        top: 0;
     }
 
-    .banner .slider .item.tarot-card {
-        padding: 4px;
-        border-radius: 10px;
+    .moon::before {
+
+        width: 5px;
+        height: 5px;
+
+        top: -2.5px;
     }
 
-    .banner .slider .item.tarot-card::before {
-        inset: 2px;
-        border-radius: 7px;
-        border-width: 0.5px;
-    }
 
-    .banner .slider .item.tarot-card img {
-        border-radius: 5px;
-    }
+    .saturn::after {
 
-    .banner .slider .item.tarot-card .holo-layer {
-        inset: 4px;
-        border-radius: 5px;
-    }
+        width: 38px;
+        height: 12px;
 
-    .banner .slider .item.tarot-card .tarot-number {
-        font-size: 9px;
-        top: 4px;
-        padding: 1px 8px;
-        letter-spacing: 1px;
-    }
-
-    .banner .slider .item.tarot-card .tarot-name {
-        font-size: 8px;
-        bottom: 4px;
-        padding: 1px 8px;
-        letter-spacing: 2px;
-    }
-
-    .banner .slider .item.tarot-card .tarot-symbol {
-        font-size: 10px;
-    }
-
-    .banner .slider .item.tarot-card .tarot-symbol.tl {
-        top: 2px;
-        left: 4px;
-    }
-    .banner .slider .item.tarot-card .tarot-symbol.tr {
-        top: 2px;
-        right: 4px;
-    }
-    .banner .slider .item.tarot-card .tarot-symbol.bl {
-        bottom: 2px;
-        left: 4px;
-    }
-    .banner .slider .item.tarot-card .tarot-symbol.br {
-        bottom: 2px;
-        right: 4px;
-    }
-
-    .banner .slider .item.tarot-card .rune {
-        font-size: 8px;
-    }
-
-    .banner .slider .item.tarot-card .rune.corner-tl,
-    .banner .slider .item.tarot-card .rune.corner-tr,
-    .banner .slider .item.tarot-card .rune.corner-bl,
-    .banner .slider .item.tarot-card .rune.corner-br {
-        font-size: 6px;
-    }
-
-    /* 🔥 PARTÍCULAS NO CELULAR PEQUENO - ESCALAM COM A CARTA 🔥 */
-    .banner .slider .item.tarot-card .particle-container {
-        width: 100%;
-        height: 100%;
-    }
-    .banner .slider .item.tarot-card .particle {
-        width: 0.8em !important;
-        height: 0.8em !important;
-        border-radius: 50%;
-    }
-
-    .portal-card-fullscreen {
-        padding: 6px !important;
-        border-width: 1.5px !important;
-    }
-    
-    .portal-card-fullscreen .tarot-number-full {
-        top: 10px;
-        padding: 2px 12px;
-        font-size: clamp(14px, 4vw, 20px);
-        letter-spacing: 2px;
-    }
-    
-    .portal-card-fullscreen .tarot-name-full {
-        bottom: 10px;
-        padding: 2px 12px;
-        font-size: clamp(10px, 3vw, 16px);
-        letter-spacing: 2px;
-    }
-    
-    .portal-card-fullscreen .tarot-symbol-full {
-        font-size: clamp(12px, 4vw, 20px);
-    }
-    
-    .portal-card-fullscreen .tarot-symbol-full.tl { top: 8px; left: 10px; }
-    .portal-card-fullscreen .tarot-symbol-full.tr { top: 8px; right: 10px; }
-    .portal-card-fullscreen .tarot-symbol-full.bl { bottom: 8px; left: 10px; }
-    .portal-card-fullscreen .tarot-symbol-full.br { bottom: 8px; right: 10px; }
-    
-    .portal-card-fullscreen .rune-full {
-        font-size: clamp(8px, 2.5vw, 14px);
-    }
-    
-    .portal-card-fullscreen .holo-layer-full {
-        inset: 6px;
+        top: -5px;
     }
 }
 
-/* ============================================
-   CONFIGURAÇÕES PARA TABLET, NOTEBOOK E PC
-   (VOCÊ MESMO VAI AJUSTAR MANUALMENTE AQUI)
-   ============================================ */
 
-/* ============================================
-   CONFIGURAÇÃO 1: TABLET
-   ============================================ */
-@media (min-width: 768px) and (max-width: 1023px) {
-    .banner .slider {
-        top: 40%; /* 👈 MEXA AQUI! Maior = desce, Menor = sobe */
-    }
+/* =========================================================
+   LANDSCAPE
+========================================================= */
 
-    .banner .mago-center {
-        top: 50%; /* 👈 MEXA AQUI! Maior = desce, Menor = sobe */
+@media (orientation: landscape) and (max-height: 768px) {
+
+    .container {
+
+        width: 90vmin;
+        height: 90vmin;
     }
 }
 
-/* ============================================
-   CONFIGURAÇÃO 2: NOTEBOOK
-   ============================================ */
-@media (min-width: 1024px) and (max-width: 1439px) {
-    .banner .slider {
-        top: 38%; /* 👈 MEXA AQUI! Maior = desce, Menor = sobe */
-    }
 
-    .banner .mago-center {
-        top: 50%; /* 👈 MEXA AQUI! Maior = desce, Menor = sobe */
+/* =========================================================
+   LANDSCAPE MUITO BAIXO
+========================================================= */
+
+@media (orientation: landscape) and (max-height: 500px) {
+
+    .container {
+
+        width: 86vmin;
+        height: 86vmin;
     }
 }
 
-/* ============================================
-   CONFIGURAÇÃO 3: PC GRANDE
-   ============================================ */
-@media (min-width: 1440px) {
-    .banner .slider {
-        top: 40%; /* 👈 MEXA AQUI! Maior = desce, Menor = sobe */
-    }
 
-    .banner .mago-center {
-        top: 30%; /* 👈 MEXA AQUI! Maior = desce, Menor = sobe */
+/* =========================================================
+   TELAS GRANDES
+========================================================= */
+
+@media (min-width: 1200px) and (min-height: 900px) {
+
+    .container {
+
+        width: min(90vmin, 900px);
+        height: min(90vmin, 900px);
     }
 }
