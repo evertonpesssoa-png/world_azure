@@ -1,12 +1,14 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: '/world_azure/mini-mundos/global/3D-art-gallery-threejs/',
+  // O caminho BASE precisa ser exatamente igual ao da sua pasta no GitHub
+  base: '/world_azure/mini-mundos/global/3D-art-gallery-threesjs/',
   build: {
     outDir: 'dist',
     rollupOptions: {
       input: {
-        main: '/main.js',
+        // Agora ele vai buscar o arquivo certo dentro da pasta correta
+        main: '/world_azure/mini-mundos/global/3D-art-gallery-threesjs/main.js',
       },
     },
   },
