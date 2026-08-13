@@ -1,5 +1,6 @@
 /* =========================================================
    SISTEMA SOLAR - SCRIPT.JS
+   ÓRBITA + ROTAÇÃO PRÓPRIA + LUA + ZOOM MOBILE
 ========================================================= */
 
 
@@ -13,6 +14,11 @@ function createStars() {
 
     if (!container) return;
 
+    /* Evita duplicar estrelas */
+
+    if (container.querySelector(".star")) {
+        return;
+    }
 
     for (let i = 0; i < 1000; i++) {
 
@@ -20,10 +26,8 @@ function createStars() {
 
         star.className = "star";
 
-
         /* -------------------------------------------------
-           Tamanho variado
-           1px até 3px
+           Tamanho
         ------------------------------------------------- */
 
         const size =
@@ -35,9 +39,8 @@ function createStars() {
         star.style.height =
             size + "px";
 
-
         /* -------------------------------------------------
-           Posição aleatória
+           Posição
         ------------------------------------------------- */
 
         star.style.top =
@@ -46,22 +49,19 @@ function createStars() {
         star.style.left =
             Math.random() * 100 + "%";
 
-
         /* -------------------------------------------------
-           Opacidade variada
+           Opacidade
         ------------------------------------------------- */
 
         star.style.opacity =
             Math.random() * 0.7 + 0.3;
 
-
         /* -------------------------------------------------
-           Delay aleatório
+           Delay
         ------------------------------------------------- */
 
         star.style.animationDelay =
             Math.random() * 5 + "s";
-
 
         container.appendChild(star);
     }
@@ -77,17 +77,9 @@ function createSaturnRingParticles() {
     const saturn =
         document.querySelector(".saturn");
 
-
-    /* -------------------------------------------------
-       Segurança
-    ------------------------------------------------- */
-
     if (!saturn) return;
 
-
-    /* -------------------------------------------------
-       Evita duplicação
-    ------------------------------------------------- */
+    /* Evita duplicação */
 
     if (
         saturn.querySelector(
@@ -97,17 +89,11 @@ function createSaturnRingParticles() {
         return;
     }
 
-
-    /* -------------------------------------------------
-       Container das partículas
-    ------------------------------------------------- */
-
     const particleContainer =
         document.createElement("div");
 
     particleContainer.className =
         "saturn-particles";
-
 
     /* -------------------------------------------------
        Quantidade responsiva
@@ -118,9 +104,8 @@ function createSaturnRingParticles() {
             ? 18
             : 30;
 
-
     /* =================================================
-       CRIAÇÃO DAS PARTÍCULAS
+       CRIA PARTÍCULAS
     ================================================= */
 
     for (
@@ -135,9 +120,8 @@ function createSaturnRingParticles() {
         particle.className =
             "saturn-particle";
 
-
         /* -------------------------------------------------
-           Ângulo aleatório
+           Ângulo
         ------------------------------------------------- */
 
         const angle =
@@ -145,15 +129,13 @@ function createSaturnRingParticles() {
             Math.PI *
             2;
 
-
         /* -------------------------------------------------
-           Distância do centro
+           Distância
         ------------------------------------------------- */
 
         const radius =
             25 +
             Math.random() * 18;
-
 
         /* -------------------------------------------------
            Coordenadas
@@ -168,7 +150,6 @@ function createSaturnRingParticles() {
             radius *
             0.32;
 
-
         /* -------------------------------------------------
            Tamanho
         ------------------------------------------------- */
@@ -177,7 +158,6 @@ function createSaturnRingParticles() {
             Math.random() *
             1.8 +
             0.7;
-
 
         /* -------------------------------------------------
            Opacidade
@@ -188,17 +168,11 @@ function createSaturnRingParticles() {
             0.55 +
             0.25;
 
-
-        /* -------------------------------------------------
-           Aplicação das propriedades
-        ------------------------------------------------- */
-
         particle.style.width =
             size + "px";
 
         particle.style.height =
             size + "px";
-
 
         particle.style.left =
             `calc(50% + ${x}px)`;
@@ -206,14 +180,8 @@ function createSaturnRingParticles() {
         particle.style.top =
             `calc(50% + ${y}px)`;
 
-
         particle.style.opacity =
             opacity;
-
-
-        /* -------------------------------------------------
-           Animação individual
-        ------------------------------------------------- */
 
         particle.style.animationDelay =
             Math.random() * 4 + "s";
@@ -223,16 +191,10 @@ function createSaturnRingParticles() {
             Math.random() * 3 +
             "s";
 
-
         particleContainer.appendChild(
             particle
         );
     }
-
-
-    /* -------------------------------------------------
-       Adiciona as partículas ao Saturno
-    ------------------------------------------------- */
 
     saturn.appendChild(
         particleContainer
@@ -241,18 +203,150 @@ function createSaturnRingParticles() {
 
 
 /* =========================================================
+   PREPARAÇÃO DOS PLANETAS
+=========================================================
+
+   IMPORTANTE:
+
+   Cada planeta precisa ter duas camadas:
+
+       .earth
+           └── .planet-body
+
+   A .earth gira ao redor do Sol.
+
+   A .planet-body gira sobre o próprio eixo.
+
+   São duas animações independentes.
+========================================================= */
+
+function setupPlanetBodies() {
+
+    const planets = [
+        "mercury",
+        "venus",
+        "earth",
+        "mars",
+        "jupiter",
+        "saturn",
+        "uranus",
+        "neptune",
+        "pluto"
+    ];
+
+    planets.forEach(
+        (planetName) => {
+
+            const planet =
+                document.querySelector(
+                    `.${planetName}`
+                );
+
+            if (!planet) return;
+
+            /* -------------------------------------------------
+               Evita criar duas vezes
+            ------------------------------------------------- */
+
+            if (
+                planet.querySelector(
+                    ".planet-body"
+                )
+            ) {
+                return;
+            }
+
+            /* -------------------------------------------------
+               Cria corpo interno
+            ------------------------------------------------- */
+
+            const body =
+                document.createElement("div");
+
+            body.className =
+                "planet-body";
+
+            /* -------------------------------------------------
+               Marca qual planeta é
+            ------------------------------------------------- */
+
+            body.dataset.planet =
+                planetName;
+
+            /* -------------------------------------------------
+               Insere antes dos elementos existentes
+               como a Lua da Terra
+            ------------------------------------------------- */
+
+            planet.insertBefore(
+                body,
+                planet.firstChild
+            );
+        }
+    );
+}
+
+
+/* =========================================================
+   ROTAÇÃO PRÓPRIA DOS PLANETAS
+=========================================================
+
+   Cada planeta recebe uma velocidade diferente.
+
+   Isso NÃO interfere na órbita.
+
+   A órbita está no elemento externo.
+
+   A rotação está no .planet-body.
+========================================================= */
+
+function setupPlanetRotation() {
+
+    const rotationSpeeds = {
+
+        mercury: "4s",
+        venus: "7s",
+        earth: "3s",
+        mars: "3.5s",
+        jupiter: "2s",
+        saturn: "2.5s",
+        uranus: "2.8s",
+        neptune: "3s",
+        pluto: "4s"
+    };
+
+    Object.entries(
+        rotationSpeeds
+    ).forEach(
+        ([planetName, duration]) => {
+
+            const body =
+                document.querySelector(
+                    `.${planetName} .planet-body`
+                );
+
+            if (!body) return;
+
+            body.style.animation =
+                `planetRotation ${duration} linear infinite`;
+        }
+    );
+}
+
+
+/* =========================================================
    ZOOM POR PINÇA - MOBILE
 =========================================================
 
-   Dois dedos se afastando:
+   Dois dedos afastando:
    → aproxima
 
-   Dois dedos se juntando:
+   Dois dedos juntando:
    → afasta
 
-   O zoom é aplicado somente ao .container.
+   O zoom é aplicado somente ao container.
 
-   As estrelas continuam paradas no fundo.
+   As estrelas permanecem paradas.
 ========================================================= */
 
 function setupPinchZoom() {
@@ -260,9 +354,7 @@ function setupPinchZoom() {
     const container =
         document.querySelector(".container");
 
-
     if (!container) return;
-
 
     /* -------------------------------------------------
        Configurações
@@ -276,12 +368,14 @@ function setupPinchZoom() {
     let initialDistance = 0;
     let initialZoom = 1;
 
-
     /* -------------------------------------------------
-       Calcula a distância entre dois dedos
+       Distância entre os dedos
     ------------------------------------------------- */
 
-    function getTouchDistance(touch1, touch2) {
+    function getTouchDistance(
+        touch1,
+        touch2
+    ) {
 
         const dx =
             touch2.clientX -
@@ -291,16 +385,14 @@ function setupPinchZoom() {
             touch2.clientY -
             touch1.clientY;
 
-
         return Math.sqrt(
             dx * dx +
             dy * dy
         );
     }
 
-
     /* -------------------------------------------------
-       Aplica o zoom
+       Aplica zoom
     ------------------------------------------------- */
 
     function applyZoom(value) {
@@ -314,14 +406,12 @@ function setupPinchZoom() {
                 )
             );
 
-
         container.style.transform =
             `scale(${zoom})`;
     }
 
-
     /* =================================================
-       INÍCIO DO GESTO
+       INÍCIO DO PINCH
     ================================================= */
 
     container.addEventListener(
@@ -334,13 +424,11 @@ function setupPinchZoom() {
                 return;
             }
 
-
             initialDistance =
                 getTouchDistance(
                     event.touches[0],
                     event.touches[1]
                 );
-
 
             initialZoom =
                 zoom;
@@ -350,9 +438,8 @@ function setupPinchZoom() {
         }
     );
 
-
     /* =================================================
-       MOVIMENTO DOS DOIS DEDOS
+       MOVIMENTO DO PINCH
     ================================================= */
 
     container.addEventListener(
@@ -365,9 +452,7 @@ function setupPinchZoom() {
                 return;
             }
 
-
             event.preventDefault();
-
 
             const currentDistance =
                 getTouchDistance(
@@ -375,30 +460,15 @@ function setupPinchZoom() {
                     event.touches[1]
                 );
 
-
             if (
                 initialDistance <= 0
             ) {
                 return;
             }
 
-
-            /* -------------------------------------------------
-               Proporção da distância:
-
-               dedos afastando
-               → distância aumenta
-               → zoom aumenta
-
-               dedos juntando
-               → distância diminui
-               → zoom diminui
-            ------------------------------------------------- */
-
             const scale =
                 currentDistance /
                 initialDistance;
-
 
             applyZoom(
                 initialZoom * scale
@@ -409,9 +479,8 @@ function setupPinchZoom() {
         }
     );
 
-
     /* =================================================
-       FINAL DO GESTO
+       FINAL DO PINCH
     ================================================= */
 
     container.addEventListener(
@@ -430,9 +499,8 @@ function setupPinchZoom() {
         }
     );
 
-
     /* -------------------------------------------------
-       Segurança para cancelamento do toque
+       Cancelamento
     ------------------------------------------------- */
 
     container.addEventListener(
@@ -457,21 +525,31 @@ window.addEventListener(
     () => {
 
         /* -------------------------------------------------
-           Criar estrelas
+           Estrelas
         ------------------------------------------------- */
 
         createStars();
 
+        /* -------------------------------------------------
+           Prepara corpos internos
+        ------------------------------------------------- */
+
+        setupPlanetBodies();
 
         /* -------------------------------------------------
-           Criar partículas de Saturno
+           Ativa rotação própria
+        ------------------------------------------------- */
+
+        setupPlanetRotation();
+
+        /* -------------------------------------------------
+           Saturno
         ------------------------------------------------- */
 
         createSaturnRingParticles();
 
-
         /* -------------------------------------------------
-           Ativar zoom por dois dedos
+           Zoom mobile
         ------------------------------------------------- */
 
         setupPinchZoom();
