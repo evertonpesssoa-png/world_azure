@@ -1,56 +1,101 @@
-// Display painting info in the DOM
+// ==============================================
+// PAINTING INFO
+// Informações das obras da galeria
+// ==============================================
+
+
+// ==============================================
+// EXIBIR INFORMAÇÕES COMPLETAS DA OBRA
+// ==============================================
+
 export const displayPaintingInfo = (info) => {
-  const infoElement = document.getElementById('painting-info');
-  if (!infoElement) return;
-  
-  // Define o conteúdo HTML
+  const infoElement = document.getElementById("painting-info");
+
+  if (!infoElement) {
+    console.warn("⚠️ Elemento #painting-info não encontrado");
+    return;
+  }
+
+  // Define o conteúdo
   infoElement.innerHTML = `
-    <strong>🖼️ ${info.title}</strong><br>
-    🎨 ${info.artist} • 📅 ${info.year}
+    <strong>🖼️ ${info.title || "Obra de Arte"}</strong><br>
+    🎨 ${info.artist || "Artista desconhecido"} • 📅 ${info.year || "—"}
   `;
-  
-  // Torna visível (compatível com seu CSS)
-  infoElement.style.opacity = '1';
-  infoElement.style.visibility = 'visible';
-  infoElement.style.transform = 'translateX(-50%) scale(1)';
-  
-  // Adiciona classe show se existir no CSS
-  infoElement.classList.add('show');
-  
-  console.log(`🖼️ Exibindo info: ${info.title}`);
+
+  // Cancela qualquer estado anterior de ocultação
+  infoElement.style.display = "block";
+  infoElement.style.visibility = "visible";
+  infoElement.style.opacity = "1";
+
+  // Mantém o elemento centralizado
+  infoElement.style.transform =
+    "translateX(-50%) scale(1)";
+
+  // Classe visual
+  infoElement.classList.add("show");
+
+  console.log(
+    `🖼️ Exibindo info: ${info.title || "Obra de Arte"}`
+  );
 };
 
-// Hide painting info in the DOM
+
+// ==============================================
+// ESCONDER INFORMAÇÕES DA OBRA
+// ==============================================
+
 export const hidePaintingInfo = () => {
-  const infoElement = document.getElementById('painting-info');
+  const infoElement = document.getElementById("painting-info");
+
   if (!infoElement) return;
-  
-  // Torna invisível
-  infoElement.style.opacity = '0';
-  infoElement.style.visibility = 'hidden';
-  infoElement.style.transform = 'translateX(-50%) scale(0.9)';
-  
-  // Remove classe show
-  infoElement.classList.remove('show');
-  
-  // Limpa o conteúdo após a animação
+
+  // Inicia animação de saída
+  infoElement.style.opacity = "0";
+  infoElement.style.visibility = "hidden";
+  infoElement.style.transform =
+    "translateX(-50%) scale(0.9)";
+
+  infoElement.classList.remove("show");
+
+  // Limpa somente depois da animação
   setTimeout(() => {
-    if (infoElement.style.opacity === '0') {
-      infoElement.innerHTML = '';
+    if (
+      infoElement.style.opacity === "0" &&
+      infoElement.style.visibility === "hidden"
+    ) {
+      infoElement.innerHTML = "";
     }
   }, 300);
 };
 
-// Versão simplificada (apenas texto, sem HTML)
+
+// ==============================================
+// VERSÃO SIMPLIFICADA
+// Mostra somente o nome da obra
+// ==============================================
+
 export const displaySimpleInfo = (title) => {
-  const infoElement = document.getElementById('painting-info');
-  if (!infoElement) return;
-  
-  infoElement.innerHTML = `🖼️ ${title}`;
-  infoElement.style.opacity = '1';
-  infoElement.style.visibility = 'visible';
-  
-  // Esconde automaticamente após 3 segundos
+  const infoElement = document.getElementById("painting-info");
+
+  if (!infoElement) {
+    console.warn("⚠️ Elemento #painting-info não encontrado");
+    return;
+  }
+
+  // Define o conteúdo
+  infoElement.innerHTML = `🖼️ ${title || "Obra de Arte"}`;
+
+  // Força o elemento a aparecer novamente
+  infoElement.style.display = "block";
+  infoElement.style.visibility = "visible";
+  infoElement.style.opacity = "1";
+
+  infoElement.style.transform =
+    "translateX(-50%) scale(1)";
+
+  infoElement.classList.add("show");
+
+  // Esconde automaticamente
   setTimeout(() => {
     hidePaintingInfo();
   }, 3000);
