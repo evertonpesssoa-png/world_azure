@@ -1,558 +1,479 @@
 /* =========================================================
-   SISTEMA SOLAR - SCRIPT.JS
-   ÓRBITA + ROTAÇÃO PRÓPRIA + LUA + ZOOM MOBILE
+SISTEMA SOLAR - SCRIPT.JS
 ========================================================= */
 
-
 /* =========================================================
-   ESTRELAS DE FUNDO
+ESTRELAS DE FUNDO
 ========================================================= */
 
 function createStars() {
 
-    const container = document.querySelector("body");
+const container = document.querySelector("body");  
 
-    if (!container) return;
+if (!container) return;  
 
-    /* Evita duplicar estrelas */
 
-    if (container.querySelector(".star")) {
-        return;
-    }
+for (let i = 0; i < 1000; i++) {  
 
-    for (let i = 0; i < 1000; i++) {
+    const star = document.createElement("div");  
 
-        const star = document.createElement("div");
+    star.className = "star";  
 
-        star.className = "star";
 
-        /* -------------------------------------------------
-           Tamanho
-        ------------------------------------------------- */
+    /* -------------------------------------------------  
+       Tamanho variado  
+       1px até 3px  
+    ------------------------------------------------- */  
 
-        const size =
-            Math.random() * 2 + 1;
+    const size =  
+        Math.random() * 2 + 1;  
 
-        star.style.width =
-            size + "px";
+    star.style.width =  
+        size + "px";  
 
-        star.style.height =
-            size + "px";
+    star.style.height =  
+        size + "px";  
 
-        /* -------------------------------------------------
-           Posição
-        ------------------------------------------------- */
 
-        star.style.top =
-            Math.random() * 100 + "%";
+    /* -------------------------------------------------  
+       Posição aleatória  
+    ------------------------------------------------- */  
 
-        star.style.left =
-            Math.random() * 100 + "%";
+    star.style.top =  
+        Math.random() * 100 + "%";  
 
-        /* -------------------------------------------------
-           Opacidade
-        ------------------------------------------------- */
+    star.style.left =  
+        Math.random() * 100 + "%";  
 
-        star.style.opacity =
-            Math.random() * 0.7 + 0.3;
 
-        /* -------------------------------------------------
-           Delay
-        ------------------------------------------------- */
+    /* -------------------------------------------------  
+       Opacidade variada  
+    ------------------------------------------------- */  
 
-        star.style.animationDelay =
-            Math.random() * 5 + "s";
+    star.style.opacity =  
+        Math.random() * 0.7 + 0.3;  
 
-        container.appendChild(star);
-    }
+
+    /* -------------------------------------------------  
+       Delay aleatório  
+    ------------------------------------------------- */  
+
+    star.style.animationDelay =  
+        Math.random() * 5 + "s";  
+
+
+    container.appendChild(star);  
 }
 
+}
 
 /* =========================================================
-   PARTÍCULAS DOS ANÉIS DE SATURNO
+PARTÍCULAS DOS ANÉIS DE SATURNO
 ========================================================= */
 
 function createSaturnRingParticles() {
 
-    const saturn =
-        document.querySelector(".saturn");
+const saturn =  
+    document.querySelector(".saturn");  
 
-    if (!saturn) return;
 
-    /* Evita duplicação */
+/* -------------------------------------------------  
+   Segurança  
+------------------------------------------------- */  
 
-    if (
-        saturn.querySelector(
-            ".saturn-particles"
-        )
-    ) {
-        return;
-    }
+if (!saturn) return;  
 
-    const particleContainer =
-        document.createElement("div");
 
-    particleContainer.className =
-        "saturn-particles";
+/* -------------------------------------------------  
+   Evita duplicação  
+------------------------------------------------- */  
 
-    /* -------------------------------------------------
-       Quantidade responsiva
-    ------------------------------------------------- */
+if (  
+    saturn.querySelector(  
+        ".saturn-particles"  
+    )  
+) {  
+    return;  
+}  
 
-    const particleCount =
-        window.innerWidth <= 768
-            ? 18
-            : 30;
 
-    /* =================================================
-       CRIA PARTÍCULAS
-    ================================================= */
+/* -------------------------------------------------  
+   Container das partículas  
+------------------------------------------------- */  
 
-    for (
-        let i = 0;
-        i < particleCount;
-        i++
-    ) {
+const particleContainer =  
+    document.createElement("div");  
 
-        const particle =
-            document.createElement("span");
+particleContainer.className =  
+    "saturn-particles";  
 
-        particle.className =
-            "saturn-particle";
 
-        /* -------------------------------------------------
-           Ângulo
-        ------------------------------------------------- */
+/* -------------------------------------------------  
+   Quantidade responsiva  
+------------------------------------------------- */  
 
-        const angle =
-            Math.random() *
-            Math.PI *
-            2;
+const particleCount =  
+    window.innerWidth <= 768  
+        ? 18  
+        : 30;  
 
-        /* -------------------------------------------------
-           Distância
-        ------------------------------------------------- */
 
-        const radius =
-            25 +
-            Math.random() * 18;
+/* =================================================  
+   CRIAÇÃO DAS PARTÍCULAS  
+================================================= */  
 
-        /* -------------------------------------------------
-           Coordenadas
-        ------------------------------------------------- */
+for (  
+    let i = 0;  
+    i < particleCount;  
+    i++  
+) {  
 
-        const x =
-            Math.cos(angle) *
-            radius;
+    const particle =  
+        document.createElement("span");  
 
-        const y =
-            Math.sin(angle) *
-            radius *
-            0.32;
+    particle.className =  
+        "saturn-particle";  
 
-        /* -------------------------------------------------
-           Tamanho
-        ------------------------------------------------- */
 
-        const size =
-            Math.random() *
-            1.8 +
-            0.7;
+    /* -------------------------------------------------  
+       Ângulo aleatório  
+    ------------------------------------------------- */  
 
-        /* -------------------------------------------------
-           Opacidade
-        ------------------------------------------------- */
+    const angle =  
+        Math.random() *  
+        Math.PI *  
+        2;  
 
-        const opacity =
-            Math.random() *
-            0.55 +
-            0.25;
 
-        particle.style.width =
-            size + "px";
+    /* -------------------------------------------------  
+       Distância do centro  
+    ------------------------------------------------- */  
 
-        particle.style.height =
-            size + "px";
+    const radius =  
+        25 +  
+        Math.random() * 18;  
 
-        particle.style.left =
-            `calc(50% + ${x}px)`;
 
-        particle.style.top =
-            `calc(50% + ${y}px)`;
+    /* -------------------------------------------------  
+       Coordenadas  
+    ------------------------------------------------- */  
 
-        particle.style.opacity =
-            opacity;
+    const x =  
+        Math.cos(angle) *  
+        radius;  
 
-        particle.style.animationDelay =
-            Math.random() * 4 + "s";
+    const y =  
+        Math.sin(angle) *  
+        radius *  
+        0.32;  
 
-        particle.style.animationDuration =
-            2.5 +
-            Math.random() * 3 +
-            "s";
 
-        particleContainer.appendChild(
-            particle
-        );
-    }
+    /* -------------------------------------------------  
+       Tamanho  
+    ------------------------------------------------- */  
 
-    saturn.appendChild(
-        particleContainer
-    );
+    const size =  
+        Math.random() *  
+        1.8 +  
+        0.7;  
+
+
+    /* -------------------------------------------------  
+       Opacidade  
+    ------------------------------------------------- */  
+
+    const opacity =  
+        Math.random() *  
+        0.55 +  
+        0.25;  
+
+
+    /* -------------------------------------------------  
+       Aplicação das propriedades  
+    ------------------------------------------------- */  
+
+    particle.style.width =  
+        size + "px";  
+
+    particle.style.height =  
+        size + "px";  
+
+
+    particle.style.left =  
+        `calc(50% + ${x}px)`;  
+
+    particle.style.top =  
+        `calc(50% + ${y}px)`;  
+
+
+    particle.style.opacity =  
+        opacity;  
+
+
+    /* -------------------------------------------------  
+       Animação individual  
+    ------------------------------------------------- */  
+
+    particle.style.animationDelay =  
+        Math.random() * 4 + "s";  
+
+    particle.style.animationDuration =  
+        2.5 +  
+        Math.random() * 3 +  
+        "s";  
+
+
+    particleContainer.appendChild(  
+        particle  
+    );  
+}  
+
+
+/* -------------------------------------------------  
+   Adiciona as partículas ao Saturno  
+------------------------------------------------- */  
+
+saturn.appendChild(  
+    particleContainer  
+);
+
 }
 
-
 /* =========================================================
-   PREPARAÇÃO DOS PLANETAS
-=========================================================
+ZOOM POR PINÇA - MOBILE
 
-   IMPORTANTE:
+Dois dedos se afastando:
+→ aproxima
 
-   Cada planeta precisa ter duas camadas:
+Dois dedos se juntando:
+→ afasta
 
-       .earth
-           └── .planet-body
+O zoom é aplicado somente ao .container.
 
-   A .earth gira ao redor do Sol.
-
-   A .planet-body gira sobre o próprio eixo.
-
-   São duas animações independentes.
-========================================================= */
-
-function setupPlanetBodies() {
-
-    const planets = [
-        "mercury",
-        "venus",
-        "earth",
-        "mars",
-        "jupiter",
-        "saturn",
-        "uranus",
-        "neptune",
-        "pluto"
-    ];
-
-    planets.forEach(
-        (planetName) => {
-
-            const planet =
-                document.querySelector(
-                    `.${planetName}`
-                );
-
-            if (!planet) return;
-
-            /* -------------------------------------------------
-               Evita criar duas vezes
-            ------------------------------------------------- */
-
-            if (
-                planet.querySelector(
-                    ".planet-body"
-                )
-            ) {
-                return;
-            }
-
-            /* -------------------------------------------------
-               Cria corpo interno
-            ------------------------------------------------- */
-
-            const body =
-                document.createElement("div");
-
-            body.className =
-                "planet-body";
-
-            /* -------------------------------------------------
-               Marca qual planeta é
-            ------------------------------------------------- */
-
-            body.dataset.planet =
-                planetName;
-
-            /* -------------------------------------------------
-               Insere antes dos elementos existentes
-               como a Lua da Terra
-            ------------------------------------------------- */
-
-            planet.insertBefore(
-                body,
-                planet.firstChild
-            );
-        }
-    );
-}
-
-
-/* =========================================================
-   ROTAÇÃO PRÓPRIA DOS PLANETAS
-=========================================================
-
-   Cada planeta recebe uma velocidade diferente.
-
-   Isso NÃO interfere na órbita.
-
-   A órbita está no elemento externo.
-
-   A rotação está no .planet-body.
-========================================================= */
-
-function setupPlanetRotation() {
-
-    const rotationSpeeds = {
-
-        mercury: "4s",
-        venus: "7s",
-        earth: "3s",
-        mars: "3.5s",
-        jupiter: "2s",
-        saturn: "2.5s",
-        uranus: "2.8s",
-        neptune: "3s",
-        pluto: "4s"
-    };
-
-    Object.entries(
-        rotationSpeeds
-    ).forEach(
-        ([planetName, duration]) => {
-
-            const body =
-                document.querySelector(
-                    `.${planetName} .planet-body`
-                );
-
-            if (!body) return;
-
-            body.style.animation =
-                `planetRotation ${duration} linear infinite`;
-        }
-    );
-}
-
-
-/* =========================================================
-   ZOOM POR PINÇA - MOBILE
-=========================================================
-
-   Dois dedos afastando:
-   → aproxima
-
-   Dois dedos juntando:
-   → afasta
-
-   O zoom é aplicado somente ao container.
-
-   As estrelas permanecem paradas.
+As estrelas continuam paradas no fundo.
 ========================================================= */
 
 function setupPinchZoom() {
 
-    const container =
-        document.querySelector(".container");
+const container =  
+    document.querySelector(".container");  
 
-    if (!container) return;
 
-    /* -------------------------------------------------
-       Configurações
-    ------------------------------------------------- */
+if (!container) return;  
 
-    let zoom = 1;
 
-    const MIN_ZOOM = 0.65;
-    const MAX_ZOOM = 2.5;
+/* -------------------------------------------------  
+   Configurações  
+------------------------------------------------- */  
 
-    let initialDistance = 0;
-    let initialZoom = 1;
+let zoom = 1;  
 
-    /* -------------------------------------------------
-       Distância entre os dedos
-    ------------------------------------------------- */
+const MIN_ZOOM = 0.65;  
+const MAX_ZOOM = 2.5;  
 
-    function getTouchDistance(
-        touch1,
-        touch2
-    ) {
+let initialDistance = 0;  
+let initialZoom = 1;  
 
-        const dx =
-            touch2.clientX -
-            touch1.clientX;
 
-        const dy =
-            touch2.clientY -
-            touch1.clientY;
+/* -------------------------------------------------  
+   Calcula a distância entre dois dedos  
+------------------------------------------------- */  
 
-        return Math.sqrt(
-            dx * dx +
-            dy * dy
-        );
-    }
+function getTouchDistance(touch1, touch2) {  
 
-    /* -------------------------------------------------
-       Aplica zoom
-    ------------------------------------------------- */
+    const dx =  
+        touch2.clientX -  
+        touch1.clientX;  
 
-    function applyZoom(value) {
+    const dy =  
+        touch2.clientY -  
+        touch1.clientY;  
 
-        zoom =
-            Math.max(
-                MIN_ZOOM,
-                Math.min(
-                    MAX_ZOOM,
-                    value
-                )
-            );
 
-        container.style.transform =
-            `scale(${zoom})`;
-    }
+    return Math.sqrt(  
+        dx * dx +  
+        dy * dy  
+    );  
+}  
 
-    /* =================================================
-       INÍCIO DO PINCH
-    ================================================= */
 
-    container.addEventListener(
-        "touchstart",
-        (event) => {
+/* -------------------------------------------------  
+   Aplica o zoom  
+------------------------------------------------- */  
 
-            if (
-                event.touches.length !== 2
-            ) {
-                return;
-            }
+function applyZoom(value) {  
 
-            initialDistance =
-                getTouchDistance(
-                    event.touches[0],
-                    event.touches[1]
-                );
+    zoom =  
+        Math.max(  
+            MIN_ZOOM,  
+            Math.min(  
+                MAX_ZOOM,  
+                value  
+            )  
+        );  
 
-            initialZoom =
-                zoom;
-        },
-        {
-            passive: false
-        }
-    );
 
-    /* =================================================
-       MOVIMENTO DO PINCH
-    ================================================= */
+    container.style.transform =  
+        `scale(${zoom})`;  
+}  
 
-    container.addEventListener(
-        "touchmove",
-        (event) => {
 
-            if (
-                event.touches.length !== 2
-            ) {
-                return;
-            }
+/* =================================================  
+   INÍCIO DO GESTO  
+================================================= */  
 
-            event.preventDefault();
+container.addEventListener(  
+    "touchstart",  
+    (event) => {  
 
-            const currentDistance =
-                getTouchDistance(
-                    event.touches[0],
-                    event.touches[1]
-                );
+        if (  
+            event.touches.length !== 2  
+        ) {  
+            return;  
+        }  
 
-            if (
-                initialDistance <= 0
-            ) {
-                return;
-            }
 
-            const scale =
-                currentDistance /
-                initialDistance;
+        initialDistance =  
+            getTouchDistance(  
+                event.touches[0],  
+                event.touches[1]  
+            );  
 
-            applyZoom(
-                initialZoom * scale
-            );
-        },
-        {
-            passive: false
-        }
-    );
 
-    /* =================================================
-       FINAL DO PINCH
-    ================================================= */
+        initialZoom =  
+            zoom;  
+    },  
+    {  
+        passive: false  
+    }  
+);  
 
-    container.addEventListener(
-        "touchend",
-        (event) => {
 
-            if (
-                event.touches.length < 2
-            ) {
+/* =================================================  
+   MOVIMENTO DOS DOIS DEDOS  
+================================================= */  
 
-                initialDistance = 0;
-            }
-        },
-        {
-            passive: true
-        }
-    );
+container.addEventListener(  
+    "touchmove",  
+    (event) => {  
 
-    /* -------------------------------------------------
-       Cancelamento
-    ------------------------------------------------- */
+        if (  
+            event.touches.length !== 2  
+        ) {  
+            return;  
+        }  
 
-    container.addEventListener(
-        "touchcancel",
-        () => {
 
-            initialDistance = 0;
-        },
-        {
-            passive: true
-        }
-    );
+        event.preventDefault();  
+
+
+        const currentDistance =  
+            getTouchDistance(  
+                event.touches[0],  
+                event.touches[1]  
+            );  
+
+
+        if (  
+            initialDistance <= 0  
+        ) {  
+            return;  
+        }  
+
+
+        /* -------------------------------------------------  
+           Proporção da distância:  
+
+           dedos afastando  
+           → distância aumenta  
+           → zoom aumenta  
+
+           dedos juntando  
+           → distância diminui  
+           → zoom diminui  
+        ------------------------------------------------- */  
+
+        const scale =  
+            currentDistance /  
+            initialDistance;  
+
+
+        applyZoom(  
+            initialZoom * scale  
+        );  
+    },  
+    {  
+        passive: false  
+    }  
+);  
+
+
+/* =================================================  
+   FINAL DO GESTO  
+================================================= */  
+
+container.addEventListener(  
+    "touchend",  
+    (event) => {  
+
+        if (  
+            event.touches.length < 2  
+        ) {  
+
+            initialDistance = 0;  
+        }  
+    },  
+    {  
+        passive: true  
+    }  
+);  
+
+
+/* -------------------------------------------------  
+   Segurança para cancelamento do toque  
+------------------------------------------------- */  
+
+container.addEventListener(  
+    "touchcancel",  
+    () => {  
+
+        initialDistance = 0;  
+    },  
+    {  
+        passive: true  
+    }  
+);
+
 }
 
-
 /* =========================================================
-   INICIALIZAÇÃO
+INICIALIZAÇÃO
 ========================================================= */
 
 window.addEventListener(
-    "DOMContentLoaded",
-    () => {
+"DOMContentLoaded",
+() => {
 
-        /* -------------------------------------------------
-           Estrelas
-        ------------------------------------------------- */
+/* -------------------------------------------------  
+       Criar estrelas  
+    ------------------------------------------------- */  
 
-        createStars();
+    createStars();  
 
-        /* -------------------------------------------------
-           Prepara corpos internos
-        ------------------------------------------------- */
 
-        setupPlanetBodies();
+    /* -------------------------------------------------  
+       Criar partículas de Saturno  
+    ------------------------------------------------- */  
 
-        /* -------------------------------------------------
-           Ativa rotação própria
-        ------------------------------------------------- */
+    createSaturnRingParticles();  
 
-        setupPlanetRotation();
 
-        /* -------------------------------------------------
-           Saturno
-        ------------------------------------------------- */
+    /* -------------------------------------------------  
+       Ativar zoom por dois dedos  
+    ------------------------------------------------- */  
 
-        createSaturnRingParticles();
+    setupPinchZoom();  
 
-        /* -------------------------------------------------
-           Zoom mobile
-        ------------------------------------------------- */
+}
 
-        setupPinchZoom();
-
-    }
 );
