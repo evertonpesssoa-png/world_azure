@@ -8,10 +8,10 @@ const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/
 
 export const createCeiling = (scene, textureLoader) => {
   
-  // Caminhos alternativos para as texturas (todos absolutos para evitar erro 404)
-  const texturesBasePath = isMobile ? 
-    "/world_azure/mini-mundos/global/3D-art-gallery-threejs/public/OfficeCeiling005_4K-JPG/" :
-    "/world_azure/mini-mundos/global/3D-art-gallery-threejs/public/OfficeCeiling005_4K-JPG/";
+  // ==============================================
+  // CAMINHO ABSOLUTO DA PASTA DE TEXTURAS
+  // ==============================================
+  const texturesBasePath = "/world_azure/mini-mundos/global/3D-art-gallery-threejs/public/OfficeCeiling005_4K-JPG/";
   
   // Versão simplificada para celular (usa apenas textura de cor, sem texturas extras pesadas)
   if (isMobile) {
