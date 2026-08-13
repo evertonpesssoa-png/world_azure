@@ -2,10 +2,18 @@
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+
     <title>3D Art Gallery</title>
-    
-    <!-- IMPORT MAP COMPLETO E DEFINITIVO -->
+
+    <!-- =========================================================
+         IMPORT MAP
+    ========================================================== -->
+
     <script type="importmap">
       {
         "imports": {
@@ -19,196 +27,795 @@
       }
     </script>
 
+    <!-- =========================================================
+         HÉCATE
+    ========================================================== -->
+
     <script src="/world_azure/shared/js/hecate/core.js"></script>
     <script src="/world_azure/shared/js/hecate/block-manager.js"></script>
     <script src="/world_azure/shared/js/hecate/test-system.js"></script>
     <script src="/world_azure/shared/js/hecate/auth.js"></script>
-    
-    <!-- CAMINHO ABSOLUTO DO CSS -->
-    <link rel="stylesheet" href="/world_azure/mini-mundos/global/3D-art-gallery-threejs/style.css" />
+
+    <!-- =========================================================
+         CSS
+    ========================================================== -->
+
+    <link
+      rel="stylesheet"
+      href="/world_azure/mini-mundos/global/3D-art-gallery-threejs/style.css"
+    />
   </head>
 
   <body>
-    <!-- MENU -->
+
+    <!-- =========================================================
+         MENU INICIAL
+    ========================================================== -->
+
     <div id="menu">
+
       <div id="img_container">
         <div id="starry_night_bg"></div>
       </div>
+
       <div id="content_container">
+
         <div id="content">
+
           <div class="title">
             <h1>3D Art Gallery</h1>
           </div>
+
           <div class="title-info">
-            <p>Bem-vindo à Galeria de Arte 3D imersiva.</p>
-            <p>Explore os corredores da galeria virtual e interaja com obras-primas, aprendendo sobre sua história e significado.</p>
-            <p>Desenvolvido por Emilian Kasemi • Adaptado para dispositivos móveis</p>
+
+            <p>
+              Bem-vindo à Galeria de Arte 3D imersiva.
+            </p>
+
+            <p>
+              Explore os corredores da galeria virtual e
+              interaja com obras-primas, aprendendo sobre
+              sua história e significado.
+            </p>
+
+            <p>
+              Desenvolvido por Emilian Kasemi •
+              Adaptado para dispositivos móveis
+            </p>
+
           </div>
 
           <button id="play_button">
             <p>EXPLORAR ARTE</p>
           </button>
+
           <div id="about_button_container">
-            <button id="about_button">SOBRE</button>
+
+            <button id="about_button">
+              SOBRE
+            </button>
+
           </div>
+
         </div>
+
       </div>
+
     </div>
 
-    <!-- SOBRE (Controlado APENAS pelo menu.js via classe .active) -->
+
+    <!-- =========================================================
+         SOBRE
+    ========================================================== -->
+
     <div id="about-overlay">
-      <button id="close-about">X</button>
-      <h1>Sobre a Galeria 3D</h1>
-      <p>Bem-vindo à nossa galeria de arte virtual 3D. Aqui você pode navegar por diversas obras de arte e aprender sobre sua história e significado.</p>
-      <p>Este projeto é trazido a você por Emilian Kasemi. Acreditamos no poder da arte para inspirar, provocar pensamentos e comunicar entre culturas.</p>
-      <p>Sinta-se à vontade para explorar. A galeria é melhor apreciada em tela cheia. <strong>No celular, use o joystick na tela!</strong></p>
+
+      <button id="close-about">
+        X
+      </button>
+
+      <h1>
+        Sobre a Galeria 3D
+      </h1>
+
+      <p>
+        Bem-vindo à nossa galeria de arte virtual 3D.
+        Aqui você pode navegar por diversas obras de arte
+        e aprender sobre sua história e significado.
+      </p>
+
+      <p>
+        Este projeto é trazido a você por Emilian Kasemi.
+        Acreditamos no poder da arte para inspirar,
+        provocar pensamentos e comunicar entre culturas.
+      </p>
+
+      <p>
+        Sinta-se à vontade para explorar.
+        A galeria é melhor apreciada em tela cheia.
+        <strong>
+          No celular, use o joystick na tela!
+        </strong>
+      </p>
+
     </div>
 
-    <!-- CONTROLES -->
+
+    <!-- =========================================================
+         PAINEL DE CONTROLES
+    ========================================================== -->
+
     <div id="info-panel">
+
       <div id="info-header">
-        <h3>Controles</h3>
-        <button id="toggle-info">Esconder</button>
+
+        <h3>
+          Controles
+        </h3>
+
+        <button id="toggle-info">
+          Esconder
+        </button>
+
       </div>
+
       <div id="info-content">
-        <p><b>W/A/S/D:</b> Movimentar</p>
-        <p><b>Mouse:</b> Olhar ao redor</p>
-        <p><b>Espaço:</b> Travar cursor</p>
-        <p><b>M:</b> Mostrar Menu</p>
-        <p><b>Enter:</b> Explorar</p>
-        <p><b>G:</b> Guia de áudio</p>
-        <p><b>P:</b> Parar áudio</p>
-        <p class="mobile-only"><b>📱 Joystick:</b> Toque na tela</p>
+
+        <p>
+          <b>W/A/S/D:</b>
+          Movimentar
+        </p>
+
+        <p>
+          <b>Mouse:</b>
+          Olhar ao redor
+        </p>
+
+        <p>
+          <b>Espaço:</b>
+          Travar cursor
+        </p>
+
+        <p>
+          <b>M:</b>
+          Mostrar Menu
+        </p>
+
+        <p>
+          <b>Enter:</b>
+          Explorar
+        </p>
+
+        <p>
+          <b>G:</b>
+          Guia de áudio
+        </p>
+
+        <p>
+          <b>P:</b>
+          Parar áudio
+        </p>
+
+        <p class="mobile-only">
+          <b>📱 Joystick:</b>
+          Use os controles na tela
+        </p>
+
       </div>
+
     </div>
 
-    <!-- ÁUDIO -->
+
+    <!-- =========================================================
+         ÁUDIO
+    ========================================================== -->
+
     <div id="audio_controls">
-      <button id="start_audio">▶ Iniciar Guia</button>
-      <button id="stop_audio">⏹ Parar Guia</button>
+
+      <button id="start_audio">
+        ▶ Iniciar Guia
+      </button>
+
+      <button id="stop_audio">
+        ⏹ Parar Guia
+      </button>
+
     </div>
+
+
+    <!-- =========================================================
+         INFORMAÇÃO DA PINTURA
+    ========================================================== -->
 
     <div id="painting-info"></div>
 
-    <!-- LOG DE DIAGNÓSTICO -->
-    <div id="log" style="
-      position: fixed;
-      bottom: 10px;
-      left: 10px;
-      right: 10px;
-      background: black;
-      color: #0f0;
-      font-family: monospace;
-      font-size: 14px;
-      padding: 15px;
-      border-radius: 10px;
-      z-index: 999999;
-      border: 2px solid #0f0;
-      max-height: 40vh;
-      overflow-y: auto;
-      display: none;
-    "></div>
 
-    <button id="btn-log" style="
-      position: fixed;
-      bottom: 10px;
-      right: 10px;
-      z-index: 999999;
-      background: black;
-      color: #0f0;
-      border: 2px solid #0f0;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      font-size: 20px;
-    ">🐛</button>
+    <!-- =========================================================
+         JOYSTICK / CONTROLE DE MOVIMENTO
+         
+         IMPORTANTE:
+         Esse elemento não existia no HTML original.
+         
+         O CSS já possuía .touch-joypad e .joy-btn,
+         mas não havia os botões.
+    ========================================================== -->
+
+    <div
+      id="touch-joypad"
+      class="touch-joypad"
+      aria-label="Controle de movimento"
+    >
+
+      <!-- LINHA 1 -->
+
+      <div class="joy-empty"></div>
+
+      <button
+        type="button"
+        class="joy-btn"
+        data-direction="forward"
+        aria-label="Mover para frente"
+      >
+        ▲
+      </button>
+
+      <div class="joy-empty"></div>
+
+
+      <!-- LINHA 2 -->
+
+      <button
+        type="button"
+        class="joy-btn"
+        data-direction="left"
+        aria-label="Mover para esquerda"
+      >
+        ◀
+      </button>
+
+      <div class="joy-empty"></div>
+
+      <button
+        type="button"
+        class="joy-btn"
+        data-direction="right"
+        aria-label="Mover para direita"
+      >
+        ▶
+      </button>
+
+
+      <!-- LINHA 3 -->
+
+      <div class="joy-empty"></div>
+
+      <button
+        type="button"
+        class="joy-btn"
+        data-direction="backward"
+        aria-label="Mover para trás"
+      >
+        ▼
+      </button>
+
+      <div class="joy-empty"></div>
+
+    </div>
+
+
+    <!-- =========================================================
+         PAINEL DE CONTROLES MÓVEIS
+         
+         Mantido caso outros módulos do projeto utilizem.
+    ========================================================== -->
+
+    <div class="mobile-controls-panel">
+
+      <!--
+        Não colocamos controles extras aqui.
+        O joystick acima é o controle principal.
+      -->
+
+    </div>
+
+
+    <!-- =========================================================
+         LOG DE DIAGNÓSTICO
+    ========================================================== -->
+
+    <div
+      id="log"
+      style="
+        position: fixed;
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+        background: black;
+        color: #0f0;
+        font-family: monospace;
+        font-size: 14px;
+        padding: 15px;
+        border-radius: 10px;
+        z-index: 999999;
+        border: 2px solid #0f0;
+        max-height: 40vh;
+        overflow-y: auto;
+        display: none;
+      "
+    ></div>
+
+
+    <!-- =========================================================
+         BOTÃO DO LOG
+    ========================================================== -->
+
+    <button
+      id="btn-log"
+      style="
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        z-index: 999999;
+        background: black;
+        color: #0f0;
+        border: 2px solid #0f0;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+      "
+    >
+      🐛
+    </button>
+
+
+    <!-- =========================================================
+         DIAGNÓSTICO
+    ========================================================== -->
 
     <script>
-      // ==============================================
-      // MOSTRA LOG NA TELA
-      // ==============================================
-      const logDiv = document.getElementById('log');
-      const logBtn = document.getElementById('btn-log');
-      
-      logBtn.onclick = function() {
-        if (logDiv.style.display === 'none') {
-          logDiv.style.display = 'block';
-          logBtn.textContent = '✕';
+
+      const logDiv =
+        document.getElementById("log");
+
+      const logBtn =
+        document.getElementById("btn-log");
+
+
+      logBtn.onclick = function () {
+
+        if (logDiv.style.display === "none") {
+
+          logDiv.style.display = "block";
+
+          logBtn.textContent = "✕";
+
         } else {
-          logDiv.style.display = 'none';
-          logBtn.textContent = '🐛';
+
+          logDiv.style.display = "none";
+
+          logBtn.textContent = "🐛";
+
         }
+
       };
 
-      function log(msg, cor = '#0f0') {
-        const div = logDiv;
-        const line = document.createElement('div');
-        line.style.color = cor;
-        line.style.padding = '2px 0';
-        line.style.borderBottom = '1px solid #222';
-        const time = new Date().toLocaleTimeString();
-        line.textContent = `[${time}] ${msg}`;
+
+      function log(
+        msg,
+        cor = "#0f0"
+      ) {
+
+        const div =
+          logDiv;
+
+        const line =
+          document.createElement("div");
+
+        line.style.color =
+          cor;
+
+        line.style.padding =
+          "2px 0";
+
+        line.style.borderBottom =
+          "1px solid #222";
+
+        const time =
+          new Date().toLocaleTimeString();
+
+        line.textContent =
+          `[${time}] ${msg}`;
+
         div.appendChild(line);
-        div.scrollTop = div.scrollHeight;
+
+        div.scrollTop =
+          div.scrollHeight;
+
         console.log(msg);
+
       }
 
-      window.onerror = function(msg, url, line, col, error) {
-        log(`🔥 ERRO: ${msg}`, '#ff4444');
-        logDiv.style.display = 'block';
-        logBtn.textContent = '✕';
-        return false;
-      };
 
-      window.addEventListener('unhandledrejection', function(e) {
-        log(`⚠️ ERRO: ${e.reason}`, '#ffaa00');
-        logDiv.style.display = 'block';
-        logBtn.textContent = '✕';
-      });
+      window.onerror =
+        function (
+          msg,
+          url,
+          line,
+          col,
+          error
+        ) {
 
-      log('✅ Diagnóstico iniciado!');
-      log('🔵 Clique em EXPLORAR ARTE');
+          log(
+            `🔥 ERRO: ${msg}`,
+            "#ff4444"
+          );
 
-      // ==============================================
-      // VERIFICAR O CARREGAMENTO DO MAIN.JS
-      // ==============================================
-      document.addEventListener('DOMContentLoaded', function() {
-        const btn = document.getElementById('play_button');
-        
-        if (btn) {
-          log('✅ Botão EXPLORAR encontrado');
-          
-          // APENAS REGISTRA O CLIQUE. QUEM EXECUTA É O MENU.JS
-          btn.addEventListener('click', function() {
-            log('🔵 CLICOU em EXPLORAR');
-          });
-        } else {
-          log('❌ Botão EXPLORAR NÃO encontrado!', '#ff4444');
+          logDiv.style.display =
+            "block";
+
+          logBtn.textContent =
+            "✕";
+
+          return false;
+
+        };
+
+
+      window.addEventListener(
+        "unhandledrejection",
+        function (e) {
+
+          log(
+            `⚠️ ERRO: ${e.reason}`,
+            "#ffaa00"
+          );
+
+          logDiv.style.display =
+            "block";
+
+          logBtn.textContent =
+            "✕";
+
         }
+      );
 
-        // ==========================================
-        // REMOVIDO TODO O CONTROLE MANUAL DO SOBRE
-        // O menu.js agora é o único responsável.
-        // ==========================================
 
-        setTimeout(() => {
-          const canvas = document.querySelector('canvas');
-          if (canvas) {
-            log('✅ Canvas 3D encontrado! Galeria rodando!', '#00ff88');
+      log(
+        "✅ Diagnóstico iniciado!"
+      );
+
+      log(
+        "🔵 Clique em EXPLORAR ARTE"
+      );
+
+
+      document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+          const btn =
+            document.getElementById(
+              "play_button"
+            );
+
+
+          if (btn) {
+
+            log(
+              "✅ Botão EXPLORAR encontrado"
+            );
+
+
+            btn.addEventListener(
+              "click",
+              function () {
+
+                log(
+                  "🔵 CLICOU em EXPLORAR"
+                );
+
+              }
+            );
+
           } else {
-            log('⚠️ Nenhum canvas 3D encontrado', '#ffaa00');
+
+            log(
+              "❌ Botão EXPLORAR NÃO encontrado!",
+              "#ff4444"
+            );
+
           }
-          
-          if (typeof THREE !== 'undefined') {
-            log('✅ Three.js carregado!', '#00ff88');
-          } else {
-            log('⚠️ Three.js NÃO carregado', '#ffaa00');
-          }
-        }, 4000);
-      });
+
+
+          setTimeout(
+            () => {
+
+              const canvas =
+                document.querySelector(
+                  "canvas"
+                );
+
+
+              if (canvas) {
+
+                log(
+                  "✅ Canvas 3D encontrado! Galeria rodando!",
+                  "#00ff88"
+                );
+
+              } else {
+
+                log(
+                  "⚠️ Nenhum canvas 3D encontrado",
+                  "#ffaa00"
+                );
+
+              }
+
+
+              if (
+                typeof THREE !==
+                "undefined"
+              ) {
+
+                log(
+                  "✅ Three.js carregado!",
+                  "#00ff88"
+                );
+
+              } else {
+
+                log(
+                  "⚠️ Three.js NÃO carregado",
+                  "#ffaa00"
+                );
+
+              }
+
+            },
+            4000
+          );
+
+        }
+      );
+
     </script>
 
-    <!-- CAMINHO ABSOLUTO DO MAIN.JS -->
-    <script type="module" src="/world_azure/mini-mundos/global/3D-art-gallery-threejs/main.js"></script>
+
+    <!-- =========================================================
+         JOYSTICK — LIGAÇÃO COM MOVEMENT.JS
+         
+         Aqui está a parte que realmente faz os botões
+         controlarem a câmera.
+    ========================================================== -->
+
+    <script type="module">
+
+      import {
+        keysPressed
+      } from "/world_azure/mini-mundos/global/3D-art-gallery-threejs/modules/movement.js";
+
+
+      const joystick =
+        document.getElementById(
+          "touch-joypad"
+        );
+
+
+      if (joystick) {
+
+        const buttons =
+          joystick.querySelectorAll(
+            ".joy-btn"
+          );
+
+
+        const directionKeys = {
+
+          forward: "w",
+
+          backward: "s",
+
+          left: "a",
+
+          right: "d"
+
+        };
+
+
+        // =====================================================
+        // COMEÇA MOVIMENTO
+        // =====================================================
+
+        function startMovement(
+          event
+        ) {
+
+          event.preventDefault();
+
+          event.stopPropagation();
+
+
+          const direction =
+            event.currentTarget.dataset.direction;
+
+          const key =
+            directionKeys[direction];
+
+
+          if (!key) return;
+
+
+          keysPressed[key] =
+            true;
+
+        }
+
+
+        // =====================================================
+        // PARA MOVIMENTO
+        // =====================================================
+
+        function stopMovement(
+          event
+        ) {
+
+          event.preventDefault();
+
+          event.stopPropagation();
+
+
+          const direction =
+            event.currentTarget.dataset.direction;
+
+          const key =
+            directionKeys[direction];
+
+
+          if (!key) return;
+
+
+          keysPressed[key] =
+            false;
+
+        }
+
+
+        // =====================================================
+        // CONFIGURA CADA BOTÃO
+        // =====================================================
+
+        buttons.forEach(
+          (button) => {
+
+            button.addEventListener(
+              "pointerdown",
+              startMovement
+            );
+
+
+            button.addEventListener(
+              "pointerup",
+              stopMovement
+            );
+
+
+            button.addEventListener(
+              "pointercancel",
+              stopMovement
+            );
+
+
+            button.addEventListener(
+              "pointerleave",
+              stopMovement
+            );
+
+
+            // Compatibilidade adicional
+            // com navegadores móveis.
+
+            button.addEventListener(
+              "touchstart",
+              startMovement,
+              {
+                passive: false
+              }
+            );
+
+
+            button.addEventListener(
+              "touchend",
+              stopMovement,
+              {
+                passive: false
+              }
+            );
+
+
+            button.addEventListener(
+              "touchcancel",
+              stopMovement,
+              {
+                passive: false
+              }
+            );
+
+          }
+        );
+
+
+        // =====================================================
+        // SE O DEDO SAIR DA TELA, PARA TUDO
+        // =====================================================
+
+        document.addEventListener(
+          "pointerup",
+          () => {
+
+            keysPressed.w =
+              false;
+
+            keysPressed.a =
+              false;
+
+            keysPressed.s =
+              false;
+
+            keysPressed.d =
+              false;
+
+          }
+        );
+
+
+        document.addEventListener(
+          "touchend",
+          () => {
+
+            keysPressed.w =
+              false;
+
+            keysPressed.a =
+              false;
+
+            keysPressed.s =
+              false;
+
+            keysPressed.d =
+              false;
+
+          },
+          {
+            passive: true
+          }
+        );
+
+
+        console.log(
+          "📱 Joystick de movimento conectado!"
+        );
+
+      } else {
+
+        console.warn(
+          "⚠️ #touch-joypad não encontrado."
+        );
+
+      }
+
+    </script>
+
+
+    <!-- =========================================================
+         MAIN.JS
+    ========================================================== -->
+
+    <script
+      type="module"
+      src="/world_azure/mini-mundos/global/3D-art-gallery-threejs/main.js"
+    ></script>
+
   </body>
 </html>
