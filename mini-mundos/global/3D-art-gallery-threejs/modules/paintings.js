@@ -1,4 +1,7 @@
-import * as THREE from 'three';
+// ==============================================
+// CORREÇÃO: Importando THREE direto da CDN
+// ==============================================
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.module.js";
 import { paintingData } from './paintingData.js';
 
 // Detecta celular
