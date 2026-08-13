@@ -13,8 +13,18 @@ export const hideMenu = () => {
 
   if (!menu) return;
 
+  // Adiciona a classe hidden para ativar a transição do CSS
   menu.classList.add("hidden");
-  menu.style.display = "none";
+  
+  // Remove o display: none forçado para permitir a transição
+  menu.style.display = "";
+  
+  // Após 600ms (tempo suficiente para a transição de 0.5s do CSS), remove o elemento do DOM
+  setTimeout(() => {
+    if (menu && menu.classList.contains("hidden")) {
+      menu.style.display = "none";
+    }
+  }, 600);
 };
 
 export const showMenu = () => {
@@ -22,6 +32,7 @@ export const showMenu = () => {
 
   if (!menu) return;
 
+  // Remove a classe hidden e reseta o display para aparecer de novo
   menu.classList.remove("hidden");
   menu.style.display = "flex";
   menu.style.visibility = "visible";
