@@ -1,6 +1,8 @@
 // ==============================================
-// CORREÇÃO: Importando THREE direto da CDN
+// CLICK HANDLING
+// Interação com as obras da galeria
 // ==============================================
+
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.module.js";
 
 const mouse = new THREE.Vector2();
@@ -10,7 +12,10 @@ function clickHandling(renderer, camera, paintings) {
 
   const handleInteraction = (event) => {
 
-    // Ignora cliques no menu
+    // ==========================================
+    // IGNORA ELEMENTOS DA INTERFACE
+    // ==========================================
+
     const menu = document.getElementById("menu");
 
     if (
@@ -21,21 +26,38 @@ function clickHandling(renderer, camera, paintings) {
       return;
     }
 
-    let clientX;
-    let clientY;
-
-    if (event.clientX !== undefined) {
-      clientX = event.clientX;
-      clientY = event.clientY;
-    } else if (event.touches?.length) {
-      clientX = event.touches[0].clientX;
-      clientY = event.touches[0].clientY;
-    } else {
+    // Não processa clique em controles da interface
+    if (
+      event.target.closest?.(
+        "#info-panel, #audio_controls, #painting-info, #VRButton, .touch-joypad, .mobile-controls-panel"
+      )
+    ) {
       return;
     }
 
-    mouse.x = (clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(clientY / window.innerHeight) * 2 + 1;
+    // ==========================================
+    // COORDENADAS
+    // ==========================================
+
+    const clientX = event.clientX;
+    const clientY = event.clientY;
+
+    if (
+      clientX === undefined ||
+      clientY === undefined
+    ) {
+      return;
+    }
+
+    mouse.x =
+      (clientX / window.innerWidth) * 2 - 1;
+
+    mouse.y =
+      -(clientY / window.innerHeight) * 2 + 1;
+
+    // ==========================================
+    // VERIFICA A OBRA
+    // ==========================================
 
     onClick(camera, paintings);
   };
@@ -47,6 +69,11 @@ function clickHandling(renderer, camera, paintings) {
   );
 }
 
+
+// ==============================================
+// RAYCAST DA OBRA
+// ==============================================
+
 function onClick(camera, paintings) {
 
   raycaster.setFromCamera(mouse, camera);
@@ -54,7 +81,12 @@ function onClick(camera, paintings) {
   const paintingsArray =
     Array.isArray(paintings)
       ? paintings
-      : paintings.children || [];
+      : paintings?.children || [];
+
+  if (!paintingsArray.length) {
+    console.warn("⚠️ Nenhuma pintura encontrada.");
+    return;
+  }
 
   const intersects =
     raycaster.intersectObjects(
@@ -62,7 +94,13 @@ function onClick(camera, paintings) {
       true
     );
 
-  if (!intersects.length) return;
+  if (!intersects.length) {
+    return;
+  }
+
+  // ==========================================
+  // ENCONTRA O OBJETO PAI DA OBRA
+  // ==========================================
 
   let painting = intersects[0].object;
 
@@ -73,42 +111,88 @@ function onClick(camera, paintings) {
     painting = painting.parent;
   }
 
-  if (!painting?.userData?.info) return;
-
-  const title =
-    painting.userData.info.title ||
-    "Obra de Arte";
-
-  const link =
-    painting.userData.info.link;
-
-  showPaintingInfo(title);
-
-  if (link && link !== "#") {
-    window.open(link, "_blank");
+  if (!painting?.userData?.info) {
+    console.warn(
+      "⚠️ Objeto clicado não possui informações."
+    );
+    return;
   }
+
+  const info = painting.userData.info;
+
+  console.log(
+    "🖼️ Obra selecionada:",
+    info.title
+  );
+
+  // ==========================================
+  // MOSTRA INFORMAÇÕES
+  // ==========================================
+
+  displayPaintingInfo(info);
 }
 
-function showPaintingInfo(title) {
+
+// ==============================================
+// MOSTRAR INFORMAÇÃO DA OBRA
+// ==============================================
+
+function displayPaintingInfo(info) {
 
   const infoDiv =
-    document.getElementById(
-      "painting-info"
+    document.getElementById("painting-info");
+
+  if (!infoDiv) {
+    console.warn(
+      "⚠️ #painting-info não encontrado."
     );
+    return;
+  }
 
-  if (!infoDiv) return;
+  infoDiv.innerHTML = `
+    <strong>🖼️ ${info.title || "Obra de Arte"}</strong>
+    ${
+      info.artist || info.year
+        ? `<br>🎨 ${info.artist || ""}${
+            info.year
+              ? ` • 📅 ${info.year}`
+              : ""
+          }`
+        : ""
+    }
+  `;
 
-  infoDiv.textContent = `🖼️ ${title}`;
+  // ==========================================
+  // MOSTRA
+  // ==========================================
 
   infoDiv.style.opacity = "1";
+  infoDiv.style.visibility = "visible";
   infoDiv.style.transform =
     "translateX(-50%) scale(1)";
 
-  setTimeout(() => {
+  infoDiv.classList.add("show");
+
+  // ==========================================
+  // ESCONDE DEPOIS DE 3 SEGUNDOS
+  // ==========================================
+
+  clearTimeout(
+    infoDiv._hideTimer
+  );
+
+  infoDiv._hideTimer = setTimeout(() => {
+
     infoDiv.style.opacity = "0";
+    infoDiv.style.visibility = "hidden";
+
     infoDiv.style.transform =
       "translateX(-50%) scale(0.9)";
-  }, 2000);
+
+    infoDiv.classList.remove("show");
+
+  }, 3000);
 }
+
 
 export { clickHandling };
