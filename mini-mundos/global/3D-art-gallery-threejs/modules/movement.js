@@ -1,4 +1,7 @@
-import * as THREE from 'three';
+// ==============================================
+// CORREÇÃO: Importando THREE direto da CDN
+// ==============================================
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.module.js";
 
 // object to hold the keys pressed
 export const keysPressed = {
@@ -14,6 +17,11 @@ export const keysPressed = {
 
 // Detecta celular
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+// OTIMIZAÇÃO: Criar objetos uma única vez para reutilizar na colisão (evita garbage collector)
+const _playerBoundingBox = new THREE.Box3();
+const _cameraWorldPosition = new THREE.Vector3();
+const _playerSize = new THREE.Vector3(1, 1, 1);
 
 // Se for celular, adicionar listeners para os botões de toque
 if (isMobile) {
@@ -75,13 +83,12 @@ export const updateMovement = (delta, controls, camera, walls) => {
 
 // checkCollision: verifica se o jogador colidiu com alguma parede
 export const checkCollision = (camera, walls) => {
-  const playerBoundingBox = new THREE.Box3();
-  const cameraWorldPosition = new THREE.Vector3();
-  camera.getWorldPosition(cameraWorldPosition);
+  // Reutilizando os objetos criados acima para evitar alocação de memória a cada frame
+  camera.getWorldPosition(_cameraWorldPosition);
   
-  playerBoundingBox.setFromCenterAndSize(
-    cameraWorldPosition,
-    new THREE.Vector3(1, 1, 1) // Tamanho do bounding box do jogador
+  _playerBoundingBox.setFromCenterAndSize(
+    _cameraWorldPosition,
+    _playerSize
   );
 
   // Verificar se walls existe e tem children
@@ -89,7 +96,7 @@ export const checkCollision = (camera, walls) => {
   
   for (let i = 0; i < walls.children.length; i++) {
     const wall = walls.children[i];
-    if (wall.BoundingBox && playerBoundingBox.intersectsBox(wall.BoundingBox)) {
+    if (wall.BoundingBox && _playerBoundingBox.intersectsBox(wall.BoundingBox)) {
       return true;
     }
   }
