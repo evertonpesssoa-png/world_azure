@@ -111,12 +111,6 @@ function createSaturnRingParticles() {
 
     /* -------------------------------------------------
        Quantidade responsiva
-
-       Mobile:
-       18 partículas
-
-       PC:
-       30 partículas
     ------------------------------------------------- */
 
     const particleCount =
@@ -154,9 +148,6 @@ function createSaturnRingParticles() {
 
         /* -------------------------------------------------
            Distância do centro
-
-           Cria diferentes posições
-           dentro dos anéis.
         ------------------------------------------------- */
 
         const radius =
@@ -180,9 +171,6 @@ function createSaturnRingParticles() {
 
         /* -------------------------------------------------
            Tamanho
-
-           Pequeno para parecer poeira
-           espacial.
         ------------------------------------------------- */
 
         const size =
@@ -225,9 +213,6 @@ function createSaturnRingParticles() {
 
         /* -------------------------------------------------
            Animação individual
-
-           Cada partícula recebe um
-           comportamento ligeiramente diferente.
         ------------------------------------------------- */
 
         particle.style.animationDelay =
@@ -246,11 +231,219 @@ function createSaturnRingParticles() {
 
 
     /* -------------------------------------------------
-       Adiciona o conjunto ao Saturno
+       Adiciona as partículas ao Saturno
     ------------------------------------------------- */
 
     saturn.appendChild(
         particleContainer
+    );
+}
+
+
+/* =========================================================
+   ZOOM POR PINÇA - MOBILE
+=========================================================
+
+   Dois dedos se afastando:
+   → aproxima
+
+   Dois dedos se juntando:
+   → afasta
+
+   O zoom é aplicado somente ao .container.
+
+   As estrelas continuam paradas no fundo.
+========================================================= */
+
+function setupPinchZoom() {
+
+    const container =
+        document.querySelector(".container");
+
+
+    if (!container) return;
+
+
+    /* -------------------------------------------------
+       Configurações
+    ------------------------------------------------- */
+
+    let zoom = 1;
+
+    const MIN_ZOOM = 0.65;
+    const MAX_ZOOM = 2.5;
+
+    let initialDistance = 0;
+    let initialZoom = 1;
+
+
+    /* -------------------------------------------------
+       Calcula a distância entre dois dedos
+    ------------------------------------------------- */
+
+    function getTouchDistance(touch1, touch2) {
+
+        const dx =
+            touch2.clientX -
+            touch1.clientX;
+
+        const dy =
+            touch2.clientY -
+            touch1.clientY;
+
+
+        return Math.sqrt(
+            dx * dx +
+            dy * dy
+        );
+    }
+
+
+    /* -------------------------------------------------
+       Aplica o zoom
+    ------------------------------------------------- */
+
+    function applyZoom(value) {
+
+        zoom =
+            Math.max(
+                MIN_ZOOM,
+                Math.min(
+                    MAX_ZOOM,
+                    value
+                )
+            );
+
+
+        container.style.transform =
+            `scale(${zoom})`;
+    }
+
+
+    /* =================================================
+       INÍCIO DO GESTO
+    ================================================= */
+
+    container.addEventListener(
+        "touchstart",
+        (event) => {
+
+            if (
+                event.touches.length !== 2
+            ) {
+                return;
+            }
+
+
+            initialDistance =
+                getTouchDistance(
+                    event.touches[0],
+                    event.touches[1]
+                );
+
+
+            initialZoom =
+                zoom;
+        },
+        {
+            passive: false
+        }
+    );
+
+
+    /* =================================================
+       MOVIMENTO DOS DOIS DEDOS
+    ================================================= */
+
+    container.addEventListener(
+        "touchmove",
+        (event) => {
+
+            if (
+                event.touches.length !== 2
+            ) {
+                return;
+            }
+
+
+            event.preventDefault();
+
+
+            const currentDistance =
+                getTouchDistance(
+                    event.touches[0],
+                    event.touches[1]
+                );
+
+
+            if (
+                initialDistance <= 0
+            ) {
+                return;
+            }
+
+
+            /* -------------------------------------------------
+               Proporção da distância:
+
+               dedos afastando
+               → distância aumenta
+               → zoom aumenta
+
+               dedos juntando
+               → distância diminui
+               → zoom diminui
+            ------------------------------------------------- */
+
+            const scale =
+                currentDistance /
+                initialDistance;
+
+
+            applyZoom(
+                initialZoom * scale
+            );
+        },
+        {
+            passive: false
+        }
+    );
+
+
+    /* =================================================
+       FINAL DO GESTO
+    ================================================= */
+
+    container.addEventListener(
+        "touchend",
+        (event) => {
+
+            if (
+                event.touches.length < 2
+            ) {
+
+                initialDistance = 0;
+            }
+        },
+        {
+            passive: true
+        }
+    );
+
+
+    /* -------------------------------------------------
+       Segurança para cancelamento do toque
+    ------------------------------------------------- */
+
+    container.addEventListener(
+        "touchcancel",
+        () => {
+
+            initialDistance = 0;
+        },
+        {
+            passive: true
+        }
     );
 }
 
@@ -263,12 +456,25 @@ window.addEventListener(
     "DOMContentLoaded",
     () => {
 
-        /* Criar estrelas */
+        /* -------------------------------------------------
+           Criar estrelas
+        ------------------------------------------------- */
+
         createStars();
 
 
-        /* Criar partículas de Saturno */
+        /* -------------------------------------------------
+           Criar partículas de Saturno
+        ------------------------------------------------- */
+
         createSaturnRingParticles();
+
+
+        /* -------------------------------------------------
+           Ativar zoom por dois dedos
+        ------------------------------------------------- */
+
+        setupPinchZoom();
 
     }
 );
