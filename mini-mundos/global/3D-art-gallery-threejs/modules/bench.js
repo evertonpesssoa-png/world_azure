@@ -10,12 +10,12 @@ const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/
 export const loadBenchModel = (scene) => {
   const loader = new GLTFLoader();
   
-  // Caminhos alternativos para tentar (prioriza GitHub Pages)
+  // Caminhos ABSOLUTOS para tentar (prioriza o caminho correto do GitHub)
   const paths = [
     "/world_azure/mini-mundos/global/3D-art-gallery-threejs/public/models/bench_2/scene.gltf",
-    "./public/models/bench_2/scene.gltf",
-    "../public/models/bench_2/scene.gltf",
-    "./models/bench_2/scene.gltf"
+    "/world_azure/mini-mundos/global/3D-art-gallery-threejs/public/models/bench_2/scene.gltf",
+    "/world_azure/mini-mundos/global/3D-art-gallery-threejs/public/models/bench_2/scene.gltf",
+    "/world_azure/mini-mundos/global/3D-art-gallery-threejs/public/models/bench_2/scene.gltf"
   ];
   
   let currentPathIndex = 0;
