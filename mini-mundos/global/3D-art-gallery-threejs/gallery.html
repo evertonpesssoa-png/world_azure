@@ -2,83 +2,19 @@
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
-    <title>3D Art Gallery • Responsivo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>3D Art Gallery</title>
     
-    <!-- 🔥 IMPORTS DO HÉCATE (OBRIGATÓRIO) 🔥 -->
     <script src="/world_azure/shared/js/hecate/core.js"></script>
     <script src="/world_azure/shared/js/hecate/block-manager.js"></script>
     <script src="/world_azure/shared/js/hecate/test-system.js"></script>
     <script src="/world_azure/shared/js/hecate/auth.js"></script>
     
     <link rel="stylesheet" href="./style.css" />
-    
-    <style>
-      /* ============================================
-         PAINEL DE ERRO NA TELA (SIMPLES)
-         ============================================ */
-      #erro-tela {
-        position: fixed;
-        top: 10px;
-        left: 10px;
-        right: 10px;
-        background: rgba(0,0,0,0.95);
-        color: #ff4444;
-        font-family: 'Courier New', monospace;
-        font-size: 13px;
-        padding: 15px;
-        border-radius: 10px;
-        z-index: 999999;
-        border: 2px solid #ff4444;
-        max-height: 50vh;
-        overflow-y: auto;
-        word-break: break-word;
-        box-shadow: 0 0 30px rgba(255,0,0,0.3);
-        display: none;
-      }
-      #erro-tela .verde { color: #00ff88; }
-      #erro-tela .amarelo { color: #ffaa00; }
-      #erro-tela .azul { color: #00ccff; }
-      #erro-tela .linha { border-bottom: 1px solid #333; padding: 4px 0; }
-      
-      #toggle-erro {
-        position: fixed;
-        bottom: 10px;
-        right: 10px;
-        z-index: 999999;
-        background: rgba(0,0,0,0.8);
-        color: #fff;
-        border: 2px solid #ff4444;
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        font-size: 22px;
-        cursor: pointer;
-        touch-action: manipulation;
-        display: none;
-      }
-      #toggle-erro:active { transform: scale(0.9); }
-      
-      .erro-ativo #erro-tela { display: block !important; }
-      .erro-ativo #toggle-erro { display: flex !important; align-items: center; justify-content: center; }
-    </style>
   </head>
 
   <body>
-    <!-- ============================================
-         PAINEL DE ERRO
-         ============================================ -->
-    <div id="erro-tela">
-      <div style="color:#00ff88; font-size:16px; font-weight:bold; margin-bottom:10px;">
-        🐛 DIAGNÓSTICO DA GALERIA
-      </div>
-      <div id="mensagens-erro"></div>
-    </div>
-    <button id="toggle-erro">🐛</button>
-
-    <!-- ============================================
-         MENU PRINCIPAL
-         ============================================ -->
+    <!-- MENU -->
     <div id="menu">
       <div id="img_container">
         <div id="starry_night_bg"></div>
@@ -90,13 +26,8 @@
           </div>
           <div class="title-info">
             <p>Bem-vindo à Galeria de Arte 3D imersiva.</p>
-            <p>
-              Explore os corredores da galeria virtual e interaja com obras-primas,
-              aprendendo sobre sua história e significado.
-            </p>
-            <p>
-              Desenvolvido por Emilian Kasemi • Adaptado para dispositivos móveis
-            </p>
+            <p>Explore os corredores da galeria virtual e interaja com obras-primas, aprendendo sobre sua história e significado.</p>
+            <p>Desenvolvido por Emilian Kasemi • Adaptado para dispositivos móveis</p>
           </div>
 
           <button id="play_button">
@@ -109,29 +40,16 @@
       </div>
     </div>
 
-    <!-- ============================================
-         OVERLAY SOBRE
-         ============================================ -->
+    <!-- SOBRE -->
     <div id="about-overlay">
       <button id="close-about">X</button>
       <h1>Sobre a Galeria 3D</h1>
-      <p>
-        Bem-vindo à nossa galeria de arte virtual 3D. Aqui você pode navegar por
-        diversas obras de arte e aprender sobre sua história e significado.
-      </p>
-      <p>
-        Este projeto é trazido a você por Emilian Kasemi. Acreditamos no poder
-        da arte para inspirar, provocar pensamentos e comunicar entre culturas.
-      </p>
-      <p>
-        Sinta-se à vontade para explorar. A galeria é melhor apreciada em tela cheia.
-        <strong>No celular, use o joystick na tela!</strong>
-      </p>
+      <p>Bem-vindo à nossa galeria de arte virtual 3D. Aqui você pode navegar por diversas obras de arte e aprender sobre sua história e significado.</p>
+      <p>Este projeto é trazido a você por Emilian Kasemi. Acreditamos no poder da arte para inspirar, provocar pensamentos e comunicar entre culturas.</p>
+      <p>Sinta-se à vontade para explorar. A galeria é melhor apreciada em tela cheia. <strong>No celular, use o joystick na tela!</strong></p>
     </div>
 
-    <!-- ============================================
-         PAINEL DE CONTROLES
-         ============================================ -->
+    <!-- CONTROLES -->
     <div id="info-panel">
       <div id="info-header">
         <h3>Controles</h3>
@@ -149,9 +67,7 @@
       </div>
     </div>
 
-    <!-- ============================================
-         CONTROLES DE ÁUDIO
-         ============================================ -->
+    <!-- ÁUDIO -->
     <div id="audio_controls">
       <button id="start_audio">▶ Iniciar Guia</button>
       <button id="stop_audio">⏹ Parar Guia</button>
@@ -159,43 +75,94 @@
 
     <div id="painting-info"></div>
 
-    <!-- ============================================
-         SCRIPT DE DIAGNÓSTICO
-         ============================================ -->
+    <!-- ========================================== -->
+    <!-- MOSTRA O ERRO NA TELA                     -->
+    <!-- ========================================== -->
+    <div id="log" style="
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+      background: black;
+      color: #0f0;
+      font-family: monospace;
+      font-size: 14px;
+      padding: 15px;
+      border-radius: 10px;
+      z-index: 999999;
+      border: 2px solid #0f0;
+      max-height: 40vh;
+      overflow-y: auto;
+      display: none;
+    "></div>
+
+    <button id="btn-log" style="
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      z-index: 999999;
+      background: black;
+      color: #0f0;
+      border: 2px solid #0f0;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 20px;
+    ">🐛</button>
+
     <script>
       // ==============================================
-      // ATIVA DEBUG COM ?debug NA URL
+      // MOSTRA LOG NA TELA
       // ==============================================
-      if (window.location.search.includes('debug')) {
-        document.body.classList.add('erro-ativo');
-      }
+      const logDiv = document.getElementById('log');
+      const logBtn = document.getElementById('btn-log');
+      
+      // Mostra o log quando clicar no botão
+      logBtn.onclick = function() {
+        if (logDiv.style.display === 'none') {
+          logDiv.style.display = 'block';
+          logBtn.textContent = '✕';
+        } else {
+          logDiv.style.display = 'none';
+          logBtn.textContent = '🐛';
+        }
+      };
 
-      // ==============================================
-      // FUNÇÃO PRA MOSTRAR NA TELA
-      // ==============================================
-      function addMsg(msg, cor = '') {
-        const div = document.getElementById('mensagens-erro');
-        if (!div) return;
+      function log(msg, cor = '#0f0') {
+        const div = logDiv;
         const line = document.createElement('div');
-        line.className = 'linha';
-        if (cor) line.className += ' ' + cor;
+        line.style.color = cor;
+        line.style.padding = '2px 0';
+        line.style.borderBottom = '1px solid #222';
         const time = new Date().toLocaleTimeString();
-        line.innerHTML = `<span style="color:#666;">[${time}]</span> ${msg}`;
+        line.textContent = `[${time}] ${msg}`;
         div.appendChild(line);
         div.scrollTop = div.scrollHeight;
         console.log(msg);
       }
 
-      function erro(msg) { addMsg(`❌ ${msg}`, ''); }
-      function ok(msg) { addMsg(`✅ ${msg}`, 'verde'); }
-      function aviso(msg) { addMsg(`⚠️ ${msg}`, 'amarelo'); }
-      function info(msg) { addMsg(`🔵 ${msg}`, 'azul'); }
+      // ==============================================
+      // CAPTURA TODOS OS ERROS
+      // ==============================================
+      window.onerror = function(msg, url, line, col, error) {
+        log(`🔥 ERRO: ${msg} (${url}:${line})`, '#ff4444');
+        if (error && error.stack) {
+          log(`📋 ${error.stack}`, '#ff4444');
+        }
+        // Mostra o log automaticamente quando der erro
+        logDiv.style.display = 'block';
+        logBtn.textContent = '✕';
+        return false;
+      };
 
-      // ==============================================
-      // MOSTRA QUE COMEÇOU
-      // ==============================================
-      info('Diagnóstico iniciado');
-      info('Clique em EXPLORAR ARTE para testar');
+      window.addEventListener('unhandledrejection', function(e) {
+        log(`⚠️ ERRO: ${e.reason}`, '#ffaa00');
+        logDiv.style.display = 'block';
+        logBtn.textContent = '✕';
+      });
+
+      log('✅ Diagnóstico iniciado!');
+      log('🔵 Clique em EXPLORAR ARTE');
 
       // ==============================================
       // BOTÃO EXPLORAR
@@ -204,58 +171,49 @@
         const btn = document.getElementById('play_button');
         
         if (btn) {
-          info('Botão EXPLORAR encontrado');
+          log('✅ Botão EXPLORAR encontrado');
           
-          btn.addEventListener('click', function() {
-            info('🔘 CLICOU no botão EXPLORAR');
+          btn.onclick = function() {
+            log('🔵 CLICOU em EXPLORAR');
             
-            // Verifica se a galeria já tá rodando
-            if (window.galleryRodando) {
-              ok('Galeria já está rodando!');
-              return;
-            }
-            
-            // Procura funções de entrada
-            info('Procurando função de entrada...');
-            const funcoes = ['entrarGaleria', 'startGallery', 'initGallery', 'loadGallery', 'init', 'start'];
+            // Tenta achar a função da galeria
+            const funcs = ['entrarGaleria', 'startGallery', 'initGallery', 'loadGallery', 'init', 'start'];
             let achou = false;
             
-            for (const f of funcoes) {
+            for (const f of funcs) {
               if (typeof window[f] === 'function') {
-                info(`▶️ Chamando ${f}()...`);
+                log(`▶️ Chamando ${f}()`);
                 try {
                   window[f]();
-                  ok(`✅ ${f}() executou com sucesso!`);
+                  log(`✅ ${f}() executou!`, '#00ff88');
                   achou = true;
-                  window.galleryRodando = true;
                   break;
                 } catch(e) {
-                  erro(`❌ ERRO em ${f}: ${e.message}`);
-                  erro(`📋 ${e.stack}`);
+                  log(`❌ ERRO em ${f}: ${e.message}`, '#ff4444');
                 }
               }
             }
             
             if (!achou) {
-              erro('❌ NENHUMA função de entrada encontrada!');
-              aviso('Funções disponíveis: ' + Object.keys(window).join(', '));
+              log('❌ Nenhuma função de entrada encontrada!', '#ff4444');
+              log('📋 Funções: ' + Object.keys(window).join(', '), '#ffaa00');
               
-              // Tenta recarregar o main.js
-              aviso('🔄 Recarregando main.js...');
+              // Recarrega o main.js
+              log('🔄 Recarregando main.js...');
               const script = document.createElement('script');
               script.type = 'module';
               script.src = './main.js?' + Date.now();
               script.onload = function() {
-                ok('✅ main.js recarregado! Tente clicar de novo.');
+                log('✅ main.js recarregado! Tente de novo.', '#00ff88');
               };
               script.onerror = function() {
-                erro('❌ ERRO ao recarregar main.js!');
+                log('❌ ERRO ao recarregar main.js!', '#ff4444');
               };
               document.body.appendChild(script);
             }
-          });
+          };
         } else {
-          erro('❌ Botão EXPLORAR não encontrado!');
+          log('❌ Botão EXPLORAR NÃO encontrado!', '#ff4444');
         }
 
         // ==============================================
@@ -263,73 +221,35 @@
         // ==============================================
         const aboutBtn = document.getElementById('about_button');
         if (aboutBtn) {
-          aboutBtn.addEventListener('click', function() {
+          aboutBtn.onclick = function() {
             document.getElementById('about-overlay').style.display = 'flex';
-          });
+          };
         }
 
-        const closeAbout = document.getElementById('close-about');
-        if (closeAbout) {
-          closeAbout.addEventListener('click', function() {
-            document.getElementById('about-overlay').style.display = 'none';
-          });
-        }
-
-        // ==============================================
-        // BOTÃO TOGGLE DEBUG
-        // ==============================================
-        const toggleBtn = document.getElementById('toggle-erro');
-        if (toggleBtn) {
-          toggleBtn.addEventListener('click', function() {
-            document.body.classList.toggle('erro-ativo');
-          });
-        }
+        document.getElementById('close-about').onclick = function() {
+          document.getElementById('about-overlay').style.display = 'none';
+        };
 
         // ==============================================
         // VERIFICA SE O 3D CARREGOU
         // ==============================================
         setTimeout(() => {
-          info('Verificando se a galeria 3D carregou...');
-          
           const canvas = document.querySelector('canvas');
           if (canvas) {
-            ok('✅ Canvas 3D encontrado! Galeria rodando!');
-            window.galleryRodando = true;
+            log('✅ Canvas 3D encontrado! Galeria rodando!', '#00ff88');
           } else {
-            aviso('⚠️ Nenhum canvas 3D encontrado ainda');
+            log('⚠️ Nenhum canvas 3D encontrado', '#ffaa00');
           }
           
           if (typeof THREE !== 'undefined') {
-            ok('✅ Three.js carregado! Versão: ' + (THREE.REVISION || '?'));
+            log('✅ Three.js carregado!', '#00ff88');
           } else {
-            aviso('⚠️ Three.js NÃO carregado');
+            log('⚠️ Three.js NÃO carregado', '#ffaa00');
           }
         }, 3000);
-
-        // ==============================================
-        // CAPTURA ERROS
-        // ==============================================
-        window.onerror = function(msg, url, line, col, error) {
-          erro(`🔥 ${msg} (${url}:${line})`);
-          if (error && error.stack) {
-            erro(`📋 ${error.stack.substring(0, 300)}`);
-          }
-          return false;
-        };
-
-        window.addEventListener('unhandledrejection', function(e) {
-          erro(`⚠️ Promessa rejeitada: ${e.reason}`);
-        });
-
-        ok('✅ Diagnóstico pronto!');
-        info('💡 Adicione ?debug na URL pra ativar automático');
-        info('🐛 Toque no 🐛 no canto inferior direito');
       });
     </script>
 
-    <!-- ============================================ -->
-    <!-- MAIN.JS ORIGINAL                            -->
-    <!-- ============================================ -->
     <script type="module" src="./main.js"></script>
   </body>
 </html>
