@@ -1,4 +1,4 @@
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.module.js";
 import { scene, setupScene } from "./modules/scene.js";
 import { createPaintings } from "./modules/paintings.js";
 import { createWalls } from "./modules/walls.js";
@@ -73,3 +73,17 @@ setupOverlayClose();
 
 console.log("✅ Botões configurados");
 console.log("✅ main.js carregado");
+
+// ==============================================
+// CORREÇÃO FINAL: AVISANDO O BOTÃO HTML
+// ==============================================
+
+// Essa função existe APENAS para o botão HTML encontrar.
+// O seu código 3D já roda automaticamente quando a página abre.
+window.startGallery = function() {
+  console.log("✅ startGallery executada com sucesso!");
+};
+
+// Garante compatibilidade com nomes alternativos
+window.init = window.startGallery;
+window.entrarGaleria = window.startGallery;
