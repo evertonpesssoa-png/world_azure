@@ -1,5 +1,8 @@
-import * as THREE from "three";
-import { PointerLockControls } from "three-stdlib";
+// ==============================================
+// CORREÇÃO: Importando THREE e PointerLockControls direto da CDN
+// ==============================================
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.module.js";
+import { PointerLockControls } from "https://cdn.jsdelivr.net/npm/three-stdlib@2.30.3/controls/PointerLockControls.js";
 
 export const scene = new THREE.Scene();
 let camera;
