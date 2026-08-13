@@ -8,7 +8,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         // Agora ele vai buscar o arquivo certo dentro da pasta correta
-        main: '/world_azure/mini-mundos/global/3D-art-gallery-threesjs/main.js',
+        main: '/world_azure/mini-mundos/global/3D-art-gallery-threejs/main.js',
       },
     },
   },
