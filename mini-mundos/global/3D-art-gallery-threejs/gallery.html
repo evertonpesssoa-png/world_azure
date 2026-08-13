@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
     <title>3D Art Gallery</title>
     
+    <!-- ============================================== -->
+    <!-- CORREÇÃO MÁGICA DOS IMPORTS DO THREE.JS AQUI -->
+    <!-- ============================================== -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.163.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.163.0/examples/jsm/"
+        }
+      }
+    </script>
+
     <script src="/world_azure/shared/js/hecate/core.js"></script>
     <script src="/world_azure/shared/js/hecate/block-manager.js"></script>
     <script src="/world_azure/shared/js/hecate/test-system.js"></script>
