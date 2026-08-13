@@ -14,79 +14,71 @@
     <link rel="stylesheet" href="./style.css" />
     
     <style>
-      /* PAINEL DE DEBUG 3D */
-      #debug-3d {
+      /* ============================================
+         PAINEL DE ERRO NA TELA (SIMPLES)
+         ============================================ */
+      #erro-tela {
         position: fixed;
-        bottom: 10px;
+        top: 10px;
         left: 10px;
         right: 10px;
-        background: rgba(0,0,0,0.92);
-        color: #00ffff;
+        background: rgba(0,0,0,0.95);
+        color: #ff4444;
         font-family: 'Courier New', monospace;
-        font-size: 11px;
-        padding: 10px;
+        font-size: 13px;
+        padding: 15px;
         border-radius: 10px;
         z-index: 999999;
-        max-height: 40vh;
+        border: 2px solid #ff4444;
+        max-height: 50vh;
         overflow-y: auto;
-        border: 2px solid #00ffff;
         word-break: break-word;
+        box-shadow: 0 0 30px rgba(255,0,0,0.3);
         display: none;
-        box-shadow: 0 0 20px rgba(0,255,255,0.2);
-        pointer-events: none;
       }
-      #debug-3d .error { color: #ff4444 !important; }
-      #debug-3d .warn { color: #ffaa00 !important; }
-      #debug-3d .success { color: #00ff88 !important; }
-      #debug-3d .info { color: #00ffff !important; }
+      #erro-tela .verde { color: #00ff88; }
+      #erro-tela .amarelo { color: #ffaa00; }
+      #erro-tela .azul { color: #00ccff; }
+      #erro-tela .linha { border-bottom: 1px solid #333; padding: 4px 0; }
       
-      #debug-toggle-3d {
+      #toggle-erro {
         position: fixed;
         bottom: 10px;
         right: 10px;
         z-index: 999999;
         background: rgba(0,0,0,0.8);
-        color: #00ffff;
-        border: 2px solid #00ffff;
+        color: #fff;
+        border: 2px solid #ff4444;
         border-radius: 50%;
         width: 50px;
         height: 50px;
-        font-size: 20px;
+        font-size: 22px;
         cursor: pointer;
-        font-family: monospace;
-        display: none;
         touch-action: manipulation;
+        display: none;
       }
-      #debug-toggle-3d:active { transform: scale(0.9); }
+      #toggle-erro:active { transform: scale(0.9); }
       
-      .debug-active #debug-3d { display: block !important; }
-      .debug-active #debug-toggle-3d { display: flex !important; align-items: center; justify-content: center; }
-      
-      /* Indicador visual da galeria */
-      #gallery-status {
-        position: fixed;
-        top: 10px;
-        right: 10px;
-        background: rgba(0,0,0,0.8);
-        color: #fff;
-        padding: 8px 15px;
-        border-radius: 20px;
-        font-size: 12px;
-        z-index: 99999;
-        border: 1px solid #666;
-        font-family: Arial, sans-serif;
-      }
-      #gallery-status.loading { border-color: #ffaa00; color: #ffaa00; }
-      #gallery-status.ready { border-color: #00ff88; color: #00ff88; }
-      #gallery-status.error { border-color: #ff4444; color: #ff4444; }
+      .erro-ativo #erro-tela { display: block !important; }
+      .erro-ativo #toggle-erro { display: flex !important; align-items: center; justify-content: center; }
     </style>
   </head>
 
   <body>
-    <!-- STATUS DA GALERIA -->
-    <div id="gallery-status">⏳ Carregando...</div>
+    <!-- ============================================
+         PAINEL DE ERRO
+         ============================================ -->
+    <div id="erro-tela">
+      <div style="color:#00ff88; font-size:16px; font-weight:bold; margin-bottom:10px;">
+        🐛 DIAGNÓSTICO DA GALERIA
+      </div>
+      <div id="mensagens-erro"></div>
+    </div>
+    <button id="toggle-erro">🐛</button>
 
-    <!-- MENU PRINCIPAL -->
+    <!-- ============================================
+         MENU PRINCIPAL
+         ============================================ -->
     <div id="menu">
       <div id="img_container">
         <div id="starry_night_bg"></div>
@@ -117,16 +109,29 @@
       </div>
     </div>
 
-    <!-- OVERLAY SOBRE -->
+    <!-- ============================================
+         OVERLAY SOBRE
+         ============================================ -->
     <div id="about-overlay">
       <button id="close-about">X</button>
       <h1>Sobre a Galeria 3D</h1>
-      <p>Bem-vindo à nossa galeria de arte virtual 3D. Aqui você pode navegar por diversas obras de arte e aprender sobre sua história e significado.</p>
-      <p>Este projeto é trazido a você por Emilian Kasemi. Acreditamos no poder da arte para inspirar, provocar pensamentos e comunicar entre culturas.</p>
-      <p>Sinta-se à vontade para explorar. A galeria é melhor apreciada em tela cheia. <strong>No celular, use o joystick na tela!</strong></p>
+      <p>
+        Bem-vindo à nossa galeria de arte virtual 3D. Aqui você pode navegar por
+        diversas obras de arte e aprender sobre sua história e significado.
+      </p>
+      <p>
+        Este projeto é trazido a você por Emilian Kasemi. Acreditamos no poder
+        da arte para inspirar, provocar pensamentos e comunicar entre culturas.
+      </p>
+      <p>
+        Sinta-se à vontade para explorar. A galeria é melhor apreciada em tela cheia.
+        <strong>No celular, use o joystick na tela!</strong>
+      </p>
     </div>
 
-    <!-- PAINEL DE CONTROLES -->
+    <!-- ============================================
+         PAINEL DE CONTROLES
+         ============================================ -->
     <div id="info-panel">
       <div id="info-header">
         <h3>Controles</h3>
@@ -144,7 +149,9 @@
       </div>
     </div>
 
-    <!-- CONTROLES DE ÁUDIO -->
+    <!-- ============================================
+         CONTROLES DE ÁUDIO
+         ============================================ -->
     <div id="audio_controls">
       <button id="start_audio">▶ Iniciar Guia</button>
       <button id="stop_audio">⏹ Parar Guia</button>
@@ -152,301 +159,176 @@
 
     <div id="painting-info"></div>
 
-    <!-- PAINEL DE DEBUG 3D -->
-    <div id="debug-3d"></div>
-    <button id="debug-toggle-3d">🎮</button>
-
-    <!-- ============================================ -->
-    <!-- DIAGNÓSTICO DA GALERIA 3D                    -->
-    <!-- ============================================ -->
+    <!-- ============================================
+         SCRIPT DE DIAGNÓSTICO
+         ============================================ -->
     <script>
-      // ============================================
-      // ATIVA DEBUG COM ?debug3d
-      // ============================================
-      if (window.location.search.includes('debug3d')) {
-        document.body.classList.add('debug-active');
+      // ==============================================
+      // ATIVA DEBUG COM ?debug NA URL
+      // ==============================================
+      if (window.location.search.includes('debug')) {
+        document.body.classList.add('erro-ativo');
       }
 
-      // ============================================
-      // FUNÇÕES DE DEBUG
-      // ============================================
-      function log3d(msg, type = 'info') {
-        const div = document.getElementById('debug-3d');
+      // ==============================================
+      // FUNÇÃO PRA MOSTRAR NA TELA
+      // ==============================================
+      function addMsg(msg, cor = '') {
+        const div = document.getElementById('mensagens-erro');
         if (!div) return;
-        
         const line = document.createElement('div');
+        line.className = 'linha';
+        if (cor) line.className += ' ' + cor;
         const time = new Date().toLocaleTimeString();
-        const colors = { info: '#00ffff', error: '#ff4444', warn: '#ffaa00', success: '#00ff88' };
-        
-        line.style.color = colors[type] || '#00ffff';
-        line.style.padding = '2px 0';
-        line.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
-        line.textContent = `[${time}] ${msg}`;
+        line.innerHTML = `<span style="color:#666;">[${time}]</span> ${msg}`;
         div.appendChild(line);
         div.scrollTop = div.scrollHeight;
-        
-        while (div.children.length > 100) {
-          div.removeChild(div.firstChild);
-        }
-        console.log(`[3D] ${msg}`);
+        console.log(msg);
       }
 
-      function updateStatus(text, type = 'loading') {
-        const el = document.getElementById('gallery-status');
-        if (el) {
-          el.textContent = text;
-          el.className = type;
-        }
-      }
+      function erro(msg) { addMsg(`❌ ${msg}`, ''); }
+      function ok(msg) { addMsg(`✅ ${msg}`, 'verde'); }
+      function aviso(msg) { addMsg(`⚠️ ${msg}`, 'amarelo'); }
+      function info(msg) { addMsg(`🔵 ${msg}`, 'azul'); }
 
-      // ============================================
-      // MONITORA O main.js
-      // ============================================
-      log3d('🎮 Iniciando diagnóstico da galeria 3D...', 'info');
-      updateStatus('⏳ Carregando main.js...', 'loading');
+      // ==============================================
+      // MOSTRA QUE COMEÇOU
+      // ==============================================
+      info('Diagnóstico iniciado');
+      info('Clique em EXPLORAR ARTE para testar');
 
-      // Verifica se o main.js carregou
-      let mainJsLoaded = false;
-      
-      // Hook no carregamento do módulo
+      // ==============================================
+      // BOTÃO EXPLORAR
+      // ==============================================
       document.addEventListener('DOMContentLoaded', function() {
-        log3d('📄 DOM carregado', 'info');
-        
-        // Procura o script main.js
-        const scripts = document.querySelectorAll('script[type="module"]');
-        let found = false;
-        scripts.forEach(s => {
-          if (s.src && s.src.includes('main.js')) {
-            found = true;
-            log3d('✅ main.js encontrado no DOM', 'success');
-            
-            // Monitora quando o módulo carregar
-            s.addEventListener('load', function() {
-              mainJsLoaded = true;
-              log3d('✅ main.js carregado com sucesso!', 'success');
-              updateStatus('✅ main.js carregado', 'ready');
-              
-              // Verifica se a galeria iniciou
-              setTimeout(checkGallery, 2000);
-            });
-            
-            s.addEventListener('error', function() {
-              log3d('❌ ERRO ao carregar main.js!', 'error');
-              updateStatus('❌ Erro no main.js', 'error');
-            });
-          }
-        });
-        
-        if (!found) {
-          log3d('⚠️ main.js NÃO encontrado no DOM', 'warn');
-          updateStatus('⚠️ main.js não encontrado', 'error');
-        }
-        
-        // ============================================
-        // BOTÃO EXPLORAR
-        // ============================================
         const btn = document.getElementById('play_button');
+        
         if (btn) {
-          // Remove eventos antigos
-          const newBtn = btn.cloneNode(true);
-          btn.parentNode.replaceChild(newBtn, btn);
+          info('Botão EXPLORAR encontrado');
           
-          newBtn.addEventListener('click', function() {
-            log3d('🖱️ CLICOU em EXPLORAR!', 'info');
+          btn.addEventListener('click', function() {
+            info('🔘 CLICOU no botão EXPLORAR');
             
-            // Verifica se a galeria já está rodando
-            if (window.galleryInitialized) {
-              log3d('✅ Galeria já está rodando!', 'success');
+            // Verifica se a galeria já tá rodando
+            if (window.galleryRodando) {
+              ok('Galeria já está rodando!');
               return;
             }
             
-            // Tenta iniciar a galeria
-            log3d('🚀 Tentando iniciar galeria...', 'info');
-            updateStatus('⏳ Iniciando galeria...', 'loading');
-            
             // Procura funções de entrada
-            const funcs = ['entrarGaleria', 'startGallery', 'initGallery', 'loadGallery', 'init'];
-            let found = false;
+            info('Procurando função de entrada...');
+            const funcoes = ['entrarGaleria', 'startGallery', 'initGallery', 'loadGallery', 'init', 'start'];
+            let achou = false;
             
-            for (const f of funcs) {
+            for (const f of funcoes) {
               if (typeof window[f] === 'function') {
+                info(`▶️ Chamando ${f}()...`);
                 try {
-                  log3d(`▶️ Chamando ${f}()...`, 'info');
                   window[f]();
-                  log3d(`✅ ${f}() executado!`, 'success');
-                  found = true;
-                  updateStatus('✅ Galeria iniciada!', 'ready');
-                  window.galleryInitialized = true;
+                  ok(`✅ ${f}() executou com sucesso!`);
+                  achou = true;
+                  window.galleryRodando = true;
                   break;
                 } catch(e) {
-                  log3d(`❌ ERRO em ${f}: ${e.message}`, 'error');
-                  log3d(`📋 Stack: ${e.stack}`, 'error');
+                  erro(`❌ ERRO em ${f}: ${e.message}`);
+                  erro(`📋 ${e.stack}`);
                 }
               }
             }
             
-            if (!found) {
-              log3d('⚠️ Nenhuma função de entrada encontrada!', 'warn');
-              log3d('🔍 Funções disponíveis: ' + Object.keys(window).filter(k => k.includes('galeria') || k.includes('Gallery') || k.includes('init')).join(', '), 'warn');
-              updateStatus('⚠️ Nenhuma função de entrada', 'error');
+            if (!achou) {
+              erro('❌ NENHUMA função de entrada encontrada!');
+              aviso('Funções disponíveis: ' + Object.keys(window).join(', '));
               
-              // Tenta recarregar
-              log3d('🔄 Recarregando main.js...', 'info');
+              // Tenta recarregar o main.js
+              aviso('🔄 Recarregando main.js...');
               const script = document.createElement('script');
               script.type = 'module';
               script.src = './main.js?' + Date.now();
               script.onload = function() {
-                log3d('✅ main.js recarregado!', 'success');
-                log3d('💡 Tente clicar novamente', 'info');
-                updateStatus('✅ Recarregado, tente de novo', 'ready');
+                ok('✅ main.js recarregado! Tente clicar de novo.');
               };
               script.onerror = function() {
-                log3d('❌ ERRO ao recarregar!', 'error');
-                updateStatus('❌ Falha ao recarregar', 'error');
+                erro('❌ ERRO ao recarregar main.js!');
               };
               document.body.appendChild(script);
             }
           });
-          
-          log3d('✅ Evento do botão configurado', 'success');
         } else {
-          log3d('❌ Botão EXPLORAR não encontrado!', 'error');
+          erro('❌ Botão EXPLORAR não encontrado!');
         }
-        
-        // ============================================
+
+        // ==============================================
         // BOTÃO SOBRE
-        // ============================================
+        // ==============================================
         const aboutBtn = document.getElementById('about_button');
         if (aboutBtn) {
           aboutBtn.addEventListener('click', function() {
-            const overlay = document.getElementById('about-overlay');
-            if (overlay) overlay.style.display = 'flex';
+            document.getElementById('about-overlay').style.display = 'flex';
           });
         }
-        
+
         const closeAbout = document.getElementById('close-about');
         if (closeAbout) {
           closeAbout.addEventListener('click', function() {
-            const overlay = document.getElementById('about-overlay');
-            if (overlay) overlay.style.display = 'none';
+            document.getElementById('about-overlay').style.display = 'none';
           });
         }
-        
-        // ============================================
-        // BOTÃO DEBUG
-        // ============================================
-        const debugToggle = document.getElementById('debug-toggle-3d');
-        if (debugToggle) {
-          debugToggle.addEventListener('click', function() {
-            document.body.classList.toggle('debug-active');
+
+        // ==============================================
+        // BOTÃO TOGGLE DEBUG
+        // ==============================================
+        const toggleBtn = document.getElementById('toggle-erro');
+        if (toggleBtn) {
+          toggleBtn.addEventListener('click', function() {
+            document.body.classList.toggle('erro-ativo');
           });
         }
-        
-        // ============================================
-        // VERIFICA GALERIA PERIODICAMENTE
-        // ============================================
-        function checkGallery() {
-          // Procura por elementos 3D típicos
+
+        // ==============================================
+        // VERIFICA SE O 3D CARREGOU
+        // ==============================================
+        setTimeout(() => {
+          info('Verificando se a galeria 3D carregou...');
+          
           const canvas = document.querySelector('canvas');
-          const threeDiv = document.getElementById('three-container');
-          const babylonDiv = document.getElementById('babylon-container');
-          
           if (canvas) {
-            log3d('✅ Canvas 3D encontrado!', 'success');
-            updateStatus('🎨 Galeria 3D rodando!', 'ready');
-            window.galleryInitialized = true;
-            return;
+            ok('✅ Canvas 3D encontrado! Galeria rodando!');
+            window.galleryRodando = true;
+          } else {
+            aviso('⚠️ Nenhum canvas 3D encontrado ainda');
           }
           
-          if (threeDiv && threeDiv.children.length > 0) {
-            log3d('✅ Three.js container encontrado!', 'success');
-            updateStatus('🎨 Three.js rodando!', 'ready');
-            window.galleryInitialized = true;
-            return;
-          }
-          
-          if (babylonDiv && babylonDiv.children.length > 0) {
-            log3d('✅ Babylon.js container encontrado!', 'success');
-            updateStatus('🎨 Babylon.js rodando!', 'ready');
-            window.galleryInitialized = true;
-            return;
-          }
-          
-          // Verifica se Three.js existe
           if (typeof THREE !== 'undefined') {
-            log3d('✅ Three.js carregado!', 'success');
-            log3d('📦 Versão: ' + (THREE.REVISION || 'desconhecida'), 'info');
+            ok('✅ Three.js carregado! Versão: ' + (THREE.REVISION || '?'));
           } else {
-            log3d('⚠️ Three.js NÃO carregado', 'warn');
-          }
-          
-          // Verifica se Babylon.js existe
-          if (typeof BABYLON !== 'undefined') {
-            log3d('✅ Babylon.js carregado!', 'success');
-          } else {
-            log3d('⚠️ Babylon.js NÃO carregado', 'warn');
-          }
-          
-          // Verifica se tem algum erro no console
-          // (não dá pra capturar tudo, mas ajuda)
-        }
-        
-        // Checa a cada 3 segundos
-        let checkCount = 0;
-        const checkInterval = setInterval(function() {
-          checkCount++;
-          checkGallery();
-          
-          if (checkCount > 10 || window.galleryInitialized) {
-            clearInterval(checkInterval);
-            log3d('⏹️ Verificações automáticas encerradas', 'info');
+            aviso('⚠️ Three.js NÃO carregado');
           }
         }, 3000);
-        
-        // ============================================
-        // INFO DO SISTEMA
-        // ============================================
-        log3d('📱 ' + (navigator.userAgent.includes('Mobile') ? 'Celular' : 'Desktop'), 'info');
-        log3d('🌐 ' + window.location.href, 'info');
-        log3d('⏰ ' + new Date().toLocaleString(), 'info');
-        
-        // Verifica WebGL
-        const canvas = document.createElement('canvas');
-        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-        if (gl) {
-          log3d('✅ WebGL suportado!', 'success');
-          log3d('🖥️ ' + gl.getParameter(gl.RENDERER), 'info');
-        } else {
-          log3d('❌ WebGL NÃO suportado!', 'error');
-          updateStatus('❌ WebGL não suportado', 'error');
-        }
-        
-        log3d('✅ Diagnóstico concluído!', 'success');
-        log3d('💡 Adicione ?debug3d na URL para ativar este painel', 'info');
-        log3d('🎮 Toque no 🎮 para ligar/desligar', 'info');
-        log3d('🔄 Clique em EXPLORAR para testar', 'info');
-      });
-      
-      // ============================================
-      // CAPTURA ERROS
-      // ============================================
-      window.onerror = function(msg, url, line, col, error) {
-        log3d(`🔥 ERRO: ${msg}`, 'error');
-        log3d(`📍 ${url}:${line}:${col}`, 'error');
-        if (error && error.stack) {
-          log3d(`📋 ${error.stack.substring(0, 300)}`, 'error');
-        }
-        updateStatus('❌ Erro na galeria', 'error');
-        return false;
-      };
-      
-      window.addEventListener('unhandledrejection', function(e) {
-        log3d(`⚠️ PROMESSA REJEITADA: ${e.reason || 'sem motivo'}`, 'error');
+
+        // ==============================================
+        // CAPTURA ERROS
+        // ==============================================
+        window.onerror = function(msg, url, line, col, error) {
+          erro(`🔥 ${msg} (${url}:${line})`);
+          if (error && error.stack) {
+            erro(`📋 ${error.stack.substring(0, 300)}`);
+          }
+          return false;
+        };
+
+        window.addEventListener('unhandledrejection', function(e) {
+          erro(`⚠️ Promessa rejeitada: ${e.reason}`);
+        });
+
+        ok('✅ Diagnóstico pronto!');
+        info('💡 Adicione ?debug na URL pra ativar automático');
+        info('🐛 Toque no 🐛 no canto inferior direito');
       });
     </script>
 
     <!-- ============================================ -->
-    <!-- SEU main.js ORIGINAL                         -->
+    <!-- MAIN.JS ORIGINAL                            -->
     <!-- ============================================ -->
     <script type="module" src="./main.js"></script>
   </body>
