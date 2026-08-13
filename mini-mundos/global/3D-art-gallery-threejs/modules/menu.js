@@ -45,15 +45,22 @@ export const showMenu = () => {
 
 export const startExperience = (controls) => {
   hideMenu();
+  
+  // ==============================================
+  // CORREÇÃO CRUCIAL: Para celular, não tenta travar o mouse!
+  // ==============================================
+  if (isMobile) {
+    document.dispatchEvent(new CustomEvent("experienceStarted"));
+    return; // Para a execução aqui no celular
+  }
 
-  if (!isMobile) {
-    try {
-      if (controls?.lock) {
-        controls.lock();
-      }
-    } catch (err) {
-      console.warn("Erro ao ativar PointerLock:", err);
+  // O código abaixo roda APENAS para Desktop (PC)
+  try {
+    if (controls?.lock) {
+      controls.lock();
     }
+  } catch (err) {
+    console.warn("Erro ao ativar PointerLock:", err);
   }
 
   document.dispatchEvent(
