@@ -104,7 +104,7 @@ body {
 
   background: linear-gradient(
     135deg,
-    #8ec5ff,
+    #4da3ff,
     #c7e9fb
   );
 
@@ -131,11 +131,11 @@ body {
 #about_button {
   background: linear-gradient(
     135deg,
-    rgba(0, 120, 255, 0.85),
-    rgba(0, 70, 200, 0.7)
+    rgba(0, 120, 255, 0.9),
+    rgba(0, 70, 200, 0.8)
   );
 
-  border: none;
+  border: 1px solid rgba(80, 170, 255, 0.5);
 
   padding: 12px 30px;
 
@@ -149,7 +149,10 @@ body {
 
   margin: 10px;
 
-  transition: all 0.3s;
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease,
+    box-shadow 0.3s ease;
 
   font-size: 1rem;
 
@@ -164,6 +167,9 @@ body {
   touch-action: manipulation;
 
   -webkit-tap-highlight-color: transparent;
+
+  box-shadow:
+    0 0 10px rgba(0, 120, 255, 0.25);
 }
 
 #play_button:hover,
@@ -172,17 +178,23 @@ body {
 
   background: linear-gradient(
     135deg,
-    rgba(0, 150, 255, 1),
-    rgba(0, 80, 220, 0.9)
+    rgba(0, 160, 255, 1),
+    rgba(0, 90, 230, 1)
   );
 
   box-shadow:
-    0 0 20px rgba(0, 130, 255, 0.6);
+    0 0 20px rgba(0, 130, 255, 0.65);
 }
 
 #play_button:active,
 #about_button:active {
   transform: scale(0.98);
+
+  background: linear-gradient(
+    135deg,
+    rgba(0, 100, 230, 1),
+    rgba(0, 60, 180, 1)
+  );
 }
 
 /* =========================================================
@@ -219,7 +231,7 @@ body {
 
   transition: all 0.3s ease;
 
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(0, 130, 255, 0.4);
 
   overflow-y: auto;
 
@@ -246,9 +258,9 @@ body {
   width: 30px;
   height: 30px;
 
-  background: rgba(0, 100, 255, 0.5);
+  background: rgba(0, 100, 255, 0.6);
 
-  border: none;
+  border: 1px solid rgba(80, 170, 255, 0.5);
 
   color: white;
 
@@ -266,7 +278,11 @@ body {
 }
 
 #close-about:hover {
-  background: rgba(0, 120, 255, 0.8);
+  background: rgba(0, 140, 255, 0.9);
+
+  box-shadow:
+    0 0 12px rgba(0, 130, 255, 0.5);
+
   transform: scale(1.05);
 }
 
@@ -275,14 +291,21 @@ body {
 }
 
 #about-overlay h1 {
-  color: #3d9bff;
+  color: #4da3ff;
+
   margin-bottom: 20px;
+
   font-size: 1.5rem;
+
+  text-shadow:
+    0 0 10px rgba(0, 130, 255, 0.4);
 }
 
 #about-overlay p {
   line-height: 1.6;
+
   margin-bottom: 15px;
+
   color: #ddd;
 }
 
@@ -306,7 +329,7 @@ body {
 
   z-index: 1000;
 
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(80, 160, 255, 0.3);
 
   min-width: 180px;
 
@@ -347,7 +370,7 @@ body {
 }
 
 #toggle-info:hover {
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(0, 120, 255, 0.4);
 }
 
 #info-content p {
@@ -525,7 +548,7 @@ body {
 
   backdrop-filter: blur(10px);
 
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(80, 160, 255, 0.4);
 
   border-radius: 50px;
 
@@ -592,7 +615,7 @@ body {
 
   gap: 6px;
 
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(80, 160, 255, 0.35);
 }
 
 .joy-btn {
@@ -632,6 +655,9 @@ body {
   transform: scale(0.88);
 
   border-color: #007bff;
+
+  box-shadow:
+    0 0 12px rgba(0, 120, 255, 0.5);
 }
 
 .joy-empty {
@@ -676,10 +702,6 @@ body {
     font-size: 12px;
   }
 
-  /* =====================================================
-     QUADRO — MOBILE
-     ===================================================== */
-
   #painting-info {
     top: 52px !important;
 
@@ -699,10 +721,6 @@ body {
 
     border-radius: 9px;
   }
-
-  /* =====================================================
-     ÁUDIO
-     ===================================================== */
 
   #audio_controls {
     right: 10px;
@@ -733,10 +751,6 @@ body {
     text-overflow: ellipsis;
   }
 
-  /* =====================================================
-     INFO PANEL
-     ===================================================== */
-
   #info-panel {
     top: 10px;
 
@@ -748,10 +762,6 @@ body {
 
     max-width: calc(100vw - 20px);
   }
-
-  /* =====================================================
-     MENU
-     ===================================================== */
 
   #content_container {
     padding: 20px 25px;
@@ -812,10 +822,6 @@ body {
 
     font-size: 10px;
   }
-
-  /* =====================================================
-     QUADRO — CELULAR PEQUENO
-     ===================================================== */
 
   #painting-info {
     top: 48px !important;
@@ -933,7 +939,7 @@ body {
 .mobile-only {
   display: none;
 
-  color: #ffaa00;
+  color: #4da3ff;
 
   font-size: 0.65rem;
 
@@ -1109,7 +1115,7 @@ button#VRButton {
 }
 
 /* =========================================================
-   SCROLLBAR
+   SCROLLBAR — AZUL
    ========================================================= */
 
 ::-webkit-scrollbar {
@@ -1123,11 +1129,11 @@ button#VRButton {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 100, 0, 0.5);
+  background: rgba(0, 120, 255, 0.5);
 
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 100, 0, 0.8);
+  background: rgba(0, 150, 255, 0.8);
 }
