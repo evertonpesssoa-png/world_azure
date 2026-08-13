@@ -251,48 +251,98 @@ body {
   display: none;
 }
 
-/* ========== PAINTING INFO ========== */
+/* ============================================
+   PAINTING INFO
+   ============================================ */
+
 #painting-info {
   position: fixed;
-  bottom: 30px;
+
   left: 50%;
+  bottom: 30px;
+
   transform: translateX(-50%);
+
   background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(15px);
+
   border-radius: 12px;
+
   padding: 12px 24px;
+
   text-align: center;
-  z-index: 60;
+
+  z-index: 2000;
+
   border: 1px solid rgba(255, 215, 0, 0.5);
+
   color: #ffdd88;
+
   font-weight: bold;
+
   pointer-events: none;
+
   transition: all 0.3s;
+
   white-space: nowrap;
+
   font-size: 0.9rem;
+
+  /*
+     Impede o texto de crescer
+     para fora da área disponível.
+  */
+  max-width: 65vw;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
 }
 
-/* ========== AUDIO CONTROLS ========== */
+/* ============================================
+   AUDIO CONTROLS
+   ============================================ */
+
 #audio_controls {
   position: fixed;
+
   bottom: 20px;
   right: 20px;
-  z-index: 50;
+
+  z-index: 2000;
+
   display: flex;
+
+  align-items: center;
+
   gap: 10px;
 }
 
 #start_audio,
 #stop_audio {
   background: rgba(0, 0, 0, 0.7);
+
   backdrop-filter: blur(10px);
+
   border: 1px solid rgba(0, 255, 255, 0.5);
+
   color: #0ff;
+
   padding: 8px 16px;
+
   border-radius: 30px;
+
   cursor: pointer;
+
   font-size: 0.7rem;
+
   transition: all 0.2s;
+
+  white-space: nowrap;
+
+  touch-action: manipulation;
+
+  -webkit-tap-highlight-color: transparent;
 }
 
 #start_audio:hover,
@@ -306,97 +356,165 @@ body {
   transform: scale(0.95);
 }
 
-/* ========== CONTROLES MÓVEIS ========== */
+/* ============================================
+   CONTROLES MÓVEIS
+   ============================================ */
+
 .mobile-controls-panel {
   position: fixed;
+
   bottom: 20px;
   right: 20px;
-  z-index: 1000;
+
+  z-index: 2000;
+
   display: none;
+
   flex-direction: column;
+
   gap: 10px;
 }
 
 .mobile-btn {
   background: rgba(0, 0, 0, 0.85);
+
   backdrop-filter: blur(10px);
+
   border: 1px solid rgba(255, 255, 255, 0.3);
+
   border-radius: 50px;
+
   padding: 12px 20px;
+
   color: white;
+
   font-size: 14px;
+
   font-weight: bold;
+
   cursor: pointer;
+
   transition: all 0.2s;
+
   font-family: monospace;
+
   touch-action: manipulation;
+
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .mobile-btn:active {
   transform: scale(0.95);
+
   background: rgba(255, 100, 0, 0.9);
+
   border-color: #ff6600;
 }
 
+/* ============================================
+   JOYPAD
+   ============================================ */
+
 .touch-joypad {
   position: fixed;
+
   bottom: 20px;
   left: 20px;
-  z-index: 1000;
+
+  z-index: 2000;
+
   background: rgba(0, 0, 0, 0.6);
+
   backdrop-filter: blur(12px);
+
   border-radius: 100px;
+
   padding: 12px;
+
   display: none;
+
   grid-template-columns: repeat(3, 60px);
+
   grid-template-rows: repeat(3, 60px);
+
   gap: 6px;
+
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .joy-btn {
   background: rgba(255, 255, 255, 0.15);
+
   border: 1px solid rgba(255, 255, 255, 0.3);
+
   border-radius: 50px;
+
   display: flex;
+
   align-items: center;
   justify-content: center;
+
   font-size: 26px;
+
   color: white;
+
   cursor: pointer;
+
   user-select: none;
+
   touch-action: manipulation;
+
   transition: all 0.05s linear;
+
   font-weight: bold;
 }
 
 .joy-btn:active {
   background: rgba(255, 100, 0, 0.9);
+
   transform: scale(0.88);
+
   border-color: #ffaa00;
 }
 
 .joy-empty {
   background: transparent;
+
   border: none;
+
   pointer-events: none;
 }
 
-/* ========== RESPONSIVIDADE ========== */
+/* ============================================
+   RESPONSIVIDADE — CELULAR
+   ============================================ */
+
 @media (max-width: 768px) {
+
   .mobile-controls-panel {
     display: flex;
+
+    /*
+       Fica acima do botão de música.
+    */
+    bottom: 68px;
+
+    right: 15px;
   }
 
   .touch-joypad {
     display: grid;
-  }
 
-  .touch-joypad {
+    bottom: 15px;
+
+    left: 15px;
+
     grid-template-columns: repeat(3, 50px);
+
     grid-template-rows: repeat(3, 50px);
+
     gap: 4px;
+
     padding: 10px;
   }
 
@@ -406,20 +524,86 @@ body {
 
   .mobile-btn {
     padding: 8px 14px;
+
     font-size: 12px;
   }
 
+
+  /* ==========================================
+     TEXTO DO QUADRO
+     FICA ACIMA DOS CONTROLES
+     ========================================== */
+
   #painting-info {
-    font-size: 0.7rem;
-    padding: 8px 16px;
+    left: 50%;
+
+    bottom: 105px;
+
+    transform: translateX(-50%);
+
+    /*
+       Reserva espaço entre o joystick
+       e os controles da direita.
+    */
+    width: calc(100vw - 170px);
+
+    max-width: calc(100vw - 170px);
+
+    min-height: 32px;
+
+    padding: 7px 10px;
+
+    font-size: 0.65rem;
+
+    line-height: 1.3;
+
     white-space: normal;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
     text-align: center;
-    width: 90%;
-    bottom: 15px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
   }
+
+
+  /* ==========================================
+     ÁUDIO
+     ========================================== */
+
+  #audio_controls {
+    bottom: 15px;
+
+    right: 15px;
+
+    gap: 5px;
+
+    z-index: 2000;
+  }
+
+  #start_audio,
+  #stop_audio {
+    padding: 6px 10px;
+
+    font-size: 0.6rem;
+
+    min-height: 30px;
+  }
+
+
+  /* ==========================================
+     OUTROS ELEMENTOS
+     ========================================== */
 
   #content_container {
     padding: 20px 25px;
+
     width: 85%;
   }
 
@@ -434,26 +618,18 @@ body {
   #play_button,
   #about_button {
     padding: 10px 20px;
+
     font-size: 0.9rem;
   }
 
   #info-panel {
     top: 10px;
+
     right: 10px;
+
     padding: 8px 12px;
+
     min-width: 140px;
-  }
-
-  #audio_controls {
-    bottom: 15px;
-    right: 15px;
-    gap: 6px;
-  }
-
-  #start_audio,
-  #stop_audio {
-    padding: 6px 12px;
-    font-size: 0.6rem;
   }
 
   .mobile-only {
@@ -461,17 +637,40 @@ body {
   }
 }
 
+/* ============================================
+   TABLET
+   ============================================ */
+
 @media (min-width: 769px) and (max-width: 1024px) {
+
   .touch-joypad {
     display: grid;
+
     transform: scale(0.8);
+
     transform-origin: bottom left;
+
+    bottom: 20px;
+
+    left: 20px;
   }
 
   .mobile-controls-panel {
     display: flex;
+
     transform: scale(0.8);
+
     transform-origin: bottom right;
+
+    bottom: 75px;
+
+    right: 20px;
+  }
+
+  #painting-info {
+    bottom: 30px;
+
+    max-width: 50vw;
   }
 
   .mobile-only {
@@ -479,7 +678,12 @@ body {
   }
 }
 
+/* ============================================
+   DESKTOP
+   ============================================ */
+
 @media (min-width: 1025px) {
+
   .touch-joypad,
   .mobile-controls-panel {
     display: none !important;
@@ -490,12 +694,24 @@ body {
   }
 }
 
+/* ============================================
+   CELULARES PEQUENOS
+   ============================================ */
+
 @media (max-width: 480px) {
+
   .touch-joypad {
     grid-template-columns: repeat(3, 45px);
+
     grid-template-rows: repeat(3, 45px);
+
     gap: 3px;
+
     padding: 8px;
+
+    bottom: 10px;
+
+    left: 10px;
   }
 
   .joy-btn {
@@ -504,16 +720,86 @@ body {
 
   .mobile-btn {
     padding: 6px 12px;
+
     font-size: 10px;
+  }
+
+
+  /* ==========================================
+     TEXTO DO QUADRO — CELULAR PEQUENO
+     ========================================== */
+
+  #painting-info {
+    bottom: 95px;
+
+    width: calc(100vw - 135px);
+
+    max-width: calc(100vw - 135px);
+
+    min-height: 30px;
+
+    padding: 6px 8px;
+
+    font-size: 0.6rem;
+
+    line-height: 1.25;
+
+    border-radius: 10px;
+  }
+
+
+  /* ==========================================
+     ÁUDIO — CELULAR PEQUENO
+     ========================================== */
+
+  #audio_controls {
+    bottom: 10px;
+
+    right: 10px;
+
+    gap: 4px;
+  }
+
+  #start_audio,
+  #stop_audio {
+    padding: 5px 8px;
+
+    font-size: 0.55rem;
+
+    min-height: 28px;
+  }
+
+
+  /* ==========================================
+     CONTROLES DIREITOS
+     ========================================== */
+
+  .mobile-controls-panel {
+    bottom: 60px;
+
+    right: 10px;
+
+    gap: 6px;
   }
 }
 
+/* ============================================
+   MOBILE ONLY
+   ============================================ */
+
 .mobile-only {
   display: none;
+
   color: #ffaa00;
+
   font-size: 0.65rem;
+
   margin-top: 5px;
 }
+
+/* ============================================
+   PULSE
+   ============================================ */
 
 @keyframes pulse {
   0%,
@@ -526,11 +812,21 @@ body {
   }
 }
 
+/* ============================================
+   MENU HIDDEN
+   ============================================ */
+
 #menu.hidden {
   opacity: 0;
+
   visibility: hidden;
+
   pointer-events: none;
 }
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
 
 ::-webkit-scrollbar {
   width: 8px;
@@ -538,11 +834,13 @@ body {
 
 ::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0.3);
+
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 100, 0, 0.5);
+
   border-radius: 4px;
 }
 
@@ -556,23 +854,30 @@ body {
 
 canvas {
   display: block;
+
   position: fixed;
+
   top: 0;
   left: 0;
+
   width: 100vw !important;
   height: 100vh !important;
+
   width: 100dvw !important;
   height: 100dvh !important;
+
   margin: 0;
   padding: 0;
+
   z-index: 1;
 }
 
 #info-panel,
 #painting-info,
 #audio_controls,
-.touch-joypad {
-  z-index: 1000;
+.touch-joypad,
+.mobile-controls-panel {
+  z-index: 2000;
 }
 
 @media (max-width: 768px) {
@@ -586,91 +891,99 @@ canvas {
    LADO OPOSTO DOS CONTROLES
    ============================================ */
 
-/*
-   CONTROLES:
-   - Joypad: esquerda embaixo
-   - Mobile controls: direita embaixo
-
-   VR:
-   - esquerda em cima
-   - não interfere com os controles inferiores
-*/
-
 #VRButton,
 button[style*="VRButton"],
 button[id*="VR"],
 button[class*="VR"],
 button[class*="vr-button"] {
+
   position: fixed !important;
 
-  /* Canto superior esquerdo */
   top: 20px !important;
+
   left: 20px !important;
 
-  /* Cancela qualquer posição anterior */
   right: auto !important;
+
   bottom: auto !important;
 
   z-index: 9999 !important;
 
   font-size: 12px !important;
+
   padding: 6px 12px !important;
 
   margin: 0 !important;
 
   touch-action: manipulation !important;
+
   pointer-events: auto !important;
 }
 
 /* ============================================
-   GARANTE QUE O VR NÃO SEJA EMPURRADO
-   PELOS CONTROLES MÓVEIS
+   VR — CELULAR
    ============================================ */
 
 @media (max-width: 768px) {
+
   #VRButton,
   button[style*="VRButton"],
   button[id*="VR"],
   button[class*="VR"],
   button[class*="vr-button"] {
+
     top: 15px !important;
+
     left: 15px !important;
+
     right: auto !important;
+
     bottom: auto !important;
+
     z-index: 9999 !important;
   }
 }
 
 /* ============================================
-   TABLET
+   VR — TABLET
    ============================================ */
 
 @media (min-width: 769px) and (max-width: 1024px) {
+
   #VRButton,
   button[style*="VRButton"],
   button[id*="VR"],
   button[class*="VR"],
   button[class*="vr-button"] {
+
     top: 20px !important;
+
     left: 20px !important;
+
     right: auto !important;
+
     bottom: auto !important;
   }
 }
 
 /* ============================================
-   DESKTOP
+   VR — DESKTOP
    ============================================ */
 
 @media (min-width: 1025px) {
+
   #VRButton,
   button[style*="VRButton"],
   button[id*="VR"],
   button[class*="VR"],
   button[class*="vr-button"] {
+
     top: 20px !important;
+
     left: 20px !important;
+
     right: auto !important;
+
     bottom: auto !important;
   }
 }
