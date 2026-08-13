@@ -12,9 +12,81 @@
     <script src="/world_azure/shared/js/hecate/auth.js"></script>
     
     <link rel="stylesheet" href="./style.css" />
+    
+    <style>
+      /* PAINEL DE DEBUG 3D */
+      #debug-3d {
+        position: fixed;
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+        background: rgba(0,0,0,0.92);
+        color: #00ffff;
+        font-family: 'Courier New', monospace;
+        font-size: 11px;
+        padding: 10px;
+        border-radius: 10px;
+        z-index: 999999;
+        max-height: 40vh;
+        overflow-y: auto;
+        border: 2px solid #00ffff;
+        word-break: break-word;
+        display: none;
+        box-shadow: 0 0 20px rgba(0,255,255,0.2);
+        pointer-events: none;
+      }
+      #debug-3d .error { color: #ff4444 !important; }
+      #debug-3d .warn { color: #ffaa00 !important; }
+      #debug-3d .success { color: #00ff88 !important; }
+      #debug-3d .info { color: #00ffff !important; }
+      
+      #debug-toggle-3d {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        z-index: 999999;
+        background: rgba(0,0,0,0.8);
+        color: #00ffff;
+        border: 2px solid #00ffff;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+        cursor: pointer;
+        font-family: monospace;
+        display: none;
+        touch-action: manipulation;
+      }
+      #debug-toggle-3d:active { transform: scale(0.9); }
+      
+      .debug-active #debug-3d { display: block !important; }
+      .debug-active #debug-toggle-3d { display: flex !important; align-items: center; justify-content: center; }
+      
+      /* Indicador visual da galeria */
+      #gallery-status {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        background: rgba(0,0,0,0.8);
+        color: #fff;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 12px;
+        z-index: 99999;
+        border: 1px solid #666;
+        font-family: Arial, sans-serif;
+      }
+      #gallery-status.loading { border-color: #ffaa00; color: #ffaa00; }
+      #gallery-status.ready { border-color: #00ff88; color: #00ff88; }
+      #gallery-status.error { border-color: #ff4444; color: #ff4444; }
+    </style>
   </head>
 
   <body>
+    <!-- STATUS DA GALERIA -->
+    <div id="gallery-status">⏳ Carregando...</div>
+
+    <!-- MENU PRINCIPAL -->
     <div id="menu">
       <div id="img_container">
         <div id="starry_night_bg"></div>
@@ -45,23 +117,16 @@
       </div>
     </div>
 
+    <!-- OVERLAY SOBRE -->
     <div id="about-overlay">
       <button id="close-about">X</button>
       <h1>Sobre a Galeria 3D</h1>
-      <p>
-        Bem-vindo à nossa galeria de arte virtual 3D. Aqui você pode navegar por
-        diversas obras de arte e aprender sobre sua história e significado.
-      </p>
-      <p>
-        Este projeto é trazido a você por Emilian Kasemi. Acreditamos no poder
-        da arte para inspirar, provocar pensamentos e comunicar entre culturas.
-      </p>
-      <p>
-        Sinta-se à vontade para explorar. A galeria é melhor apreciada em tela cheia.
-        <strong>No celular, use o joystick na tela!</strong>
-      </p>
+      <p>Bem-vindo à nossa galeria de arte virtual 3D. Aqui você pode navegar por diversas obras de arte e aprender sobre sua história e significado.</p>
+      <p>Este projeto é trazido a você por Emilian Kasemi. Acreditamos no poder da arte para inspirar, provocar pensamentos e comunicar entre culturas.</p>
+      <p>Sinta-se à vontade para explorar. A galeria é melhor apreciada em tela cheia. <strong>No celular, use o joystick na tela!</strong></p>
     </div>
 
+    <!-- PAINEL DE CONTROLES -->
     <div id="info-panel">
       <div id="info-header">
         <h3>Controles</h3>
@@ -79,6 +144,7 @@
       </div>
     </div>
 
+    <!-- CONTROLES DE ÁUDIO -->
     <div id="audio_controls">
       <button id="start_audio">▶ Iniciar Guia</button>
       <button id="stop_audio">⏹ Parar Guia</button>
@@ -86,6 +152,302 @@
 
     <div id="painting-info"></div>
 
+    <!-- PAINEL DE DEBUG 3D -->
+    <div id="debug-3d"></div>
+    <button id="debug-toggle-3d">🎮</button>
+
+    <!-- ============================================ -->
+    <!-- DIAGNÓSTICO DA GALERIA 3D                    -->
+    <!-- ============================================ -->
+    <script>
+      // ============================================
+      // ATIVA DEBUG COM ?debug3d
+      // ============================================
+      if (window.location.search.includes('debug3d')) {
+        document.body.classList.add('debug-active');
+      }
+
+      // ============================================
+      // FUNÇÕES DE DEBUG
+      // ============================================
+      function log3d(msg, type = 'info') {
+        const div = document.getElementById('debug-3d');
+        if (!div) return;
+        
+        const line = document.createElement('div');
+        const time = new Date().toLocaleTimeString();
+        const colors = { info: '#00ffff', error: '#ff4444', warn: '#ffaa00', success: '#00ff88' };
+        
+        line.style.color = colors[type] || '#00ffff';
+        line.style.padding = '2px 0';
+        line.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+        line.textContent = `[${time}] ${msg}`;
+        div.appendChild(line);
+        div.scrollTop = div.scrollHeight;
+        
+        while (div.children.length > 100) {
+          div.removeChild(div.firstChild);
+        }
+        console.log(`[3D] ${msg}`);
+      }
+
+      function updateStatus(text, type = 'loading') {
+        const el = document.getElementById('gallery-status');
+        if (el) {
+          el.textContent = text;
+          el.className = type;
+        }
+      }
+
+      // ============================================
+      // MONITORA O main.js
+      // ============================================
+      log3d('🎮 Iniciando diagnóstico da galeria 3D...', 'info');
+      updateStatus('⏳ Carregando main.js...', 'loading');
+
+      // Verifica se o main.js carregou
+      let mainJsLoaded = false;
+      
+      // Hook no carregamento do módulo
+      document.addEventListener('DOMContentLoaded', function() {
+        log3d('📄 DOM carregado', 'info');
+        
+        // Procura o script main.js
+        const scripts = document.querySelectorAll('script[type="module"]');
+        let found = false;
+        scripts.forEach(s => {
+          if (s.src && s.src.includes('main.js')) {
+            found = true;
+            log3d('✅ main.js encontrado no DOM', 'success');
+            
+            // Monitora quando o módulo carregar
+            s.addEventListener('load', function() {
+              mainJsLoaded = true;
+              log3d('✅ main.js carregado com sucesso!', 'success');
+              updateStatus('✅ main.js carregado', 'ready');
+              
+              // Verifica se a galeria iniciou
+              setTimeout(checkGallery, 2000);
+            });
+            
+            s.addEventListener('error', function() {
+              log3d('❌ ERRO ao carregar main.js!', 'error');
+              updateStatus('❌ Erro no main.js', 'error');
+            });
+          }
+        });
+        
+        if (!found) {
+          log3d('⚠️ main.js NÃO encontrado no DOM', 'warn');
+          updateStatus('⚠️ main.js não encontrado', 'error');
+        }
+        
+        // ============================================
+        // BOTÃO EXPLORAR
+        // ============================================
+        const btn = document.getElementById('play_button');
+        if (btn) {
+          // Remove eventos antigos
+          const newBtn = btn.cloneNode(true);
+          btn.parentNode.replaceChild(newBtn, btn);
+          
+          newBtn.addEventListener('click', function() {
+            log3d('🖱️ CLICOU em EXPLORAR!', 'info');
+            
+            // Verifica se a galeria já está rodando
+            if (window.galleryInitialized) {
+              log3d('✅ Galeria já está rodando!', 'success');
+              return;
+            }
+            
+            // Tenta iniciar a galeria
+            log3d('🚀 Tentando iniciar galeria...', 'info');
+            updateStatus('⏳ Iniciando galeria...', 'loading');
+            
+            // Procura funções de entrada
+            const funcs = ['entrarGaleria', 'startGallery', 'initGallery', 'loadGallery', 'init'];
+            let found = false;
+            
+            for (const f of funcs) {
+              if (typeof window[f] === 'function') {
+                try {
+                  log3d(`▶️ Chamando ${f}()...`, 'info');
+                  window[f]();
+                  log3d(`✅ ${f}() executado!`, 'success');
+                  found = true;
+                  updateStatus('✅ Galeria iniciada!', 'ready');
+                  window.galleryInitialized = true;
+                  break;
+                } catch(e) {
+                  log3d(`❌ ERRO em ${f}: ${e.message}`, 'error');
+                  log3d(`📋 Stack: ${e.stack}`, 'error');
+                }
+              }
+            }
+            
+            if (!found) {
+              log3d('⚠️ Nenhuma função de entrada encontrada!', 'warn');
+              log3d('🔍 Funções disponíveis: ' + Object.keys(window).filter(k => k.includes('galeria') || k.includes('Gallery') || k.includes('init')).join(', '), 'warn');
+              updateStatus('⚠️ Nenhuma função de entrada', 'error');
+              
+              // Tenta recarregar
+              log3d('🔄 Recarregando main.js...', 'info');
+              const script = document.createElement('script');
+              script.type = 'module';
+              script.src = './main.js?' + Date.now();
+              script.onload = function() {
+                log3d('✅ main.js recarregado!', 'success');
+                log3d('💡 Tente clicar novamente', 'info');
+                updateStatus('✅ Recarregado, tente de novo', 'ready');
+              };
+              script.onerror = function() {
+                log3d('❌ ERRO ao recarregar!', 'error');
+                updateStatus('❌ Falha ao recarregar', 'error');
+              };
+              document.body.appendChild(script);
+            }
+          });
+          
+          log3d('✅ Evento do botão configurado', 'success');
+        } else {
+          log3d('❌ Botão EXPLORAR não encontrado!', 'error');
+        }
+        
+        // ============================================
+        // BOTÃO SOBRE
+        // ============================================
+        const aboutBtn = document.getElementById('about_button');
+        if (aboutBtn) {
+          aboutBtn.addEventListener('click', function() {
+            const overlay = document.getElementById('about-overlay');
+            if (overlay) overlay.style.display = 'flex';
+          });
+        }
+        
+        const closeAbout = document.getElementById('close-about');
+        if (closeAbout) {
+          closeAbout.addEventListener('click', function() {
+            const overlay = document.getElementById('about-overlay');
+            if (overlay) overlay.style.display = 'none';
+          });
+        }
+        
+        // ============================================
+        // BOTÃO DEBUG
+        // ============================================
+        const debugToggle = document.getElementById('debug-toggle-3d');
+        if (debugToggle) {
+          debugToggle.addEventListener('click', function() {
+            document.body.classList.toggle('debug-active');
+          });
+        }
+        
+        // ============================================
+        // VERIFICA GALERIA PERIODICAMENTE
+        // ============================================
+        function checkGallery() {
+          // Procura por elementos 3D típicos
+          const canvas = document.querySelector('canvas');
+          const threeDiv = document.getElementById('three-container');
+          const babylonDiv = document.getElementById('babylon-container');
+          
+          if (canvas) {
+            log3d('✅ Canvas 3D encontrado!', 'success');
+            updateStatus('🎨 Galeria 3D rodando!', 'ready');
+            window.galleryInitialized = true;
+            return;
+          }
+          
+          if (threeDiv && threeDiv.children.length > 0) {
+            log3d('✅ Three.js container encontrado!', 'success');
+            updateStatus('🎨 Three.js rodando!', 'ready');
+            window.galleryInitialized = true;
+            return;
+          }
+          
+          if (babylonDiv && babylonDiv.children.length > 0) {
+            log3d('✅ Babylon.js container encontrado!', 'success');
+            updateStatus('🎨 Babylon.js rodando!', 'ready');
+            window.galleryInitialized = true;
+            return;
+          }
+          
+          // Verifica se Three.js existe
+          if (typeof THREE !== 'undefined') {
+            log3d('✅ Three.js carregado!', 'success');
+            log3d('📦 Versão: ' + (THREE.REVISION || 'desconhecida'), 'info');
+          } else {
+            log3d('⚠️ Three.js NÃO carregado', 'warn');
+          }
+          
+          // Verifica se Babylon.js existe
+          if (typeof BABYLON !== 'undefined') {
+            log3d('✅ Babylon.js carregado!', 'success');
+          } else {
+            log3d('⚠️ Babylon.js NÃO carregado', 'warn');
+          }
+          
+          // Verifica se tem algum erro no console
+          // (não dá pra capturar tudo, mas ajuda)
+        }
+        
+        // Checa a cada 3 segundos
+        let checkCount = 0;
+        const checkInterval = setInterval(function() {
+          checkCount++;
+          checkGallery();
+          
+          if (checkCount > 10 || window.galleryInitialized) {
+            clearInterval(checkInterval);
+            log3d('⏹️ Verificações automáticas encerradas', 'info');
+          }
+        }, 3000);
+        
+        // ============================================
+        // INFO DO SISTEMA
+        // ============================================
+        log3d('📱 ' + (navigator.userAgent.includes('Mobile') ? 'Celular' : 'Desktop'), 'info');
+        log3d('🌐 ' + window.location.href, 'info');
+        log3d('⏰ ' + new Date().toLocaleString(), 'info');
+        
+        // Verifica WebGL
+        const canvas = document.createElement('canvas');
+        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+        if (gl) {
+          log3d('✅ WebGL suportado!', 'success');
+          log3d('🖥️ ' + gl.getParameter(gl.RENDERER), 'info');
+        } else {
+          log3d('❌ WebGL NÃO suportado!', 'error');
+          updateStatus('❌ WebGL não suportado', 'error');
+        }
+        
+        log3d('✅ Diagnóstico concluído!', 'success');
+        log3d('💡 Adicione ?debug3d na URL para ativar este painel', 'info');
+        log3d('🎮 Toque no 🎮 para ligar/desligar', 'info');
+        log3d('🔄 Clique em EXPLORAR para testar', 'info');
+      });
+      
+      // ============================================
+      // CAPTURA ERROS
+      // ============================================
+      window.onerror = function(msg, url, line, col, error) {
+        log3d(`🔥 ERRO: ${msg}`, 'error');
+        log3d(`📍 ${url}:${line}:${col}`, 'error');
+        if (error && error.stack) {
+          log3d(`📋 ${error.stack.substring(0, 300)}`, 'error');
+        }
+        updateStatus('❌ Erro na galeria', 'error');
+        return false;
+      };
+      
+      window.addEventListener('unhandledrejection', function(e) {
+        log3d(`⚠️ PROMESSA REJEITADA: ${e.reason || 'sem motivo'}`, 'error');
+      });
+    </script>
+
+    <!-- ============================================ -->
+    <!-- SEU main.js ORIGINAL                         -->
+    <!-- ============================================ -->
     <script type="module" src="./main.js"></script>
   </body>
 </html>
