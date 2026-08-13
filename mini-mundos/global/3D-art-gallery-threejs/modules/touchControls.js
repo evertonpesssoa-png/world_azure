@@ -1,13 +1,17 @@
 // ============================================================
 // 📱 TOUCH CONTROLS — GALERIA 3D
 // ============================================================
-// 1 dedo arrastando = olhar ao redor
+// 1 dedo arrastando em área livre = olhar ao redor
 //
-// Não interfere:
+// NÃO interfere:
 // - no joystick
 // - nos botões
+// - no menu
+// - no áudio
 // - no VR
 // - no clique das pinturas
+//
+// O movimento é controlado pelo movement.js.
 // ============================================================
 
 const isMobile =
@@ -20,16 +24,19 @@ let active = false;
 let lastX = 0;
 let lastY = 0;
 
-// Sensibilidade da câmera
-// Maior = mais rápido
-// Menor = mais lento
+// ============================================================
+// 🎚️ SENSIBILIDADE
+// ============================================================
+
 const sensitivity = 0.003;
 
+
 // ============================================================
-// ELEMENTOS DA INTERFACE
+// 🚫 ELEMENTOS QUE NÃO PODEM CONTROLAR A CÂMERA
 // ============================================================
 
 function isInterfaceElement(target) {
+
   if (!target) return false;
 
   return !!target.closest(`
@@ -43,79 +50,135 @@ function isInterfaceElement(target) {
     #VRButton,
     #about-overlay
   `);
+
 }
 
+
 // ============================================================
-// CONFIGURAÇÃO
+// 🎥 CONFIGURAÇÃO
 // ============================================================
 
 export function setupTouchControls(camera, renderer) {
 
-  // Desktop não precisa desse sistema
+  // ----------------------------------------------------------
+  // Desktop
+  // ----------------------------------------------------------
+
   if (!isMobile) {
-    console.log("🖥️ TouchControls: desktop detectado");
+
+    console.log(
+      "🖥️ TouchControls: desktop detectado"
+    );
+
     return;
+
   }
 
-  const element = renderer.domElement;
 
-  // Impede o navegador de interpretar o toque
-  // como scroll/gesto da página.
-  element.style.touchAction = "none";
+  // ----------------------------------------------------------
+  // Canvas
+  // ----------------------------------------------------------
+
+  const element =
+    renderer.domElement;
+
+
+  element.style.touchAction =
+    "none";
+
 
   // ==========================================================
-  // TOUCH START
+  // 👆 TOUCH START
   // ==========================================================
 
   element.addEventListener(
     "touchstart",
+
     (event) => {
 
-      // Apenas 1 dedo controla a câmera
+      // ------------------------------------------------------
+      // Só um dedo
+      // ------------------------------------------------------
+
       if (event.touches.length !== 1) {
+
         active = false;
+
         return;
+
       }
 
-      // Se começou sobre algum controle da interface,
-      // não mexe na câmera.
-      if (isInterfaceElement(event.target)) {
+
+      // ------------------------------------------------------
+      // Não iniciar olhar sobre interface
+      // ------------------------------------------------------
+
+      if (
+        isInterfaceElement(
+          event.target
+        )
+      ) {
+
         active = false;
+
         return;
+
       }
 
-      const touch = event.touches[0];
 
-      lastX = touch.clientX;
-      lastY = touch.clientY;
+      const touch =
+        event.touches[0];
+
+
+      lastX =
+        touch.clientX;
+
+      lastY =
+        touch.clientY;
+
 
       active = true;
 
+
       event.preventDefault();
+
     },
+
     {
       passive: false
     }
+
   );
 
+
   // ==========================================================
-  // TOUCH MOVE
+  // 👆 TOUCH MOVE
   // ==========================================================
 
   element.addEventListener(
     "touchmove",
+
     (event) => {
 
       if (!active) return;
 
-      // Se passar para dois dedos,
-      // encerra o controle de rotação.
+
+      // ------------------------------------------------------
+      // Se entrar com outro dedo, cancela
+      // ------------------------------------------------------
+
       if (event.touches.length !== 1) {
+
         active = false;
+
         return;
+
       }
 
-      const touch = event.touches[0];
+
+      const touch =
+        event.touches[0];
+
 
       const deltaX =
         touch.clientX - lastX;
@@ -123,68 +186,104 @@ export function setupTouchControls(camera, renderer) {
       const deltaY =
         touch.clientY - lastY;
 
-      lastX = touch.clientX;
-      lastY = touch.clientY;
+
+      lastX =
+        touch.clientX;
+
+      lastY =
+        touch.clientY;
+
 
       // ======================================================
-      // OLHAR PARA ESQUERDA / DIREITA
+      // 👈👉 GIRO HORIZONTAL
       // ======================================================
 
       camera.rotation.y -=
         deltaX * sensitivity;
 
+
       // ======================================================
-      // OLHAR PARA CIMA / BAIXO
+      // 👆👇 GIRO VERTICAL
       // ======================================================
 
       camera.rotation.x -=
         deltaY * sensitivity;
 
+
       // ======================================================
-      // LIMITA A VISÃO VERTICAL
+      // 🔒 LIMITA VISÃO VERTICAL
       // ======================================================
 
       const maxVertical =
         Math.PI / 2 - 0.05;
 
-      camera.rotation.x = Math.max(
-        -maxVertical,
-        Math.min(
-          maxVertical,
-          camera.rotation.x
-        )
-      );
+
+      camera.rotation.x =
+        Math.max(
+          -maxVertical,
+
+          Math.min(
+            maxVertical,
+            camera.rotation.x
+          )
+        );
+
 
       event.preventDefault();
+
     },
+
     {
       passive: false
     }
+
   );
 
+
   // ==========================================================
-  // TOUCH END
+  // ☝️ TOUCH END
   // ==========================================================
 
   element.addEventListener(
     "touchend",
+
     () => {
+
       active = false;
+
     }
   );
 
+
   // ==========================================================
-  // TOUCH CANCEL
+  // ❌ TOUCH CANCEL
   // ==========================================================
 
   element.addEventListener(
     "touchcancel",
+
     () => {
+
       active = false;
+
     }
   );
+
+
+  // ==========================================================
+  // 📱 FINALIZAÇÃO
+  // ==========================================================
 
   console.log(
     "📱 TouchControls ativado!"
   );
+
+  console.log(
+    "👆 Arraste a área livre da tela para olhar ao redor."
+  );
+
+  console.log(
+    "🎮 Use o joystick para movimentar."
+  );
+
 }
