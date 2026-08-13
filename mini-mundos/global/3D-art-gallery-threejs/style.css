@@ -104,7 +104,7 @@ body {
 
   background: linear-gradient(
     135deg,
-    #ffd89b,
+    #8ec5ff,
     #c7e9fb
   );
 
@@ -124,15 +124,15 @@ body {
 }
 
 /* =========================================================
-   BOTÕES DO MENU
+   BOTÕES DO MENU — AZUL
    ========================================================= */
 
 #play_button,
 #about_button {
   background: linear-gradient(
     135deg,
-    rgba(255, 100, 0, 0.8),
-    rgba(255, 50, 0, 0.6)
+    rgba(0, 120, 255, 0.85),
+    rgba(0, 70, 200, 0.7)
   );
 
   border: none;
@@ -172,12 +172,12 @@ body {
 
   background: linear-gradient(
     135deg,
-    rgba(255, 100, 0, 1),
-    rgba(255, 50, 0, 0.8)
+    rgba(0, 150, 255, 1),
+    rgba(0, 80, 220, 0.9)
   );
 
   box-shadow:
-    0 0 20px rgba(255, 100, 0, 0.5);
+    0 0 20px rgba(0, 130, 255, 0.6);
 }
 
 #play_button:active,
@@ -246,7 +246,7 @@ body {
   width: 30px;
   height: 30px;
 
-  background: rgba(255, 0, 0, 0.5);
+  background: rgba(0, 100, 255, 0.5);
 
   border: none;
 
@@ -266,7 +266,7 @@ body {
 }
 
 #close-about:hover {
-  background: rgba(255, 0, 0, 0.8);
+  background: rgba(0, 120, 255, 0.8);
   transform: scale(1.05);
 }
 
@@ -275,7 +275,7 @@ body {
 }
 
 #about-overlay h1 {
-  color: #ff6600;
+  color: #3d9bff;
   margin-bottom: 20px;
   font-size: 1.5rem;
 }
@@ -321,7 +321,7 @@ body {
 
   margin-bottom: 8px;
 
-  color: #ffaa00;
+  color: #4da3ff;
 }
 
 #info-header h3 {
@@ -364,19 +364,6 @@ body {
 
 /* =========================================================
    INFORMAÇÃO DO QUADRO
-   =========================================================
-   
-   POSIÇÃO CONTROLADA DIRETAMENTE.
-
-   NÃO USA translateX.
-
-   25% = esquerda
-   30% = mais para o centro
-   40% = centro-direita
-   50% = metade da tela
-
-   VALOR ATUAL: 25%
-
    ========================================================= */
 
 #painting-info {
@@ -412,9 +399,9 @@ body {
 
   z-index: 3000;
 
-  border: 1px solid rgba(255, 215, 0, 0.5);
+  border: 1px solid rgba(0, 150, 255, 0.5);
 
-  color: #ffdd88;
+  color: #88c9ff;
 
   font-weight: bold;
 
@@ -567,9 +554,9 @@ body {
 .mobile-btn:active {
   transform: scale(0.95);
 
-  background: rgba(255, 100, 0, 0.9);
+  background: rgba(0, 100, 255, 0.9);
 
-  border-color: #ff6600;
+  border-color: #007bff;
 }
 
 /* =========================================================
@@ -640,11 +627,11 @@ body {
 }
 
 .joy-btn:active {
-  background: rgba(255, 100, 0, 0.9);
+  background: rgba(0, 100, 255, 0.9);
 
   transform: scale(0.88);
 
-  border-color: #ffaa00;
+  border-color: #007bff;
 }
 
 .joy-empty {
