@@ -38,7 +38,6 @@ body {
 
     font-family: Arial, sans-serif;
 
-    /* Mantém o gesto de pinça para o JS */
     touch-action: none;
 }
 
@@ -46,18 +45,6 @@ body {
 /* =========================================================
    CONTAINER PRINCIPAL
 ========================================================= */
-
-/*
-   O sistema passa a usar o menor lado da tela.
-
-   Vertical:
-   largura pequena → usa a largura
-
-   Horizontal:
-   altura pequena → usa a altura
-
-   Assim o sistema sempre cabe proporcionalmente.
-*/
 
 .container {
 
@@ -378,15 +365,43 @@ body {
 
 
 /* =========================================================
-   LUA
+   LUA - ÓRBITA AO REDOR DA TERRA
 ========================================================= */
+
+/*
+   A .moon funciona como uma pequena órbita.
+
+   Ela fica centralizada dentro da Terra.
+   A Lua propriamente dita fica no topo dessa órbita.
+
+   Assim:
+
+             🌙
+             |
+          --------
+        /          \
+       |    🌍      |
+        \          /
+          --------
+
+   A .moon gira.
+   A imagem da Lua acompanha a borda.
+*/
 
 .moon {
 
     position: absolute;
 
-    width: 30px;
-    height: 30px;
+    /*
+       Diâmetro da órbita da Lua.
+
+       A Terra possui 200px de diâmetro.
+       A Lua ficará aproximadamente 35px
+       afastada do centro.
+    */
+
+    width: 70px;
+    height: 70px;
 
     top: 50%;
     left: 50%;
@@ -394,9 +409,20 @@ body {
     transform:
         translate(-50%, -50%);
 
+    border-radius: 50%;
+
     animation:
         moonOrbit 3s linear infinite;
+
+    pointer-events: none;
+
+    z-index: 6;
 }
+
+
+/* =========================================================
+   LUA - IMAGEM
+========================================================= */
 
 .moon::before {
 
@@ -413,12 +439,20 @@ body {
         url('./images/moon.png');
 
     background-size: cover;
+    background-position: center;
 
-    top: -25px;
+    /*
+       Coloca a Lua na borda superior
+       da órbita.
+    */
+
+    top: -3px;
     left: 50%;
 
     transform:
         translateX(-50%);
+
+    pointer-events: none;
 }
 
 
@@ -625,13 +659,6 @@ body {
    RESPONSIVIDADE - TELAS PEQUENAS
 ========================================================= */
 
-/*
-   Aqui o sistema é reduzido proporcionalmente.
-
-   O JS continua podendo aumentar novamente
-   através do zoom por pinça.
-*/
-
 @media (max-width: 768px) {
 
     .container {
@@ -748,8 +775,27 @@ body {
 
 
     /* -----------------------------------------------------
+       LUA - MOBILE
+       Mantém a proporção da órbita.
+    ----------------------------------------------------- */
+
+    .moon {
+
+        width: 58px;
+        height: 58px;
+    }
+
+    .moon::before {
+
+        width: 5px;
+        height: 5px;
+
+        top: -2.5px;
+    }
+
+
+    /* -----------------------------------------------------
        ANEL DE SATURNO
-       Mantido sem alterar a lógica.
     ----------------------------------------------------- */
 
     .saturn::after {
@@ -783,6 +829,26 @@ body {
         margin-top: -23px;
     }
 
+
+    /* -----------------------------------------------------
+       LUA
+    ----------------------------------------------------- */
+
+    .moon {
+
+        width: 52px;
+        height: 52px;
+    }
+
+    .moon::before {
+
+        width: 5px;
+        height: 5px;
+
+        top: -2.5px;
+    }
+
+
     .saturn::after {
 
         width: 38px;
@@ -796,13 +862,6 @@ body {
 /* =========================================================
    TELAS HORIZONTAIS / LANDSCAPE
 ========================================================= */
-
-/*
-   Em uma tela horizontal, o vmin passa automaticamente
-   a usar a ALTURA da tela.
-
-   Isso impede o sistema de ficar cortado verticalmente.
-*/
 
 @media (orientation: landscape) and (max-height: 768px) {
 
