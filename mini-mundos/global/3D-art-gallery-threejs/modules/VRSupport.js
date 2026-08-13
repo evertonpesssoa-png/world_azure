@@ -1,7 +1,6 @@
 // ==============================================
 // CORREÇÃO DE CAMINHO ABSOLUTO PARA O GITHUB PAGES
 // ==============================================
-// Importando o VRButton direto da CDN (mesma versão que você está usando)
 import { VRButton } from "https://cdn.jsdelivr.net/npm/three@0.163.0/examples/jsm/webxr/VRButton.js";
 
 // Detecta se é celular
@@ -50,20 +49,25 @@ const enableVR = (renderer) => {
       console.log("🕶️ WebXR session ended");
     });
 
-    // Adicionar botão VR apenas em desktop (no celular fica pequeno demais)
-    if (!isMobile) {
-      const vrButton = VRButton.createButton(renderer);
-      vrButton.style.position = 'fixed';
-      vrButton.style.bottom = '20px';
-      vrButton.style.left = '20px';
-      vrButton.style.right = 'auto';
-      vrButton.style.top = 'auto';
-      vrButton.style.zIndex = '1000';
-      document.body.appendChild(vrButton);
-      console.log("🕶️ Botão VR adicionado (desktop)");
-    } else {
-      console.log("📱 VR disponível mas botão oculto no celular (use gestos)");
-    }
+    // ==============================================
+    // CRIAÇÃO DO BOTÃO VR (FUNCIONA NO CELULAR E PC)
+    // POSIÇÃO ALTERADA PARA O TOPO ESQUERDO
+    // ==============================================
+    const vrButton = VRButton.createButton(renderer);
+    vrButton.style.position = 'fixed';
+    vrButton.style.top = '20px';        // Topo da tela
+    vrButton.style.left = '20px';       // Lado esquerdo (oposto ao menu de controles)
+    vrButton.style.right = 'auto';
+    vrButton.style.bottom = 'auto';
+    vrButton.style.zIndex = '9999';
+    
+    // Ajuste de tamanho para ficar discreto no celular
+    vrButton.style.fontSize = '12px';
+    vrButton.style.padding = '6px 12px';
+    
+    document.body.appendChild(vrButton);
+    console.log("🕶️ Botão VR adicionado (topo esquerdo)");
+    
   } catch (error) {
     console.warn("⚠️ Erro ao configurar VR:", error);
   }
