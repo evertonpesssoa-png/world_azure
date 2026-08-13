@@ -1,5 +1,8 @@
-import * as THREE from "three";
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader";
+// ==============================================
+// IMPORTS CORRIGIDOS COM CAMINHOS ABSOLUTOS DA CDN
+// ==============================================
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.module.js";
+import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.163.0/examples/jsm/loaders/GLTFLoader.js";
 
 // Detecta celular
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
