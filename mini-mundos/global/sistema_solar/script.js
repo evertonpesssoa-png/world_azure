@@ -9,7 +9,169 @@
    - Botão de pause (roxo)
    - Painel interativo WZ (Sol, Lua e Planetas) - GLASS
    - Modo Exploração (viagem interplanetária)
+   - Caixa de LOG para debug no celular
 ========================================================= */
+
+
+/* =========================================================
+   CAIXA DE LOG - PARA DEBUG NO CELULAR
+========================================================= */
+
+// Cria a caixa de log
+function createLogBox() {
+    const logBox = document.createElement('div');
+    logBox.id = 'logBox';
+    logBox.style.cssText = `
+        position: fixed;
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+        max-height: 200px;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(0, 255, 255, 0.3);
+        border-radius: 12px;
+        padding: 10px 14px;
+        z-index: 99999;
+        overflow-y: auto;
+        font-family: 'Courier New', monospace;
+        font-size: 11px;
+        color: #00ffcc;
+        pointer-events: none;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.8);
+        scroll-behavior: smooth;
+        display: none;
+    `;
+    
+    // Título da caixa
+    const title = document.createElement('div');
+    title.textContent = '📡 LOG DE SISTEMA';
+    title.style.cssText = `
+        color: #8ab4f8;
+        font-weight: bold;
+        font-size: 10px;
+        letter-spacing: 2px;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding-bottom: 4px;
+    `;
+    logBox.appendChild(title);
+    
+    // Container das mensagens
+    const messages = document.createElement('div');
+    messages.id = 'logMessages';
+    messages.style.cssText = `
+        max-height: 150px;
+        overflow-y: auto;
+        line-height: 1.6;
+    `;
+    logBox.appendChild(messages);
+    
+    document.body.appendChild(logBox);
+    
+    // Botão para mostrar/esconder o log
+    const toggleBtn = document.createElement('button');
+    toggleBtn.textContent = '📋 LOG';
+    toggleBtn.style.cssText = `
+        position: fixed;
+        bottom: 10px;
+        left: 10px;
+        padding: 6px 12px;
+        background: rgba(0, 20, 40, 0.7);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(0, 255, 255, 0.2);
+        border-radius: 8px;
+        color: #00ffcc;
+        font-size: 10px;
+        font-family: 'Courier New', monospace;
+        cursor: pointer;
+        z-index: 100000;
+        transition: all 0.3s ease;
+        touch-action: manipulation;
+    `;
+    
+    let isVisible = false;
+    toggleBtn.addEventListener('click', () => {
+        isVisible = !isVisible;
+        logBox.style.display = isVisible ? 'block' : 'none';
+        toggleBtn.textContent = isVisible ? '📋 OCULTAR' : '📋 LOG';
+        toggleBtn.style.borderColor = isVisible ? 'rgba(0, 255, 255, 0.5)' : 'rgba(0, 255, 255, 0.2)';
+    });
+    
+    document.body.appendChild(toggleBtn);
+    
+    return logBox;
+}
+
+// Função para adicionar mensagens ao log
+function addLog(message, type = 'info') {
+    const messages = document.getElementById('logMessages');
+    if (!messages) return;
+    
+    const entry = document.createElement('div');
+    const timestamp = new Date().toLocaleTimeString();
+    
+    const colors = {
+        info: '#00ffcc',
+        success: '#00ff88',
+        error: '#ff4466',
+        warning: '#ffaa44',
+        comet: '#66ddff',
+        meteor: '#ff8844'
+    };
+    
+    entry.style.color = colors[type] || colors.info;
+    entry.style.fontSize = '10px';
+    entry.style.borderBottom = '1px solid rgba(255,255,255,0.03)';
+    entry.style.padding = '2px 0';
+    entry.textContent = `[${timestamp}] ${message}`;
+    
+    messages.appendChild(entry);
+    messages.scrollTop = messages.scrollHeight;
+    
+    // Limita o número de mensagens
+    while (messages.children.length > 50) {
+        messages.removeChild(messages.firstChild);
+    }
+}
+
+// Sobrescreve console.log para aparecer na caixa
+const originalLog = console.log;
+const originalError = console.error;
+const originalWarn = console.warn;
+
+console.log = function(...args) {
+    originalLog.apply(console, args);
+    addLog(args.join(' '), 'info');
+};
+
+console.error = function(...args) {
+    originalError.apply(console, args);
+    addLog('❌ ' + args.join(' '), 'error');
+};
+
+console.warn = function(...args) {
+    originalWarn.apply(console, args);
+    addLog('⚠️ ' + args.join(' '), 'warning');
+};
+
+// Funções específicas para logs
+function logComet(msg) { addLog('☄️ ' + msg, 'comet'); }
+function logMeteor(msg) { addLog('💫 ' + msg, 'meteor'); }
+function logSuccess(msg) { addLog('✅ ' + msg, 'success'); }
+function logError(msg) { addLog('❌ ' + msg, 'error'); }
+
+let logBoxInitialized = false;
+
+function initLogBox() {
+    if (logBoxInitialized) return;
+    createLogBox();
+    logBoxInitialized = true;
+    addLog('🚀 Sistema de LOG iniciado!', 'success');
+    addLog('📱 Clique em "📋 LOG" para ver os eventos', 'info');
+}
 
 
 /* =========================================================
@@ -276,16 +438,21 @@ function randomBetween(min, max) {
 
 
 /* ---------------------------------------------------------
-   CRIA UM COMETA
+   CRIA UM COMETA (COM LOGS)
 --------------------------------------------------------- */
 
 function createComet() {
 
+    addLog('🔥 createComet() CHAMADA!', 'comet');
+    
     const container =
         document.querySelector(".container");
 
 
-    if (!container) return;
+    if (!container) {
+        addLog('❌ Container NÃO encontrado!', 'error');
+        return;
+    }
 
 
     /* -------------------------------------------------
@@ -295,6 +462,7 @@ function createComet() {
     if (
         container.querySelector(".comet")
     ) {
+        addLog('⏳ Já existe um cometa, aguardando...', 'warning');
         return;
     }
 
@@ -520,6 +688,8 @@ function createComet() {
     container.appendChild(
         comet
     );
+    
+    addLog('✅ COMETA ADICIONADO ao DOM!', 'success');
 
 
     /* -------------------------------------------------
@@ -531,6 +701,7 @@ function createComet() {
 
             if (comet.parentNode) {
                 comet.remove();
+                addLog('🗑️ Cometa removido após animação', 'comet');
             }
 
         },
@@ -574,7 +745,7 @@ function scheduleComet() {
 
 
 /* =========================================================
-   PEQUENO DETRITO / METEORO
+   PEQUENO DETRITO / METEORO (COM LOGS)
 
    Muito mais discreto que o cometa.
 
@@ -584,11 +755,16 @@ function scheduleComet() {
 
 function createMeteor() {
 
+    addLog('☄️ createMeteor() CHAMADA!', 'meteor');
+    
     const container =
         document.querySelector(".container");
 
 
-    if (!container) return;
+    if (!container) {
+        addLog('❌ Container NÃO encontrado!', 'error');
+        return;
+    }
 
 
     /* -------------------------------------------------
@@ -598,6 +774,7 @@ function createMeteor() {
     if (
         container.querySelector(".comet")
     ) {
+        addLog('⏳ Cometa ativo, meteoro cancelado', 'warning');
         return;
     }
 
@@ -727,6 +904,8 @@ function createMeteor() {
     container.appendChild(
         meteor
     );
+    
+    addLog('✅ METEORO ADICIONADO ao DOM!', 'success');
 
 
     setTimeout(
@@ -734,6 +913,7 @@ function createMeteor() {
 
             if (meteor.parentNode) {
                 meteor.remove();
+                addLog('🗑️ Meteoro removido após animação', 'meteor');
             }
 
         },
@@ -1696,6 +1876,9 @@ window.addEventListener(
     "DOMContentLoaded",
     () => {
 
+        // INICIALIZA O LOG ANTES DE TUDO
+        initLogBox();
+
         createStars();
         createSaturnRingParticles();
         setupPinchZoom();
@@ -1717,6 +1900,7 @@ window.addEventListener(
         console.log('⏸️ Clique no botão (ROXO) ou pressione ESPAÇO para pausar/continuar.');
         console.log('🪐 Toque nos planetas, Sol ou Lua para viajar e ver a cosmologia WZ!');
         console.log('🚀 Pressione ESC para sair do modo exploração.');
+        console.log('📱 Clique em "📋 LOG" no canto inferior esquerdo para ver os logs!');
 
         window.createComet = createComet;
         window.createMeteor = createMeteor;
@@ -1728,5 +1912,7 @@ window.addEventListener(
         document.querySelectorAll('[data-key]').forEach(el => {
             console.log(`  - ${el.className} → ${el.dataset.key}`);
         });
+        
+        addLog('✅ Sistema Solar INICIALIZADO!', 'success');
     }
 );
