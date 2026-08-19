@@ -4,7 +4,7 @@
    LUA
    HIERARQUIA VISUAL DAS ÓRBITAS
    COMETAS / METEOROS EVENTUAIS
-   BOTÃO PAUSE - GLASSMORPHISM
+   BOTÃO PAUSE - GLASSMORPHISM ROXO
    PAINEL INTERATIVO - GLASSMORPHISM
    MODO EXPLORAÇÃO - ANIMAÇÕES
 ========================================================= */
@@ -903,7 +903,190 @@ body {
 
 
 /* =========================================================
-   BOTÃO DE PAUSE - GLASSMORPHISM
+   CLASSES GLASS - PARA USO NO JAVASCRIPT
+========================================================= */
+
+/* Painel Glass */
+.glass-panel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    width: min(340px, 92%);
+    max-height: 85vh;
+    overflow-y: auto;
+    background: rgba(10, 20, 40, 0.65) !important;
+    backdrop-filter: blur(25px) saturate(1.4) !important;
+    -webkit-backdrop-filter: blur(25px) saturate(1.4) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 20px !important;
+    padding: 32px 28px 28px !important;
+    z-index: 10000 !important;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 
+        0 30px 80px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+        0 0 60px rgba(160, 80, 255, 0.05),
+        0 8px 32px rgba(0, 0, 0, 0.4) !important;
+    font-family: 'Courier New', monospace !important;
+    color: #b8d4ff !important;
+    pointer-events: none !important;
+}
+
+.glass-panel::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 60% !important;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.05), transparent) !important;
+    border-radius: 20px 20px 0 0 !important;
+    pointer-events: none !important;
+    z-index: 0 !important;
+}
+
+.glass-panel::after {
+    content: '' !important;
+    position: absolute !important;
+    top: -1px !important;
+    left: -1px !important;
+    right: -1px !important;
+    bottom: -1px !important;
+    border-radius: 21px !important;
+    background: linear-gradient(135deg, rgba(160, 80, 255, 0.15), transparent 40%, transparent 60%, rgba(160, 80, 255, 0.05)) !important;
+    z-index: -1 !important;
+    pointer-events: none !important;
+}
+
+.glass-panel > * {
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+.glass-panel.active {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translate(-50%, -50%) scale(1) !important;
+    pointer-events: auto !important;
+}
+
+/* Scroll do painel */
+.glass-panel::-webkit-scrollbar {
+    width: 4px;
+}
+
+.glass-panel::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 2px;
+}
+
+.glass-panel::-webkit-scrollbar-thumb {
+    background: rgba(160, 80, 255, 0.2);
+    border-radius: 2px;
+}
+
+.glass-panel::-webkit-scrollbar-thumb:hover {
+    background: rgba(160, 80, 255, 0.3);
+}
+
+/* Botão Fechar Glass */
+.glass-close {
+    background: rgba(255, 255, 255, 0.04) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    border-radius: 12px !important;
+    color: rgba(255, 255, 255, 0.25) !important;
+    font-size: 16px !important;
+    cursor: pointer !important;
+    padding: 6px 12px !important;
+    transition: all 0.3s ease !important;
+    font-family: 'Courier New', monospace !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
+}
+
+.glass-close:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    color: rgba(255, 255, 255, 0.6) !important;
+    transform: scale(1.05) !important;
+}
+
+.glass-close:active {
+    transform: scale(0.92) !important;
+}
+
+/* Botão Voltar Glass - Roxo */
+.glass-back {
+    position: fixed !important;
+    bottom: 90px !important;
+    left: 50% !important;
+    transform: translateX(-50%) scale(0.9) !important;
+    padding: 12px 24px !important;
+    background: rgba(80, 20, 120, 0.45) !important;
+    backdrop-filter: blur(20px) saturate(1.5) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(1.5) !important;
+    border: 1px solid rgba(160, 80, 255, 0.25) !important;
+    border-radius: 16px !important;
+    color: #c084fc !important;
+    font-size: 13px !important;
+    font-family: 'Courier New', monospace !important;
+    cursor: pointer !important;
+    z-index: 10001 !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    box-shadow: 0 8px 32px rgba(80, 20, 120, 0.3) !important;
+    letter-spacing: 1.5px !important;
+    text-transform: uppercase !important;
+    font-weight: 600 !important;
+    user-select: none !important;
+    touch-action: manipulation !important;
+    pointer-events: none !important;
+}
+
+.glass-back::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 50% !important;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.06), transparent) !important;
+    border-radius: 16px 16px 0 0 !important;
+    pointer-events: none !important;
+}
+
+.glass-back:hover {
+    background: rgba(100, 40, 160, 0.6) !important;
+    border-color: rgba(160, 80, 255, 0.5) !important;
+    box-shadow: 0 8px 40px rgba(80, 20, 120, 0.4) !important;
+    transform: translateX(-50%) scale(1.04) !important;
+    color: #d8b4fe !important;
+}
+
+.glass-back:active {
+    transform: translateX(-50%) scale(0.96) !important;
+    border-color: rgba(160, 80, 255, 0.5) !important;
+}
+
+.glass-back.visible {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateX(-50%) scale(1) !important;
+    pointer-events: auto !important;
+}
+
+
+/* =========================================================
+   BOTÃO DE PAUSE - GLASS ROXO
 ========================================================= */
 
 #pauseBtn {
@@ -911,12 +1094,12 @@ body {
     bottom: 30px;
     right: 30px;
     padding: 14px 28px;
-    background: rgba(10, 20, 40, 0.55);
+    background: rgba(80, 20, 120, 0.45);
     backdrop-filter: blur(20px) saturate(1.5);
     -webkit-backdrop-filter: blur(20px) saturate(1.5);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(160, 80, 255, 0.25);
     border-radius: 16px;
-    color: #8ab4f8;
+    color: #c084fc;
     font-size: 14px;
     font-family: 'Courier New', monospace;
     font-weight: 600;
@@ -924,9 +1107,9 @@ body {
     z-index: 9999;
     transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.3),
-        0 0 0 1px rgba(255, 255, 255, 0.05) inset,
-        0 0 30px rgba(100, 200, 255, 0.03);
+        0 8px 32px rgba(80, 20, 120, 0.3),
+        0 0 0 1px rgba(160, 80, 255, 0.05) inset,
+        0 0 30px rgba(160, 80, 255, 0.05);
     user-select: none;
     touch-action: manipulation;
     letter-spacing: 2px;
@@ -952,20 +1135,20 @@ body {
 
 /* Hover do botão */
 #pauseBtn:hover {
-    background: rgba(20, 40, 70, 0.7);
-    border-color: rgba(100, 200, 255, 0.3);
+    background: rgba(100, 40, 160, 0.6);
+    border-color: rgba(160, 80, 255, 0.5);
     box-shadow: 
-        0 8px 40px rgba(0, 0, 0, 0.4),
-        0 0 0 1px rgba(100, 200, 255, 0.1) inset,
-        0 0 50px rgba(100, 200, 255, 0.06);
+        0 8px 40px rgba(80, 20, 120, 0.4),
+        0 0 0 1px rgba(160, 80, 255, 0.1) inset,
+        0 0 50px rgba(160, 80, 255, 0.1);
     transform: scale(1.04);
-    color: #b8d4ff;
+    color: #d8b4fe;
 }
 
 /* Clique do botão */
 #pauseBtn:active {
     transform: scale(0.96);
-    border-color: rgba(100, 200, 255, 0.5);
+    border-color: rgba(160, 80, 255, 0.5);
 }
 
 
@@ -994,7 +1177,7 @@ body {
     box-shadow: 
         0 30px 80px rgba(0, 0, 0, 0.6),
         0 0 0 1px rgba(255, 255, 255, 0.05) inset,
-        0 0 60px rgba(100, 200, 255, 0.05),
+        0 0 60px rgba(160, 80, 255, 0.05),
         0 8px 32px rgba(0, 0, 0, 0.4);
     font-family: 'Courier New', monospace;
     color: #b8d4ff;
@@ -1030,10 +1213,10 @@ body {
     border-radius: 21px;
     background: linear-gradient(
         135deg,
-        rgba(100, 200, 255, 0.15),
+        rgba(160, 80, 255, 0.15),
         transparent 40%,
         transparent 60%,
-        rgba(100, 200, 255, 0.05)
+        rgba(160, 80, 255, 0.05)
     );
     z-index: -1;
     pointer-events: none;
@@ -1064,12 +1247,12 @@ body {
 }
 
 #planetPanel::-webkit-scrollbar-thumb {
-    background: rgba(100, 200, 255, 0.2);
+    background: rgba(160, 80, 255, 0.2);
     border-radius: 2px;
 }
 
 #planetPanel::-webkit-scrollbar-thumb:hover {
-    background: rgba(100, 200, 255, 0.3);
+    background: rgba(160, 80, 255, 0.3);
 }
 
 
@@ -1178,12 +1361,12 @@ body {
     left: 50%;
     transform: translateX(-50%) scale(0.9);
     padding: 12px 24px;
-    background: rgba(10, 20, 40, 0.6);
+    background: rgba(80, 20, 120, 0.45);
     backdrop-filter: blur(20px) saturate(1.5);
     -webkit-backdrop-filter: blur(20px) saturate(1.5);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(160, 80, 255, 0.25);
     border-radius: 16px;
-    color: #8ab4f8;
+    color: #c084fc;
     font-size: 13px;
     font-family: 'Courier New', monospace;
     cursor: pointer;
@@ -1191,7 +1374,7 @@ body {
     opacity: 0;
     visibility: hidden;
     transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 32px rgba(80, 20, 120, 0.3);
     letter-spacing: 1.5px;
     text-transform: uppercase;
     font-weight: 600;
@@ -1215,17 +1398,17 @@ body {
 
 /* Hover do botão voltar */
 #backButton:hover {
-    background: rgba(20, 40, 70, 0.7);
-    border-color: rgba(100, 200, 255, 0.3);
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4), 0 0 50px rgba(100, 200, 255, 0.06);
+    background: rgba(100, 40, 160, 0.6);
+    border-color: rgba(160, 80, 255, 0.5);
+    box-shadow: 0 8px 40px rgba(80, 20, 120, 0.4), 0 0 50px rgba(160, 80, 255, 0.06);
     transform: translateX(-50%) scale(1.04);
-    color: #b8d4ff;
+    color: #d8b4fe;
 }
 
 /* Clique do botão voltar */
 #backButton:active {
     transform: translateX(-50%) scale(0.96);
-    border-color: rgba(100, 200, 255, 0.5);
+    border-color: rgba(160, 80, 255, 0.5);
 }
 
 /* Animação de entrada do botão voltar */
@@ -1257,10 +1440,10 @@ body {
 
 @keyframes planetPulse {
     0%, 100% {
-        filter: brightness(1.3) drop-shadow(0 0 30px rgba(100, 200, 255, 0.3));
+        filter: brightness(1.3) drop-shadow(0 0 30px rgba(160, 80, 255, 0.3));
     }
     50% {
-        filter: brightness(1.5) drop-shadow(0 0 60px rgba(100, 200, 255, 0.6));
+        filter: brightness(1.5) drop-shadow(0 0 60px rgba(160, 80, 255, 0.6));
     }
 }
 
@@ -1486,6 +1669,16 @@ body {
         width: 80%;
         max-width: 300px;
     }
+
+    .glass-back {
+        bottom: 80px !important;
+        padding: 10px 18px !important;
+        font-size: 11px !important;
+        border-radius: 12px !important;
+        letter-spacing: 1px !important;
+        width: 80% !important;
+        max-width: 300px !important;
+    }
 }
 
 
@@ -1567,6 +1760,15 @@ body {
         max-width: 260px;
         border-radius: 10px;
     }
+
+    .glass-back {
+        bottom: 70px !important;
+        padding: 8px 14px !important;
+        font-size: 10px !important;
+        width: 85% !important;
+        max-width: 260px !important;
+        border-radius: 10px !important;
+    }
 }
 
 
@@ -1612,6 +1814,15 @@ body {
         width: 70%;
         max-width: 220px;
         border-radius: 10px;
+    }
+
+    .glass-back {
+        bottom: 70px !important;
+        padding: 8px 14px !important;
+        font-size: 10px !important;
+        width: 70% !important;
+        max-width: 220px !important;
+        border-radius: 10px !important;
     }
 }
 
