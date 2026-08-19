@@ -6,6 +6,7 @@
    - Partículas dos anéis de Saturno
    - Cometas / meteoros ocasionais
    - Zoom por pinça no mobile
+   - Botão de pause
 ========================================================= */
 
 
@@ -299,7 +300,7 @@ function createComet() {
     const comet =
         document.createElement("div");
 
-    comet.className = "comet"; // AJUSTADO: usa a classe do CSS
+    comet.className = "comet";
 
 
     /* -------------------------------------------------
@@ -557,7 +558,7 @@ function scheduleComet() {
         );
 
 
-    setTimeout(
+    window._cometScheduler = setTimeout(
         () => {
 
             createComet();
@@ -602,7 +603,7 @@ function createMeteor() {
     const meteor =
         document.createElement("div");
 
-    meteor.className = "meteor"; // AJUSTADO: usa a classe do CSS
+    meteor.className = "meteor";
 
 
     /* -------------------------------------------------
@@ -756,7 +757,7 @@ function scheduleMeteor() {
         );
 
 
-    setTimeout(
+    window._meteorScheduler = setTimeout(
         () => {
 
             createMeteor();
@@ -958,6 +959,96 @@ function setupPinchZoom() {
 
 
 /* =========================================================
+   BOTÃO DE PAUSE
+========================================================= */
+
+function setupPauseButton() {
+
+    // Cria o botão
+    const pauseBtn = document.createElement('button');
+    pauseBtn.id = 'pauseBtn';
+    pauseBtn.textContent = '⏸️ Pausar';
+    pauseBtn.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        padding: 12px 20px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 30px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        z-index: 9999;
+        transition: all 0.3s ease;
+        font-family: Arial, sans-serif;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        user-select: none;
+        touch-action: manipulation;
+    `;
+
+    // Hover effect
+    pauseBtn.addEventListener('mouseenter', () => {
+        pauseBtn.style.background = 'rgba(255, 255, 255, 0.2)';
+        pauseBtn.style.transform = 'scale(1.05)';
+    });
+
+    pauseBtn.addEventListener('mouseleave', () => {
+        pauseBtn.style.background = 'rgba(255, 255, 255, 0.1)';
+        pauseBtn.style.transform = 'scale(1)';
+    });
+
+    let isPaused = false;
+
+    // Clique do botão
+    pauseBtn.addEventListener('click', () => {
+
+        isPaused = !isPaused;
+
+        // Muda o texto
+        pauseBtn.textContent = isPaused ? '▶️ Continuar' : '⏸️ Pausar';
+
+        // Aplica pause em TODAS as animações
+        document.querySelectorAll(
+            '.mercury, .venus, .earth, .mars, ' +
+            '.jupiter, .saturn, .uranus, .neptune, .pluto, ' +
+            '.moon, .saturn-particle, .sun, .star'
+        ).forEach(el => {
+            el.style.animationPlayState = isPaused ? 'paused' : 'running';
+        });
+
+        // Pausa cometas e meteoros (evita novos spawns)
+        if (isPaused) {
+            // Cancela os schedulers
+            clearTimeout(window._cometScheduler);
+            clearTimeout(window._meteorScheduler);
+        } else {
+            // Reinicia os schedulers
+            scheduleComet();
+            scheduleMeteor();
+        }
+
+        console.log(isPaused ? '⏸️ Sistema pausado' : '▶️ Sistema retomado');
+    });
+
+    document.body.appendChild(pauseBtn);
+
+    // Guarda referência global
+    window.pauseBtn = pauseBtn;
+
+    // Pausa com tecla Espaço
+    document.addEventListener('keydown', (event) => {
+        if (event.code === 'Space' && window.pauseBtn) {
+            event.preventDefault();
+            window.pauseBtn.click();
+        }
+    });
+}
+
+
+/* =========================================================
    INICIALIZAÇÃO
 ========================================================= */
 
@@ -984,6 +1075,13 @@ window.addEventListener(
         ------------------------------------------------- */
 
         setupPinchZoom();
+
+
+        /* -------------------------------------------------
+           Botão de Pause
+        ------------------------------------------------- */
+
+        setupPauseButton();
 
 
         /* -------------------------------------------------
@@ -1027,6 +1125,7 @@ window.addEventListener(
 
         console.log('🌠 Sistema Solar iniciado!');
         console.log('💡 Digite createComet() ou createMeteor() para testar manualmente.');
+        console.log('⏸️ Clique no botão ou pressione ESPAÇO para pausar/continuar.');
 
         // Expõe funções para teste no console
         window.createComet = createComet;
