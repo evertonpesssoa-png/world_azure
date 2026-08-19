@@ -266,7 +266,6 @@ function createComet() {
     const comet = document.createElement("div");
     comet.className = "comet";
     
-    // ESTILOS DIRETOS - TAMANHO GRANDE PRA VER NO CELULAR
     comet.style.cssText = `
         position: fixed !important;
         width: 35px !important;
@@ -315,10 +314,8 @@ function createComet() {
             break;
     }
 
-    // DURAÇÃO MAIOR (3-6 segundos)
     const duration = randomBetween(3.0, 6.0);
     
-    // Posições em pixels
     const startXPx = (startX / 100) * window.innerWidth;
     const startYPx = (startY / 100) * window.innerHeight;
     const endXPx = (endX / 100) * window.innerWidth;
@@ -327,7 +324,6 @@ function createComet() {
     comet.style.left = startXPx + 'px';
     comet.style.top = startYPx + 'px';
 
-    // CAUDA GRANDE
     const tail = document.createElement('div');
     tail.style.cssText = `
         position: absolute !important;
@@ -386,6 +382,7 @@ function scheduleComet() {
     }, delay);
 }
 
+// 🔥 METEORO CORRIGIDO - MENOR, EM LOCAIS E MOMENTOS DIFERENTES
 function createMeteor() {
     addLog('💫 createMeteor() CHAMADA!', 'meteor');
     
@@ -395,40 +392,37 @@ function createMeteor() {
         return;
     }
 
-    if (container.querySelector(".comet")) {
-        addLog('⏳ Cometa ativo, meteoro cancelado', 'warning');
-        return;
-    }
+    // 🔥 NÃO IMPEDE MAIS METEOROS SE TIVER COMETA
+    // (agora podem aparecer juntos)
 
     const meteor = document.createElement("div");
     meteor.className = "meteor";
     
-    // ESTILOS DIRETOS - TAMANHO GRANDE PRA VER NO CELULAR
+    // 🔥 TAMANHO REDUZIDO PELA METADE (12px em vez de 25px)
+    const size = 12;
     meteor.style.cssText = `
         position: fixed !important;
-        width: 25px !important;
-        height: 25px !important;
+        width: ${size}px !important;
+        height: ${size}px !important;
         border-radius: 50% !important;
         background: radial-gradient(circle at 35% 35%, #ffffff, #ff8844) !important;
-        box-shadow: 0 0 40px rgba(255, 150, 50, 0.9), 0 0 80px rgba(255, 100, 0, 0.5), 0 0 120px rgba(255, 50, 0, 0.3) !important;
+        box-shadow: 0 0 20px rgba(255, 150, 50, 0.9), 0 0 40px rgba(255, 100, 0, 0.5), 0 0 60px rgba(255, 50, 0, 0.3) !important;
         pointer-events: none !important;
         z-index: 9998 !important;
         opacity: 0 !important;
-        border: 2px solid rgba(255, 200, 100, 0.4) !important;
+        border: 1px solid rgba(255, 200, 100, 0.3) !important;
         transition: none !important;
     `;
 
-    const startX = randomBetween(-10, 110);
-    const startY = randomBetween(-10, 100);
-    const distance = randomBetween(15, 35);
-    const endX = startX + distance;
-    const endY = startY + distance * randomBetween(0.25, 0.7);
-    const dx = endX - startX;
-    const dy = endY - startY;
-    const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-
-    // DURAÇÃO MAIOR (1.5-3.5 segundos)
-    const duration = randomBetween(1.5, 3.5);
+    // 🔥 POSIÇÕES ALEATÓRIAS DIFERENTES
+    const startX = randomBetween(-5, 105);
+    const startY = randomBetween(-5, 105);
+    const distance = randomBetween(10, 25);
+    const endX = startX + distance * (Math.random() > 0.5 ? 1 : -1);
+    const endY = startY + distance * randomBetween(0.3, 0.8) * (Math.random() > 0.5 ? 1 : -1);
+    
+    // 🔥 DURAÇÃO VARIADA (0.8-2.5 segundos)
+    const duration = randomBetween(0.8, 2.5);
 
     const startXPx = (startX / 100) * window.innerWidth;
     const startYPx = (startY / 100) * window.innerHeight;
@@ -438,24 +432,24 @@ function createMeteor() {
     meteor.style.left = startXPx + 'px';
     meteor.style.top = startYPx + 'px';
 
-    // RASTRO GRANDE
+    // 🔥 RASTRO MENOR (proporcional ao tamanho)
     const trail = document.createElement('div');
     trail.style.cssText = `
         position: absolute !important;
-        width: 100px !important;
-        height: 4px !important;
+        width: ${size * 3}px !important;
+        height: 2px !important;
         top: 50% !important;
-        right: 8px !important;
+        right: 4px !important;
         transform: translateY(-50%) !important;
-        background: linear-gradient(to left, rgba(255, 200, 100, 0.9), rgba(255, 150, 50, 0.4), rgba(255, 100, 0, 0.1), transparent) !important;
-        filter: blur(2px) !important;
+        background: linear-gradient(to left, rgba(255, 200, 100, 0.8), rgba(255, 150, 50, 0.3), transparent) !important;
+        filter: blur(1px) !important;
         pointer-events: none !important;
-        border-radius: 2px !important;
+        border-radius: 1px !important;
     `;
     meteor.appendChild(trail);
 
     container.appendChild(meteor);
-    addLog('✅ Meteoro ADICIONADO! (duração: ' + duration.toFixed(1) + 's, tamanho: 25px)', 'success');
+    addLog(`✅ Meteoro ADICIONADO! (duração: ${duration.toFixed(1)}s, tamanho: ${size}px, pos: ${startX.toFixed(0)}%, ${startY.toFixed(0)}%)`, 'success');
 
     let startTime = null;
 
@@ -488,11 +482,20 @@ function createMeteor() {
     requestAnimationFrame(animateMeteor);
 }
 
+// 🔥 SCHEDULE METEORO CORRIGIDO - INTERVALOS VARIADOS E MÚLTIPLOS
 function scheduleMeteor() {
-    const delay = randomBetween(10000, 25000);
+    // 🔥 INTERVALOS ALEATÓRIOS MAIS VARIADOS (3-15 segundos)
+    const delay = randomBetween(3000, 15000);
     addLog(`⏰ Próximo meteoro em ${(delay/1000).toFixed(1)}s`, 'meteor');
     window._meteorScheduler = setTimeout(() => {
-        createMeteor();
+        // 🔥 PODE CRIAR MAIS DE UM METEORO POR VEZ (1-2)
+        const count = Math.random() > 0.7 ? 2 : 1;
+        for (let i = 0; i < count; i++) {
+            // 🔥 ATRASO ENTRE METEOROS (0.5-2 segundos)
+            setTimeout(() => {
+                createMeteor();
+            }, i * randomBetween(500, 2000));
+        }
         scheduleMeteor();
     }, delay);
 }
@@ -896,51 +899,61 @@ function createInfoPanel() {
     return panel;
 }
 
-// 🔥 FUNÇÃO OPENPANEL CORRIGIDA - COM MAPEAMENTO DIRETO
 function openPanel(key) {
+    if (!key) {
+        addLog('⚠️ openPanel chamada sem key! Ignorando...', 'warning');
+        return;
+    }
+    
     addLog(`📂 Abrindo painel para: ${key}`, 'planet');
     
     const panel = document.getElementById('planetPanel') || createInfoPanel();
     
-    // 🔥 MAPEAMENTO DIRETO - CORRIGIDO
     let data = null;
     
     if (key === 'sun') {
         data = celestialData.sun;
-        addLog('☀️ Abrindo painel do SOL (MESTRE)', 'planet');
+        addLog('☀️ SOL (MESTRE)', 'planet');
     } else if (key === 'moon') {
         data = celestialData.moon;
-        addLog('🌙 Abrindo painel da LUA (HÉCATE)', 'planet');
+        addLog('🌙 LUA (HÉCATE)', 'planet');
+    } else if (key === 'mercury') {
+        data = planetData.mercury;
+        addLog('🪐 MERCÚRIO (SÍRIA)', 'planet');
+    } else if (key === 'venus') {
+        data = planetData.venus;
+        addLog('🪐 VÊNUS (DIVA)', 'planet');
+    } else if (key === 'earth') {
+        data = planetData.earth;
+        addLog('🪐 TERRA (ASTREIA)', 'planet');
+    } else if (key === 'mars') {
+        data = planetData.mars;
+        addLog('🪐 MARTE (VICTÓRIA)', 'planet');
+    } else if (key === 'jupiter') {
+        data = planetData.jupiter;
+        addLog('🪐 JÚPITER (ATENA)', 'planet');
+    } else if (key === 'saturn') {
+        data = planetData.saturn;
+        addLog('🪐 SATURNO (HÉSTIA)', 'planet');
+    } else if (key === 'uranus') {
+        data = planetData.uranus;
+        addLog('🪐 URANO (DAEDALA)', 'planet');
+    } else if (key === 'neptune') {
+        data = planetData.neptune;
+        addLog('🪐 NETUNO (UMBRA)', 'planet');
+    } else if (key === 'pluto') {
+        data = planetData.pluto;
+        addLog('🪐 PLUTÃO (MÉRLIM)', 'planet');
     } else {
-        // 🔥 MAPEAMENTO EXPLÍCITO PARA CADA PLANETA
-        const planetMap = {
-            'mercury': planetData.mercury,
-            'venus': planetData.venus,
-            'earth': planetData.earth,
-            'mars': planetData.mars,
-            'jupiter': planetData.jupiter,
-            'saturn': planetData.saturn,
-            'uranus': planetData.uranus,
-            'neptune': planetData.neptune,
-            'pluto': planetData.pluto
-        };
-        
-        data = planetMap[key];
-        
-        if (data) {
-            addLog(`🪐 Abrindo painel de ${data.name} (${data.asura})`, 'planet');
-        } else {
-            addLog(`❌ Planeta não encontrado no mapa: ${key}`, 'error');
-        }
+        addLog(`❌ Key desconhecida: "${key}" - IGNORANDO!`, 'error');
+        return;
     }
     
-    // 🔥 FALLBACK: se não encontrou, usa Plutão mas mostra erro
     if (!data) {
-        addLog('❌ Dados NÃO encontrados para: ' + key + ' - Usando PLUTÃO como fallback!', 'error');
-        data = planetData.pluto;
+        addLog(`❌ Dados NÃO encontrados para: ${key}`, 'error');
+        return;
     }
 
-    // Atualiza conteúdo do painel
     document.getElementById('planetEmoji').textContent = data.emoji;
     document.getElementById('planetName').textContent = data.name;
     
@@ -1016,6 +1029,11 @@ function createBackButton() {
 }
 
 function enterExploration(key) {
+    if (!key) {
+        addLog('⚠️ enterExploration chamada sem key!', 'warning');
+        return;
+    }
+    
     addLog(`🚀 Iniciando exploração para: ${key}`, 'explore');
     
     if (explorationMode.isTransitioning) {
@@ -1154,44 +1172,70 @@ function exitExploration() {
 document.addEventListener('click', (e) => {
     const panel = document.getElementById('planetPanel');
     if (!panel || !panel.classList.contains('active')) return;
+    
     const isClickOnPlanet = e.target.closest('.mercury, .venus, .earth, .mars, .jupiter, .saturn, .uranus, .neptune, .pluto, .sun, .moon');
     const isClickOnPanel = e.target.closest('#planetPanel');
     const isClickOnBack = e.target.closest('#backButton');
-    if (!isClickOnPlanet && !isClickOnPanel && !isClickOnBack) {
+    const isClickOnPause = e.target.closest('#pauseBtn');
+    const isClickOnLog = e.target.closest('#logBox') || e.target.closest('[id*="log"]') || e.target.closest('[class*="log"]');
+    
+    if (!isClickOnPlanet && !isClickOnPanel && !isClickOnBack && !isClickOnPause && !isClickOnLog) {
         closePanel();
         addLog('👆 Clique fora → painel fechado', 'info');
     }
 });
 
 function addClickHandler(element, key) {
+    if (!key) {
+        addLog(`⚠️ Elemento sem key: ${element.className}`, 'warning');
+        return;
+    }
+    
     const finalKey = String(key);
-    addLog(`🔗 Configurando clique para: ${finalKey} (classe: ${element.className})`, 'info');
+    addLog(`🔗 Configurando: ${finalKey} (${element.className})`, 'info');
+    
     element.style.cursor = 'pointer';
     element.style.transition = 'transform 0.15s ease, filter 0.3s ease';
     element.style.webkitTapHighlightColor = 'transparent';
 
     element.addEventListener('click', (e) => {
         e.stopPropagation();
+        e.preventDefault();
         addLog(`🖱️ CLIQUE em: ${finalKey}`, 'planet');
-        openPanel(finalKey); // 🔥 SEMPRE ABRE O PAINEL CORRETO
+        openPanel(finalKey);
     });
 
     element.addEventListener('touchend', (e) => {
         e.preventDefault();
         e.stopPropagation();
         addLog(`👆 TOQUE em: ${finalKey}`, 'planet');
-        openPanel(finalKey); // 🔥 SEMPRE ABRE O PAINEL CORRETO
+        openPanel(finalKey);
     });
 
-    // Feedback visual
-    element.addEventListener('touchstart', () => { element.style.transform = 'scale(0.92)'; });
-    element.addEventListener('touchend', () => { element.style.transform = 'scale(1)'; });
-    element.addEventListener('touchcancel', () => { element.style.transform = 'scale(1)'; });
-    element.addEventListener('mousedown', () => { element.style.transform = 'scale(0.92)'; });
-    element.addEventListener('mouseup', () => { element.style.transform = 'scale(1)'; });
-    element.addEventListener('mouseleave', () => { element.style.transform = 'scale(1)'; });
-    element.addEventListener('mouseenter', () => { element.style.filter = 'brightness(1.3) drop-shadow(0 0 20px rgba(160,80,255,0.15))'; });
-    element.addEventListener('mouseleave', () => { element.style.filter = 'none'; });
+    element.addEventListener('touchstart', () => { 
+        element.style.transform = 'scale(0.92)'; 
+    });
+    element.addEventListener('touchend', () => { 
+        element.style.transform = 'scale(1)'; 
+    });
+    element.addEventListener('touchcancel', () => { 
+        element.style.transform = 'scale(1)'; 
+    });
+    element.addEventListener('mousedown', () => { 
+        element.style.transform = 'scale(0.92)'; 
+    });
+    element.addEventListener('mouseup', () => { 
+        element.style.transform = 'scale(1)'; 
+    });
+    element.addEventListener('mouseleave', () => { 
+        element.style.transform = 'scale(1)'; 
+    });
+    element.addEventListener('mouseenter', () => { 
+        element.style.filter = 'brightness(1.3) drop-shadow(0 0 20px rgba(160,80,255,0.15))'; 
+    });
+    element.addEventListener('mouseleave', () => { 
+        element.style.filter = 'none'; 
+    });
 }
 
 function setupPlanetClick() {
@@ -1269,13 +1313,11 @@ window.addEventListener("DOMContentLoaded", () => {
     window.enterExploration = enterExploration;
     window.exitExploration = exitExploration;
     
-    // 🔥 DEBUG: MOSTRA TODOS OS DATA-KEYS ENCONTRADOS
     addLog('📋 DATA-KEYS ENCONTRADOS:', 'info');
     document.querySelectorAll('[data-key]').forEach(el => {
         addLog(`  - ${el.className} → "${el.dataset.key}"`, 'info');
     });
     
-    // 🔥 VERIFICA SE CADA PLANETA TEM DADOS
     const planetKeys = ['mercury', 'venus', 'earth', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto'];
     addLog('📋 VERIFICANDO DADOS DOS PLANETAS:', 'info');
     planetKeys.forEach(key => {
