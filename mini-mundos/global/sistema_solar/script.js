@@ -896,12 +896,15 @@ function createInfoPanel() {
     return panel;
 }
 
+// 🔥 FUNÇÃO OPENPANEL CORRIGIDA - COM MAPEAMENTO DIRETO
 function openPanel(key) {
     addLog(`📂 Abrindo painel para: ${key}`, 'planet');
     
     const panel = document.getElementById('planetPanel') || createInfoPanel();
     
-    let data;
+    // 🔥 MAPEAMENTO DIRETO - CORRIGIDO
+    let data = null;
+    
     if (key === 'sun') {
         data = celestialData.sun;
         addLog('☀️ Abrindo painel do SOL (MESTRE)', 'planet');
@@ -909,17 +912,35 @@ function openPanel(key) {
         data = celestialData.moon;
         addLog('🌙 Abrindo painel da LUA (HÉCATE)', 'planet');
     } else {
-        data = planetData[key];
+        // 🔥 MAPEAMENTO EXPLÍCITO PARA CADA PLANETA
+        const planetMap = {
+            'mercury': planetData.mercury,
+            'venus': planetData.venus,
+            'earth': planetData.earth,
+            'mars': planetData.mars,
+            'jupiter': planetData.jupiter,
+            'saturn': planetData.saturn,
+            'uranus': planetData.uranus,
+            'neptune': planetData.neptune,
+            'pluto': planetData.pluto
+        };
+        
+        data = planetMap[key];
+        
         if (data) {
             addLog(`🪐 Abrindo painel de ${data.name} (${data.asura})`, 'planet');
+        } else {
+            addLog(`❌ Planeta não encontrado no mapa: ${key}`, 'error');
         }
     }
     
+    // 🔥 FALLBACK: se não encontrou, usa Plutão mas mostra erro
     if (!data) {
-        addLog('❌ Dados não encontrados para: ' + key, 'error');
-        return;
+        addLog('❌ Dados NÃO encontrados para: ' + key + ' - Usando PLUTÃO como fallback!', 'error');
+        data = planetData.pluto;
     }
 
+    // Atualiza conteúdo do painel
     document.getElementById('planetEmoji').textContent = data.emoji;
     document.getElementById('planetName').textContent = data.name;
     
@@ -1144,7 +1165,7 @@ document.addEventListener('click', (e) => {
 
 function addClickHandler(element, key) {
     const finalKey = String(key);
-    addLog(`🔗 Configurando clique para: ${finalKey}`, 'info');
+    addLog(`🔗 Configurando clique para: ${finalKey} (classe: ${element.className})`, 'info');
     element.style.cursor = 'pointer';
     element.style.transition = 'transform 0.15s ease, filter 0.3s ease';
     element.style.webkitTapHighlightColor = 'transparent';
@@ -1152,24 +1173,17 @@ function addClickHandler(element, key) {
     element.addEventListener('click', (e) => {
         e.stopPropagation();
         addLog(`🖱️ CLIQUE em: ${finalKey}`, 'planet');
-        if (explorationMode.active && explorationMode.target === finalKey) {
-            openPanel(finalKey);
-        } else {
-            enterExploration(finalKey);
-        }
+        openPanel(finalKey); // 🔥 SEMPRE ABRE O PAINEL CORRETO
     });
 
     element.addEventListener('touchend', (e) => {
         e.preventDefault();
         e.stopPropagation();
         addLog(`👆 TOQUE em: ${finalKey}`, 'planet');
-        if (explorationMode.active && explorationMode.target === finalKey) {
-            openPanel(finalKey);
-        } else {
-            enterExploration(finalKey);
-        }
+        openPanel(finalKey); // 🔥 SEMPRE ABRE O PAINEL CORRETO
     });
 
+    // Feedback visual
     element.addEventListener('touchstart', () => { element.style.transform = 'scale(0.92)'; });
     element.addEventListener('touchend', () => { element.style.transform = 'scale(1)'; });
     element.addEventListener('touchcancel', () => { element.style.transform = 'scale(1)'; });
@@ -1190,7 +1204,7 @@ function setupPlanetClick() {
             addLog(`⚠️ Elemento sem data-key: ${element.className}`, 'warning');
             return;
         }
-        addLog(`🪐 Configurando: ${key}`, 'info');
+        addLog(`🪐 Configurando: ${key} (classe: ${element.className})`, 'info');
         addClickHandler(element, key);
         count++;
     });
@@ -1255,8 +1269,20 @@ window.addEventListener("DOMContentLoaded", () => {
     window.enterExploration = enterExploration;
     window.exitExploration = exitExploration;
     
-    addLog('📋 Data-keys encontrados:', 'info');
+    // 🔥 DEBUG: MOSTRA TODOS OS DATA-KEYS ENCONTRADOS
+    addLog('📋 DATA-KEYS ENCONTRADOS:', 'info');
     document.querySelectorAll('[data-key]').forEach(el => {
-        addLog(`  - ${el.className} → ${el.dataset.key}`, 'info');
+        addLog(`  - ${el.className} → "${el.dataset.key}"`, 'info');
+    });
+    
+    // 🔥 VERIFICA SE CADA PLANETA TEM DADOS
+    const planetKeys = ['mercury', 'venus', 'earth', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto'];
+    addLog('📋 VERIFICANDO DADOS DOS PLANETAS:', 'info');
+    planetKeys.forEach(key => {
+        if (planetData[key]) {
+            addLog(`  ✅ ${key}: ${planetData[key].name}`, 'success');
+        } else {
+            addLog(`  ❌ ${key}: DADOS FALTANDO!`, 'error');
+        }
     });
 });
