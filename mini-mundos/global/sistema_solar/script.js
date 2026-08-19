@@ -1347,7 +1347,10 @@ function openPanel(key) {
         data = planetData[key];
     }
     
-    if (!data) return;
+    if (!data) {
+        console.error('❌ Dados não encontrados para:', key);
+        return;
+    }
 
     // Atualiza conteúdo
     document.getElementById('planetEmoji').textContent = data.emoji;
@@ -1490,10 +1493,20 @@ function createBackButton() {
     return btn;
 }
 
-// Entra no modo exploração
+// Entra no modo exploração - CORRIGIDO
 function enterExploration(key) {
-    if (explorationMode.isTransitioning) return;
-    if (explorationMode.active && explorationMode.target === key) return;
+    console.log(`🚀 Tentando viajar para: ${key}`);
+    
+    if (explorationMode.isTransitioning) {
+        console.log('⏳ Já está em transição');
+        return;
+    }
+    
+    if (explorationMode.active && explorationMode.target === key) {
+        console.log(`📋 Já está em ${key}, abrindo painel`);
+        openPanel(key);
+        return;
+    }
     
     explorationMode.isTransitioning = true;
     explorationMode.active = true;
@@ -1502,18 +1515,28 @@ function enterExploration(key) {
     const container = document.querySelector('.container');
     const backBtn = document.getElementById('backButton') || createBackButton();
     
-    // Encontra o elemento do planeta
-    let planet;
-    if (key === 'sun') {
-        planet = document.querySelector('.sun');
-    } else if (key === 'moon') {
-        planet = document.querySelector('.moon');
-    } else {
+    // Encontra o elemento do planeta usando data-key ou classe
+    let planet = document.querySelector(`[data-key="${key}"]`);
+    if (!planet) {
+        // Fallback: procura pela classe
         planet = document.querySelector(`.${key}`);
     }
     
-    if (!planet || !container) {
+    if (!planet) {
+        console.error(`❌ Planeta não encontrado: ${key}`);
         explorationMode.isTransitioning = false;
+        explorationMode.active = false;
+        explorationMode.target = null;
+        return;
+    }
+    
+    console.log(`📍 Planeta encontrado:`, planet);
+    
+    if (!container) {
+        console.error('❌ Container não encontrado');
+        explorationMode.isTransitioning = false;
+        explorationMode.active = false;
+        explorationMode.target = null;
         return;
     }
     
@@ -1555,7 +1578,7 @@ function enterExploration(key) {
     planet.style.zIndex = '20';
     
     // Anima a órbita (opcional - desacelera)
-    document.querySelectorAll('.mercury, .venus, .earth, .mars, .jupiter, .saturn, .uranus, .neptune, .pluto').forEach(p => {
+    document.querySelectorAll('.mercury, .venus, .earth, .mars, .jupiter, .saturn, .uranus, .neptune, .pluto, .sun, .moon').forEach(p => {
         if (p !== planet) {
             p.style.transition = 'opacity 0.8s ease';
             p.style.opacity = '0.3';
@@ -1647,8 +1670,11 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// Função auxiliar para adicionar eventos de clique/toque (modificada para exploração)
+// Função auxiliar para adicionar eventos de clique/toque - CORRIGIDA
 function addClickHandler(element, key) {
+    const finalKey = String(key);
+    console.log(`🔗 Adicionando handler para: ${finalKey}`);
+    
     element.style.cursor = 'pointer';
     element.style.transition = 'transform 0.15s ease, filter 0.3s ease';
     element.style.webkitTapHighlightColor = 'transparent';
@@ -1656,11 +1682,12 @@ function addClickHandler(element, key) {
     // Evento de clique (desktop)
     element.addEventListener('click', (e) => {
         e.stopPropagation();
-        // Se já estiver no modo exploração e for o mesmo planeta, abre o painel
-        if (explorationMode.active && explorationMode.target === key) {
-            openPanel(key);
+        console.log(`🖱️ Clique em: ${finalKey}`);
+        
+        if (explorationMode.active && explorationMode.target === finalKey) {
+            openPanel(finalKey);
         } else {
-            enterExploration(key);
+            enterExploration(finalKey);
         }
     });
 
@@ -1668,10 +1695,12 @@ function addClickHandler(element, key) {
     element.addEventListener('touchend', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        if (explorationMode.active && explorationMode.target === key) {
-            openPanel(key);
+        console.log(`👆 Toque em: ${finalKey}`);
+        
+        if (explorationMode.active && explorationMode.target === finalKey) {
+            openPanel(finalKey);
         } else {
-            enterExploration(key);
+            enterExploration(finalKey);
         }
     });
 
@@ -1710,51 +1739,31 @@ function addClickHandler(element, key) {
     });
 }
 
-// Configura os corpos celestes como clicáveis
+// Configura os corpos celestes como clicáveis - CORRIGIDO
 function setupPlanetClick() {
-    // Planetas
-    const planets = document.querySelectorAll(
-        '.mercury, .venus, .earth, .mars, ' +
+    
+    // PEGA TODOS OS CORPOS CELESTES com data-key
+    const allCelestialBodies = document.querySelectorAll(
+        '.sun, .moon, .mercury, .venus, .earth, .mars, ' +
         '.jupiter, .saturn, .uranus, .neptune, .pluto'
     );
 
-    const planetMap = {
-        'mercury': 'mercury',
-        'venus': 'venus',
-        'earth': 'earth',
-        'mars': 'mars',
-        'jupiter': 'jupiter',
-        'saturn': 'saturn',
-        'uranus': 'uranus',
-        'neptune': 'neptune',
-        'pluto': 'pluto'
-    };
-
-    planets.forEach(planet => {
-        let planetKey = null;
-        for (const [key, className] of Object.entries(planetMap)) {
-            if (planet.classList.contains(className)) {
-                planetKey = key;
-                break;
-            }
+    allCelestialBodies.forEach(element => {
+        // Pega a chave do atributo data-key
+        const key = element.dataset.key;
+        
+        if (!key) {
+            console.warn('⚠️ Elemento sem data-key:', element);
+            return;
         }
-        if (!planetKey) return;
-        addClickHandler(planet, planetKey);
+
+        console.log(`🪐 Configurando: ${key}`);
+
+        // Adiciona o evento de clique
+        addClickHandler(element, key);
     });
 
-    // 🌞 SOL
-    const sun = document.querySelector('.sun');
-    if (sun) {
-        addClickHandler(sun, 'sun');
-    }
-
-    // 🌙 LUA
-    const moon = document.querySelector('.moon');
-    if (moon) {
-        addClickHandler(moon, 'moon');
-    }
-
-    console.log('🪐 Corpos celestes configurados como clicáveis!');
+    console.log('🪐 Todos os corpos celestes configurados como clicáveis!');
     console.log('🚀 Modo Exploração ativado! Toque em um planeta para viajar.');
 }
 
@@ -1872,6 +1881,7 @@ window.addEventListener(
         console.log('⏸️ Clique no botão ou pressione ESPAÇO para pausar/continuar.');
         console.log('🪐 Toque nos planetas, Sol ou Lua para viajar e ver a cosmologia WZ!');
         console.log('🚀 Pressione ESC para sair do modo exploração.');
+        console.log('📋 Verifique se os elementos têm data-key no HTML!');
 
         // Expõe funções para teste no console
         window.createComet = createComet;
@@ -1879,5 +1889,11 @@ window.addEventListener(
         window.openPanel = openPanel;
         window.enterExploration = enterExploration;
         window.exitExploration = exitExploration;
+        
+        // Debug: mostra todos os data-keys
+        console.log('📋 Data-keys encontrados:');
+        document.querySelectorAll('[data-key]').forEach(el => {
+            console.log(`  - ${el.className} → ${el.dataset.key}`);
+        });
     }
 );
