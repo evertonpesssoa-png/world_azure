@@ -4,7 +4,7 @@
    FUNÇÕES:
    - Estrelas de fundo
    - Partículas dos anéis de Saturno
-   - Cometas / meteoros ocasionais
+   - Cometas / meteoros ocasionais (VISÍVEIS)
    - Zoom por pinça no mobile
    - Botão de pause (roxo)
    - Painel interativo WZ (Sol, Lua e Planetas) - GLASS
@@ -242,7 +242,7 @@ function createSaturnRingParticles() {
 
 
 /* =========================================================
-   COMETAS / METEOROS
+   COMETAS / METEOROS - VERSÃO VISÍVEL NO CELULAR
 ========================================================= */
 
 function randomBetween(min, max) {
@@ -265,6 +265,21 @@ function createComet() {
 
     const comet = document.createElement("div");
     comet.className = "comet";
+    
+    // ESTILOS DIRETOS - TAMANHO GRANDE PRA VER NO CELULAR
+    comet.style.cssText = `
+        position: fixed !important;
+        width: 35px !important;
+        height: 35px !important;
+        border-radius: 50% !important;
+        background: radial-gradient(circle at 35% 35%, #ffffff, #66ddff) !important;
+        box-shadow: 0 0 50px rgba(100, 200, 255, 0.9), 0 0 100px rgba(100, 200, 255, 0.5), 0 0 150px rgba(50, 150, 255, 0.3) !important;
+        pointer-events: none !important;
+        z-index: 9999 !important;
+        opacity: 0 !important;
+        border: 2px solid rgba(255, 255, 255, 0.4) !important;
+        transition: none !important;
+    `;
 
     const direction = Math.floor(Math.random() * 4);
     let startX, startY, endX, endY;
@@ -300,39 +315,70 @@ function createComet() {
             break;
     }
 
-    const dx = endX - startX;
-    const dy = endY - startY;
-    const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+    // DURAÇÃO MAIOR (3-6 segundos)
+    const duration = randomBetween(3.0, 6.0);
+    
+    // Posições em pixels
+    const startXPx = (startX / 100) * window.innerWidth;
+    const startYPx = (startY / 100) * window.innerHeight;
+    const endXPx = (endX / 100) * window.innerWidth;
+    const endYPx = (endY / 100) * window.innerHeight;
 
-    comet.style.setProperty("--start-x", startX + "%");
-    comet.style.setProperty("--start-y", startY + "%");
-    comet.style.setProperty("--end-x", endX + "%");
-    comet.style.setProperty("--end-y", endY + "%");
-    comet.style.setProperty("--comet-angle", angle + "deg");
+    comet.style.left = startXPx + 'px';
+    comet.style.top = startYPx + 'px';
 
-    const duration = randomBetween(1.2, 2.2);
-    comet.style.animationDuration = duration + "s";
-
-    const scale = randomBetween(0.75, 1.15);
-    comet.style.transform = `scale(${scale})`;
-
-    const hue = randomBetween(180, 220);
-    comet.style.background = `hsl(${hue}, 100%, 90%)`;
-    comet.style.boxShadow = `0 0 8px hsl(${hue}, 100%, 80%), 0 0 20px hsl(${hue}, 100%, 60%)`;
+    // CAUDA GRANDE
+    const tail = document.createElement('div');
+    tail.style.cssText = `
+        position: absolute !important;
+        width: 180px !important;
+        height: 5px !important;
+        top: 50% !important;
+        right: 12px !important;
+        transform: translateY(-50%) !important;
+        background: linear-gradient(to left, rgba(100, 200, 255, 0.9), rgba(50, 150, 255, 0.4), rgba(0, 100, 255, 0.1), transparent) !important;
+        filter: blur(2.5px) !important;
+        pointer-events: none !important;
+        border-radius: 3px !important;
+    `;
+    comet.appendChild(tail);
 
     container.appendChild(comet);
-    addLog('✅ Cometa ADICIONADO! (duração: ' + duration.toFixed(1) + 's)', 'success');
+    addLog('✅ Cometa ADICIONADO! (duração: ' + duration.toFixed(1) + 's, tamanho: 35px)', 'success');
 
-    setTimeout(() => {
-        if (comet.parentNode) {
-            comet.remove();
-            addLog('🗑️ Cometa removido após animação', 'comet');
+    let startTime = null;
+
+    function animateComet(timestamp) {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / (duration * 1000), 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        
+        const currentX = startXPx + (endXPx - startXPx) * eased;
+        const currentY = startYPx + (endYPx - startYPx) * eased;
+        
+        comet.style.left = currentX + 'px';
+        comet.style.top = currentY + 'px';
+        comet.style.opacity = progress < 0.08 ? progress / 0.08 : (progress > 0.85 ? 1 - (progress - 0.85) / 0.15 : 1);
+        comet.style.transform = `scale(${0.4 + eased * 0.6})`;
+        
+        const angle = Math.atan2(endYPx - startYPx, endXPx - startXPx) * 180 / Math.PI;
+        tail.style.transform = `translateY(-50%) rotate(${angle}deg)`;
+        
+        if (progress < 1) {
+            requestAnimationFrame(animateComet);
+        } else {
+            if (comet.parentNode) {
+                comet.remove();
+                addLog('🗑️ Cometa removido após animação', 'comet');
+            }
         }
-    }, (duration * 1000) + 300);
+    }
+
+    requestAnimationFrame(animateComet);
 }
 
 function scheduleComet() {
-    const delay = randomBetween(8000, 18000);
+    const delay = randomBetween(6000, 15000);
     addLog(`⏰ Próximo cometa em ${(delay/1000).toFixed(1)}s`, 'comet');
     window._cometScheduler = setTimeout(() => {
         createComet();
@@ -356,44 +402,94 @@ function createMeteor() {
 
     const meteor = document.createElement("div");
     meteor.className = "meteor";
+    
+    // ESTILOS DIRETOS - TAMANHO GRANDE PRA VER NO CELULAR
+    meteor.style.cssText = `
+        position: fixed !important;
+        width: 25px !important;
+        height: 25px !important;
+        border-radius: 50% !important;
+        background: radial-gradient(circle at 35% 35%, #ffffff, #ff8844) !important;
+        box-shadow: 0 0 40px rgba(255, 150, 50, 0.9), 0 0 80px rgba(255, 100, 0, 0.5), 0 0 120px rgba(255, 50, 0, 0.3) !important;
+        pointer-events: none !important;
+        z-index: 9998 !important;
+        opacity: 0 !important;
+        border: 2px solid rgba(255, 200, 100, 0.4) !important;
+        transition: none !important;
+    `;
 
     const startX = randomBetween(-10, 110);
     const startY = randomBetween(-10, 100);
-    const distance = randomBetween(8, 18);
+    const distance = randomBetween(15, 35);
     const endX = startX + distance;
     const endY = startY + distance * randomBetween(0.25, 0.7);
     const dx = endX - startX;
     const dy = endY - startY;
     const angle = Math.atan2(dy, dx) * 180 / Math.PI;
 
-    meteor.style.setProperty("--start-x", startX + "%");
-    meteor.style.setProperty("--start-y", startY + "%");
-    meteor.style.setProperty("--end-x", endX + "%");
-    meteor.style.setProperty("--end-y", endY + "%");
-    meteor.style.setProperty("--comet-angle", angle + "deg");
+    // DURAÇÃO MAIOR (1.5-3.5 segundos)
+    const duration = randomBetween(1.5, 3.5);
 
-    const duration = randomBetween(0.7, 1.3);
-    meteor.style.animationDuration = duration + "s";
+    const startXPx = (startX / 100) * window.innerWidth;
+    const startYPx = (startY / 100) * window.innerHeight;
+    const endXPx = (endX / 100) * window.innerWidth;
+    const endYPx = (endY / 100) * window.innerHeight;
 
-    const size = randomBetween(1.5, 3.5);
-    meteor.style.width = size + "px";
-    meteor.style.height = size + "px";
-    const intensity = randomBetween(0.6, 1);
-    meteor.style.boxShadow = `0 0 ${size * 3}px rgba(255, 255, 255, ${intensity})`;
+    meteor.style.left = startXPx + 'px';
+    meteor.style.top = startYPx + 'px';
+
+    // RASTRO GRANDE
+    const trail = document.createElement('div');
+    trail.style.cssText = `
+        position: absolute !important;
+        width: 100px !important;
+        height: 4px !important;
+        top: 50% !important;
+        right: 8px !important;
+        transform: translateY(-50%) !important;
+        background: linear-gradient(to left, rgba(255, 200, 100, 0.9), rgba(255, 150, 50, 0.4), rgba(255, 100, 0, 0.1), transparent) !important;
+        filter: blur(2px) !important;
+        pointer-events: none !important;
+        border-radius: 2px !important;
+    `;
+    meteor.appendChild(trail);
 
     container.appendChild(meteor);
-    addLog('✅ Meteoro ADICIONADO! (duração: ' + duration.toFixed(1) + 's)', 'success');
+    addLog('✅ Meteoro ADICIONADO! (duração: ' + duration.toFixed(1) + 's, tamanho: 25px)', 'success');
 
-    setTimeout(() => {
-        if (meteor.parentNode) {
-            meteor.remove();
-            addLog('🗑️ Meteoro removido após animação', 'meteor');
+    let startTime = null;
+
+    function animateMeteor(timestamp) {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / (duration * 1000), 1);
+        const eased = progress * progress;
+        
+        const currentX = startXPx + (endXPx - startXPx) * eased;
+        const currentY = startYPx + (endYPx - startYPx) * eased;
+        
+        meteor.style.left = currentX + 'px';
+        meteor.style.top = currentY + 'px';
+        meteor.style.opacity = progress < 0.05 ? progress / 0.05 : (progress > 0.8 ? 1 - (progress - 0.8) / 0.2 : 1);
+        meteor.style.transform = `scale(${0.5 + eased * 0.5})`;
+        
+        const angle = Math.atan2(endYPx - startYPx, endXPx - startXPx) * 180 / Math.PI;
+        trail.style.transform = `translateY(-50%) rotate(${angle}deg)`;
+        
+        if (progress < 1) {
+            requestAnimationFrame(animateMeteor);
+        } else {
+            if (meteor.parentNode) {
+                meteor.remove();
+                addLog('🗑️ Meteoro removido após animação', 'meteor');
+            }
         }
-    }, (duration * 1000) + 200);
+    }
+
+    requestAnimationFrame(animateMeteor);
 }
 
 function scheduleMeteor() {
-    const delay = randomBetween(15000, 30000);
+    const delay = randomBetween(10000, 25000);
     addLog(`⏰ Próximo meteoro em ${(delay/1000).toFixed(1)}s`, 'meteor');
     window._meteorScheduler = setTimeout(() => {
         createMeteor();
