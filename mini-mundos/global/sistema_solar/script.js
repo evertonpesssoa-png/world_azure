@@ -7,6 +7,7 @@
    - Cometas / meteoros ocasionais
    - Zoom por pinça no mobile
    - Botão de pause
+   - Painel interativo WZ (Sol, Lua e Planetas)
 ========================================================= */
 
 
@@ -1049,6 +1050,494 @@ function setupPauseButton() {
 
 
 /* =========================================================
+   PAINEL INTERATIVO WZ - COSMOLOGIA
+========================================================= */
+
+// Dados dos planetas com a cosmologia WZ
+const planetData = {
+    mercury: {
+        name: 'MERCÚRIO',
+        asura: 'SÍRIA',
+        emoji: '☿',
+        title: '⚡ Asura do Comércio e Comunicação',
+        description: '1º planeta do Sistema Solar',
+        info: 'Síria rege o fluxo da prosperidade, a comunicação e o comércio. Como Mercúrio, que viaja rápido entre os mundos, Síria conecta os domínios da WZ com agilidade e precisão.',
+        distance: '57,9 milhões km',
+        diameter: '4.879 km',
+        day: '58,6 dias terrestres',
+        year: '88 dias terrestres',
+        moons: '0 luas',
+        color: '#b5b5b5',
+        sigil: '⚡',
+        type: 'Planeta'
+    },
+    venus: {
+        name: 'VÊNUS',
+        asura: 'DIVA',
+        emoji: '♀',
+        title: '🌸 Asura da Diplomacia e Harmonia',
+        description: '2º planeta do Sistema Solar',
+        info: 'Diva rege as relações, a elegância e a harmonia. Como Vênus, que brilha no céu noturno, Diva ilumina os caminhos da diplomacia e da beleza na WZ.',
+        distance: '108,2 milhões km',
+        diameter: '12.104 km',
+        day: '243 dias terrestres',
+        year: '225 dias terrestres',
+        moons: '0 luas',
+        color: '#e8cda0',
+        sigil: '🌸',
+        type: 'Planeta'
+    },
+    earth: {
+        name: 'TERRA',
+        asura: 'ASTREIA',
+        emoji: '🌍',
+        title: '🛡️ Asura da Proteção e Defesa',
+        description: '3º planeta do Sistema Solar',
+        info: 'Astreia é o bastião da vida e da proteção na WZ. Como a Terra, que abriga e sustenta, Astreia defende os limites do império com firmeza e sabedoria.',
+        distance: '149,6 milhões km',
+        diameter: '12.756 km',
+        day: '24 horas',
+        year: '365,25 dias',
+        moons: '1 lua (Hécate)',
+        color: '#4d8bf7',
+        sigil: '🛡️',
+        type: 'Planeta'
+    },
+    mars: {
+        name: 'MARTE',
+        asura: 'VICTÓRIA',
+        emoji: '♂',
+        title: '⚔️ Asura da Guerra e Conquista',
+        description: '4º planeta do Sistema Solar',
+        info: 'Victória rege a estratégia, a conquista e o avanço. Como Marte, o planeta vermelho, Victória representa a força que avança quando necessário, sempre com propósito.',
+        distance: '227,9 milhões km',
+        diameter: '6.792 km',
+        day: '24,6 horas',
+        year: '687 dias',
+        moons: '2 luas (Fobos e Deimos)',
+        color: '#c1440e',
+        sigil: '⚔️',
+        type: 'Planeta'
+    },
+    jupiter: {
+        name: 'JÚPITER',
+        asura: 'ATENA',
+        emoji: '♃',
+        title: '🦉 Asura da Sabedoria Soberana',
+        description: '5º planeta do Sistema Solar',
+        info: 'Atena expande o conhecimento e a sabedoria na WZ. Como Júpiter, o maior planeta, Atena reina com inteligência e visão, guiando o império com clareza.',
+        distance: '778,5 milhões km',
+        diameter: '142.984 km',
+        day: '9,9 horas',
+        year: '11,86 anos',
+        moons: '95 luas (Ganímedes é a maior)',
+        color: '#d4a574',
+        sigil: '🦉',
+        type: 'Planeta'
+    },
+    saturn: {
+        name: 'SATURNO',
+        asura: 'HÉSTIA',
+        emoji: '♄',
+        title: '⚖️ Asura da Lei e Ordem',
+        description: '6º planeta do Sistema Solar',
+        info: 'Héstia rege o tempo, a lei e a jurisprudência na WZ. Como Saturno, com seus anéis que representam ciclos, Héstia mantém a ordem e a justiça no império.',
+        distance: '1,43 bilhão km',
+        diameter: '120.536 km',
+        day: '10,7 horas',
+        year: '29,46 anos',
+        moons: '146 luas (Titã é a maior)',
+        color: '#ead6b8',
+        sigil: '⚖️',
+        type: 'Planeta'
+    },
+    uranus: {
+        name: 'URANO',
+        asura: 'DAEDALA',
+        emoji: '⛢',
+        title: '🔧 Asura da Inovação e Tecnologia',
+        description: '7º planeta do Sistema Solar',
+        info: 'Daedala revoluciona a tecnologia e a inovação na WZ. Como Urano, que gira de lado, Daedala pensa fora do convencional, criando o novo e o disruptivo.',
+        distance: '2,87 bilhões km',
+        diameter: '51.118 km',
+        day: '17,2 horas',
+        year: '84 anos',
+        moons: '27 luas',
+        color: '#7ec8e3',
+        sigil: '🔧',
+        type: 'Planeta'
+    },
+    neptune: {
+        name: 'NETUNO',
+        asura: 'UMBRA',
+        emoji: '♆',
+        title: '🌙 Asura do Mistério e Percepção',
+        description: '8º planeta do Sistema Solar',
+        info: 'Umbra rege as sombras, o mistério e a caça na WZ. Como Netuno, que esconde segredos nas profundezas, Umbra vê o que outros não percebem e age nas margens.',
+        distance: '4,50 bilhões km',
+        diameter: '49.528 km',
+        day: '16,1 horas',
+        year: '164,8 anos',
+        moons: '16 luas (Tritão é a maior)',
+        color: '#3b4cb8',
+        sigil: '🌙',
+        type: 'Planeta'
+    },
+    pluto: {
+        name: 'PLUTÃO',
+        asura: 'MÉRLIM',
+        emoji: '♇',
+        title: '🔮 Guardião do Limiar Invisível',
+        description: 'Planeta anão — Guardião da Fronteira',
+        info: 'Mérlim rege a transformação profunda e a engenharia do renascimento na WZ. Como Plutão, que existe além da fronteira conhecida, Mérlim é o guardião do limiar, mostrando que sempre há um novo ciclo além do fim aparente.',
+        distance: '5,91 bilhões km',
+        diameter: '2.377 km',
+        day: '6,4 dias',
+        year: '248 anos',
+        moons: '5 luas (Caronte é a maior)',
+        color: '#d6c8b0',
+        sigil: '🔮',
+        type: 'Planeta Anão'
+    }
+};
+
+// Dados do Sol e da Lua (cosmologia WZ)
+const celestialData = {
+    sun: {
+        name: 'SOL',
+        emoji: '☀️',
+        asura: 'MESTRE',
+        title: '👑 A Presença que Ilumina',
+        description: 'Centro do Sistema Solar',
+        info: 'O Sol é o silêncio que ilumina. Não é o soberano que fala, é a fonte que aquece. Não é a ordem que se impõe, é a luz que permite que tudo cresça. Na cosmologia da WZ, o Sol representa a Presença do Mestre — simples, silenciosa, mas essencial. Ele não pede atenção, ele a sustenta.',
+        distance: '—',
+        diameter: '1.392.700 km',
+        day: '25 dias',
+        year: '—',
+        moons: '8 planetas',
+        color: '#fdb813',
+        sigil: '👑',
+        type: 'Estrela'
+    },
+    moon: {
+        name: 'LUA',
+        emoji: '🌙',
+        asura: 'HÉCATE',
+        title: '🌙 Guardiã das Fronteiras',
+        description: 'Satélite Natural da Terra — Selo de Hécate no Céu',
+        info: 'A Lua é Hécate, a Guardiã das Fronteiras. Ela não emite luz própria — reflete a luz do Sol, assim como Hécate reflete a autoridade do Mestre. Ela vigia os limiares entre o conhecido e o desconhecido, entre a Terra e o cosmos. É o selo de Hécate no céu: presença constante, discreta, mas inegável. Quando as marés sobem, lembramos que ela está lá, protegendo as fronteiras da WZ.',
+        distance: '384.400 km',
+        diameter: '3.474 km',
+        day: '27,3 dias',
+        year: '27,3 dias',
+        moons: '—',
+        color: '#d4d4d4',
+        sigil: '🌙',
+        type: 'Satélite — Guardiã das Fronteiras'
+    }
+};
+
+// Cria o painel de informações (versão WZ completa)
+function createInfoPanel() {
+    const panel = document.createElement('div');
+    panel.id = 'planetPanel';
+    panel.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.9);
+        width: min(340px, 92%);
+        max-height: 85vh;
+        overflow-y: auto;
+        background: rgba(0, 10, 25, 0.95);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid rgba(100, 200, 255, 0.2);
+        border-radius: 16px;
+        padding: 28px 24px 24px;
+        z-index: 10000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 
+            0 25px 80px rgba(0, 0, 0, 0.9),
+            0 0 60px rgba(0, 150, 255, 0.05),
+            inset 0 0 60px rgba(0, 150, 255, 0.02);
+        font-family: 'Courier New', monospace;
+        color: #b8d4ff;
+        pointer-events: none;
+    `;
+
+    panel.innerHTML = `
+        <div style="display: flex; align-items: flex-start; gap: 14px; margin-bottom: 12px;">
+            <div id="planetEmoji" style="font-size: 36px; line-height: 1; flex-shrink: 0;">🌍</div>
+            <div style="flex: 1;">
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                    <span id="planetName" style="font-size: 22px; font-weight: bold; color: #8ab4f8; letter-spacing: 2px; text-transform: uppercase;">TERRA</span>
+                    <span id="planetSigil" style="font-size: 16px; opacity: 0.6;">🛡️</span>
+                </div>
+                <div id="planetAsura" style="font-size: 16px; font-weight: bold; color: #6a9fd8; letter-spacing: 1px; margin-top: 2px;">ASTREIA</div>
+                <div id="planetTitle" style="font-size: 11px; color: rgba(255,255,255,0.35); letter-spacing: 1px; margin-top: 2px;">🛡️ Asura da Proteção e Defesa</div>
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
+            <span style="font-size: 11px; background: rgba(100,200,255,0.08); padding: 2px 12px; border-radius: 12px; color: rgba(255,255,255,0.4); border: 1px solid rgba(100,200,255,0.05);" id="planetDesc">3º planeta</span>
+            <span style="font-size: 11px; background: rgba(100,200,255,0.05); padding: 2px 12px; border-radius: 12px; color: rgba(255,255,255,0.3); border: 1px solid rgba(100,200,255,0.05);" id="planetClassification">Planeta</span>
+        </div>
+        
+        <div id="planetInfo" style="font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.7; margin-bottom: 16px; padding: 14px 16px; background: rgba(0, 50, 100, 0.08); border-radius: 8px; border-left: 2px solid rgba(100, 200, 255, 0.2);">
+            Informações do corpo celeste
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px 16px; font-size: 12px; color: rgba(255,255,255,0.5);">
+            <div><span style="color: rgba(255,255,255,0.2);">🌞 Distância</span><br><span id="planetDistance" style="color: #8ab4f8; font-weight: bold;">---</span></div>
+            <div><span style="color: rgba(255,255,255,0.2);">📏 Diâmetro</span><br><span id="planetDiameter" style="color: #8ab4f8; font-weight: bold;">---</span></div>
+            <div><span style="color: rgba(255,255,255,0.2);">🌅 Dia</span><br><span id="planetDay" style="color: #8ab4f8; font-weight: bold;">---</span></div>
+            <div><span style="color: rgba(255,255,255,0.2);">📅 Ano</span><br><span id="planetYear" style="color: #8ab4f8; font-weight: bold;">---</span></div>
+        </div>
+        
+        <div style="margin-top: 14px; font-size: 12px; color: rgba(255,255,255,0.25); text-align: center; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.04);">
+            <span id="planetMoons">🌙 0 luas</span>
+        </div>
+        
+        <div style="position: absolute; top: 12px; right: 16px;">
+            <button id="closePanel" style="
+                background: none;
+                border: none;
+                color: rgba(255,255,255,0.2);
+                font-size: 18px;
+                cursor: pointer;
+                padding: 4px 8px;
+                transition: color 0.3s;
+                font-family: 'Courier New', monospace;
+            ">✕</button>
+        </div>
+        
+        <!-- Selo WZ -->
+        <div style="position: absolute; bottom: 12px; right: 16px; font-size: 9px; color: rgba(255,255,255,0.06); letter-spacing: 3px; text-transform: uppercase;">
+            ⚜️ WZ • Cosmologia
+        </div>
+    `;
+
+    document.body.appendChild(panel);
+
+    // Botão fechar
+    document.getElementById('closePanel').addEventListener('click', closePanel);
+    document.getElementById('closePanel').addEventListener('touchend', (e) => {
+        e.preventDefault();
+        closePanel();
+    });
+
+    return panel;
+}
+
+// Abre o painel com dados do planeta/corpo celeste
+function openPanel(key) {
+    const panel = document.getElementById('planetPanel') || createInfoPanel();
+    
+    // Verifica se é Sol ou Lua
+    let data;
+    if (key === 'sun') {
+        data = celestialData.sun;
+    } else if (key === 'moon') {
+        data = celestialData.moon;
+    } else {
+        data = planetData[key];
+    }
+    
+    if (!data) return;
+
+    // Atualiza conteúdo
+    document.getElementById('planetEmoji').textContent = data.emoji;
+    document.getElementById('planetName').textContent = data.name;
+    
+    // Mostra Asura (se tiver)
+    const asuraEl = document.getElementById('planetAsura');
+    const titleEl = document.getElementById('planetTitle');
+    
+    if (data.asura) {
+        asuraEl.textContent = data.asura;
+        asuraEl.style.display = 'block';
+    } else {
+        asuraEl.style.display = 'none';
+    }
+    
+    titleEl.textContent = data.title;
+    titleEl.style.display = 'block';
+    
+    document.getElementById('planetSigil').textContent = data.sigil || '';
+    document.getElementById('planetDesc').textContent = data.description;
+    document.getElementById('planetInfo').textContent = data.info;
+    document.getElementById('planetDistance').textContent = data.distance;
+    document.getElementById('planetDiameter').textContent = data.diameter;
+    document.getElementById('planetDay').textContent = data.day;
+    document.getElementById('planetYear').textContent = data.year;
+    document.getElementById('planetMoons').textContent = data.moons !== '—' ? `🌙 ${data.moons}` : '—';
+    document.getElementById('planetClassification').textContent = data.type || 'Planeta';
+
+    // Cor do corpo celeste
+    document.getElementById('planetName').style.color = data.color;
+    if (data.asura) {
+        document.getElementById('planetAsura').style.color = data.color;
+    }
+    document.getElementById('planetInfo').style.borderLeftColor = data.color;
+
+    // Mostra painel
+    panel.style.opacity = '1';
+    panel.style.visibility = 'visible';
+    panel.style.transform = 'translate(-50%, -50%) scale(1)';
+    panel.style.pointerEvents = 'auto';
+}
+
+// Fecha o painel
+function closePanel() {
+    const panel = document.getElementById('planetPanel');
+    if (!panel) return;
+    
+    panel.style.opacity = '0';
+    panel.style.visibility = 'hidden';
+    panel.style.transform = 'translate(-50%, -50%) scale(0.9)';
+    panel.style.pointerEvents = 'none';
+}
+
+// Fecha ao clicar fora (apenas desktop)
+document.addEventListener('click', (e) => {
+    const panel = document.getElementById('planetPanel');
+    if (!panel) return;
+    if (panel.style.visibility === 'hidden') return;
+    
+    const isClickOnPlanet = e.target.closest('.mercury, .venus, .earth, .mars, .jupiter, .saturn, .uranus, .neptune, .pluto, .sun, .moon');
+    const isClickOnPanel = e.target.closest('#planetPanel');
+    
+    if (!isClickOnPlanet && !isClickOnPanel) {
+        closePanel();
+    }
+});
+
+// Função auxiliar para adicionar eventos de clique/toque
+function addClickHandler(element, key) {
+    // Estilo de clique
+    element.style.cursor = 'pointer';
+    element.style.transition = 'transform 0.15s ease, filter 0.3s ease';
+    element.style.webkitTapHighlightColor = 'transparent';
+
+    // Evento de clique (desktop)
+    element.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openPanel(key);
+    });
+
+    // Evento de toque (mobile)
+    element.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openPanel(key);
+    });
+
+    // Feedback visual ao tocar/clicar
+    element.addEventListener('touchstart', () => {
+        element.style.transform = 'scale(0.92)';
+    });
+
+    element.addEventListener('touchend', () => {
+        element.style.transform = 'scale(1)';
+    });
+
+    element.addEventListener('touchcancel', () => {
+        element.style.transform = 'scale(1)';
+    });
+
+    element.addEventListener('mousedown', () => {
+        element.style.transform = 'scale(0.92)';
+    });
+
+    element.addEventListener('mouseup', () => {
+        element.style.transform = 'scale(1)';
+    });
+
+    element.addEventListener('mouseleave', () => {
+        element.style.transform = 'scale(1)';
+    });
+
+    // Destaque ao passar o mouse (desktop)
+    element.addEventListener('mouseenter', () => {
+        element.style.filter = 'brightness(1.3) drop-shadow(0 0 20px rgba(255,255,255,0.15))';
+    });
+
+    element.addEventListener('mouseleave', () => {
+        element.style.filter = 'none';
+    });
+}
+
+// Configura os corpos celestes como clicáveis
+function setupPlanetClick() {
+    // Planetas
+    const planets = document.querySelectorAll(
+        '.mercury, .venus, .earth, .mars, ' +
+        '.jupiter, .saturn, .uranus, .neptune, .pluto'
+    );
+
+    const planetMap = {
+        'mercury': 'mercury',
+        'venus': 'venus',
+        'earth': 'earth',
+        'mars': 'mars',
+        'jupiter': 'jupiter',
+        'saturn': 'saturn',
+        'uranus': 'uranus',
+        'neptune': 'neptune',
+        'pluto': 'pluto'
+    };
+
+    planets.forEach(planet => {
+        let planetKey = null;
+        for (const [key, className] of Object.entries(planetMap)) {
+            if (planet.classList.contains(className)) {
+                planetKey = key;
+                break;
+            }
+        }
+        if (!planetKey) return;
+        addClickHandler(planet, planetKey);
+    });
+
+    // 🌞 SOL
+    const sun = document.querySelector('.sun');
+    if (sun) {
+        addClickHandler(sun, 'sun');
+    }
+
+    // 🌙 LUA
+    const moon = document.querySelector('.moon');
+    if (moon) {
+        addClickHandler(moon, 'moon');
+    }
+
+    console.log('🪐 Corpos celestes configurados como clicáveis!');
+}
+
+// Inicializa os planetas clicáveis
+function initPlanetInteraction() {
+    // Espera os planetas existirem
+    const checkPlanets = setInterval(() => {
+        const planets = document.querySelectorAll(
+            '.mercury, .venus, .earth, .mars, .jupiter, .saturn, .uranus, .neptune, .pluto'
+        );
+        if (planets.length > 0) {
+            clearInterval(checkPlanets);
+            setupPlanetClick();
+        }
+    }, 100);
+
+    // Timeout de segurança
+    setTimeout(() => {
+        clearInterval(checkPlanets);
+    }, 5000);
+}
+
+
+/* =========================================================
    INICIALIZAÇÃO
 ========================================================= */
 
@@ -1082,6 +1571,13 @@ window.addEventListener(
         ------------------------------------------------- */
 
         setupPauseButton();
+
+
+        /* -------------------------------------------------
+           Planetas Interativos (WZ Cosmologia)
+        ------------------------------------------------- */
+
+        initPlanetInteraction();
 
 
         /* -------------------------------------------------
@@ -1126,9 +1622,11 @@ window.addEventListener(
         console.log('🌠 Sistema Solar iniciado!');
         console.log('💡 Digite createComet() ou createMeteor() para testar manualmente.');
         console.log('⏸️ Clique no botão ou pressione ESPAÇO para pausar/continuar.');
+        console.log('🪐 Toque nos planetas, Sol ou Lua para ver a cosmologia WZ!');
 
         // Expõe funções para teste no console
         window.createComet = createComet;
         window.createMeteor = createMeteor;
+        window.openPanel = openPanel;
     }
 );
