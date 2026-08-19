@@ -6,8 +6,8 @@
    - Partículas dos anéis de Saturno
    - Cometas / meteoros ocasionais
    - Zoom por pinça no mobile
-   - Botão de pause
-   - Painel interativo WZ (Sol, Lua e Planetas)
+   - Botão de pause (roxo)
+   - Painel interativo WZ (Sol, Lua e Planetas) - GLASS
    - Modo Exploração (viagem interplanetária)
 ========================================================= */
 
@@ -961,45 +961,57 @@ function setupPinchZoom() {
 
 
 /* =========================================================
-   BOTÃO DE PAUSE
+   BOTÃO DE PAUSE - GLASS ROXO
 ========================================================= */
 
 function setupPauseButton() {
 
-    // Cria o botão
+    // Cria o botão com estilo Glass + Roxo
     const pauseBtn = document.createElement('button');
     pauseBtn.id = 'pauseBtn';
+    pauseBtn.className = 'glass-btn';
     pauseBtn.textContent = '⏸️ Pausar';
+    
+    // Estilos inline básicos (o resto vem do CSS)
     pauseBtn.style.cssText = `
         position: fixed;
-        bottom: 20px;
-        right: 20px;
-        padding: 12px 20px;
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 30px;
-        color: white;
-        font-size: 16px;
+        bottom: 30px;
+        right: 30px;
+        padding: 14px 28px;
+        background: rgba(80, 20, 120, 0.45);
+        backdrop-filter: blur(20px) saturate(1.5);
+        -webkit-backdrop-filter: blur(20px) saturate(1.5);
+        border: 1px solid rgba(160, 80, 255, 0.25);
+        border-radius: 16px;
+        color: #c084fc;
+        font-size: 14px;
+        font-family: 'Courier New', monospace;
+        font-weight: 600;
         cursor: pointer;
         z-index: 9999;
-        transition: all 0.3s ease;
-        font-family: Arial, sans-serif;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        box-shadow: 0 8px 32px rgba(80, 20, 120, 0.3), 0 0 0 1px rgba(160, 80, 255, 0.05) inset, 0 0 30px rgba(160, 80, 255, 0.05);
         user-select: none;
         touch-action: manipulation;
+        letter-spacing: 2px;
+        text-transform: uppercase;
     `;
 
     // Hover effect
     pauseBtn.addEventListener('mouseenter', () => {
-        pauseBtn.style.background = 'rgba(255, 255, 255, 0.2)';
-        pauseBtn.style.transform = 'scale(1.05)';
+        pauseBtn.style.background = 'rgba(100, 40, 160, 0.6)';
+        pauseBtn.style.borderColor = 'rgba(160, 80, 255, 0.5)';
+        pauseBtn.style.boxShadow = '0 8px 40px rgba(80, 20, 120, 0.4), 0 0 0 1px rgba(160, 80, 255, 0.1) inset, 0 0 50px rgba(160, 80, 255, 0.1)';
+        pauseBtn.style.transform = 'scale(1.04)';
+        pauseBtn.style.color = '#d8b4fe';
     });
 
     pauseBtn.addEventListener('mouseleave', () => {
-        pauseBtn.style.background = 'rgba(255, 255, 255, 0.1)';
+        pauseBtn.style.background = 'rgba(80, 20, 120, 0.45)';
+        pauseBtn.style.borderColor = 'rgba(160, 80, 255, 0.25)';
+        pauseBtn.style.boxShadow = '0 8px 32px rgba(80, 20, 120, 0.3), 0 0 0 1px rgba(160, 80, 255, 0.05) inset, 0 0 30px rgba(160, 80, 255, 0.05)';
         pauseBtn.style.transform = 'scale(1)';
+        pauseBtn.style.color = '#c084fc';
     });
 
     let isPaused = false;
@@ -1023,11 +1035,9 @@ function setupPauseButton() {
 
         // Pausa cometas e meteoros (evita novos spawns)
         if (isPaused) {
-            // Cancela os schedulers
             clearTimeout(window._cometScheduler);
             clearTimeout(window._meteorScheduler);
         } else {
-            // Reinicia os schedulers
             scheduleComet();
             scheduleMeteor();
         }
@@ -1051,7 +1061,7 @@ function setupPauseButton() {
 
 
 /* =========================================================
-   PAINEL INTERATIVO WZ - COSMOLOGIA
+   PAINEL INTERATIVO WZ - COSMOLOGIA (GLASS)
 ========================================================= */
 
 // Dados dos planetas com a cosmologia WZ
@@ -1238,37 +1248,12 @@ const celestialData = {
     }
 };
 
-// Cria o painel de informações (versão WZ completa)
+// Cria o painel de informações (GLASS)
 function createInfoPanel() {
     const panel = document.createElement('div');
     panel.id = 'planetPanel';
-    panel.style.cssText = `
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) scale(0.9);
-        width: min(340px, 92%);
-        max-height: 85vh;
-        overflow-y: auto;
-        background: rgba(0, 10, 25, 0.95);
-        backdrop-filter: blur(25px);
-        -webkit-backdrop-filter: blur(25px);
-        border: 1px solid rgba(100, 200, 255, 0.2);
-        border-radius: 16px;
-        padding: 28px 24px 24px;
-        z-index: 10000;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 
-            0 25px 80px rgba(0, 0, 0, 0.9),
-            0 0 60px rgba(0, 150, 255, 0.05),
-            inset 0 0 60px rgba(0, 150, 255, 0.02);
-        font-family: 'Courier New', monospace;
-        color: #b8d4ff;
-        pointer-events: none;
-    `;
-
+    panel.className = 'glass-panel';
+    
     panel.innerHTML = `
         <div style="display: flex; align-items: flex-start; gap: 14px; margin-bottom: 12px;">
             <div id="planetEmoji" style="font-size: 36px; line-height: 1; flex-shrink: 0;">🌍</div>
@@ -1303,16 +1288,7 @@ function createInfoPanel() {
         </div>
         
         <div style="position: absolute; top: 12px; right: 16px;">
-            <button id="closePanel" style="
-                background: none;
-                border: none;
-                color: rgba(255,255,255,0.2);
-                font-size: 18px;
-                cursor: pointer;
-                padding: 4px 8px;
-                transition: color 0.3s;
-                font-family: 'Courier New', monospace;
-            ">✕</button>
+            <button id="closePanel" class="glass-close">✕</button>
         </div>
         
         <!-- Selo WZ -->
@@ -1388,10 +1364,7 @@ function openPanel(key) {
     document.getElementById('planetInfo').style.borderLeftColor = data.color;
 
     // Mostra painel
-    panel.style.opacity = '1';
-    panel.style.visibility = 'visible';
-    panel.style.transform = 'translate(-50%, -50%) scale(1)';
-    panel.style.pointerEvents = 'auto';
+    panel.classList.add('active');
 }
 
 // Fecha o painel
@@ -1399,10 +1372,7 @@ function closePanel() {
     const panel = document.getElementById('planetPanel');
     if (!panel) return;
     
-    panel.style.opacity = '0';
-    panel.style.visibility = 'hidden';
-    panel.style.transform = 'translate(-50%, -50%) scale(0.9)';
-    panel.style.pointerEvents = 'none';
+    panel.classList.remove('active');
 }
 
 
@@ -1433,43 +1403,12 @@ const planetZoomLevels = {
     moon: 3.5
 };
 
-// Cria o botão de voltar
+// Cria o botão de voltar (GLASS)
 function createBackButton() {
     const btn = document.createElement('button');
     btn.id = 'backButton';
+    btn.className = 'glass-back';
     btn.textContent = '← Voltar ao Sistema Solar';
-    btn.style.cssText = `
-        position: fixed;
-        bottom: 90px;
-        left: 50%;
-        transform: translateX(-50%) scale(0.9);
-        padding: 12px 24px;
-        background: rgba(10, 20, 40, 0.6);
-        backdrop-filter: blur(20px) saturate(1.5);
-        -webkit-backdrop-filter: blur(20px) saturate(1.5);
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 16px;
-        color: #8ab4f8;
-        font-size: 13px;
-        font-family: 'Courier New', monospace;
-        cursor: pointer;
-        z-index: 10001;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        font-weight: 600;
-        user-select: none;
-        touch-action: manipulation;
-        pointer-events: none;
-    `;
-    
-    btn.innerHTML = `
-        <span style="position: relative; z-index: 1;">← Voltar ao Sistema Solar</span>
-        <span style="position: absolute; top: 0; left: 0; right: 0; height: 50%; background: linear-gradient(to bottom, rgba(255,255,255,0.06), transparent); border-radius: 16px 16px 0 0; pointer-events: none;"></span>
-    `;
     
     btn.addEventListener('click', exitExploration);
     btn.addEventListener('touchend', (e) => {
@@ -1477,23 +1416,11 @@ function createBackButton() {
         exitExploration();
     });
     
-    btn.addEventListener('mouseenter', () => {
-        btn.style.background = 'rgba(20, 40, 70, 0.7)';
-        btn.style.borderColor = 'rgba(100, 200, 255, 0.3)';
-        btn.style.boxShadow = '0 8px 40px rgba(0, 0, 0, 0.4), 0 0 50px rgba(100, 200, 255, 0.06)';
-    });
-    
-    btn.addEventListener('mouseleave', () => {
-        btn.style.background = 'rgba(10, 20, 40, 0.6)';
-        btn.style.borderColor = 'rgba(255, 255, 255, 0.12)';
-        btn.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.3)';
-    });
-    
     document.body.appendChild(btn);
     return btn;
 }
 
-// Entra no modo exploração - CORRIGIDO
+// Entra no modo exploração
 function enterExploration(key) {
     console.log(`🚀 Tentando viajar para: ${key}`);
     
@@ -1518,7 +1445,6 @@ function enterExploration(key) {
     // Encontra o elemento do planeta usando data-key ou classe
     let planet = document.querySelector(`[data-key="${key}"]`);
     if (!planet) {
-        // Fallback: procura pela classe
         planet = document.querySelector(`.${key}`);
     }
     
@@ -1540,10 +1466,8 @@ function enterExploration(key) {
         return;
     }
     
-    // Fecha o painel se estiver aberto
     closePanel();
     
-    // Obtém a posição do planeta
     const containerRect = container.getBoundingClientRect();
     const planetRect = planet.getBoundingClientRect();
     
@@ -1553,31 +1477,22 @@ function enterExploration(key) {
     const planetCenterX = planetRect.left + planetRect.width / 2;
     const planetCenterY = planetRect.top + planetRect.height / 2;
     
-    // Calcula o deslocamento para centralizar o planeta
     const deltaX = centerX - planetCenterX;
     const deltaY = centerY - planetCenterY;
     
-    // Calcula o zoom (baseado no planeta)
     const zoomLevel = planetZoomLevels[key] || 2.5;
     
-    // Aplica a transformação com transição suave
     container.style.transition = 'transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
     container.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(${zoomLevel})`;
     
-    // Mostra o botão de voltar
     setTimeout(() => {
-        backBtn.style.opacity = '1';
-        backBtn.style.visibility = 'visible';
-        backBtn.style.transform = 'translateX(-50%) scale(1)';
-        backBtn.style.pointerEvents = 'auto';
+        backBtn.classList.add('visible');
     }, 300);
     
-    // Adiciona classe de destaque no planeta
     planet.style.transition = 'filter 0.8s ease, box-shadow 0.8s ease';
     planet.style.filter = 'brightness(1.3) drop-shadow(0 0 40px rgba(100,200,255,0.3))';
     planet.style.zIndex = '20';
     
-    // Anima a órbita (opcional - desacelera)
     document.querySelectorAll('.mercury, .venus, .earth, .mars, .jupiter, .saturn, .uranus, .neptune, .pluto, .sun, .moon').forEach(p => {
         if (p !== planet) {
             p.style.transition = 'opacity 0.8s ease';
@@ -1585,13 +1500,11 @@ function enterExploration(key) {
         }
     });
     
-    // Abre o painel após a transição
     setTimeout(() => {
         openPanel(key);
         explorationMode.isTransitioning = false;
     }, 900);
     
-    // Esconde o botão de pause durante a exploração
     const pauseBtn = document.getElementById('pauseBtn');
     if (pauseBtn) {
         pauseBtn.style.transition = 'opacity 0.4s ease';
@@ -1612,16 +1525,13 @@ function exitExploration() {
     const container = document.querySelector('.container');
     const backBtn = document.getElementById('backButton');
     
-    // Fecha o painel
     closePanel();
     
-    // Volta ao normal
     if (container) {
         container.style.transition = 'transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
         container.style.transform = 'translate(0, 0) scale(1)';
     }
     
-    // Restaura os planetas
     document.querySelectorAll('.mercury, .venus, .earth, .mars, .jupiter, .saturn, .uranus, .neptune, .pluto, .sun, .moon').forEach(p => {
         p.style.transition = 'opacity 0.8s ease, filter 0.8s ease';
         p.style.opacity = '1';
@@ -1630,16 +1540,10 @@ function exitExploration() {
         p.style.boxShadow = '';
     });
     
-    // Esconde o botão de voltar
     if (backBtn) {
-        backBtn.style.transition = 'all 0.4s ease';
-        backBtn.style.opacity = '0';
-        backBtn.style.visibility = 'hidden';
-        backBtn.style.transform = 'translateX(-50%) scale(0.9)';
-        backBtn.style.pointerEvents = 'none';
+        backBtn.classList.remove('visible');
     }
     
-    // Mostra o botão de pause novamente
     const pauseBtn = document.getElementById('pauseBtn');
     if (pauseBtn) {
         pauseBtn.style.transition = 'opacity 0.6s ease 0.3s';
@@ -1655,11 +1559,11 @@ function exitExploration() {
     }, 900);
 }
 
-// Fecha ao clicar fora (apenas desktop) - versão modificada
+// Fecha ao clicar fora
 document.addEventListener('click', (e) => {
     const panel = document.getElementById('planetPanel');
     if (!panel) return;
-    if (panel.style.visibility === 'hidden') return;
+    if (!panel.classList.contains('active')) return;
     
     const isClickOnPlanet = e.target.closest('.mercury, .venus, .earth, .mars, .jupiter, .saturn, .uranus, .neptune, .pluto, .sun, .moon');
     const isClickOnPanel = e.target.closest('#planetPanel');
@@ -1670,7 +1574,7 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// Função auxiliar para adicionar eventos de clique/toque - CORRIGIDA
+// Função auxiliar para adicionar eventos de clique/toque
 function addClickHandler(element, key) {
     const finalKey = String(key);
     console.log(`🔗 Adicionando handler para: ${finalKey}`);
@@ -1679,7 +1583,6 @@ function addClickHandler(element, key) {
     element.style.transition = 'transform 0.15s ease, filter 0.3s ease';
     element.style.webkitTapHighlightColor = 'transparent';
 
-    // Evento de clique (desktop)
     element.addEventListener('click', (e) => {
         e.stopPropagation();
         console.log(`🖱️ Clique em: ${finalKey}`);
@@ -1691,7 +1594,6 @@ function addClickHandler(element, key) {
         }
     });
 
-    // Evento de toque (mobile)
     element.addEventListener('touchend', (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -1704,7 +1606,6 @@ function addClickHandler(element, key) {
         }
     });
 
-    // Feedback visual ao tocar/clicar
     element.addEventListener('touchstart', () => {
         element.style.transform = 'scale(0.92)';
     });
@@ -1729,7 +1630,6 @@ function addClickHandler(element, key) {
         element.style.transform = 'scale(1)';
     });
 
-    // Destaque ao passar o mouse (desktop)
     element.addEventListener('mouseenter', () => {
         element.style.filter = 'brightness(1.3) drop-shadow(0 0 20px rgba(255,255,255,0.15))';
     });
@@ -1739,17 +1639,15 @@ function addClickHandler(element, key) {
     });
 }
 
-// Configura os corpos celestes como clicáveis - CORRIGIDO
+// Configura os corpos celestes como clicáveis
 function setupPlanetClick() {
     
-    // PEGA TODOS OS CORPOS CELESTES com data-key
     const allCelestialBodies = document.querySelectorAll(
         '.sun, .moon, .mercury, .venus, .earth, .mars, ' +
         '.jupiter, .saturn, .uranus, .neptune, .pluto'
     );
 
     allCelestialBodies.forEach(element => {
-        // Pega a chave do atributo data-key
         const key = element.dataset.key;
         
         if (!key) {
@@ -1758,8 +1656,6 @@ function setupPlanetClick() {
         }
 
         console.log(`🪐 Configurando: ${key}`);
-
-        // Adiciona o evento de clique
         addClickHandler(element, key);
     });
 
@@ -1769,7 +1665,6 @@ function setupPlanetClick() {
 
 // Inicializa os planetas clicáveis
 function initPlanetInteraction() {
-    // Espera os planetas existirem
     const checkPlanets = setInterval(() => {
         const planets = document.querySelectorAll(
             '.mercury, .venus, .earth, .mars, .jupiter, .saturn, .uranus, .neptune, .pluto'
@@ -1780,7 +1675,6 @@ function initPlanetInteraction() {
         }
     }, 100);
 
-    // Timeout de segurança
     setTimeout(() => {
         clearInterval(checkPlanets);
     }, 5000);
@@ -1802,95 +1696,34 @@ window.addEventListener(
     "DOMContentLoaded",
     () => {
 
-        /* -------------------------------------------------
-           Estrelas
-        ------------------------------------------------- */
-
         createStars();
-
-
-        /* -------------------------------------------------
-           Saturno
-        ------------------------------------------------- */
-
         createSaturnRingParticles();
-
-
-        /* -------------------------------------------------
-           Zoom
-        ------------------------------------------------- */
-
         setupPinchZoom();
-
-
-        /* -------------------------------------------------
-           Botão de Pause
-        ------------------------------------------------- */
-
         setupPauseButton();
-
-
-        /* -------------------------------------------------
-           Planetas Interativos (WZ Cosmologia + Modo Exploração)
-        ------------------------------------------------- */
-
         initPlanetInteraction();
 
-
-        /* -------------------------------------------------
-           Cometas
-
-           O primeiro não aparece imediatamente.
-           O sistema começa calmo.
-        ------------------------------------------------- */
-
-        // Primeiro cometa após 3-6 segundos
-        setTimeout(
-            () => {
-                createComet();
-            },
-            randomBetween(3000, 6000)
-        );
-
+        setTimeout(() => {
+            createComet();
+        }, randomBetween(3000, 6000));
         scheduleComet();
 
-
-        /* -------------------------------------------------
-           Meteoros
-
-           Ainda mais raros.
-        ------------------------------------------------- */
-
-        // Primeiro meteoro após 5-10 segundos
-        setTimeout(
-            () => {
-                createMeteor();
-            },
-            randomBetween(5000, 10000)
-        );
-
+        setTimeout(() => {
+            createMeteor();
+        }, randomBetween(5000, 10000));
         scheduleMeteor();
-
-
-        /* -------------------------------------------------
-           Debug (opcional)
-        ------------------------------------------------- */
 
         console.log('🌠 Sistema Solar iniciado!');
         console.log('💡 Digite createComet() ou createMeteor() para testar manualmente.');
-        console.log('⏸️ Clique no botão ou pressione ESPAÇO para pausar/continuar.');
+        console.log('⏸️ Clique no botão (ROXO) ou pressione ESPAÇO para pausar/continuar.');
         console.log('🪐 Toque nos planetas, Sol ou Lua para viajar e ver a cosmologia WZ!');
         console.log('🚀 Pressione ESC para sair do modo exploração.');
-        console.log('📋 Verifique se os elementos têm data-key no HTML!');
 
-        // Expõe funções para teste no console
         window.createComet = createComet;
         window.createMeteor = createMeteor;
         window.openPanel = openPanel;
         window.enterExploration = enterExploration;
         window.exitExploration = exitExploration;
         
-        // Debug: mostra todos os data-keys
         console.log('📋 Data-keys encontrados:');
         document.querySelectorAll('[data-key]').forEach(el => {
             console.log(`  - ${el.className} → ${el.dataset.key}`);
