@@ -4,6 +4,7 @@
    LUA
    HIERARQUIA VISUAL DAS ÓRBITAS
    COMETAS / METEOROS EVENTUAIS
+   BOTÃO PAUSE ESTILO STAR WARS
 ========================================================= */
 
 
@@ -896,6 +897,74 @@ body {
 
 
 /* =========================================================
+   BOTÃO DE PAUSE - ESTILO STAR WARS
+========================================================= */
+
+#pauseBtn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    padding: 14px 24px;
+    background: rgba(0, 20, 40, 0.6);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(100, 200, 255, 0.25);
+    border-radius: 8px;
+    color: #8ab4f8;
+    font-size: 15px;
+    font-family: 'Courier New', monospace;
+    cursor: pointer;
+    z-index: 9999;
+    transition: all 0.3s ease;
+    box-shadow: 
+        0 0 20px rgba(0, 150, 255, 0.1),
+        inset 0 0 20px rgba(0, 150, 255, 0.05);
+    user-select: none;
+    touch-action: manipulation;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Efeito holográfico nas bordas */
+#pauseBtn::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 9px;
+    background: linear-gradient(
+        45deg,
+        rgba(0, 150, 255, 0.1),
+        rgba(100, 200, 255, 0.05),
+        rgba(0, 150, 255, 0.1)
+    );
+    z-index: -1;
+    filter: blur(2px);
+}
+
+/* Hover - estilo nave */
+#pauseBtn:hover {
+    background: rgba(0, 40, 80, 0.8);
+    border-color: rgba(100, 200, 255, 0.5);
+    box-shadow: 
+        0 0 40px rgba(0, 150, 255, 0.2),
+        inset 0 0 40px rgba(0, 150, 255, 0.05);
+    transform: scale(1.05);
+    color: #b8d4ff;
+}
+
+/* Clique - efeito de disparo */
+#pauseBtn:active {
+    transform: scale(0.95);
+    border-color: rgba(100, 200, 255, 0.8);
+    box-shadow: 
+        0 0 60px rgba(0, 150, 255, 0.3);
+}
+
+
+/* =========================================================
    RESPONSIVIDADE - MOBILE
 ========================================================= */
 
@@ -1057,6 +1126,18 @@ body {
 
         width: 50px;
     }
+
+
+    /* -----------------------------------------------------
+       BOTÃO PAUSE MOBILE
+    ----------------------------------------------------- */
+
+    #pauseBtn {
+        bottom: 20px;
+        right: 20px;
+        padding: 10px 16px;
+        font-size: 12px;
+    }
 }
 
 
@@ -1113,6 +1194,14 @@ body {
 
         width: 40px;
     }
+
+
+    #pauseBtn {
+        bottom: 15px;
+        right: 15px;
+        padding: 8px 14px;
+        font-size: 11px;
+    }
 }
 
 
@@ -1140,6 +1229,13 @@ body {
 
         width: 86vmin;
         height: 86vmin;
+    }
+
+    #pauseBtn {
+        bottom: 15px;
+        right: 15px;
+        padding: 8px 14px;
+        font-size: 11px;
     }
 }
 
