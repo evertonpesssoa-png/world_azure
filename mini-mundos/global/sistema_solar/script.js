@@ -290,7 +290,7 @@ function createComet() {
     ------------------------------------------------- */
 
     if (
-        container.querySelector(".space-comet")
+        container.querySelector(".comet")
     ) {
         return;
     }
@@ -299,8 +299,7 @@ function createComet() {
     const comet =
         document.createElement("div");
 
-    comet.className =
-        "space-comet";
+    comet.className = "comet"; // AJUSTADO: usa a classe do CSS
 
 
     /* -------------------------------------------------
@@ -479,10 +478,8 @@ function createComet() {
         randomBetween(1.2, 2.2);
 
 
-    comet.style.setProperty(
-        "--comet-duration",
-        duration + "s"
-    );
+    comet.style.animationDuration =
+        duration + "s";
 
 
     /* -------------------------------------------------
@@ -493,10 +490,24 @@ function createComet() {
         randomBetween(0.75, 1.15);
 
 
-    comet.style.setProperty(
-        "--comet-scale",
-        scale
-    );
+    comet.style.transform =
+        `scale(${scale})`;
+
+
+    /* -------------------------------------------------
+       Cor do cometa (variação)
+    ------------------------------------------------- */
+
+    const hue =
+        randomBetween(180, 220); // Azul-cyan
+
+
+    comet.style.background =
+        `hsl(${hue}, 100%, 90%)`;
+
+    comet.style.boxShadow =
+        `0 0 8px hsl(${hue}, 100%, 80%),
+         0 0 20px hsl(${hue}, 100%, 60%)`;
 
 
     /* -------------------------------------------------
@@ -515,7 +526,9 @@ function createComet() {
     setTimeout(
         () => {
 
-            comet.remove();
+            if (comet.parentNode) {
+                comet.remove();
+            }
 
         },
         (duration * 1000) + 300
@@ -580,9 +593,7 @@ function createMeteor() {
     ------------------------------------------------- */
 
     if (
-        container.querySelector(
-            ".space-comet"
-        )
+        container.querySelector(".comet")
     ) {
         return;
     }
@@ -591,8 +602,7 @@ function createMeteor() {
     const meteor =
         document.createElement("div");
 
-    meteor.className =
-        "space-meteor";
+    meteor.className = "meteor"; // AJUSTADO: usa a classe do CSS
 
 
     /* -------------------------------------------------
@@ -654,27 +664,27 @@ function createMeteor() {
     ------------------------------------------------- */
 
     meteor.style.setProperty(
-        "--meteor-start-x",
+        "--start-x",
         startX + "%"
     );
 
     meteor.style.setProperty(
-        "--meteor-start-y",
+        "--start-y",
         startY + "%"
     );
 
     meteor.style.setProperty(
-        "--meteor-end-x",
+        "--end-x",
         endX + "%"
     );
 
     meteor.style.setProperty(
-        "--meteor-end-y",
+        "--end-y",
         endY + "%"
     );
 
     meteor.style.setProperty(
-        "--meteor-angle",
+        "--comet-angle",
         angle + "deg"
     );
 
@@ -686,11 +696,30 @@ function createMeteor() {
         );
 
 
-    meteor.style.setProperty(
-        "--meteor-duration",
-        duration + "s"
-    );
+    meteor.style.animationDuration =
+        duration + "s";
 
+
+    /* -------------------------------------------------
+       Tamanho e brilho do meteoro
+    ------------------------------------------------- */
+
+    const size =
+        randomBetween(1.5, 3.5);
+
+    meteor.style.width = size + "px";
+    meteor.style.height = size + "px";
+
+    const intensity =
+        randomBetween(0.6, 1);
+
+    meteor.style.boxShadow =
+        `0 0 ${size * 3}px rgba(255, 255, 255, ${intensity})`;
+
+
+    /* -------------------------------------------------
+       Adiciona ao sistema
+    ------------------------------------------------- */
 
     container.appendChild(
         meteor
@@ -700,7 +729,9 @@ function createMeteor() {
     setTimeout(
         () => {
 
-            meteor.remove();
+            if (meteor.parentNode) {
+                meteor.remove();
+            }
 
         },
         (duration * 1000) + 200
@@ -962,6 +993,14 @@ window.addEventListener(
            O sistema começa calmo.
         ------------------------------------------------- */
 
+        // Primeiro cometa após 3-6 segundos
+        setTimeout(
+            () => {
+                createComet();
+            },
+            randomBetween(3000, 6000)
+        );
+
         scheduleComet();
 
 
@@ -971,7 +1010,26 @@ window.addEventListener(
            Ainda mais raros.
         ------------------------------------------------- */
 
+        // Primeiro meteoro após 5-10 segundos
+        setTimeout(
+            () => {
+                createMeteor();
+            },
+            randomBetween(5000, 10000)
+        );
+
         scheduleMeteor();
 
+
+        /* -------------------------------------------------
+           Debug (opcional)
+        ------------------------------------------------- */
+
+        console.log('🌠 Sistema Solar iniciado!');
+        console.log('💡 Digite createComet() ou createMeteor() para testar manualmente.');
+
+        // Expõe funções para teste no console
+        window.createComet = createComet;
+        window.createMeteor = createMeteor;
     }
 );
