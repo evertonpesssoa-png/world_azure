@@ -30,14 +30,14 @@ function createLogBox() {
         background: rgba(0, 0, 0, 0.85);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(0, 255, 255, 0.3);
+        border: 1px solid rgba(160, 80, 255, 0.3);
         border-radius: 12px;
         padding: 10px 14px;
         z-index: 99999;
         overflow-y: auto;
         font-family: 'Courier New', monospace;
         font-size: 11px;
-        color: #00ffcc;
+        color: #c084fc;
         pointer-events: none;
         box-shadow: 0 4px 30px rgba(0, 0, 0, 0.8);
         scroll-behavior: smooth;
@@ -48,13 +48,13 @@ function createLogBox() {
     const title = document.createElement('div');
     title.textContent = '📡 LOG DE SISTEMA';
     title.style.cssText = `
-        color: #8ab4f8;
+        color: #c084fc;
         font-weight: bold;
         font-size: 10px;
         letter-spacing: 2px;
         margin-bottom: 6px;
         text-transform: uppercase;
-        border-bottom: 1px solid rgba(255,255,255,0.05);
+        border-bottom: 1px solid rgba(160,80,255,0.1);
         padding-bottom: 4px;
     `;
     logBox.appendChild(title);
@@ -79,11 +79,11 @@ function createLogBox() {
         bottom: 10px;
         left: 10px;
         padding: 6px 12px;
-        background: rgba(0, 20, 40, 0.7);
+        background: rgba(80, 20, 120, 0.45);
         backdrop-filter: blur(10px);
-        border: 1px solid rgba(0, 255, 255, 0.2);
+        border: 1px solid rgba(160, 80, 255, 0.25);
         border-radius: 8px;
-        color: #00ffcc;
+        color: #c084fc;
         font-size: 10px;
         font-family: 'Courier New', monospace;
         cursor: pointer;
@@ -97,7 +97,7 @@ function createLogBox() {
         isVisible = !isVisible;
         logBox.style.display = isVisible ? 'block' : 'none';
         toggleBtn.textContent = isVisible ? '📋 OCULTAR' : '📋 LOG';
-        toggleBtn.style.borderColor = isVisible ? 'rgba(0, 255, 255, 0.5)' : 'rgba(0, 255, 255, 0.2)';
+        toggleBtn.style.borderColor = isVisible ? 'rgba(160, 80, 255, 0.5)' : 'rgba(160, 80, 255, 0.2)';
     });
     
     document.body.appendChild(toggleBtn);
@@ -114,12 +114,18 @@ function addLog(message, type = 'info') {
     const timestamp = new Date().toLocaleTimeString();
     
     const colors = {
-        info: '#00ffcc',
+        info: '#c084fc',
         success: '#00ff88',
         error: '#ff4466',
         warning: '#ffaa44',
         comet: '#66ddff',
-        meteor: '#ff8844'
+        meteor: '#ff8844',
+        planet: '#4d8bf7',
+        glass: '#8ab4f8',
+        star: '#ffdd44',
+        zoom: '#00ffcc',
+        pause: '#ff66aa',
+        explore: '#ff66ff'
     };
     
     entry.style.color = colors[type] || colors.info;
@@ -157,20 +163,13 @@ console.warn = function(...args) {
     addLog('⚠️ ' + args.join(' '), 'warning');
 };
 
-// Funções específicas para logs
-function logComet(msg) { addLog('☄️ ' + msg, 'comet'); }
-function logMeteor(msg) { addLog('💫 ' + msg, 'meteor'); }
-function logSuccess(msg) { addLog('✅ ' + msg, 'success'); }
-function logError(msg) { addLog('❌ ' + msg, 'error'); }
-
 let logBoxInitialized = false;
 
 function initLogBox() {
     if (logBoxInitialized) return;
     createLogBox();
     logBoxInitialized = true;
-    addLog('🚀 Sistema de LOG iniciado!', 'success');
-    addLog('📱 Clique em "📋 LOG" para ver os eventos', 'info');
+    addLog('🚀 LOG iniciado! Clique em "📋 LOG"', 'success');
 }
 
 
@@ -179,64 +178,28 @@ function initLogBox() {
 ========================================================= */
 
 function createStars() {
-
-    const container =
-        document.querySelector("body");
-
-    if (!container) return;
-
-
-    for (let i = 0; i < 1000; i++) {
-
-        const star =
-            document.createElement("div");
-
-        star.className = "star";
-
-
-        /* -------------------------------------------------
-           Tamanho
-        ------------------------------------------------- */
-
-        const size =
-            Math.random() * 2 + 1;
-
-        star.style.width =
-            size + "px";
-
-        star.style.height =
-            size + "px";
-
-
-        /* -------------------------------------------------
-           Posição
-        ------------------------------------------------- */
-
-        star.style.top =
-            Math.random() * 100 + "%";
-
-        star.style.left =
-            Math.random() * 100 + "%";
-
-
-        /* -------------------------------------------------
-           Opacidade
-        ------------------------------------------------- */
-
-        star.style.opacity =
-            Math.random() * 0.7 + 0.3;
-
-
-        /* -------------------------------------------------
-           Delay
-        ------------------------------------------------- */
-
-        star.style.animationDelay =
-            Math.random() * 5 + "s";
-
-
-        container.appendChild(star);
+    addLog('⭐ Criando estrelas de fundo...', 'star');
+    const container = document.querySelector("body");
+    if (!container) {
+        addLog('❌ Body não encontrado!', 'error');
+        return;
     }
+
+    let count = 0;
+    for (let i = 0; i < 1000; i++) {
+        const star = document.createElement("div");
+        star.className = "star";
+        const size = Math.random() * 2 + 1;
+        star.style.width = size + "px";
+        star.style.height = size + "px";
+        star.style.top = Math.random() * 100 + "%";
+        star.style.left = Math.random() * 100 + "%";
+        star.style.opacity = Math.random() * 0.7 + 0.3;
+        star.style.animationDelay = Math.random() * 5 + "s";
+        container.appendChild(star);
+        count++;
+    }
+    addLog('✅ ' + count + ' estrelas criadas!', 'success');
 }
 
 
@@ -245,710 +208,205 @@ function createStars() {
 ========================================================= */
 
 function createSaturnRingParticles() {
-
-    const saturn =
-        document.querySelector(".saturn");
-
-
-    if (!saturn) return;
-
-
-    /* -------------------------------------------------
-       Evita duplicação
-    ------------------------------------------------- */
-
-    if (
-        saturn.querySelector(
-            ".saturn-particles"
-        )
-    ) {
+    addLog('🪐 Criando anéis de Saturno...', 'info');
+    const saturn = document.querySelector(".saturn");
+    if (!saturn) {
+        addLog('❌ Saturno não encontrado!', 'error');
+        return;
+    }
+    
+    if (saturn.querySelector(".saturn-particles")) {
+        addLog('⏳ Anéis já existem', 'warning');
         return;
     }
 
+    const particleContainer = document.createElement("div");
+    particleContainer.className = "saturn-particles";
+    const particleCount = window.innerWidth <= 768 ? 18 : 30;
 
-    /* -------------------------------------------------
-       Container
-    ------------------------------------------------- */
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement("span");
+        particle.className = "saturn-particle";
+        const angle = Math.random() * Math.PI * 2;
+        const radius = 25 + Math.random() * 18;
+        const x = Math.cos(angle) * radius;
+        const y = Math.sin(angle) * radius * 0.32;
+        const size = Math.random() * 1.8 + 0.7;
+        const opacity = Math.random() * 0.55 + 0.25;
 
-    const particleContainer =
-        document.createElement("div");
-
-    particleContainer.className =
-        "saturn-particles";
-
-
-    /* -------------------------------------------------
-       Quantidade
-    ------------------------------------------------- */
-
-    const particleCount =
-        window.innerWidth <= 768
-            ? 18
-            : 30;
-
-
-    /* =================================================
-       CRIAÇÃO
-    ================================================= */
-
-    for (
-        let i = 0;
-        i < particleCount;
-        i++
-    ) {
-
-        const particle =
-            document.createElement("span");
-
-        particle.className =
-            "saturn-particle";
-
-
-        /* -------------------------------------------------
-           Ângulo
-        ------------------------------------------------- */
-
-        const angle =
-            Math.random() *
-            Math.PI *
-            2;
-
-
-        /* -------------------------------------------------
-           Distância
-        ------------------------------------------------- */
-
-        const radius =
-            25 +
-            Math.random() * 18;
-
-
-        /* -------------------------------------------------
-           Coordenadas
-        ------------------------------------------------- */
-
-        const x =
-            Math.cos(angle) *
-            radius;
-
-        const y =
-            Math.sin(angle) *
-            radius *
-            0.32;
-
-
-        /* -------------------------------------------------
-           Tamanho
-        ------------------------------------------------- */
-
-        const size =
-            Math.random() *
-            1.8 +
-            0.7;
-
-
-        /* -------------------------------------------------
-           Opacidade
-        ------------------------------------------------- */
-
-        const opacity =
-            Math.random() *
-            0.55 +
-            0.25;
-
-
-        /* -------------------------------------------------
-           Aplicação
-        ------------------------------------------------- */
-
-        particle.style.width =
-            size + "px";
-
-        particle.style.height =
-            size + "px";
-
-
-        particle.style.left =
-            `calc(50% + ${x}px)`;
-
-        particle.style.top =
-            `calc(50% + ${y}px)`;
-
-
-        particle.style.opacity =
-            opacity;
-
-
-        /* -------------------------------------------------
-           Animação
-        ------------------------------------------------- */
-
-        particle.style.animationDelay =
-            Math.random() * 4 + "s";
-
-        particle.style.animationDuration =
-            2.5 +
-            Math.random() * 3 +
-            "s";
-
-
-        particleContainer.appendChild(
-            particle
-        );
+        particle.style.width = size + "px";
+        particle.style.height = size + "px";
+        particle.style.left = `calc(50% + ${x}px)`;
+        particle.style.top = `calc(50% + ${y}px)`;
+        particle.style.opacity = opacity;
+        particle.style.animationDelay = Math.random() * 4 + "s";
+        particle.style.animationDuration = 2.5 + Math.random() * 3 + "s";
+        particleContainer.appendChild(particle);
     }
 
-
-    saturn.appendChild(
-        particleContainer
-    );
+    saturn.appendChild(particleContainer);
+    addLog('✅ ' + particleCount + ' partículas dos anéis criadas!', 'success');
 }
 
 
 /* =========================================================
-   COMETAS / METEOROS OCASIONAIS
-
-   IMPORTANTE:
-
-   Não existe uma quantidade fixa de objetos na tela.
-
-   Um evento é criado:
-   → espera alguns segundos
-   → aparece um cometa
-   → atravessa o sistema
-   → desaparece
-   → espera novamente
-
-   Isso mantém o espaço vivo sem parecer uma
-   decoração cheia de partículas.
+   COMETAS / METEOROS
 ========================================================= */
-
-
-/* ---------------------------------------------------------
-   GERA UM NÚMERO ALEATÓRIO ENTRE MIN E MAX
---------------------------------------------------------- */
 
 function randomBetween(min, max) {
-
-    return (
-        Math.random() *
-        (max - min) +
-        min
-    );
+    return Math.random() * (max - min) + min;
 }
-
-
-/* ---------------------------------------------------------
-   CRIA UM COMETA (COM LOGS)
---------------------------------------------------------- */
 
 function createComet() {
-
-    addLog('🔥 createComet() CHAMADA!', 'comet');
+    addLog('☄️ createComet() CHAMADA!', 'comet');
     
-    const container =
-        document.querySelector(".container");
-
-
+    const container = document.querySelector(".container");
     if (!container) {
-        addLog('❌ Container NÃO encontrado!', 'error');
+        addLog('❌ Container não encontrado!', 'error');
         return;
     }
 
-
-    /* -------------------------------------------------
-       Impede mais de um cometa simultâneo
-    ------------------------------------------------- */
-
-    if (
-        container.querySelector(".comet")
-    ) {
-        addLog('⏳ Já existe um cometa, aguardando...', 'warning');
+    if (container.querySelector(".comet")) {
+        addLog('⏳ Já existe um cometa ativo', 'warning');
         return;
     }
 
-
-    const comet =
-        document.createElement("div");
-
+    const comet = document.createElement("div");
     comet.className = "comet";
 
-
-    /* -------------------------------------------------
-       Direção aleatória
-
-       O cometa pode atravessar:
-
-       ↘
-       ↙
-       →
-       ←
-
-       sem ficar preso sempre à mesma trajetória.
-    ------------------------------------------------- */
-
-    const direction =
-        Math.floor(
-            Math.random() * 4
-        );
-
-
-    let startX;
-    let startY;
-    let endX;
-    let endY;
-
-
-    /* =================================================
-       TRAJETÓRIAS
-    ================================================= */
+    const direction = Math.floor(Math.random() * 4);
+    let startX, startY, endX, endY;
 
     switch (direction) {
-
-        /* -------------------------------------------------
-           Superior esquerdo → inferior direito
-        ------------------------------------------------- */
-
         case 0:
-
-            startX =
-                randomBetween(-25, 20);
-
-            startY =
-                randomBetween(-20, 10);
-
-            endX =
-                randomBetween(80, 125);
-
-            endY =
-                randomBetween(80, 125);
-
+            startX = randomBetween(-25, 20);
+            startY = randomBetween(-20, 10);
+            endX = randomBetween(80, 125);
+            endY = randomBetween(80, 125);
+            addLog('📍 Cometa: ↘ (superior esquerdo → inferior direito)', 'comet');
             break;
-
-
-        /* -------------------------------------------------
-           Superior direito → inferior esquerdo
-        ------------------------------------------------- */
-
         case 1:
-
-            startX =
-                randomBetween(80, 125);
-
-            startY =
-                randomBetween(-20, 10);
-
-            endX =
-                randomBetween(-25, 20);
-
-            endY =
-                randomBetween(80, 125);
-
+            startX = randomBetween(80, 125);
+            startY = randomBetween(-20, 10);
+            endX = randomBetween(-25, 20);
+            endY = randomBetween(80, 125);
+            addLog('📍 Cometa: ↙ (superior direito → inferior esquerdo)', 'comet');
             break;
-
-
-        /* -------------------------------------------------
-           Esquerda → direita
-        ------------------------------------------------- */
-
         case 2:
-
-            startX =
-                randomBetween(-25, -10);
-
-            startY =
-                randomBetween(15, 85);
-
-            endX =
-                randomBetween(110, 125);
-
-            endY =
-                startY +
-                randomBetween(-20, 20);
-
+            startX = randomBetween(-25, -10);
+            startY = randomBetween(15, 85);
+            endX = randomBetween(110, 125);
+            endY = startY + randomBetween(-20, 20);
+            addLog('📍 Cometa: → (esquerda → direita)', 'comet');
             break;
-
-
-        /* -------------------------------------------------
-           Direita → esquerda
-        ------------------------------------------------- */
-
         default:
-
-            startX =
-                randomBetween(110, 125);
-
-            startY =
-                randomBetween(15, 85);
-
-            endX =
-                randomBetween(-25, -10);
-
-            endY =
-                startY +
-                randomBetween(-20, 20);
-
+            startX = randomBetween(110, 125);
+            startY = randomBetween(15, 85);
+            endX = randomBetween(-25, -10);
+            endY = startY + randomBetween(-20, 20);
+            addLog('📍 Cometa: ← (direita → esquerda)', 'comet');
             break;
     }
 
+    const dx = endX - startX;
+    const dy = endY - startY;
+    const angle = Math.atan2(dy, dx) * 180 / Math.PI;
 
-    /* -------------------------------------------------
-       Ângulo da trajetória
+    comet.style.setProperty("--start-x", startX + "%");
+    comet.style.setProperty("--start-y", startY + "%");
+    comet.style.setProperty("--end-x", endX + "%");
+    comet.style.setProperty("--end-y", endY + "%");
+    comet.style.setProperty("--comet-angle", angle + "deg");
 
-       Usado para girar a cauda na direção correta.
-    ------------------------------------------------- */
+    const duration = randomBetween(1.2, 2.2);
+    comet.style.animationDuration = duration + "s";
 
-    const dx =
-        endX - startX;
+    const scale = randomBetween(0.75, 1.15);
+    comet.style.transform = `scale(${scale})`;
 
-    const dy =
-        endY - startY;
+    const hue = randomBetween(180, 220);
+    comet.style.background = `hsl(${hue}, 100%, 90%)`;
+    comet.style.boxShadow = `0 0 8px hsl(${hue}, 100%, 80%), 0 0 20px hsl(${hue}, 100%, 60%)`;
 
-    const angle =
-        Math.atan2(dy, dx) *
-        180 /
-        Math.PI;
+    container.appendChild(comet);
+    addLog('✅ Cometa ADICIONADO! (duração: ' + duration.toFixed(1) + 's)', 'success');
 
-
-    /* -------------------------------------------------
-       Variáveis CSS
-    ------------------------------------------------- */
-
-    comet.style.setProperty(
-        "--start-x",
-        startX + "%"
-    );
-
-    comet.style.setProperty(
-        "--start-y",
-        startY + "%"
-    );
-
-    comet.style.setProperty(
-        "--end-x",
-        endX + "%"
-    );
-
-    comet.style.setProperty(
-        "--end-y",
-        endY + "%"
-    );
-
-    comet.style.setProperty(
-        "--comet-angle",
-        angle + "deg"
-    );
-
-
-    /* -------------------------------------------------
-       Velocidade
-
-       Entre 1.2 e 2.2 segundos.
-    ------------------------------------------------- */
-
-    const duration =
-        randomBetween(1.2, 2.2);
-
-
-    comet.style.animationDuration =
-        duration + "s";
-
-
-    /* -------------------------------------------------
-       Pequena variação de tamanho
-    ------------------------------------------------- */
-
-    const scale =
-        randomBetween(0.75, 1.15);
-
-
-    comet.style.transform =
-        `scale(${scale})`;
-
-
-    /* -------------------------------------------------
-       Cor do cometa (variação)
-    ------------------------------------------------- */
-
-    const hue =
-        randomBetween(180, 220); // Azul-cyan
-
-
-    comet.style.background =
-        `hsl(${hue}, 100%, 90%)`;
-
-    comet.style.boxShadow =
-        `0 0 8px hsl(${hue}, 100%, 80%),
-         0 0 20px hsl(${hue}, 100%, 60%)`;
-
-
-    /* -------------------------------------------------
-       Adiciona ao sistema
-    ------------------------------------------------- */
-
-    container.appendChild(
-        comet
-    );
-    
-    addLog('✅ COMETA ADICIONADO ao DOM!', 'success');
-
-
-    /* -------------------------------------------------
-       Remove depois da animação
-    ------------------------------------------------- */
-
-    setTimeout(
-        () => {
-
-            if (comet.parentNode) {
-                comet.remove();
-                addLog('🗑️ Cometa removido após animação', 'comet');
-            }
-
-        },
-        (duration * 1000) + 300
-    );
+    setTimeout(() => {
+        if (comet.parentNode) {
+            comet.remove();
+            addLog('🗑️ Cometa removido após animação', 'comet');
+        }
+    }, (duration * 1000) + 300);
 }
-
-
-/* =========================================================
-   COMETA OCASIONAL
-
-   Intervalo:
-
-   mínimo: 8 segundos
-   máximo: 18 segundos
-
-   Portanto a tela passa bastante tempo sem
-   nenhum cometa.
-========================================================= */
 
 function scheduleComet() {
-
-    const delay =
-        randomBetween(
-            8000,
-            18000
-        );
-
-
-    window._cometScheduler = setTimeout(
-        () => {
-
-            createComet();
-
-            scheduleComet();
-
-        },
-        delay
-    );
+    const delay = randomBetween(8000, 18000);
+    addLog(`⏰ Próximo cometa em ${(delay/1000).toFixed(1)}s`, 'comet');
+    window._cometScheduler = setTimeout(() => {
+        createComet();
+        scheduleComet();
+    }, delay);
 }
 
-
-/* =========================================================
-   PEQUENO DETRITO / METEORO (COM LOGS)
-
-   Muito mais discreto que o cometa.
-
-   Pode aparecer ocasionalmente entre os cometas,
-   mas não fica permanente na tela.
-========================================================= */
-
 function createMeteor() {
-
-    addLog('☄️ createMeteor() CHAMADA!', 'meteor');
+    addLog('💫 createMeteor() CHAMADA!', 'meteor');
     
-    const container =
-        document.querySelector(".container");
-
-
+    const container = document.querySelector(".container");
     if (!container) {
-        addLog('❌ Container NÃO encontrado!', 'error');
+        addLog('❌ Container não encontrado!', 'error');
         return;
     }
 
-
-    /* -------------------------------------------------
-       Não cria meteoros se já houver um cometa
-    ------------------------------------------------- */
-
-    if (
-        container.querySelector(".comet")
-    ) {
+    if (container.querySelector(".comet")) {
         addLog('⏳ Cometa ativo, meteoro cancelado', 'warning');
         return;
     }
 
-
-    const meteor =
-        document.createElement("div");
-
+    const meteor = document.createElement("div");
     meteor.className = "meteor";
 
+    const startX = randomBetween(-10, 110);
+    const startY = randomBetween(-10, 100);
+    const distance = randomBetween(8, 18);
+    const endX = startX + distance;
+    const endY = startY + distance * randomBetween(0.25, 0.7);
+    const dx = endX - startX;
+    const dy = endY - startY;
+    const angle = Math.atan2(dy, dx) * 180 / Math.PI;
 
-    /* -------------------------------------------------
-       Posição inicial aleatória
-    ------------------------------------------------- */
+    meteor.style.setProperty("--start-x", startX + "%");
+    meteor.style.setProperty("--start-y", startY + "%");
+    meteor.style.setProperty("--end-x", endX + "%");
+    meteor.style.setProperty("--end-y", endY + "%");
+    meteor.style.setProperty("--comet-angle", angle + "deg");
 
-    const startX =
-        randomBetween(
-            -10,
-            110
-        );
+    const duration = randomBetween(0.7, 1.3);
+    meteor.style.animationDuration = duration + "s";
 
-    const startY =
-        randomBetween(
-            -10,
-            100
-        );
-
-
-    /* -------------------------------------------------
-       Pequena trajetória
-    ------------------------------------------------- */
-
-    const distance =
-        randomBetween(
-            8,
-            18
-        );
-
-
-    const endX =
-        startX +
-        distance;
-
-    const endY =
-        startY +
-        distance *
-        randomBetween(
-            0.25,
-            0.7
-        );
-
-
-    const dx =
-        endX - startX;
-
-    const dy =
-        endY - startY;
-
-
-    const angle =
-        Math.atan2(dy, dx) *
-        180 /
-        Math.PI;
-
-
-    /* -------------------------------------------------
-       Variáveis CSS
-    ------------------------------------------------- */
-
-    meteor.style.setProperty(
-        "--start-x",
-        startX + "%"
-    );
-
-    meteor.style.setProperty(
-        "--start-y",
-        startY + "%"
-    );
-
-    meteor.style.setProperty(
-        "--end-x",
-        endX + "%"
-    );
-
-    meteor.style.setProperty(
-        "--end-y",
-        endY + "%"
-    );
-
-    meteor.style.setProperty(
-        "--comet-angle",
-        angle + "deg"
-    );
-
-
-    const duration =
-        randomBetween(
-            0.7,
-            1.3
-        );
-
-
-    meteor.style.animationDuration =
-        duration + "s";
-
-
-    /* -------------------------------------------------
-       Tamanho e brilho do meteoro
-    ------------------------------------------------- */
-
-    const size =
-        randomBetween(1.5, 3.5);
-
+    const size = randomBetween(1.5, 3.5);
     meteor.style.width = size + "px";
     meteor.style.height = size + "px";
+    const intensity = randomBetween(0.6, 1);
+    meteor.style.boxShadow = `0 0 ${size * 3}px rgba(255, 255, 255, ${intensity})`;
 
-    const intensity =
-        randomBetween(0.6, 1);
+    container.appendChild(meteor);
+    addLog('✅ Meteoro ADICIONADO! (duração: ' + duration.toFixed(1) + 's)', 'success');
 
-    meteor.style.boxShadow =
-        `0 0 ${size * 3}px rgba(255, 255, 255, ${intensity})`;
-
-
-    /* -------------------------------------------------
-       Adiciona ao sistema
-    ------------------------------------------------- */
-
-    container.appendChild(
-        meteor
-    );
-    
-    addLog('✅ METEORO ADICIONADO ao DOM!', 'success');
-
-
-    setTimeout(
-        () => {
-
-            if (meteor.parentNode) {
-                meteor.remove();
-                addLog('🗑️ Meteoro removido após animação', 'meteor');
-            }
-
-        },
-        (duration * 1000) + 200
-    );
+    setTimeout(() => {
+        if (meteor.parentNode) {
+            meteor.remove();
+            addLog('🗑️ Meteoro removido após animação', 'meteor');
+        }
+    }, (duration * 1000) + 200);
 }
 
-
-/* =========================================================
-   METEOROS RAROS
-
-   Intervalo maior que o dos cometas.
-
-   Entre 15 e 30 segundos.
-========================================================= */
-
 function scheduleMeteor() {
-
-    const delay =
-        randomBetween(
-            15000,
-            30000
-        );
-
-
-    window._meteorScheduler = setTimeout(
-        () => {
-
-            createMeteor();
-
-            scheduleMeteor();
-
-        },
-        delay
-    );
+    const delay = randomBetween(15000, 30000);
+    addLog(`⏰ Próximo meteoro em ${(delay/1000).toFixed(1)}s`, 'meteor');
+    window._meteorScheduler = setTimeout(() => {
+        createMeteor();
+        scheduleMeteor();
+    }, delay);
 }
 
 
@@ -957,186 +415,58 @@ function scheduleMeteor() {
 ========================================================= */
 
 function setupPinchZoom() {
-
-    const container =
-        document.querySelector(".container");
-
-
-    if (!container) return;
-
+    addLog('🔍 Configurando zoom por pinça...', 'zoom');
+    const container = document.querySelector(".container");
+    if (!container) {
+        addLog('❌ Container não encontrado!', 'error');
+        return;
+    }
 
     let zoom = 1;
-
-
     const MIN_ZOOM = 0.65;
     const MAX_ZOOM = 2.5;
-
-
     let initialDistance = 0;
     let initialZoom = 1;
 
-
-    /* -------------------------------------------------
-       Distância entre os dedos
-    ------------------------------------------------- */
-
-    function getTouchDistance(
-        touch1,
-        touch2
-    ) {
-
-        const dx =
-            touch2.clientX -
-            touch1.clientX;
-
-        const dy =
-            touch2.clientY -
-            touch1.clientY;
-
-
-        return Math.sqrt(
-            dx * dx +
-            dy * dy
-        );
+    function getTouchDistance(touch1, touch2) {
+        const dx = touch2.clientX - touch1.clientX;
+        const dy = touch2.clientY - touch1.clientY;
+        return Math.sqrt(dx * dx + dy * dy);
     }
-
-
-    /* -------------------------------------------------
-       Aplica zoom
-    ------------------------------------------------- */
 
     function applyZoom(value) {
-
-        zoom =
-            Math.max(
-                MIN_ZOOM,
-                Math.min(
-                    MAX_ZOOM,
-                    value
-                )
-            );
-
-
-        container.style.transform =
-            `scale(${zoom})`;
+        zoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, value));
+        container.style.transform = `scale(${zoom})`;
+        addLog('🔍 Zoom: ' + zoom.toFixed(2), 'zoom');
     }
 
+    container.addEventListener("touchstart", (event) => {
+        if (event.touches.length !== 2) return;
+        initialDistance = getTouchDistance(event.touches[0], event.touches[1]);
+        initialZoom = zoom;
+        addLog('👆 Dois dedos detectados - zoom iniciado', 'zoom');
+    }, { passive: false });
 
-    /* =================================================
-       INÍCIO
-    ================================================= */
+    container.addEventListener("touchmove", (event) => {
+        if (event.touches.length !== 2) return;
+        event.preventDefault();
+        const currentDistance = getTouchDistance(event.touches[0], event.touches[1]);
+        if (initialDistance <= 0) return;
+        const scale = currentDistance / initialDistance;
+        applyZoom(initialZoom * scale);
+    }, { passive: false });
 
-    container.addEventListener(
-        "touchstart",
-        (event) => {
-
-            if (
-                event.touches.length !== 2
-            ) {
-                return;
-            }
-
-
-            initialDistance =
-                getTouchDistance(
-                    event.touches[0],
-                    event.touches[1]
-                );
-
-
-            initialZoom =
-                zoom;
-        },
-        {
-            passive: false
-        }
-    );
-
-
-    /* =================================================
-       MOVIMENTO
-    ================================================= */
-
-    container.addEventListener(
-        "touchmove",
-        (event) => {
-
-            if (
-                event.touches.length !== 2
-            ) {
-                return;
-            }
-
-
-            event.preventDefault();
-
-
-            const currentDistance =
-                getTouchDistance(
-                    event.touches[0],
-                    event.touches[1]
-                );
-
-
-            if (
-                initialDistance <= 0
-            ) {
-                return;
-            }
-
-
-            const scale =
-                currentDistance /
-                initialDistance;
-
-
-            applyZoom(
-                initialZoom *
-                scale
-            );
-        },
-        {
-            passive: false
-        }
-    );
-
-
-    /* =================================================
-       FINAL
-    ================================================= */
-
-    container.addEventListener(
-        "touchend",
-        (event) => {
-
-            if (
-                event.touches.length < 2
-            ) {
-
-                initialDistance = 0;
-            }
-        },
-        {
-            passive: true
-        }
-    );
-
-
-    /* =================================================
-       CANCELAMENTO
-    ================================================= */
-
-    container.addEventListener(
-        "touchcancel",
-        () => {
-
-            initialDistance = 0;
-
-        },
-        {
-            passive: true
-        }
-    );
+    container.addEventListener("touchend", () => { 
+        initialDistance = 0;
+        addLog('👆 Zoom finalizado', 'zoom');
+    }, { passive: true });
+    
+    container.addEventListener("touchcancel", () => { 
+        initialDistance = 0;
+        addLog('👆 Zoom cancelado', 'zoom');
+    }, { passive: true });
+    
+    addLog('✅ Zoom por pinça configurado!', 'success');
 }
 
 
@@ -1145,14 +475,11 @@ function setupPinchZoom() {
 ========================================================= */
 
 function setupPauseButton() {
-
-    // Cria o botão com estilo Glass + Roxo
+    addLog('⏸️ Criando botão de pause ROXO...', 'pause');
+    
     const pauseBtn = document.createElement('button');
     pauseBtn.id = 'pauseBtn';
-    pauseBtn.className = 'glass-btn';
     pauseBtn.textContent = '⏸️ Pausar';
-    
-    // Estilos inline básicos (o resto vem do CSS)
     pauseBtn.style.cssText = `
         position: fixed;
         bottom: 30px;
@@ -1177,7 +504,6 @@ function setupPauseButton() {
         text-transform: uppercase;
     `;
 
-    // Hover effect
     pauseBtn.addEventListener('mouseenter', () => {
         pauseBtn.style.background = 'rgba(100, 40, 160, 0.6)';
         pauseBtn.style.borderColor = 'rgba(160, 80, 255, 0.5)';
@@ -1196,15 +522,11 @@ function setupPauseButton() {
 
     let isPaused = false;
 
-    // Clique do botão
     pauseBtn.addEventListener('click', () => {
-
         isPaused = !isPaused;
-
-        // Muda o texto
         pauseBtn.textContent = isPaused ? '▶️ Continuar' : '⏸️ Pausar';
+        addLog(isPaused ? '⏸️ SISTEMA PAUSADO' : '▶️ SISTEMA RETOMADO', 'pause');
 
-        // Aplica pause em TODAS as animações
         document.querySelectorAll(
             '.mercury, .venus, .earth, .mars, ' +
             '.jupiter, .saturn, .uranus, .neptune, .pluto, ' +
@@ -1213,30 +535,29 @@ function setupPauseButton() {
             el.style.animationPlayState = isPaused ? 'paused' : 'running';
         });
 
-        // Pausa cometas e meteoros (evita novos spawns)
         if (isPaused) {
             clearTimeout(window._cometScheduler);
             clearTimeout(window._meteorScheduler);
+            addLog('⏸️ Cometas e meteoros PAUSADOS', 'pause');
         } else {
             scheduleComet();
             scheduleMeteor();
+            addLog('▶️ Cometas e meteoros RETOMADOS', 'pause');
         }
-
-        console.log(isPaused ? '⏸️ Sistema pausado' : '▶️ Sistema retomado');
     });
 
     document.body.appendChild(pauseBtn);
-
-    // Guarda referência global
     window.pauseBtn = pauseBtn;
 
-    // Pausa com tecla Espaço
     document.addEventListener('keydown', (event) => {
         if (event.code === 'Space' && window.pauseBtn) {
             event.preventDefault();
             window.pauseBtn.click();
+            addLog('⌨️ Tecla ESPAÇO pressionada', 'pause');
         }
     });
+    
+    addLog('✅ Botão de pause ROXO criado!', 'success');
 }
 
 
@@ -1430,6 +751,8 @@ const celestialData = {
 
 // Cria o painel de informações (GLASS)
 function createInfoPanel() {
+    addLog('🪟 Criando painel GLASS...', 'glass');
+    
     const panel = document.createElement('div');
     panel.id = 'planetPanel';
     panel.className = 'glass-panel';
@@ -1478,6 +801,7 @@ function createInfoPanel() {
     `;
 
     document.body.appendChild(panel);
+    addLog('✅ Painel GLASS criado!', 'success');
 
     // Botão fechar
     document.getElementById('closePanel').addEventListener('click', closePanel);
@@ -1491,19 +815,27 @@ function createInfoPanel() {
 
 // Abre o painel com dados do planeta/corpo celeste
 function openPanel(key) {
+    addLog(`📂 Abrindo painel para: ${key}`, 'planet');
+    
     const panel = document.getElementById('planetPanel') || createInfoPanel();
     
     // Verifica se é Sol ou Lua
     let data;
     if (key === 'sun') {
         data = celestialData.sun;
+        addLog('☀️ Abrindo painel do SOL (MESTRE)', 'planet');
     } else if (key === 'moon') {
         data = celestialData.moon;
+        addLog('🌙 Abrindo painel da LUA (HÉCATE)', 'planet');
     } else {
         data = planetData[key];
+        if (data) {
+            addLog(`🪐 Abrindo painel de ${data.name} (${data.asura})`, 'planet');
+        }
     }
     
     if (!data) {
+        addLog('❌ Dados não encontrados para: ' + key, 'error');
         console.error('❌ Dados não encontrados para:', key);
         return;
     }
@@ -1545,6 +877,7 @@ function openPanel(key) {
 
     // Mostra painel
     panel.classList.add('active');
+    addLog('✅ Painel ABERTO para: ' + data.name, 'success');
 }
 
 // Fecha o painel
@@ -1553,6 +886,7 @@ function closePanel() {
     if (!panel) return;
     
     panel.classList.remove('active');
+    addLog('❌ Painel FECHADO', 'info');
 }
 
 
@@ -1585,6 +919,8 @@ const planetZoomLevels = {
 
 // Cria o botão de voltar (GLASS)
 function createBackButton() {
+    addLog('🔙 Criando botão Voltar GLASS...', 'glass');
+    
     const btn = document.createElement('button');
     btn.id = 'backButton';
     btn.className = 'glass-back';
@@ -1597,20 +933,21 @@ function createBackButton() {
     });
     
     document.body.appendChild(btn);
+    addLog('✅ Botão Voltar GLASS criado!', 'success');
     return btn;
 }
 
 // Entra no modo exploração
 function enterExploration(key) {
-    console.log(`🚀 Tentando viajar para: ${key}`);
+    addLog(`🚀 Iniciando exploração para: ${key}`, 'explore');
     
     if (explorationMode.isTransitioning) {
-        console.log('⏳ Já está em transição');
+        addLog('⏳ Já está em transição', 'warning');
         return;
     }
     
     if (explorationMode.active && explorationMode.target === key) {
-        console.log(`📋 Já está em ${key}, abrindo painel`);
+        addLog(`📋 Já está em ${key}, abrindo painel`, 'explore');
         openPanel(key);
         return;
     }
@@ -1629,6 +966,7 @@ function enterExploration(key) {
     }
     
     if (!planet) {
+        addLog(`❌ Planeta não encontrado: ${key}`, 'error');
         console.error(`❌ Planeta não encontrado: ${key}`);
         explorationMode.isTransitioning = false;
         explorationMode.active = false;
@@ -1636,10 +974,10 @@ function enterExploration(key) {
         return;
     }
     
-    console.log(`📍 Planeta encontrado:`, planet);
+    addLog(`📍 Planeta encontrado: ${planet.className}`, 'explore');
     
     if (!container) {
-        console.error('❌ Container não encontrado');
+        addLog('❌ Container não encontrado', 'error');
         explorationMode.isTransitioning = false;
         explorationMode.active = false;
         explorationMode.target = null;
@@ -1665,13 +1003,17 @@ function enterExploration(key) {
     container.style.transition = 'transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
     container.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(${zoomLevel})`;
     
+    addLog(`🔍 Zoom para ${key}: ${zoomLevel}x`, 'explore');
+    
     setTimeout(() => {
         backBtn.classList.add('visible');
+        addLog('🔙 Botão Voltar VISÍVEL', 'explore');
     }, 300);
     
     planet.style.transition = 'filter 0.8s ease, box-shadow 0.8s ease';
-    planet.style.filter = 'brightness(1.3) drop-shadow(0 0 40px rgba(100,200,255,0.3))';
+    planet.style.filter = 'brightness(1.3) drop-shadow(0 0 40px rgba(160,80,255,0.3))';
     planet.style.zIndex = '20';
+    addLog(`✨ ${key} DESTACADO!`, 'explore');
     
     document.querySelectorAll('.mercury, .venus, .earth, .mars, .jupiter, .saturn, .uranus, .neptune, .pluto, .sun, .moon').forEach(p => {
         if (p !== planet) {
@@ -1683,6 +1025,7 @@ function enterExploration(key) {
     setTimeout(() => {
         openPanel(key);
         explorationMode.isTransitioning = false;
+        addLog(`✅ Exploração em ${key} COMPLETA!`, 'success');
     }, 900);
     
     const pauseBtn = document.getElementById('pauseBtn');
@@ -1692,13 +1035,22 @@ function enterExploration(key) {
         pauseBtn.style.pointerEvents = 'none';
     }
     
-    console.log(`🚀 Viajando para ${key}...`);
+    addLog(`🚀 Viajando para ${key}...`, 'explore');
 }
 
 // Sai do modo exploração
 function exitExploration() {
-    if (explorationMode.isTransitioning) return;
-    if (!explorationMode.active) return;
+    addLog('🌌 Saindo do modo exploração...', 'explore');
+    
+    if (explorationMode.isTransitioning) {
+        addLog('⏳ Já está em transição', 'warning');
+        return;
+    }
+    
+    if (!explorationMode.active) {
+        addLog('⚠️ Não está em modo exploração', 'warning');
+        return;
+    }
     
     explorationMode.isTransitioning = true;
     
@@ -1710,6 +1062,7 @@ function exitExploration() {
     if (container) {
         container.style.transition = 'transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
         container.style.transform = 'translate(0, 0) scale(1)';
+        addLog('🔍 Zoom resetado', 'explore');
     }
     
     document.querySelectorAll('.mercury, .venus, .earth, .mars, .jupiter, .saturn, .uranus, .neptune, .pluto, .sun, .moon').forEach(p => {
@@ -1722,6 +1075,7 @@ function exitExploration() {
     
     if (backBtn) {
         backBtn.classList.remove('visible');
+        addLog('🔙 Botão Voltar OCULTO', 'explore');
     }
     
     const pauseBtn = document.getElementById('pauseBtn');
@@ -1735,6 +1089,7 @@ function exitExploration() {
         explorationMode.active = false;
         explorationMode.target = null;
         explorationMode.isTransitioning = false;
+        addLog('🌌 Retornou ao Sistema Solar!', 'success');
         console.log('🌌 Retornou ao Sistema Solar');
     }, 900);
 }
@@ -1751,13 +1106,14 @@ document.addEventListener('click', (e) => {
     
     if (!isClickOnPlanet && !isClickOnPanel && !isClickOnBack) {
         closePanel();
+        addLog('👆 Clique fora → painel fechado', 'info');
     }
 });
 
 // Função auxiliar para adicionar eventos de clique/toque
 function addClickHandler(element, key) {
     const finalKey = String(key);
-    console.log(`🔗 Adicionando handler para: ${finalKey}`);
+    addLog(`🔗 Configurando clique para: ${finalKey}`, 'info');
     
     element.style.cursor = 'pointer';
     element.style.transition = 'transform 0.15s ease, filter 0.3s ease';
@@ -1765,6 +1121,7 @@ function addClickHandler(element, key) {
 
     element.addEventListener('click', (e) => {
         e.stopPropagation();
+        addLog(`🖱️ CLIQUE em: ${finalKey}`, 'planet');
         console.log(`🖱️ Clique em: ${finalKey}`);
         
         if (explorationMode.active && explorationMode.target === finalKey) {
@@ -1777,6 +1134,7 @@ function addClickHandler(element, key) {
     element.addEventListener('touchend', (e) => {
         e.preventDefault();
         e.stopPropagation();
+        addLog(`👆 TOQUE em: ${finalKey}`, 'planet');
         console.log(`👆 Toque em: ${finalKey}`);
         
         if (explorationMode.active && explorationMode.target === finalKey) {
@@ -1811,7 +1169,7 @@ function addClickHandler(element, key) {
     });
 
     element.addEventListener('mouseenter', () => {
-        element.style.filter = 'brightness(1.3) drop-shadow(0 0 20px rgba(255,255,255,0.15))';
+        element.style.filter = 'brightness(1.3) drop-shadow(0 0 20px rgba(160,80,255,0.15))';
     });
 
     element.addEventListener('mouseleave', () => {
@@ -1821,48 +1179,58 @@ function addClickHandler(element, key) {
 
 // Configura os corpos celestes como clicáveis
 function setupPlanetClick() {
+    addLog('🪐 Configurando corpos celestes como clicáveis...', 'info');
     
     const allCelestialBodies = document.querySelectorAll(
         '.sun, .moon, .mercury, .venus, .earth, .mars, ' +
         '.jupiter, .saturn, .uranus, .neptune, .pluto'
     );
 
+    let count = 0;
     allCelestialBodies.forEach(element => {
         const key = element.dataset.key;
         
         if (!key) {
+            addLog(`⚠️ Elemento sem data-key: ${element.className}`, 'warning');
             console.warn('⚠️ Elemento sem data-key:', element);
             return;
         }
 
-        console.log(`🪐 Configurando: ${key}`);
+        addLog(`🪐 Configurando: ${key}`, 'info');
         addClickHandler(element, key);
+        count++;
     });
 
-    console.log('🪐 Todos os corpos celestes configurados como clicáveis!');
-    console.log('🚀 Modo Exploração ativado! Toque em um planeta para viajar.');
+    addLog(`✅ ${count} corpos celestes configurados como clicáveis!`, 'success');
+    addLog('🚀 Modo Exploração ativado! Toque em um planeta para viajar.', 'explore');
 }
 
 // Inicializa os planetas clicáveis
 function initPlanetInteraction() {
+    addLog('🔄 Inicializando interação com planetas...', 'info');
+    
     const checkPlanets = setInterval(() => {
         const planets = document.querySelectorAll(
             '.mercury, .venus, .earth, .mars, .jupiter, .saturn, .uranus, .neptune, .pluto'
         );
         if (planets.length > 0) {
             clearInterval(checkPlanets);
+            addLog(`✅ ${planets.length} planetas encontrados!`, 'success');
             setupPlanetClick();
         }
     }, 100);
 
     setTimeout(() => {
         clearInterval(checkPlanets);
+        addLog('⏰ Timeout: verificando planetas novamente...', 'warning');
+        setupPlanetClick();
     }, 5000);
 }
 
 // Atalho para sair da exploração (ESC)
 document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && explorationMode.active) {
+        addLog('⌨️ Tecla ESC pressionada → saindo da exploração', 'explore');
         exitExploration();
     }
 });
@@ -1875,6 +1243,8 @@ document.addEventListener('keydown', (event) => {
 window.addEventListener(
     "DOMContentLoaded",
     () => {
+
+        addLog('🚀 INICIALIZANDO SISTEMA SOLAR...', 'info');
 
         // INICIALIZA O LOG ANTES DE TUDO
         initLogBox();
@@ -1895,12 +1265,13 @@ window.addEventListener(
         }, randomBetween(5000, 10000));
         scheduleMeteor();
 
-        console.log('🌠 Sistema Solar iniciado!');
-        console.log('💡 Digite createComet() ou createMeteor() para testar manualmente.');
-        console.log('⏸️ Clique no botão (ROXO) ou pressione ESPAÇO para pausar/continuar.');
-        console.log('🪐 Toque nos planetas, Sol ou Lua para viajar e ver a cosmologia WZ!');
-        console.log('🚀 Pressione ESC para sair do modo exploração.');
-        console.log('📱 Clique em "📋 LOG" no canto inferior esquerdo para ver os logs!');
+        addLog('✅ SISTEMA SOLAR INICIALIZADO COM SUCESSO!', 'success');
+        addLog('🌠 Sistema Solar pronto para exploração!', 'success');
+        addLog('💡 Digite createComet() ou createMeteor() para testar manualmente.', 'info');
+        addLog('⏸️ Clique no botão (ROXO) ou pressione ESPAÇO para pausar/continuar.', 'info');
+        addLog('🪐 Toque nos planetas, Sol ou Lua para viajar e ver a cosmologia WZ!', 'info');
+        addLog('🚀 Pressione ESC para sair do modo exploração.', 'info');
+        addLog('📱 Clique em "📋 LOG" no canto inferior esquerdo para ver os logs!', 'info');
 
         window.createComet = createComet;
         window.createMeteor = createMeteor;
@@ -1908,8 +1279,9 @@ window.addEventListener(
         window.enterExploration = enterExploration;
         window.exitExploration = exitExploration;
         
-        console.log('📋 Data-keys encontrados:');
+        addLog('📋 Data-keys encontrados:', 'info');
         document.querySelectorAll('[data-key]').forEach(el => {
+            addLog(`  - ${el.className} → ${el.dataset.key}`, 'info');
             console.log(`  - ${el.className} → ${el.dataset.key}`);
         });
         
